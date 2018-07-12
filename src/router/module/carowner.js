@@ -11,66 +11,33 @@ const _import = require('../_import_' + process.env.NODE_ENV)
  export default {
   path: '/carowner',
   component: Layout,
-  redirect: '/company/groupManage',
-  name: '公司管理',
+  redirect: '/carowner/baseInfo',
+  name: '车主管理',
   icon: 'gongsiguanli',
   children: [
-    { path: '/company/index', icon: 'information', hidden: true, name: '公司管理', component: _import('company/index'), meta: { title: '公司管理', stitle: '公司', noCache: true }},
-    { path: '/company/myinfo', icon: 'information', hidden: true, name: '个人中心', component: _import('company/myinfo/index'), meta: { title: '个人中心', noCache: true }},
-    { path: '/company/groupManage', icon: 'zuzhijiagou', hidden: false, name: '组织架构', component: _import('company/groupManage/index'), meta: { title: '组织架构', stitle: '组织', noCache: true }
-    },
-    { path: '/company/permissionManage', icon: 'quanxianguanli', hidden: false, name: '权限管理', component: _import('company/permissionManage/index'), meta: { title: '权限管理', stitle: '权限', noCache: true }},
+    // 基本信息
     {
-      path: '/company/employeeManage',
-      icon: 'yuangongguanli',
-      hidden: false,
-      name: '员工管理',
-      component: _import('company/employeeManage/index'),
-      meta: { title: '员工管理', stitle: '员工', noCache: true }
+      path: '/carowner/baseInfo', icon: 'QQ', name: '基本信息管理', component: _import('carowner/baseInfo/index'), redirect: '/carowner/baseInfo/index', meta: { role: ['admin'], title: '基本信息管理', istab: true, noCache: false },
+      children: [
+        {
+          path: '/carowner/baseInfo/authentication', icon: 'QQ', name: '完善实名认证', component: _import('carowner/baseInfo/authentication/index'), meta: { role: ['admin'], title: '完善实名认证', noCache: false }
+        },
+        {
+          path: '/changePassword', icon: 'QQ', name: '修改登录密码', component: _import('changePassword'), meta: { role: ['admin'], title: '修改登录密码', noCache: false }
+        }
+      ]
     },
+    // 车源信息管理
     {
-      path: '/company/customerManage',
-      icon: 'kehuguanli',
-      hidden: false,
-      name: '客户管理',
-      component: _import('company/customerManage/index'),
-      // redirect: '/company/customerManage/sender',
-      meta: { title: '客户管理', stitle: '客户', noCache: true }
-      /* children: [{ path: '/company/customerManage/sender', hidden: false, name: '发货人', component: _import('company/customerManage/sender/index'), meta: { title: '发货人', noCache: true }},
-      { path: '/company/customerManage/receiver', hidden: false, name: '收货人', component: _import('company/customerManage/receiver/index'), meta: { title: '收货人', noCache: true }}] */
-    },
-    {
-      path: '/company/driverManage',
-      icon: 'sijiguanli',
-      hidden: false,
-      name: '司机管理',
-      component: _import('company/driverManage/index'),
-      meta: { title: '司机管理', stitle: '司机', noCache: true }
-    },
-    {
-      path: '/company/trunkManage',
-      icon: 'cheliangguanli',
-      hidden: false,
-      name: '车辆管理',
-      component: _import('company/trunkManage/index'),
-      meta: { title: '车辆管理', stitle: '车辆', noCache: true }
-    },
-    {
-      path: '/company/carrierManage',
-      icon: 'chengyunshang',
-      hidden: false,
-      name: '承运商管理',
-      component: _import('company/carrierManage/index'),
-      meta: { title: '承运商管理', stitle: '承运商', noCache: true }
-    },
-    { path: '/company/systemSetup', icon: 'xitongshezhi', hidden: false, name: '系统设置', component: _import('company/systemSetup/index'), meta: { title: '系统设置', stitle: '设置', noCache: true }},
-    {
-      path: '/company/printManage',
-      icon: 'dayin',
-      hidden: true,
-      name: '打印模版管理',
-      component: _import('company/printManage/index'),
-      meta: { title: '打印模版管理', stitle: '打印', noCache: true }
+      path: '/carowner/carinfo', icon: 'QQ', name: '车源信息管理', component: _import('carowner/carinfo/index'), redirect: '/carowner/carinfo/create', meta: { role: ['admin'], title: '车源信息管理', istab: true, noCache: false },
+      children: [
+        {
+          path: '/carowner/carinfo/create', icon: 'QQ', name: '发布车源', component: _import('carowner/carinfo/create'), meta: { role: ['admin'], title: '发布车源', noCache: false }
+        },
+        {
+          path: '/carowner/carinfo/manage', icon: 'QQ', name: '管理车源', component: _import('carowner/carinfo/manage'), meta: { role: ['admin'], title: '管理车源', noCache: false }
+        }
+      ]
     }
   ]
  }

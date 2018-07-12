@@ -17,7 +17,7 @@
 ``` bash
 
 # Clone project
-git clone http://39.108.174.31:8889/dengl/aflc-portal-web.git
+git clone http://39.108.174.31:8889/dengl/aflc-portal-admin.git
 # Install dependencies
 npm install
 

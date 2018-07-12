@@ -8,15 +8,10 @@ import Layout from '../views/layout/Layout'
 
 // ========================引入各个版块类别================
 // 公司
-import Company from './module/company'
-// 财务
-import Finance from './module/finance'
-// 客服
-import Service from './module/service'
-// 运营
-import Operation from './module/operation'
-// 报表
-import Report from './module/report'
+import carowner from './module/carowner'
+import carrier from './module/carrier'
+import consignor from './module/consignor'
+
 
 // components DEMO
 import Components from './module/componentsDemo'
@@ -59,13 +54,8 @@ export default new Router({
 })
 
 export const asyncRouterMap = [
-  Operation,
-  Finance,
-  Report,
-  Company,
-  Service,
-/*   {
-    path: '/createOrder', hidden: true, icon: 'QQ', name: '创建运单', component: _import('operation/order/createOrder/pop'), meta: { role: ['admin'], title: '创建运单', noCache: true }
-  }, */
+  carowner,
+  consignor,
+  carrier,
   { path: '*', redirect: '/404', hidden: true }
 ]
