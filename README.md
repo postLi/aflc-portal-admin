@@ -17,8 +17,7 @@
 ``` bash
 
 # Clone project
-git clone http://192.168.1.157:8889/nanedo/anfa-tms.git
-
+git clone http://39.108.174.31:8889/dengl/aflc-portal-web.git
 # Install dependencies
 npm install
 
