@@ -12,7 +12,6 @@ import carowner from './module/carowner'
 import carrier from './module/carrier'
 import consignor from './module/consignor'
 
-
 // components DEMO
 import Components from './module/componentsDemo'
 
@@ -30,6 +29,14 @@ export const constantRouterMap = [
   { path: '/404', component: _import('404'), hidden: true },
   {
     path: '/',
+    redirect: '/changePassword',
+    noDropdown: true,
+    icon: 'shouye',
+    name: '首页',
+    hidden: true
+  }
+/*   {
+    path: '/',
     component: Layout,
     redirect: '/dashboard',
     noDropdown: true,
@@ -40,7 +47,7 @@ export const constantRouterMap = [
       path: 'dashboard', name: '首页', icon: 'shouye', component: _import('dashboard/index'),
       meta: { title: '首页', noCache: true }
     }]
-  }
+  } */
 ]
 // 用来展示自定义组件、指令、过滤器等
 if (process.env.NODE_ENV === 'development') {

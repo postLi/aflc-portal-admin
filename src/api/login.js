@@ -17,25 +17,28 @@ export function login(username, password, orgid) {
     }
   }) */
   console.log('login:', arguments, fetch.axios)
+  const form = new FormData()
+  form.append('username', username)
+  form.append('password', password)
+  form.append('grant_type', grant_type)
   return fetch.request({
     url: '/uaa/oauth/token',
     method: 'post',
     headers: {
-      'content-type': 'application/x-www-form-urlencoded',
+      'Content-Type': 'multipart/form-data',
       'authorization': 'Basic d2ViQXBwOndlYkFwcA=='
     },
-    params: {
-      username,
-      password,
-      grant_type,
-      orgid
-      // scope,
-    }
+    data: form
   })
 }
 
-export function getInfo(username, orgid) {
-  return fetch.get('/api-system/system/user/v1/getCurrentUser')
+export function getInfo(mobile, memberType) {
+  return fetch.get('/aflccommonservice/common/aflcLogisticsCompany/v1/getUserInfo', {
+    params: {
+      mobile,
+      memberType
+    }
+  })
 }
 
 export function logout() {

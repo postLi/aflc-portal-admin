@@ -30,13 +30,13 @@ module.exports = {
   dev: {
     env: require('./dev.env'),
     host: 'http://192.168.1.198',
-    port: 9528,
+    port: 9526,
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
       '/api' : {
-        target: "http://192.168.1.157:7010",
+        target: "http://192.168.1.78:7010",
         pathRewrite: {'^/api': ''},
         changeOrigin: true
       },
@@ -61,7 +61,7 @@ module.exports = {
         changeOrigin: true
       },
       '/ceshi': {
-        target: "http://192.168.1.78:7010",
+        target: "http://192.168.1.157:7010",
         pathRewrite: {'^/ceshi': ''},
         changeOrigin: true
       }

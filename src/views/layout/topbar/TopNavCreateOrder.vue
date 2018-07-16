@@ -1,5 +1,5 @@
 <template>
-  <div class="createOrder" @click="openCreatePage"><icon-svg icon-class="jia" /> 创建运单</div>
+  <div class="createOrder" @click="openCreatePage"><icon-svg icon-class="jia" /> 创建订单</div>
 </template>
 <script>
 import openWindow from '@/utils/openWindow'

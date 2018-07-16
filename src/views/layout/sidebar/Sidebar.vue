@@ -4,7 +4,7 @@
         <img :src="avatar" alt="">
         <span>{{ name }}</span><br><span>{{ company }}</span>
       </div> -->
-      <SidebarMenuSearch :searchItem="sidebarRouters" />
+      <!-- <SidebarMenuSearch :searchItem="sidebarRouters" /> -->
       <hamburger class="hamburger-container" :toggleClick="toggleSideBar" :isActive="sidebar.opened"></hamburger>
       <sidebar-item ref="sidebaritem" :routes='sidebarRouters'></sidebar-item>
       <div @mouseover="showSubnav" @mouseout="hideSubnav" class="subNavWrapper"></div>
@@ -31,10 +31,10 @@ export default {
     toggleSideBar() {
       this.$store.dispatch('ToggleSideBar')
     },
-    showSubnav () {
+    showSubnav() {
       this.$refs.sidebaritem.clearTimer()
     },
-    hideSubnav () {
+    hideSubnav() {
       this.$refs.sidebaritem.hideSubNav()
     }
   }

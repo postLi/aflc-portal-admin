@@ -10,12 +10,12 @@ router.beforeEach((to, from, next) => {
   NProgress.start()
   // 如果链接带有token信息，则将其保存
   // 会覆盖原有的token
-  if (to.query.tmstoken) {
-    store.dispatch('FeLogin', to.query.tmstoken).then(() => {
+  if (to.query.settoken) {
+    store.dispatch('FeLogin', to.query.settoken).then(() => {
       next({
-        path: to.fullPath.replace(/([&|?])(tmstoken=[^&]*&?)/, '$1').replace(/\?$/, '')
+        path: to.fullPath.replace(/([&|?])(settoken=[^&]*&?)/, '$1').replace(/\?$/, '')
       })
-      console.log('load Token:', getToken(), to.fullPath.replace(/([&|?])(tmstoken=[^&]*&?)/, '$1').replace(/\?$/, ''))
+      console.log('load Token:', getToken(), to.fullPath.replace(/([&|?])(settoken=[^&]*&?)/, '$1').replace(/\?$/, ''))
     })
   } else if (getToken()) {
     if (to.path === '/login') {
@@ -32,13 +32,13 @@ router.beforeEach((to, from, next) => {
         }).catch(() => {
           removeToken()
           next({ path: '/login', query: {
-            // 删除tmstoken，避免重复循环
-            tourl: to.fullPath.replace(/([&|?])(tmstoken=[^&]*&?)/, '$1')
+            // 删除settoken，避免重复循环
+            tourl: to.fullPath.replace(/([&|?])(settoken=[^&]*&?)/, '$1')
           }})
         })
       } else {
         const title = to.meta.title || to.name || ''
-        window.document.title = (title ? title + ' - ' : '') + '安发TMS管理系统'
+        window.document.title = (title ? title + ' - ' : '') + '会员中心'
         next()
       }
     }

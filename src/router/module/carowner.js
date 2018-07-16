@@ -8,12 +8,14 @@ const _import = require('../_import_' + process.env.NODE_ENV)
  * meta 路由相关信息 ： stitle为边栏折叠时显示， noCache是否加入到路由的缓存列表里， istab 是否为页面内的tab切换
  */
 
- export default {
+export default {
   path: '/carowner',
   component: Layout,
   redirect: '/carowner/baseInfo',
   name: '车主管理',
   icon: 'gongsiguanli',
+  // 用户类型
+  memberType: 'AF00101',
   children: [
     // 基本信息
     {
@@ -40,4 +42,4 @@ const _import = require('../_import_' + process.env.NODE_ENV)
       ]
     }
   ]
- }
+}

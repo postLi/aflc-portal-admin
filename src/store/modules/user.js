@@ -1,5 +1,5 @@
 import { login, logout, getInfo } from '@/api/login'
-import { getToken, setToken, removeToken, setUsername, setOrgId, getOrgId, getUsername, setUserInfo, removeUserInfo, removeUsername, removeOrgId } from '@/utils/auth'
+import { getToken, setToken, removeToken, setUsername, setOrgId, getLogin, setLogin, setUserInfo, removeUserInfo, removeUsername, removeOrgId } from '@/utils/auth'
 
 const user = {
   state: {
@@ -46,6 +46,7 @@ const user = {
           setToken(data.access_token)
           setUsername(username)
           setOrgId(userInfo.accNum)
+          setLogin(userInfo)
           commit('SET_TOKEN', data.access_token)
           commit('SET_USERNAME', username)
           resolve()
@@ -68,15 +69,17 @@ const user = {
     // 获取用户信息
     GetInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
-        getInfo().then(response => {
+        const param = getLogin()
+        getInfo(param.mobile, param.memberType).then(response => {
           const data = response.data
-          data.rolesIdList = data.rolesId.split(',')
+          // data.rolesIdList = data.rolesId.split(',')
+          data.rolesIdList = [param.memberType]
           commit('SET_ROLES', data.rolesIdList)
-          commit('SET_NAME', data.username)
-          commit('SET_USERNAME', data.username)
-          setUsername(data.username)
-          commit('SET_COMPANY', data.orgName)
-          setOrgId(data.orgid)
+          commit('SET_NAME', data.contactsName)
+          commit('SET_USERNAME', param.username)
+          setUsername(param.username)
+          commit('SET_COMPANY', data.companyName)
+          // setOrgId(data.orgid)
           commit('SET_AVATAR', require('../../assets/role.png'))
           commit('SET_OTHERINFO', data)
           setUserInfo(data)

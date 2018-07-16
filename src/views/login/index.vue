@@ -11,7 +11,7 @@
 
       <el-form autoComplete="on" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left" label-width="0px"
                class="card-box login-form">
-        <h3 class="title">欢迎使用安发物流</h3>
+        <h3 class="title">会员中心</h3>
 
         <!--<div v-if="errInfo">-->
           <!--<span>{{errInfo}}</span>-->
@@ -23,16 +23,21 @@
           <!--<span class="svg-container svg-container_login">-->
           <!--<icon-svg icon-class="yonghuming" />-->
           <!--</span>-->
-
-         <el-input name="accNum" type="text" v-model="loginForm.accNum" autoComplete="off" :placeholder="holder.accNum" @focus='accNum()'   clearable >
-          <template slot="prepend">公司ID</template>
-         </el-input>
+          <span class="el-input-group__prepend">角色</span>
+          <el-select v-model="loginForm.accNum" placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
         </el-form-item>
 
         <el-form-item prop="username">
           <el-input name="username" type="text" @keyup.enter.native="handleLogin" v-model="loginForm.username" autoComplete="off"
                     :placeholder="holder.username" @focus='username()' clearable>
-                    <template slot="prepend">用户名</template>
+                    <template slot="prepend">手机号</template>
          </el-input>
 
 
@@ -95,10 +100,10 @@ export default {
     //   }
     // }
     const validatePass = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('密码不能小于6位'))
+      if (value.length < 3) {
+        callback(new Error('密码不能小于3位'))
       } else if (!value.length) {
-        callback(new Error('请输入6位数字密码'))
+        callback(new Error('请输入密码'))
       } else {
         callback()
       }
@@ -109,14 +114,31 @@ export default {
         username: '账号',
         password: '密码'
       },
+      options: [
+        {
+          label: '车主',
+          value: 'aflc-1'
+        },
+        {
+          label: '货主',
+          value: 'aflc-2'
+        },
+        {
+          label: '物流公司',
+          value: 'aflc-5'
+        }
+      ],
       loading: false,
       checked: false,
       errInfo: false,
-      //模拟登陆信息
+      // 模拟登陆信息
       loginForm: {
-        accNum: '4',
-        username: 'fangjian',
-        password: '123456'
+        accNum: 'aflc-5',
+        // 130888888885 承运商
+        // 13088888886 123456  可以作为货主、车主、承运商登录
+        username: '130888888881',
+        password: '123',
+        memberType: 'AF00107'
       },
       loginRules: {
         accNum: [{ required: true, trigger: 'blur' }],
@@ -126,13 +148,34 @@ export default {
 
     }
   },
+  watch: {
+    'loginForm.accNum': {
+      handler(newVal) {
+        switch (newVal) {
+          case 'aflc-1':
+            this.loginForm.memberType = 'AF00101'
+            break
+          case 'aflc-2':
+            this.loginForm.memberType = 'AF00102'
+            break
+          case 'aflc-5':
+            this.loginForm.memberType = 'AF00107'
+            break
+        }
+      },
+      immidate: true
+    }
+  },
   methods: {
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         console.log(valid)
         if (valid) {
           this.loading = true
-          this.$store.dispatch('Login', this.loginForm).then(() => {
+          const data = Object.assign({}, this.loginForm)
+          data.mobile = data.username
+          data.username = data.username + '|' + this.loginForm.accNum
+          this.$store.dispatch('Login', data).then(() => {
             // if (!this.loginForm.accNum) {
             //   this.errInfo = true
             //   this.errInfo = '该公司Id不存在'
@@ -178,5 +221,12 @@ export default {
   @import "../../styles/mixin.scss";
   @import "../../styles/login-index.css";
 
-
+.login-container{
+  .el-form-item__content{
+    display: flex;
+    &>span{
+      width: 83px;
+    }
+  }
+}
 </style>

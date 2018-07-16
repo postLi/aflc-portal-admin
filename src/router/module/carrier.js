@@ -8,12 +8,13 @@ const _import = require('../_import_' + process.env.NODE_ENV)
  * meta 路由相关信息 ： stitle为边栏折叠时显示， noCache是否加入到路由的缓存列表里， istab 是否为页面内的tab切换
  */
 
- export default {
+export default {
   path: '/carrier',
   component: Layout,
   redirect: '/carrier/baseInfo',
-  name: '车主管理',
+  name: '物流公司',
   icon: 'gongsiguanli',
+  memberType: 'AF00107',
   children: [
     // 基本信息
     {
@@ -47,7 +48,7 @@ const _import = require('../_import_' + process.env.NODE_ENV)
     },
     // 物流公司、专线管理
     {
-      path: '/carrier/logistics', icon: 'QQ', name: '物流公司、专线管理', component: _import('carrier/logistics/index'), redirect: '/carrier/logistics/line', meta: { role: ['admin'], title: '物流公司、专线管理', istab: true, noCache: false },
+      path: '/carrier/logistics', icon: 'QQ', name: '物流公司、专线管理', component: _import('carrier/logistics/index'), redirect: '/carrier/logistics/line', meta: { role: ['admin'], title: '网点专线管理', istab: true, noCache: false },
       children: [
         {
           path: '/carrier/logistics/createGroup', icon: 'QQ', name: '发布我的网点', component: _import('carrier/logistics/createGroup/index'), meta: { role: ['admin'], title: '发布我的网点', noCache: false }
@@ -85,4 +86,4 @@ const _import = require('../_import_' + process.env.NODE_ENV)
       ]
     }
   ]
- }
+}

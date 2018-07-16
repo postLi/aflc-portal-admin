@@ -20,6 +20,13 @@ function hasPermission(roles, route) {
  */
 function filterAsyncRouter(asyncRouterMap, roles) {
   const accessedRouters = asyncRouterMap.filter(route => {
+    return route.memberType === roles
+  })
+  return accessedRouters
+}
+
+function filterAsyncRouter2(asyncRouterMap, roles) {
+  const accessedRouters = asyncRouterMap.filter(route => {
     if (hasPermission(roles, route)) {
       if (route.children && route.children.length) {
         route.children = filterAsyncRouter(route.children, roles)
@@ -57,8 +64,11 @@ const permission = {
         } else {
           accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
         } */
+        accessedRouters = filterAsyncRouter(asyncRouterMap, roles[0])
+        console.log('GenerateRoutes:', accessedRouters, roles, asyncRouterMap)
+        commit('SET_SIDEBAR_ROUTERS', accessedRouters[0].children || [])
         // 暂时给于全部权限，等后台权限体系建立好再对接设置
-        accessedRouters = asyncRouterMap
+        // accessedRouters = asyncRouterMap
         commit('SET_ROUTERS', accessedRouters)
         resolve()
       })
