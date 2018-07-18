@@ -33,5 +33,5 @@ import fetch from '@/utils/fetch'
 }
  */
 export function postNewRange(data) {
-  return fetch.post('/aflcportalservice/portalt/aflcTransportRange/v1/publishAflcTransportRange', data)
+  return fetch.post('/aflcusercenterservice/   /aflcTransportRange/v1/add', data)
 }

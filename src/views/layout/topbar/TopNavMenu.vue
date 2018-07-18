@@ -4,10 +4,10 @@
       mode="horizontal" 
       :default-active="current"
       :router="true">
-      <!-- <el-menu-item key="/dashboard" index="/dashboard">
-        <icon-svg icon-class="shouye" /> 首页
+      <el-menu-item key="/dashboard" index="/dashboard">
+        返回首页
       </el-menu-item>
-      <template v-for="(menu, index) in permission_routers">
+      <!-- <template v-for="(menu, index) in permission_routers">
          <el-menu-item :key="index" :index="menu.path" v-if="!menu.hidden">
           <icon-svg v-if="menu.icon" :icon-class="menu.icon" /> {{menu.name}}
         </el-menu-item>
@@ -51,7 +51,7 @@ export default {
       this.current = current.path
       if (this.prevPath !== this.current) {
         this.prevPath = this.current
-        this.$store.dispatch('GenerateSidebarRoutes', current.name)
+        //this.$store.dispatch('GenerateSidebarRoutes', current.name)
       }
     }
   }
@@ -61,7 +61,7 @@ export default {
 
 <style lang="scss">
 @import "src/styles/variate.scss";
-  #app .page-top-nav{
+  .page-top-nav{
     .el-menu--horizontal{
       border-bottom: none;
     }
@@ -69,7 +69,7 @@ export default {
       background: #373d41;
     }
   }
-  #app .page-top-nav .el-menu-item{
+ .page-top-nav .el-menu-item{
     height: $topNavHeight;
     line-height: $topNavHeight;
     color: #fff;
@@ -90,7 +90,7 @@ export default {
       background: #2a2f32;
     }
   }
-  #app .page-top-nav .el-submenu>.el-menu{
+  .page-top-nav .el-submenu>.el-menu{
     top: $topNavHeight + 2px;
   }
 </style>

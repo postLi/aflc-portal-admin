@@ -3,11 +3,11 @@
     <div class="navbar-wrapper">
         <navbar></navbar>
     </div>
-    <div class="sidebar-wrapper">
-      <sidebar></sidebar>
-    </div>
+    
     <div class="main-container">
-      <TagsView></TagsView>
+      <div class="sidebar-wrapper">
+        <sidebar></sidebar>
+      </div>
       <div class="main-container-wrap">
           <app-main :key="theRefreshKey"></app-main>
       </div>
@@ -109,12 +109,10 @@ export default {
     .app-wrapper {
         @include clearfix;
         position: relative;
-        height: 100%;
-        width: 100%;
 
         &.hideSidebar {
             .main-container {
-                margin-left: $hideSidebarWidth;
+                
             }
             .sidebar-wrapper{
                 width: $hideSidebarWidth;
@@ -137,9 +135,8 @@ export default {
         }
         .sidebar-wrapper {
             width: $sidebarWidth;
-            position: fixed;
+            float: left;
             height: 100%;
-            padding-top: $topNavHeight;
             bottom: 0;
             left: 0;
             z-index: 1001;
@@ -153,28 +150,24 @@ export default {
             width: 100%;
         }
         .main-container {
-            height: 100%;
-            transition: all .1s ease-out;
-            margin-left: $sidebarWidth;
+            margin: 0 auto;
+            width: 1200px;
             box-sizing: border-box;
-            padding-top: $topNavHeight + $tabsHeight;
+            padding-top: 20px;
             position: relative;
         }
         .main-container-wrap{
-            height: 100%;
-            overflow: auto;
+            float: left;
+            margin-left: 20px;
+            width: 990px;
         }
         .navbar-wrapper{
-            position: fixed;
-            left: 0;
-            top: 0;
             width: 100%;
             height: $topNavHeight;
             line-height: $topNavHeight;
             border-radius: 0px !important;
             background: #373d41;
-            z-index: 1009;
-            min-width: 1180px;
+            min-width: 1200px;
         }
     }
 </style>

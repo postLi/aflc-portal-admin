@@ -5,7 +5,6 @@
         <span>{{ name }}</span><br><span>{{ company }}</span>
       </div> -->
       <!-- <SidebarMenuSearch :searchItem="sidebarRouters" /> -->
-      <hamburger class="hamburger-container" :toggleClick="toggleSideBar" :isActive="sidebar.opened"></hamburger>
       <sidebar-item ref="sidebaritem" :routes='sidebarRouters'></sidebar-item>
       <div @mouseover="showSubnav" @mouseout="hideSubnav" class="subNavWrapper"></div>
   </div>
@@ -61,7 +60,7 @@ export default {
 }
 .sidebar-container{
   min-height: 100%;
-  padding-top: 70px;
+  padding-top: 0px;
   background: #42485B;
   border-radius: 0;
 

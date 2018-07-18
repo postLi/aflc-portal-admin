@@ -65,6 +65,7 @@ const permission = {
           accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
         } */
         accessedRouters = filterAsyncRouter(asyncRouterMap, roles[0])
+        accessedRouters.push(asyncRouterMap.pop())
         console.log('GenerateRoutes:', accessedRouters, roles, asyncRouterMap)
         commit('SET_SIDEBAR_ROUTERS', accessedRouters[0].children || [])
         // 暂时给于全部权限，等后台权限体系建立好再对接设置

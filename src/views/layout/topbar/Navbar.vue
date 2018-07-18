@@ -1,10 +1,10 @@
 <template>
-  <div class="navbar">
+  <div class="navbar clearfix">
     <div class="logo-panel">
       <router-link to="/"><img src="../../../assets/logo.png" alt=""></router-link>
     </div>
     <TopNavMenu />
-<!--     <router-link tag="div" class="pickClip" to="/order/pickClip"><icon-svg icon-class="tiaodanjia" />挑单夹</router-link> -->
+<!--     <router-link tag="div" class="pickClip" to="/order/pickClip"><icon-svg icon-class="tiaodanjia" />挑坕夹</router-link> -->
     <TopNavUser />
     <TopNavCreateOrder />
     <TopNavSearch />
@@ -37,6 +37,10 @@ export default {
     .navbar {
         background: #373d41;
         border-radius: 0;
+        width: 1200px;
+        margin-left: auto;
+        position: relative;
+        margin-right: auto;
 
         .errLog-container {
             display: inline-block;
@@ -57,8 +61,7 @@ export default {
     }
 
     .logo-panel{
-      padding-left: 32px;
-      padding-right: 53px;
+      padding-left: 0;
       height: auto;
       float: left;
       height: $topNavHeight;
@@ -70,9 +73,10 @@ export default {
       }
       
       img{
-        height: 37px;
-        width: 112px;
+        height: 29px;
+        width: 65px;
         vertical-align: middle;
+        margin-left: 30px;
       }
     }
     

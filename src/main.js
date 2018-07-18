@@ -20,7 +20,8 @@ import './directive'
 // import './mock/'
 
 // Vue.use(ElementUI, { locale })
-Vue.use(ElementUI)
+// 全局设置按钮大小为mini
+Vue.use(ElementUI, { size: 'mini' })
 
 Vue.config.productionTip = false
 Vue.prototype.$const = $const
