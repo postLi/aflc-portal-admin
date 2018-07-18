@@ -62,7 +62,7 @@ export default {
     },
     limit: {
         type:Number,
-        default: 1
+        default: 10
     },
     listtype: {
         type: String,

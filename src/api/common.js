@@ -1,5 +1,9 @@
 import fetch from '@/utils/fetch'
 
+
+const baseUrl= 'aflccommonservice' ;
+
+
 /**
  * 获取城市数据
  */
@@ -67,3 +71,17 @@ export function getSelectType(type = '', orgid) {
     return res.data || []
   })
 }
+
+
+//通过数据字典查询
+/**
+ * @export
+ * @param {*} code 数据字典code值
+ * @returns
+ */
+export function getDictionary(code) {
+    return fetch.axios({
+      url: '/'+baseUrl+'/sysDict/getSysDictByCodeGet/'+code,
+      method: 'get'
+    })
+  }

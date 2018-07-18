@@ -40,26 +40,26 @@ module.exports = {
         pathRewrite: {'^/api': ''},
         changeOrigin: true
       },
-      '/localapi' : {
-        target: "http://192.168.1.233:7010",
-        // target: 'http://192.168.1.23:7010',
-        pathRewrite: {'^/localapi': ''}
-      },
-      '/wukunzhi': {
-        target: "http://192.168.1.42:7010",
-        pathRewrite: {'^/wukunzhi': ''},
-        changeOrigin: true
-      },
-      '/huangyuwen': {
-        target: "http://192.168.1.23:7010",
-        pathRewrite: {'^/huangyuwen': ''},
-        changeOrigin: true
-      },
-      '/dingfei': {
-        target: "http://192.168.1.34:7010",
-        pathRewrite: {'^/dingfei': ''},
-        changeOrigin: true
-      },
+    //   '/localapi' : {
+    //     target: "http://192.168.1.233:7010",
+    //     // target: 'http://192.168.1.23:7010',
+    //     pathRewrite: {'^/localapi': ''}
+    //   },
+    //   '/wukunzhi': {
+    //     target: "http://192.168.1.42:7010",
+    //     pathRewrite: {'^/wukunzhi': ''},
+    //     changeOrigin: true
+    //   },
+    //   '/huangyuwen': {
+    //     target: "http://192.168.1.23:7010",
+    //     pathRewrite: {'^/huangyuwen': ''},
+    //     changeOrigin: true
+    //   },
+    //   '/dingfei': {
+    //     target: "http://192.168.1.34:7010",
+    //     pathRewrite: {'^/dingfei': ''},
+    //     changeOrigin: true
+    //   },
       '/ceshi': {
         target: "http://192.168.1.157:7010",
         pathRewrite: {'^/ceshi': ''},

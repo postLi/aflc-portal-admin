@@ -1,0 +1,156 @@
+.carrierIdentification{
+    padding: 18px 20px;
+    background: #f2f2f2;
+    width: 100%;
+    height: 100%;
+    .el-form{
+        width: 100%;
+        height: 100%;
+        .carrierTitle{
+            background: #fff;
+            padding: 18px 20px;
+            margin-bottom: 20px;
+            .realname{
+                border-bottom: solid 1px #0E91E9;
+                margin-bottom: 10px;
+                h2{
+                    display: inline-block;
+                    line-height: 26px;
+                    font-size: 22px;
+                    font-weight: normal;
+                    color: #333333;
+                    border-bottom: 4px solid #0E91E9;
+                }
+                span{
+                    display: inline-block;
+                    line-height: 20px;
+                    font-size: 14px;
+                    color: #ff300d;
+                    font-weight: bold;
+                }
+            }
+            .prompt{
+                padding: 12px 27px 19px;
+                background-color: #d1e0f2;
+                margin-bottom: 13px;
+                & p:nth-child(1){
+                    margin-bottom: 5px;
+                }
+                p{
+                    line-height: 17px;
+                    font-size: 14px;
+                    color: #333333;
+                    .tishi{
+                        line-height: 20px;
+                        font-size: 14px;
+                        font-weight: bold;
+                        position: relative;
+                        &>i{
+                            position: absolute;
+                            top: 2px;
+                            left: -17px;
+                            color: #ff300d;
+                        }
+                    }
+                    .star{
+                        color: #ff300d;
+                        font-weight: bold;
+                        padding: 0 2px;
+                    }
+                    .site{
+                        color: #0e91e9;
+                        font-weight: bold;
+                    }
+                }
+    
+            }
+        }
+        h2{
+            line-height: 24px;
+            font-size: 20px;
+            font-weight: normal;
+            color: #333333;
+        }
+        .information{
+            
+            background: #fff;
+            padding: 18px 20px;
+            &>h2{
+                margin-bottom: 20px;
+                padding: 5px 0;
+                border-bottom: 2px solid #0E91E9;
+            }
+            &>.el-form-item{
+                .el-form-item__label{
+                    line-height: 28px;
+                    font-size: 16px;
+                    letter-spacing: 0px;
+                    color: #333;
+                }
+                .el-form-item__content{
+                    line-height: 28px;
+                    width: 300px;
+                    .el-select{
+                        width: 100%;
+                    }
+                    .el-input{
+                        position: relative;
+                        .el-input__inner{
+                            height: 28px;
+                            line-height: 28px;
+                            padding: 5px;
+                            overflow:hidden;/*超出长度的文字隐藏*/
+                            text-overflow:ellipsis;/*文字隐藏以后添加省略号*/
+                            white-space:nowrap;/*强制不换行*/
+                        }
+                        .el-input-group__append{
+                            position: absolute;
+                            top: 7px;
+                            right: -10px;
+                            background: #fff;
+                            color: #0e91e9;
+                            line-height:14px;
+                            font-size: 12px;
+                            border: 0 none ;
+                            padding: 0;
+                        }
+                    }
+                    &>.licensePicture{
+                        height: 133px;
+                        margin-top: 18px;
+                    }
+                }
+            }
+            .moreWidth{
+                .el-form-item__content{
+                    width: 75%;
+                }
+            }
+            .textarea{
+                .el-form-item__content{
+                    width: 600px;
+                    p{
+                        color: #999999;
+                        font-size: 12px;
+                    }
+                }
+            }
+        }
+
+        .contactInformation,.picInformation{
+            .el-form-item{
+                display: inline-block;
+            }
+        }
+
+        .picInformation{
+            .el-form-item{
+                p{
+                    span{
+                        color: #ff300d;
+                    }
+                }
+            }
+        }
+    }
+}
