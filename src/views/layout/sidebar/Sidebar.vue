@@ -44,7 +44,7 @@ export default {
 @import "src/styles/variate.scss";
 @import "src/styles/mixin.scss";
 
-#app .sidebar-menu{
+ .sidebar-menu{
   height: 100%;
   overflow-y: auto;
   overflow-x: visible;
@@ -63,6 +63,7 @@ export default {
   padding-top: 0px;
   background: #42485B;
   border-radius: 0;
+  padding-bottom: 146px;
 
   .el-menu{
     border-right: 0;
