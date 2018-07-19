@@ -30,7 +30,7 @@
         </el-col>
       </el-row>
     </el-popover>
-    <div class="avatar-wrapper" v-popover:popoveruser>
+    <div class="avatar-wrapper" >
       <img class="user-avatar" :src="avatar">
       <span class="user-name">{{ name }}</span>
     </div>

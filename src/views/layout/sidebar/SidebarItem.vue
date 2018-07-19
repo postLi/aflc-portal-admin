@@ -1,7 +1,7 @@
 <template>
     <ul class="sidebar-menu" ref="sidebarMenu" @click.stop="showTab">
       <li
-        class="menu-item"
+        class="menu-item isOpen"
         v-for="(route, index) in routes"
         :key="index"
         v-if="!route.hidden"

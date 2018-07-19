@@ -1,5 +1,4 @@
 .carrierIdentification{
-    padding: 18px 20px;
     background: #f2f2f2;
     width: 100%;
     height: 100%;
@@ -83,16 +82,13 @@
             &>.el-form-item{
                 .el-form-item__label{
                     line-height: 28px;
-                    font-size: 16px;
+                    font-size: 14px;
                     letter-spacing: 0px;
                     color: #333;
                 }
                 .el-form-item__content{
                     line-height: 28px;
-                    width: 300px;
-                    .el-select{
-                        width: 100%;
-                    }
+                    width: 250px;
                     .el-input{
                         position: relative;
                         .el-input__inner{
@@ -115,9 +111,25 @@
                             padding: 0;
                         }
                     }
+                    .el-select{
+                        width: 100%;
+                    }
+                    .el-date-editor{
+                        width: 100%;
+                        .el-input__inner{
+                            padding-left:35px; 
+                            padding-top: 6px;
+                        }
+                        .el-input__icon{
+                            line-height: 30px;
+                        }
+                    }
                     &>.licensePicture{
                         height: 133px;
                         margin-top: 18px;
+                    }
+                    .preview{
+                        padding: 7px 100px;
                     }
                 }
             }
@@ -149,6 +161,18 @@
                     span{
                         color: #ff300d;
                     }
+                }
+            }
+        }
+
+
+        .fromfooter{
+            padding: 60px 0;
+            margin-left: 150px;
+            .el-button{
+                span{
+                    font-size: 16px;
+                    line-height: 22px;
                 }
             }
         }

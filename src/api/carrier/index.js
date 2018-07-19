@@ -35,12 +35,12 @@ const baseUrl = 'aflcusercenterservice' ;
 }
  */
 export function postNewRange(data) {
-  return fetch.post('/aflcportalservice/portalt/aflcTransportRange/v1/publishAflcTransportRange', data)
+  return fetch.post('/aflcusercenterservice/   /aflcTransportRange/v1/add', data)
 }
 
 //认证物流公司
 export function identifyCarrier(data){
-    return fetch({
+    return fetch.axios({
       url: '/'+baseUrl+'/usercenter/aflcLogisticsCompany/v1/authAflcLogisticsCompany',
       method: 'post',
       data:data

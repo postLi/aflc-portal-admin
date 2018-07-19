@@ -33,7 +33,7 @@ export function login(username, password, orgid) {
 }
 
 export function getInfo(mobile, memberType) {
-  return fetch.get('/aflccommonservice/common/aflcLogisticsCompany/v1/getUserInfo', {
+  return fetch.get('/aflccommonservice/common/aflcMemberCenter/v1/getUserInfo', {
     params: {
       mobile,
       memberType

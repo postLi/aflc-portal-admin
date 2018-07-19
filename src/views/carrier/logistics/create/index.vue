@@ -38,6 +38,14 @@
         <el-input v-model="ruleForm.name"></el-input> 次
       </el-form-item>
 
+      <el-form-item label="重货价格：" prop="name">
+        报价<el-input v-model="ruleForm.name"></el-input> 元
+      </el-form-item>
+
+      <el-form-item label="轻货价格：" prop="name">
+        报价<el-input v-model="ruleForm.name"></el-input> 元
+      </el-form-item>
+
        <el-form-item label="最低一票价格" prop="name">
         报价<el-input v-model="ruleForm.name"></el-input> 元
       </el-form-item>

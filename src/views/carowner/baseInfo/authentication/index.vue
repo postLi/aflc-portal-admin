@@ -1,5 +1,3 @@
 <template>
-    <div>
-        chezhu
-    </div>
+  <div>实名认证</div>
 </template>
