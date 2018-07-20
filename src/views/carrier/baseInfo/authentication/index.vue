@@ -3,7 +3,7 @@
         <el-form :model="logisticsForm" :rules="rules" ref="ruleForm" label-width="250px" class="demo-ruleForm">
             <div class="carrierTitle">
                 <div class="realname">
-                    <h2>完善实名认证 <span >( 未认证 )</span> </h2>
+                    <h2>完善实名认证 <span :class="{certified:logisticsForm.authStatusName == '待认证' ,certify:logisticsForm.authStatusName == '认证成功'}">( {{logisticsForm.authStatusName}} )</span> </h2>
                 </div>
                 <div class="prompt">
                     <p><span class="tishi"><i class="el-icon-warning"></i>小提示： </span>(打<span class="star">*</span>号为必填项)</p>
@@ -304,12 +304,11 @@ export default {
         };
     },
     watch:{
-        serviceTypeArr(newVal){
-            console.log(newVal)
-        },
         productServiceCodeArr(newVal){
             console.log(newVal)
-
+        },
+          otherServiceCodeArr(newVal){
+            console.log(newVal)
         }
     },
     mounted(){
@@ -326,6 +325,10 @@ export default {
                 this.optionsOtherService = resArr[2].data;
                 this.serverClassify = resArr[3].data;
                 this.logisticsForm = resArr[4].data;
+                this.serviceTypeArr = JSON.parse(this.logisticsForm.serviceType) || [];
+                this.productServiceCodeArr = JSON.parse(this.logisticsForm.productService)  || [];
+                this.otherServiceCodeArr = JSON.parse(this.logisticsForm.otherService)  || [];
+
 
             }).catch(err => {
                
@@ -343,30 +346,55 @@ export default {
             this.logisticsForm.belongBrand = this.optionsBelongBrand.find(item => item.code === this.logisticsForm.belongBrandCode)['name'];
 
             let serviceTypeName = [];
+            let productServiceName = [];
+            let otherServiceName =  [];
 
-            // this.serviceTypeArr.forEach(el=>{
-            //     this.serverClassify.forEach(item => {
-            //         el.
-            //     })
-            // })
-
-            this.logisticsForm.serviceType = this.serviceTypeArr.join(',');
-
-
-
-
-
+            this.serviceTypeArr.forEach(el=>{
+                this.serverClassify.forEach(item => {
+                    if(el.code == item.code){
+                        serviceTypeName.push(item.name)
+                    }
+                })
+            })
             
+            this.productServiceCodeArr.forEach(el=>{
+                this.optionsProductService.forEach(item => {
+                    if(el == item.code){
+                        productServiceName.push(item.name)
+                    }
+                })
+            })
+
+            this.otherServiceCodeArr.forEach(el=>{
+                this.optionsOtherService.forEach(item => {
+                    if(el == item.code){
+                        otherServiceName.push(item.name)
+                    }
+                })
+            })
+
+
+            //服务类型
+            this.logisticsForm.serviceType = JSON.stringify(this.serviceTypeArr);                         
+            this.logisticsForm.serviceTypeName = JSON.stringify(serviceTypeName);
+            //产品与服务
+            this.logisticsForm.productServiceCode = JSON.stringify(this.productServiceCodeArr);                         
+            this.logisticsForm.productService = JSON.stringify(productServiceName);
+            //增值服务
+            this.logisticsForm.otherServiceCode = JSON.stringify(this.otherServiceCodeArr);                         
+            this.logisticsForm.otherService = JSON.stringify(otherServiceName);
+            
+            console.log(productServiceName,otherServiceName)
+
         },
         submitForm(formName) {
 
             this.$refs[formName].validate((valid) => {  
+                this.completeInfo();
 
-
-                this.logisticsForm.serviceType = JSON.stringify(this.serviceTypeArr);
 
                 let form = Object.assign({},this.logisticsForm,{authStatus:'AF0010402',authStatusName:'待认证'});
-                
+                console.log(form)
                 if (valid) {
                     // this.logisticsForm.
                     identifyCarrier(form).then(res=>{

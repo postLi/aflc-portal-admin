@@ -3,7 +3,7 @@
         <el-form :model="logisticsForm" :rules="rules" ref="ruleForm" label-width="250px" class="demo-ruleForm">
             <div class="carrierTitle">
                 <div class="realname">
-                    <h2>完善实名认证 <span >( 未认证 )</span> </h2>
+                    <h2>完善实名认证 <span  class="className">( {{logisticsForm.driverStatusName}} )</span> </h2>
                 </div>
                 <div class="prompt">
                     <p><span class="tishi"><i class="el-icon-warning"></i>小提示： </span>(打<span class="star">*</span>号为必填项)</p>
@@ -13,19 +13,19 @@
             <div class="companyInformation information">
                 <h2>基本信息</h2>
                 <el-form-item label="车主：" prop="driverName">
-                    <el-input v-model="logisticsForm.driverName" @change="limitNum" placeholder="请填写车主姓名">
+                    <el-input v-model="logisticsForm.driverName" @change="limitNum" placeholder="请填写车主姓名" :disabled="ifDisable === false">
                     </el-input>
                 </el-form-item> 
                 <el-form-item label="身份证号：" prop="driverCardid">
-                     <el-input v-model="logisticsForm.driverCardid" placeholder="请输入18位身份证号">
+                     <el-input v-model="logisticsForm.driverCardid" placeholder="请输入18位身份证号" :disabled="ifDisable === false">
                     </el-input>
                 </el-form-item>
                 <el-form-item label="手机号码：" prop="driverMobile"> 
-                     <el-input v-model="logisticsForm.driverMobile" maxlength="11" v-numberOnly>
+                     <el-input v-model="logisticsForm.driverMobile" maxlength="11" v-numberOnly :disabled="ifDisable === false">
                     </el-input>
                 </el-form-item>
                 <el-form-item label="车主QQ：" prop="QQ">             
-                    <el-input v-model="logisticsForm.qq" v-numberOnly>
+                    <el-input v-model="logisticsForm.qq" v-numberOnly :disabled="ifDisable === false">
                     </el-input>
                 </el-form-item>
                 <el-form-item label="车主简介："  class="textarea"  prop="driverDesc">
@@ -33,6 +33,7 @@
                         type="textarea"
                         :autosize="{ minRows: 5, maxRows: 10}"
                         placeholder="请输入内容"
+                        :disabled="ifDisable === false"
                         v-model="logisticsForm.driverDesc" :maxlength="maxlength">
                     </el-input>
                     <p>{{totalNumber}} / {{maxlength}}</p>
@@ -43,17 +44,20 @@
                 <h2>车主认证照片</h2>
                 <el-form-item   label-width="50px" prop="drivingLicenceFile">
                     <p><span>*</span>上传驾驶证照片：</p>
-                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.drivingLicenceFile" />
+                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.drivingLicenceFile" v-if="ifDisable == 'false'"/>
+                    <img class="showPicture" :src="logisticsForm.drivingLicenceFile" alt="" v-else>
                     <el-button  class="preview" type="primary" plain v-show="logisticsForm.drivingLicenceFile ? true : false" v-showPicture :imgurl="logisticsForm.drivingLicenceFile">点击预览</el-button>
                 </el-form-item>
                 <el-form-item   label-width="50px" prop="idCardFile">
                     <p><span>*</span>上传车主身份证照片：</p>
-                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.idCardFile" />
+                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.idCardFile" v-if="ifDisable == 'false'"/>
+                    <img class="showPicture" :src="logisticsForm.idCardFile" alt="" v-else>
                     <el-button  class="preview" type="primary" plain v-show="logisticsForm.idCardFile ? true : false" v-showPicture :imgurl="logisticsForm.idCardFile">点击预览</el-button>
                 </el-form-item>
                 <el-form-item  label-width="50px" prop="personalImageFile">
                     <p><span>*</span>上传车主个人形象照：</p>
-                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.personalImageFile" />
+                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.personalImageFile" v-if="ifDisable == 'false'"/>
+                    <img class="showPicture" :src="logisticsForm.personalImageFile" alt="" v-else>
                     <el-button  class="preview" type="primary" plain v-show="logisticsForm.personalImageFile ? true : false" v-showPicture :imgurl="logisticsForm.personalImageFile">点击预览</el-button>
                 </el-form-item>
             </div>
@@ -83,6 +87,9 @@ export default {
         totalNum() {
     　　　　return this.logisticsForm.driverDesc
     　　},
+        disabled(){
+            return this.logisticsForm.driverStatusName;
+        }
     },
     watch:{
         totalNum:{
@@ -95,6 +102,16 @@ export default {
             },
             deep:true
         },
+        disabled:{
+            handler(newVal){
+                if(newVal == '待认证' || newVal == '认证成功'){
+                    this.ifDisable = false;
+                }else{
+                    this.ifDisable = true;
+                }
+            },
+            deep:true
+        }
     },
     data() {
         var checkDriverCardid = (rule, value, callback) => {
@@ -108,6 +125,11 @@ export default {
             }
         };
         return {
+            ifDisable:false,
+            className:{
+                certified:false,
+                certify:true,
+            },
             totalNumber:0,//当前字数
             maxlength:200,
             logisticsForm: {
@@ -206,7 +228,12 @@ export default {
             bottom: -5px;
         }
         
-        
+        .certified{
+            color: #fff;
+        }
+        .certify{
+            color: #fff;
+        }
 
 </style>
 
