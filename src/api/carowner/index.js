@@ -1,5 +1,8 @@
 import fetch from '@/utils/fetch'
 
+
+const baseUrl = 'aflcusercenterservice';
+
 /**
  * 查询car信息
  * @param {*} id car id
@@ -174,3 +177,13 @@ export function putEnableType(id, type) {
 export function putSetRouteType(id, type) {
   return fetch.put('/aflcusercenterservice/usercenter/aflcCarInfo/v1/setRouteType/' + id + '/' + type)
 }
+
+
+//认证车主
+export function identifyOwner(data){
+    return fetch.axios({
+      url: '/aflcusercenterservice/usercenter/aflcDriver/v1/authAflcDriver',
+      method: 'post',
+      data:data
+    })
+  }

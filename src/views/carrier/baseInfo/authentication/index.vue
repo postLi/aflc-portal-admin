@@ -1,5 +1,5 @@
 <template>
-    <div class="carrierIdentification">
+    <div class="carrierIdentification identification">
         <el-form :model="logisticsForm" :rules="rules" ref="ruleForm" label-width="250px" class="demo-ruleForm">
             <div class="carrierTitle">
                 <div class="realname">
@@ -140,7 +140,7 @@
 
 <script>
 
-import './identification.scss'
+import '@/styles/identification.scss'
 import upload from '@/components/Upload/singleImage'
 import { identifyCarrier } from '@/api/carrier/index.js'
 import { getDictionary } from '@/api/common.js'

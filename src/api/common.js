@@ -80,3 +80,21 @@ export function getDictionary(code) {
       method: 'get'
     })
   }
+
+
+
+//根据手机号码获取车主信息
+export function getShipperInfoByMobile(phone) {
+    return fetch.axios({
+      url: '/'+baseUrl+'/common/aflcMemberCenter/v1/getShipperInfoByMobile?'+'mobile='+phone,
+      method: 'get',
+    })
+  }
+
+  //根据手机号码获取车主信息
+export function getDriverInfoByMobile(phone) {
+    return fetch.axios({
+      url: '/'+baseUrl+'/common/aflcMemberCenter/v1/getDriverInfoByMobile?'+'mobile='+phone,
+      method: 'get',
+    })
+  }
