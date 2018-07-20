@@ -83,7 +83,7 @@ export function getDictionary(code) {
 
 
 
-//根据手机号码获取车主信息
+//根据手机号码获取货主信息
 export function getShipperInfoByMobile(phone) {
     return fetch.axios({
       url: '/'+baseUrl+'/common/aflcMemberCenter/v1/getShipperInfoByMobile?'+'mobile='+phone,
@@ -91,10 +91,18 @@ export function getShipperInfoByMobile(phone) {
     })
   }
 
-  //根据手机号码获取车主信息
+//根据手机号码获取车主信息
 export function getDriverInfoByMobile(phone) {
     return fetch.axios({
       url: '/'+baseUrl+'/common/aflcMemberCenter/v1/getDriverInfoByMobile?'+'mobile='+phone,
+      method: 'get',
+    })
+  }
+
+//根据手机号码获取物流公司信息
+  export function getLogisticsCompanyInfoByMobile(phone) {
+    return fetch.axios({
+      url: '/'+baseUrl+'/common/aflcMemberCenter/v1/getLogisticsCompanyInfoByMobile?'+'mobile='+phone,
       method: 'get',
     })
   }

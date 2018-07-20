@@ -18,7 +18,7 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item label="品牌：" >
-                    <el-select v-model="logisticsForm.belongBrand" placeholder="请选择">
+                    <el-select v-model="logisticsForm.belongBrandCode" placeholder="请选择">
                         <el-option
                         v-for="item in optionsBelongBrand"
                         :key="item.id"
@@ -65,7 +65,7 @@
                 </el-form-item>
                 <el-form-item label="服务类型："  class="moreWidth" prop="serviceTypeArr">
                     <el-checkbox-group v-model="serviceTypeArr" >
-                        <el-checkbox v-for="server in serverClassify" :label="server.label"  :key="server.label">{{server.name}}</el-checkbox>
+                        <el-checkbox v-for="server in serverClassify" :label="server.code"  :key="server.id">{{server.name}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
                 <el-form-item label="产品与服务：" class="moreWidth" >
@@ -143,8 +143,10 @@
 import '@/styles/identification.scss'
 import upload from '@/components/Upload/singleImage'
 import { identifyCarrier } from '@/api/carrier/index.js'
-import { getDictionary } from '@/api/common.js'
+import { getDictionary,getLogisticsCompanyInfoByMobile } from '@/api/common.js'
 import { REGEX } from '@/utils/validate.js'
+import { getUserInfo } from '@/utils/auth.js'
+
 export default {
     components:{
         upload,
@@ -218,6 +220,7 @@ export default {
                     }
                 }]
             },
+            serviceType:'AF028',//服务类型
             belongBrand:'AF029',//品牌code
             productServiceCode:'AF027',//产品与服务code
             otherServiceCode:'AF025',//增值服务code
@@ -229,16 +232,7 @@ export default {
             otherServiceCodeArr:[],
             productServiceCodeArr:[],
             serviceTypeArr:[],
-            serverClassify:[
-                {
-                    label:'整车运输',
-                    name:'整车运输'
-                },
-                {
-                    label:'零担货运',
-                    name:'零担货运'
-                }
-            ],
+            serverClassify:[],
             logisticsForm: {
                 companyName: '',//物流公司名称
                 belongBrand: '',//品牌
@@ -270,7 +264,7 @@ export default {
                     {required: true, message: '请输入法人/负责人信息', trigger: 'blur'},
                 ],
                 creditCode:[
-                    {validator: checkCreditCode, trigger: 'change' }
+                    {validator: checkCreditCode, trigger: 'blur' }
                 ],
                 companyFile: [
                     { required: true, message: '请上传公司LOGO', trigger: 'blur' }
@@ -312,6 +306,10 @@ export default {
     watch:{
         serviceTypeArr(newVal){
             console.log(newVal)
+        },
+        productServiceCodeArr(newVal){
+            console.log(newVal)
+
         }
     },
     mounted(){
@@ -319,31 +317,59 @@ export default {
     },  
     methods: {
         getMoreInformation(){
-            Promise.all([getDictionary(this.belongBrand),getDictionary(this.productServiceCode),getDictionary(this.otherServiceCode),]).then(resArr => {
+             let res = getUserInfo() ;
+            Promise.all([getDictionary(this.belongBrand),getDictionary(this.productServiceCode),getDictionary(this.otherServiceCode),getDictionary(this.serviceType),getLogisticsCompanyInfoByMobile(res.mobile)]).then(resArr => {
                 // this.loading = false
                 console.log(resArr)
                 this.optionsBelongBrand = resArr[0].data;
                 this.optionsProductService = resArr[1].data;
                 this.optionsOtherService = resArr[2].data;
+                this.serverClassify = resArr[3].data;
+                this.logisticsForm = resArr[4].data;
 
             }).catch(err => {
                
             })
         },
         limitNum(val){
-            console.log(val)
-            console.log(val.length)
 
             if(val.length>25){
 
             }
         },
+        //完善信息
+        completeInfo(){
+
+            this.logisticsForm.belongBrand = this.optionsBelongBrand.find(item => item.code === this.logisticsForm.belongBrandCode)['name'];
+
+            let serviceTypeName = [];
+
+            // this.serviceTypeArr.forEach(el=>{
+            //     this.serverClassify.forEach(item => {
+            //         el.
+            //     })
+            // })
+
+            this.logisticsForm.serviceType = this.serviceTypeArr.join(',');
+
+
+
+
+
+            
+        },
         submitForm(formName) {
 
-            this.$refs[formName].validate((valid) => {
+            this.$refs[formName].validate((valid) => {  
+
+
+                this.logisticsForm.serviceType = JSON.stringify(this.serviceTypeArr);
+
+                let form = Object.assign({},this.logisticsForm,{authStatus:'AF0010402',authStatusName:'待认证'});
+                
                 if (valid) {
                     // this.logisticsForm.
-                    identifyCarrier(this.logisticsForm).then(res=>{
+                    identifyCarrier(form).then(res=>{
                         console.log(res)
                     })
                 } else {
@@ -360,3 +386,17 @@ export default {
 }
 </script>
 
+<style type="text/css" lang="scss">
+
+        .carrierIdentification {
+            .moreWidth{
+                .el-form-item__content{
+                    .el-checkbox-group{
+                        .el-checkbox:nth-child(7){
+                            margin-left: 0;
+                        }
+                    }
+                }
+            }
+        }
+</style>

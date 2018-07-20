@@ -4,7 +4,7 @@
         <el-form :model="logisticsForm" :rules="rules" ref="ruleForm" label-width="250px" class="demo-ruleForm">
             <div class="carrierTitle">
                 <div class="realname">
-                    <h2>完善实名认证 <span >( 未认证 )</span> </h2>
+                    <h2>完善实名认证 <span >( {{logisticsForm.shipperStatusName}} )</span> </h2>
                 </div>
                 <div class="prompt">
                     <p><span class="tishi"><i class="el-icon-warning"></i>小提示： </span>(打<span class="star">*</span>号为必填项)</p>
@@ -14,7 +14,9 @@
             <div class="companyInformation information">
                 <h2>基本信息</h2>
                 <el-form-item label="货主类型：" prop="shipperType">
-                    <el-select v-model="logisticsForm.shipperType" placeholder="请选择">
+                    <el-input v-model="logisticsForm.shipperTypeName" disabled  v-if="ifDisable === false">
+                    </el-input>
+                    <el-select v-model="logisticsForm.shipperType" placeholder="请选择" v-else>
                         <el-option
                         v-for="item in optionsShipperType"
                         :key="item.id"
@@ -24,20 +26,20 @@
                     </el-select>
                 </el-form-item> 
                 <el-form-item label="公司名称：" prop="companyName">
-                     <el-input v-model="logisticsForm.companyName">
+                     <el-input v-model="logisticsForm.companyName"  :disabled="ifDisable === false">
                         <p slot="append">请填写企业在工商局注册的全称，完整的信息让客户更加信赖您</p>
                     </el-input>
                 </el-form-item>
                 <el-form-item label="法人/负责人：" prop="legalPerson"> 
-                     <el-input v-model="logisticsForm.legalPerson">
+                     <el-input v-model="logisticsForm.legalPerson" :disabled="ifDisable === false">
                     </el-input>
                 </el-form-item>
-                 <el-form-item label="统一社会信用代码（营业执照）：" maxlength="18"  prop="creditCode">
-                    <el-input v-model="logisticsForm.creditCode">
+                 <el-form-item label="统一社会信用代码（营业执照）："  prop="creditCode">
+                    <el-input v-model="logisticsForm.creditCode" :disabled="ifDisable === false" maxlength="18">
                     </el-input>
                 </el-form-item>
                 <el-form-item label="身份证号：" prop="legalPersonIdno">             
-                    <el-input v-model="logisticsForm.legalPersonIdno">
+                    <el-input v-model="logisticsForm.legalPersonIdno" :disabled="ifDisable === false">
                     </el-input>
                 </el-form-item>
                 <el-form-item label="公司成立时间：" >
@@ -47,11 +49,13 @@
                     type="date"
                     placeholder="选择日期"
                     value-format="timestamp"
+                    :disabled="ifDisable === false"
                     :picker-options="pickerOptions">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="企业LOGO：" prop="companyLogo" class="minHeight">
-                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.companyLogo" />
+                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.companyLogo" v-if="ifDisable == 'false'"/>
+                    <img class="showPicture" :src="logisticsForm.companyLogo" alt="LOGO" >
                     <el-button  class="preview" type="primary" plain v-show="logisticsForm.companyLogo ? true : false" v-showPicture :imgurl="logisticsForm.companyLogo">点击预览</el-button>
                 </el-form-item>
                 <el-form-item label="公司简介："  class="textarea"  prop="driverDesc">
@@ -59,6 +63,7 @@
                         type="textarea"
                         :autosize="{ minRows: 5, maxRows: 10}"
                         placeholder="请输入内容"
+                        :disabled="ifDisable === false"
                         v-model="logisticsForm.driverDesc" :maxlength="maxlength">
                     </el-input>
                     <span>{{totalNumber}} / {{maxlength}}</span>
@@ -69,12 +74,12 @@
             <!-- 联系方式 -->
             <div class="contactInformation information">
                 <h2>联系方式</h2>
-                <el-form-item label="联系人："  prop="contacts">
-                    <el-input v-model="logisticsForm.contacts">
+                <el-form-item label="联系人："  prop="contacts" >
+                    <el-input v-model="logisticsForm.contacts" :disabled="ifDisable === false">
                     </el-input>
                 </el-form-item>
-                <el-form-item label="手机："  label-width="150px" prop="mobile">
-                    <el-input v-model="logisticsForm.mobile" maxlength="11"  v-numberOnly>
+                <el-form-item label="手机："  label-width="150px" prop="mobile" >
+                    <el-input v-model="logisticsForm.mobile" maxlength="11"  v-numberOnly :disabled="ifDisable === false">
                     </el-input>
                 </el-form-item>
                 <el-form-item label="公司所在地：" prop="belongCityName">
@@ -86,11 +91,11 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item label="联系电话：">
-                    <el-input v-model="logisticsForm.contactsTel" maxlength="12" >
+                    <el-input v-model="logisticsForm.contactsTel" maxlength="12"  :disabled="ifDisable === false">
                     </el-input>
                 </el-form-item>
                 <el-form-item label="QQ：" label-width="150px">
-                    <el-input v-model="logisticsForm.qq" v-numberOnly placeholder="填写QQ，方便物流公司联系您">
+                    <el-input v-model="logisticsForm.qq" v-numberOnly placeholder="填写QQ，方便物流公司联系您" :disabled="ifDisable === false">
                     </el-input>
                 </el-form-item>
             </div>
@@ -100,23 +105,26 @@
                 <h2>物流公司认证照片</h2>
                 <el-form-item   label-width="50px">
                     <p><span>*</span>上传营业执照照片：</p>
-                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.businessLicenceFile" />
+                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.businessLicenceFile" v-if="ifDisable == 'false'"/>
+                    <img class="showPicture" :src="logisticsForm.businessLicenceFile" alt="营业执照" v-else>
                     <el-button  class="preview" type="primary" plain v-show="logisticsForm.businessLicenceFile ? true : false" v-showPicture :imgurl="logisticsForm.businessLicenceFile">点击预览</el-button>
                 </el-form-item>
                 <el-form-item   label-width="50px" prop="companyFacadeFile" >
                     <p><span>*</span>上传公司或者档口照片：</p>
-                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.companyFacadeFile" />
+                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.companyFacadeFile" v-if="ifDisable == 'false'" />
+                    <img class="showPicture" :src="logisticsForm.companyFacadeFile" alt="公司或者档口照片" v-else>
                     <el-button  class="preview" type="primary" plain v-show="logisticsForm.companyFacadeFile ? true : false" v-showPicture :imgurl="logisticsForm.companyFacadeFile">点击预览</el-button>
                 </el-form-item>
                 <el-form-item  label-width="50px" prop="shipperCardFile">
                     <p><span>*</span>上传发货人名片照片：</p>
-                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.shipperCardFile" />
+                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.shipperCardFile" v-if="ifDisable == 'false'"/>
+                    <img class="showPicture" :src="logisticsForm.shipperCardFile" alt="" v-else>
                     <el-button  class="preview" type="primary" plain v-show="logisticsForm.shipperCardFile ? true : false" v-showPicture :imgurl="logisticsForm.shipperCardFile">点击预览</el-button>
                 </el-form-item>
             </div>
              <el-form-item class="fromfooter">
-                <el-button size="medium" @click="resetForm('ruleForm')">取消</el-button>
-                <el-button size="medium" type="primary" @click="submitForm('ruleForm')">确认</el-button>
+                <el-button size="medium" @click="resetForm('ruleForm')" v-show="ifDisable">取消</el-button>
+                <el-button size="medium" type="primary" @click="submitForm('ruleForm')" v-show="ifDisable">确认</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -138,19 +146,35 @@ export default {
     },
     computed: {
         totalNum() {
-    　　　　return this.logisticsForm.driverDesc
+    　　　　return this.logisticsForm.driverDesc;
     　　},
+        disabled(){
+            return this.logisticsForm.shipperStatusName;
+        }
     },
     watch:{
         totalNum:{
             handler(val, oldVal){
             //    console.log(val.length)
-            if(val){
-                this.totalNumber = val.length;
-            }
+                if(val){
+                    this.totalNumber = val.length;
+                }
             },
             deep:true
         },
+        disabled:{
+            handler(newVal){
+                console.log(newVal)
+                if(newVal == '待认证' || newVal == '认证成功'){
+                    this.ifDisable = false;
+                }else{
+                    this.ifDisable = true;
+                }
+
+                console.log(this.ifDisable)
+            },
+            deep:true
+        }
     },
     data() {
         var checkcreditCode = (rule, value, callback) => {
@@ -227,6 +251,7 @@ export default {
                     }
                 }]
             },
+            ifDisable:true,
             driverPhone:'',//货主电话（账户）
             totalNumber:0,//當前字數
             maxlength:200,
@@ -301,10 +326,9 @@ export default {
             }).catch(err => {
                 
             })
+
         },
         limitNum(val){
-            console.log(val)
-            console.log(val.length)
 
             if(val.length>25){
 
@@ -314,10 +338,11 @@ export default {
 
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    // this.logisticsForm.
-                    let form = Object.assign({},this.logisticsForm,{shipperStatus:"AF0010402"})
-                    identifyShipper(this.logisticsForm).then(res=>{
+                    let form = Object.assign({},this.logisticsForm,{'shipperStatus':"AF0010402"})
+                    // console.log(form)
+                    identifyShipper(form).then(res=>{
                         console.log(res)
+                        this.getMoreInformation();
                     })
                 } else {
                     console.log('error submit!!');

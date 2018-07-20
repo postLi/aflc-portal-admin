@@ -172,7 +172,7 @@ export default {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     // this.logisticsForm.
-                    let form = Object.assign({},this.logisticsForm,{accountStatus:'AF0010402'})
+                    let form = Object.assign({},this.logisticsForm,{driverStatus:'AF0010402'})
                     identifyOwner(this.logisticsForm).then(res=>{
                         console.log(res)
                     })
