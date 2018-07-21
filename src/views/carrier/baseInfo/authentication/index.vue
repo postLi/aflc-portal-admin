@@ -326,8 +326,8 @@ export default {
                 this.serverClassify = resArr[3].data;
                 this.logisticsForm = resArr[4].data;
                 this.serviceTypeArr = JSON.parse(this.logisticsForm.serviceType) || [];
-                this.productServiceCodeArr = JSON.parse(this.logisticsForm.productService)  || [];
-                this.otherServiceCodeArr = JSON.parse(this.logisticsForm.otherService)  || [];
+                this.productServiceCodeArr = JSON.parse(this.logisticsForm.productServiceCode)  || [];
+                this.otherServiceCodeArr = JSON.parse(this.logisticsForm.otherServiceCode)  || [];
 
 
             }).catch(err => {
@@ -351,7 +351,7 @@ export default {
 
             this.serviceTypeArr.forEach(el=>{
                 this.serverClassify.forEach(item => {
-                    if(el.code == item.code){
+                    if(el == item.code){
                         serviceTypeName.push(item.name)
                     }
                 })
@@ -374,6 +374,7 @@ export default {
             })
 
 
+
             //服务类型
             this.logisticsForm.serviceType = JSON.stringify(this.serviceTypeArr);                         
             this.logisticsForm.serviceTypeName = JSON.stringify(serviceTypeName);
@@ -383,22 +384,19 @@ export default {
             //增值服务
             this.logisticsForm.otherServiceCode = JSON.stringify(this.otherServiceCodeArr);                         
             this.logisticsForm.otherService = JSON.stringify(otherServiceName);
-            
-            console.log(productServiceName,otherServiceName)
-
         },
         submitForm(formName) {
 
             this.$refs[formName].validate((valid) => {  
                 this.completeInfo();
-
-
                 let form = Object.assign({},this.logisticsForm,{authStatus:'AF0010402',authStatusName:'待认证'});
                 console.log(form)
                 if (valid) {
                     // this.logisticsForm.
                     identifyCarrier(form).then(res=>{
                         console.log(res)
+                        this.getMoreInformation();
+                        this.clear();
                     })
                 } else {
                     console.log('error submit!!');
@@ -408,7 +406,18 @@ export default {
         },
         resetForm(formName) {
             this.$refs[formName].resetFields();
-        }
+        },
+        clear(){
+            this.optionsBelongBrand = [];//品牌
+            this.optionsProductService = [];//产品与服务
+            this.optionsOtherService = [];//增值服务
+            this.otherServiceCodeArr = [];
+            this.productServiceCodeArr = [];
+            this.serviceTypeArr = [];
+            this.serverClassify = [];
+        },
+
+
     },
   
 }
