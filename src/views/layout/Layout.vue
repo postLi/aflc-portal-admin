@@ -41,22 +41,22 @@ export default {
     CreateOrder,
     OrderDetail
   },
-  data () {
-      return {
-          theRefreshKey: '',
-          orderid: '',
-          orderobj: {
-            orderid: '',
-            batchid: '',
-            preid: '',
-            ordernum: 1,
-            batchobj: {}
-          },
-          showDetail: false,
-          showCreate: false,
-          showDetailVisible: false,
-          showCreateVisible: false
-      }
+  data() {
+    return {
+      theRefreshKey: '',
+      orderid: '',
+      orderobj: {
+        orderid: '',
+        batchid: '',
+        preid: '',
+        ordernum: 1,
+        batchobj: {}
+      },
+      showDetail: false,
+      showCreate: false,
+      showDetailVisible: false,
+      showCreateVisible: false
+    }
   },
   computed: {
     sidebar() {
@@ -64,40 +64,38 @@ export default {
     }
   },
   mounted() {
-      this.eventBus.$on('showOrderDetail', (orderid) => {
+    this.eventBus.$on('showOrderDetail', (orderid) => {
           // 避免重复触发的事件
-          if(!this.showDetailVisible){
-            console.log('showOrderDetail:', orderid)
-            this.orderid = orderid || ''
-            this.showDetail = true
-            this.showDetailVisible = true
-          }
-
-      })
-      this.eventBus.$on('hideOrderDetail', (orderid) => {
-          this.showDetailVisible = false
-      })
+      if (!this.showDetailVisible) {
+        console.log('showOrderDetail:', orderid)
+        this.orderid = orderid || ''
+        this.showDetail = true
+        this.showDetailVisible = true
+      }
+    })
+    this.eventBus.$on('hideOrderDetail', (orderid) => {
+      this.showDetailVisible = false
+    })
       // 如果传过来orderid，表示修改该订单
-      this.eventBus.$on('showCreateOrder', (orderobj) => {
+    this.eventBus.$on('showCreateOrder', (orderobj) => {
           // 避免重复触发的事件
-          if(!this.showCreateVisible){
-            let data = objectMerge2(this._orderobj, orderobj)
-            console.log('showCreateOrder:', orderobj, data)
-            this.orderobj = data
-            this.showCreate = true
-            this.showCreateVisible = true
-          }
-
-      })
-      this.eventBus.$on('hideCreateOrder', (orderid) => {
-          this.showCreateVisible = false
-      })
-      this._orderobj = objectMerge2({}, this.orderobj)
+      if (!this.showCreateVisible) {
+        const data = objectMerge2(this._orderobj, orderobj)
+        console.log('showCreateOrder:', orderobj, data)
+        this.orderobj = data
+        this.showCreate = true
+        this.showCreateVisible = true
+      }
+    })
+    this.eventBus.$on('hideCreateOrder', (orderid) => {
+      this.showCreateVisible = false
+    })
+    this._orderobj = objectMerge2({}, this.orderobj)
   },
   methods: {
-      refreshKey(){
-          this.theRefreshKey = Math.random()
-      }
+    refreshKey() {
+      this.theRefreshKey = Math.random()
+    }
   }
 }
 </script>
@@ -151,15 +149,15 @@ export default {
         }
         .main-container {
             margin: 0 auto;
-            width: 1200px;
+            min-width: 1200px;
+            width: 100%;
             box-sizing: border-box;
-            padding-top: 20px;
             position: relative;
+            display: flex;
         }
         .main-container-wrap{
             float: left;
-            margin-left: 20px;
-            width: 990px;
+            flex: 1;
         }
         .navbar-wrapper{
             width: 100%;

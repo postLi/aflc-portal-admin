@@ -25,7 +25,7 @@ export default {
     TopNavSearch,
     TopNavCreateOrder
   },
-  data () {
+  data() {
     return {
     }
   }
@@ -37,7 +37,8 @@ export default {
     .navbar {
         background: #373d41;
         border-radius: 0;
-        width: 1200px;
+        min-width: 1200px;
+        width: 100%;
         margin-left: auto;
         position: relative;
         margin-right: auto;
