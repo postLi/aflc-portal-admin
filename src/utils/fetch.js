@@ -115,9 +115,11 @@ service.interceptors.response.use(
 )
 
 export function checkStatus(res) {
-  if (res.status !== 100 && res.status !== -1 && res.status !== 40001) {
+  // if (res.status !== 100 && res.status !== -1 && res.status !== 40001 && res.status !== 415) {
+  if (res.status === 200) {
     return res
   } else {
+    console.log('axios res err: ', res)
     return Promise.reject(res)
   }
 }
