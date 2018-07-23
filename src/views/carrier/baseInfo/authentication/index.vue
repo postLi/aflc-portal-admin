@@ -461,15 +461,7 @@ export default {
 <style type="text/css" lang="scss">
 
         .carrierIdentification {
-            .moreWidth{
-                .el-form-item__content{
-                    .el-checkbox-group{
-                        .el-checkbox:nth-child(7){
-                            margin-left: 0;
-                        }
-                    }
-                }
-            }
+           
         }
         
          .carrierIdentification .el-form .information .textarea .el-form-item__content {
