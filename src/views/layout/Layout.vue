@@ -108,6 +108,7 @@ export default {
         @include clearfix;
         position: relative;
         background: #f2f2f2;
+        height: 100%;
         &.hideSidebar {
             .main-container {
                 
@@ -134,7 +135,6 @@ export default {
         .sidebar-wrapper {
             width: $sidebarWidth;
             float: left;
-            height: 100%;
             bottom: 0;
             left: 0;
             z-index: 1001;
@@ -154,6 +154,7 @@ export default {
             box-sizing: border-box;
             position: relative;
             display: flex;
+            min-height: 100%;
         }
         .main-container-wrap{
             float: left;
