@@ -57,6 +57,15 @@ export function NewPointNetwork(data){
     })
   }
 
+
+//更改物流公司网点
+export function changePointNetwork(data){
+    return fetch.axios({
+      url: '/'+baseUrl+'/usercenter/aflcPointNetwork/v1/update',
+      method: 'PUT',
+      data:data
+    })
+  }
 //根据条件获取物流公司网点列表
 export function getPointNetwork(page,pagesize,data){
     return fetch.axios({
@@ -79,7 +88,7 @@ export function PointNetworkStatus(id){
     })
   }
 
-  //根据条件获取物流公司网点列表
+  //删除物流公司网点列表
 export function deletePointNetwork(id){
     return fetch.axios({
       url: '/'+baseUrl+'/usercenter/aflcPointNetwork/v1/delete/'+id,

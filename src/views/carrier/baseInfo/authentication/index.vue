@@ -92,7 +92,7 @@
                     <el-input v-model="logisticsForm.contactsName" :disabled="ifDisable === false">
                     </el-input>
                 </el-form-item>
-                <el-form-item label="手机："  label-width="150px" prop="mobile">
+                <el-form-item label="手机："  prop="mobile">
                     <el-input v-model="logisticsForm.mobile" maxlength="11"  v-numberOnly   :disabled="ifDisable === false">
                     </el-input>
                 </el-form-item>
@@ -100,7 +100,7 @@
                     <el-input v-model="logisticsForm.belongCityName">
                     </el-input>
                 </el-form-item> 
-                <el-form-item label="详细地址："  label-width="150px" prop="address">
+                <el-form-item label="详细地址："  prop="address">
                     <el-input v-model="logisticsForm.address">
                     </el-input>
                 </el-form-item>
@@ -108,7 +108,7 @@
                     <el-input v-model="logisticsForm.contactsTel" maxlength="11" :disabled="ifDisable === false">
                     </el-input>
                 </el-form-item>
-                <el-form-item label="QQ：" label-width="150px">
+                <el-form-item label="QQ：">
                     <el-input v-model="logisticsForm.qq" v-numberOnly :disabled="ifDisable === false">
                     </el-input>
                 </el-form-item>
@@ -121,20 +121,20 @@
             <!-- 物流公司认证照片 -->
             <div class="picInformation information" >
                 <h2>物流公司认证照片</h2>
-                <el-form-item   label-width="50px" prop="businessLicenceFile">
+                <el-form-item   prop="businessLicenceFile">
                     <p><span>*</span>上传营业执照照片：</p>
                     <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.businessLicenceFile" v-if="ifDisable == 'false'"/>
                     <img class="showPicture" :src="logisticsForm.businessLicenceFile ? logisticsForm.businessLicenceFile: defaultImg" alt="" v-else>
                     <el-button  class="preview" type="primary" plain v-show="logisticsForm.businessLicenceFile ? true : false" v-showPicture :imgurl="logisticsForm.businessLicenceFile">点击预览</el-button>
                 </el-form-item>
-                <el-form-item   label-width="50px" prop="takeIdCardFile">
+                <el-form-item   prop="takeIdCardFile">
                     <p><span>*</span>负责人手持身份证正面照片：</p>
                     <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.takeIdCardFile" v-if="ifDisable == 'false'"/>
                     <img class="showPicture" :src="logisticsForm.takeIdCardFile? logisticsForm.takeIdCardFile: defaultImg" alt="" v-else>
                     
                     <el-button  class="preview" type="primary" plain v-show="logisticsForm.takeIdCardFile ? true : false" v-showPicture :imgurl="logisticsForm.takeIdCardFile">点击预览</el-button>
                 </el-form-item>
-                <el-form-item  label-width="50px" prop="companyFacadeFile">
+                <el-form-item  prop="companyFacadeFile">
                     <p><span>*</span>上传公司或者档口照片：</p>
                     <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.companyFacadeFile" v-if="ifDisable == 'false'"/>
                     <img class="showPicture" :src="logisticsForm.companyFacadeFile ? logisticsForm.companyFacadeFile: defaultImg" alt="" v-else>

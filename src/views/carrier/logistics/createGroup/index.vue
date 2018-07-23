@@ -40,7 +40,8 @@
                 </el-form-item>
             </div>
             <el-form-item class="fromfooter">
-                <el-button size="medium" type="primary" @click="submitForm('ruleForm')">立即发布</el-button>
+                <el-button size="medium" type="primary" @click="submitForm('ruleForm')" v-if="logisticsForm.id">保存</el-button>
+                <el-button size="medium" type="primary" @click="submitForm('ruleForm')" v-else>立即发布</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -50,7 +51,7 @@
 
 import '@/styles/identification.scss'
 import { getDictionary,getLogisticsCompanyInfoByMobile } from '@/api/common.js'
-import { NewPointNetwork } from '@/api/carrier/index.js'
+import { NewPointNetwork,changePointNetwork } from '@/api/carrier/index.js'
 import { REGEX } from '@/utils/validate.js'
 import upload from '@/components/Upload/singleImage'
 
@@ -135,7 +136,6 @@ export default {
     methods: {
         getParams(){
             if(this.$route.params.data){
-
                 let dataObj = this.$route.params.data;//接收数据
                 this.logisticsForm = Object.assign({},dataObj);
             }else{
@@ -157,19 +157,32 @@ export default {
         submitForm(formName) {
 
             this.$refs[formName].validate((valid) => {  
-                
                 // console.log(form)
                 if (valid) {
-                    // this.logisticsForm.
-                    NewPointNetwork(this.logisticsForm).then(res=>{
-                        console.log(res)
-                        this.$alert('操作成功', '提示', {
-                            confirmButtonText: '确定',
-                            callback: action => {
-                                console.log(this)
-                                this.$router.push({name: '管理我的网点'});
-                            }
-                        });
+                    // this.logisticsForm.\
+                    let commitFunction;
+                    if(this.logisticsForm.id){
+                        commitFunction = changePointNetwork(this.logisticsForm);
+                    }else{
+                        commitFunction = NewPointNetwork(this.logisticsForm);
+                    }
+                    commitFunction.then(res=>{
+                        console.log('res',res)
+                        if(res.status == 200){
+                            this.$alert('操作成功', '提示', {
+                                confirmButtonText: '确定',
+                                callback: action => {
+                                    this.$router.push({name: '管理我的网点'});
+                                }
+                            });
+                        }else{
+                            this.$message({
+                                type: 'info',
+                                message: '操作失败，原因：' + errorInfo ? errorInfo : err.text
+                            })
+                        }
+                    }).catch(err=>{
+                        // console.log('err',err)
                     })
                 } else {
                     console.log('error submit!!');
@@ -177,10 +190,6 @@ export default {
                 }
             });
         },
-        resetForm(formName) {
-            this.$refs[formName].resetFields();
-        },
-
     },
   
 }

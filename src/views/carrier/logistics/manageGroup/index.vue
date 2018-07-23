@@ -1,35 +1,31 @@
 <template>
     <div class="PointNetwork identification">
-        <el-form :model="logisticsForm" ref="ruleForm" label-width="90px" class="demo-ruleForm">
+        <el-form :model="logisticsForm" ref="ruleForm" label-width="110px" class="demo-ruleForm">
             <div class="carrierTitle">
                 <div class="realname">
                     <h2>管理我的网点</h2>
                 </div>
             </div>
             <div class="searchInformation information">
-                <el-form-item label="网点名称">
-                    <el-input v-model="logisticsForm.pointName">
-                    </el-input>
-                </el-form-item>
-                <el-form-item label="网点地址：">
-                    <el-input v-model="logisticsForm.address">
-                    </el-input>
-                </el-form-item>
-                <el-form-item label="联系人：" maxlength="18" >
+                <el-form-item label="网点名称" prop="name">
                     <el-input v-model="logisticsForm.name">
                     </el-input>
                 </el-form-item>
-                <el-form-item label="手机：">
+                <el-form-item label="网点地址：" prop="address">
+                    <el-input v-model="logisticsForm.address">
+                    </el-input>
+                </el-form-item>
+                <el-form-item label="联系人：" maxlength="18"  prop="name">
+                    <el-input v-model="logisticsForm.name">
+                    </el-input>
+                </el-form-item>
+                <el-form-item label="手机：" prop="mobile">
                     <el-input v-model="logisticsForm.mobile" maxlength="11">
                     </el-input>
                 </el-form-item>
-                <el-form-item label="固话：">
-                     <el-input v-model="logisticsForm.telNum" maxlength="11">
-                    </el-input>
-                </el-form-item>
-                <el-form-item>
+                <el-form-item class="btnChoose" style="margin-left:20px;">
                     <el-button type="primary" @click="handleSearch">搜索</el-button>
-                    <el-button type="primary">清空</el-button>
+                    <el-button type="primary" @click="clearSearch">清空</el-button>
                 </el-form-item>
             </div>
             <!-- <div class="information">
@@ -52,13 +48,13 @@
                             fixed
                             label="序号"
                             type="index"
-                            width="50">
+                            width="80">
                         </el-table-column>
                         <el-table-column
                             fixed
                             prop="pointName"
                             label="网点名称"
-                            width="120">
+                            width="180">
                         </el-table-column>
                         <el-table-column
                             prop="address"
@@ -68,22 +64,22 @@
                         <el-table-column
                             prop="name"
                             label="联系人"
-                            width="120">
+                            width="180">
                         </el-table-column>
                         <el-table-column
                             prop="mobile"
                             label="手机"
-                            width="150">
+                            width="180">
                         </el-table-column>
                         <el-table-column
                             prop="telNum"
                             label="固话" 
-                            width="150">
+                            width="180">
                         </el-table-column>
                         <el-table-column
                             prop="pointFile"
                             label="网点图片"
-                            width="150">
+                            width="210">
                                 <template  slot-scope="scope"> 
                                     <img  :src="scope.row.pointFile ? scope.row.pointFile : defaultImg" />
                                 </template>
@@ -92,7 +88,7 @@
                             fixed="right"
                             prop="address"
                             label="操作"
-                            width="220">
+                            >
                                 <template slot-scope="scope">
                                     <!-- <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button> -->
                                     <el-button @click="handleEdit(scope.row)" type="primary" size="mini">修改</el-button>
@@ -156,8 +152,9 @@ export default {
                 this.totalCount = res.data.totalCount;
             })
         },
-        resetForm(formName) {
-            this.$refs[formName].resetFields();
+        clearSearch(){
+            this.$refs.ruleForm.resetFields();
+            this.firstblood();
         },
         //搜索
         handleSearch(){
@@ -223,6 +220,13 @@ export default {
 <style type="text/css" lang="scss">
     .PointNetwork{
         .el-form{
+            .btnChoose{
+                width: 200px;
+                .el-form-item__content{
+                    margin-left: 0 !important;
+                    width: 155px !important;
+                }
+            }
             .searchInformation{
                 .el-form-item{
                     display: inline-block;
