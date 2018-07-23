@@ -48,4 +48,44 @@ export function identifyCarrier(data){
   }
 
 
+  //新增物流公司网点
+export function NewPointNetwork(data){
+    return fetch.axios({
+      url: '/'+baseUrl+'/usercenter/aflcPointNetwork/v1/add',
+      method: 'post',
+      data:data
+    })
+  }
+
+//根据条件获取物流公司网点列表
+export function getPointNetwork(page,pagesize,data){
+    return fetch.axios({
+      url: '/'+baseUrl+'/usercenter/aflcPointNetwork/v1/list',
+      method: 'post',
+      data:{
+        "currentPage": page,
+        "pageSize": pagesize,
+        "vo": data
+      }
+    })
+  }
+
+
+//更改物流公司网点状态
+export function PointNetworkStatus(id){
+    return fetch.axios({
+      url: '/aflcusercenterservice/usercenter/aflcPointNetwork/v1/updateAflcPointNetworkStatus/'+id,
+      method: 'PUT',
+    })
+  }
+
+  //根据条件获取物流公司网点列表
+export function deletePointNetwork(id){
+    return fetch.axios({
+      url: '/'+baseUrl+'/usercenter/aflcPointNetwork/v1/delete/'+id,
+      method: 'DELETE',
+    })
+  }
+
+  
   

@@ -80,7 +80,7 @@
             text-indent: 10px;
             background-color: #fff;
             border-color: #e4e7ed;
-            color: #3e9ff1;
+            color: #333;
             cursor: not-allowed;
             word-break:break-all;
         }
@@ -88,6 +88,7 @@
             
             background: #fff;
             padding: 18px 20px;
+            margin-bottom: 20px;
             &>h2{
                 margin-bottom: 20px;
                 padding: 5px 0;

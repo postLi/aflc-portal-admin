@@ -3,7 +3,7 @@
         <el-form :model="logisticsForm" :rules="rules" ref="ruleForm" label-width="250px" class="demo-ruleForm">
             <div class="carrierTitle">
                 <div class="realname">
-                    <h2>完善实名认证 <span  class="className">( {{logisticsForm.driverStatusName}} )</span> </h2>
+                    <h2>完善实名认证 <span  :class="{certified:logisticsForm.driverStatusName == '待认证' ,certify:logisticsForm.driverStatusName == '认证成功'}">( {{logisticsForm.driverStatusName}} )</span> </h2>
                 </div>
                 <div class="prompt">
                     <p><span class="tishi"><i class="el-icon-warning"></i>小提示： </span>(打<span class="star">*</span>号为必填项)</p>
@@ -45,25 +45,25 @@
                 <el-form-item   label-width="50px" prop="drivingLicenceFile">
                     <p><span>*</span>上传驾驶证照片：</p>
                     <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.drivingLicenceFile" v-if="ifDisable == 'false'"/>
-                    <img class="showPicture" :src="logisticsForm.drivingLicenceFile" alt="" v-else>
+                    <img class="showPicture" :src="logisticsForm.drivingLicenceFile" alt="驾驶证照片"  v-else/>
                     <el-button  class="preview" type="primary" plain v-show="logisticsForm.drivingLicenceFile ? true : false" v-showPicture :imgurl="logisticsForm.drivingLicenceFile">点击预览</el-button>
                 </el-form-item>
                 <el-form-item   label-width="50px" prop="idCardFile">
                     <p><span>*</span>上传车主身份证照片：</p>
                     <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.idCardFile" v-if="ifDisable == 'false'"/>
-                    <img class="showPicture" :src="logisticsForm.idCardFile" alt="" v-else>
+                    <img class="showPicture" :src="logisticsForm.idCardFile" alt="车主身份证照片" v-else/>
                     <el-button  class="preview" type="primary" plain v-show="logisticsForm.idCardFile ? true : false" v-showPicture :imgurl="logisticsForm.idCardFile">点击预览</el-button>
                 </el-form-item>
                 <el-form-item  label-width="50px" prop="personalImageFile">
                     <p><span>*</span>上传车主个人形象照：</p>
                     <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.personalImageFile" v-if="ifDisable == 'false'"/>
-                    <img class="showPicture" :src="logisticsForm.personalImageFile" alt="" v-else>
+                    <img class="showPicture" :src="logisticsForm.personalImageFile" alt="车主个人形象照" v-else/>
                     <el-button  class="preview" type="primary" plain v-show="logisticsForm.personalImageFile ? true : false" v-showPicture :imgurl="logisticsForm.personalImageFile">点击预览</el-button>
                 </el-form-item>
             </div>
             <el-form-item class="fromfooter">
-                <el-button size="medium" @click="resetForm('ruleForm')">取消</el-button>
-                <el-button size="medium" type="primary" @click="submitForm('ruleForm')">确认</el-button>
+                <el-button size="medium" @click="resetForm('ruleForm')" v-show="ifDisable">取消</el-button>
+                <el-button size="medium" type="primary" @click="submitForm('ruleForm')" v-show="ifDisable">确认</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -126,10 +126,6 @@ export default {
         };
         return {
             ifDisable:false,
-            className:{
-                certified:false,
-                certify:true,
-            },
             totalNumber:0,//当前字数
             maxlength:200,
             logisticsForm: {
@@ -228,12 +224,7 @@ export default {
             bottom: -5px;
         }
         
-        .certified{
-            color: #fff;
-        }
-        .certify{
-            color: #fff;
-        }
+      
 
 </style>
 

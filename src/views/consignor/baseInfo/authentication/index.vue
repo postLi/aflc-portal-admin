@@ -4,7 +4,7 @@
         <el-form :model="logisticsForm" :rules="rules" ref="ruleForm" label-width="250px" class="demo-ruleForm">
             <div class="carrierTitle">
                 <div class="realname">
-                    <h2>完善实名认证 <span >( {{logisticsForm.shipperStatusName}} )</span> </h2>
+                    <h2>完善实名认证 <span :class="{certified:logisticsForm.shipperStatusName == '待认证' ,certify:logisticsForm.shipperStatusName == '认证成功'}">( {{logisticsForm.shipperStatusName}} )</span> </h2>
                 </div>
                 <div class="prompt">
                     <p><span class="tishi"><i class="el-icon-warning"></i>小提示： </span>(打<span class="star">*</span>号为必填项)</p>
@@ -55,7 +55,7 @@
                 </el-form-item>
                 <el-form-item label="企业LOGO：" prop="companyLogo" class="minHeight">
                     <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.companyLogo" v-if="ifDisable == 'false'"/>
-                    <img class="showPicture" :src="logisticsForm.companyLogo" alt="LOGO" >
+                    <img class="showPicture" :src="logisticsForm.companyLogo" alt="LOGO" v-else>
                     <el-button  class="preview" type="primary" plain v-show="logisticsForm.companyLogo ? true : false" v-showPicture :imgurl="logisticsForm.companyLogo">点击预览</el-button>
                 </el-form-item>
                 <el-form-item label="公司简介："  class="textarea"  prop="driverDesc">
@@ -68,7 +68,7 @@
                     </el-input>
                     <span>{{totalNumber}} / {{maxlength}}</span>
                     <p>如果您是企业，必须填写完整细致的企业简介；</p>
-                    <p> 如果您是个人，必须填写详细的个体经营范围，不得出现违法词语，字数不低于30字。</p>
+                    <p>如果您是个人，必须填写详细的个体经营范围，不得出现违法词语，字数不低于30字。</p>
                 </el-form-item>
             </div>
             <!-- 联系方式 -->

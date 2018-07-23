@@ -13,12 +13,14 @@
             <div class="companyInformation information">
                 <h2>公司信息</h2>
                 <el-form-item label="物流公司名称：" prop="companyName">
-                    <el-input v-model="logisticsForm.companyName" @change="limitNum">
+                    <el-input v-model="logisticsForm.companyName" @change="limitNum" :disabled="ifDisable === false">
                         <p slot="append">请填写企业在工商局注册的全称，完整的信息让客户更加信赖您。</p>
                     </el-input>
                 </el-form-item>
                 <el-form-item label="品牌：" >
-                    <el-select v-model="logisticsForm.belongBrandCode" placeholder="请选择">
+                    <el-input v-model="logisticsForm.belongBrand" @change="limitNum" disabled v-if="ifDisable === false">
+                    </el-input>
+                    <el-select v-model="logisticsForm.belongBrandCode" placeholder="请选择" v-else>
                         <el-option
                         v-for="item in optionsBelongBrand"
                         :key="item.id"
@@ -33,49 +35,53 @@
                     align="right"
                     type="date"
                     placeholder="选择日期"
+                    :disabled="ifDisable === false"
                     value-format="timestamp"
                     :picker-options="pickerOptions">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="法人/负责人：" prop="corporation">
-                    <el-input v-model="logisticsForm.corporation">
+                    <el-input v-model="logisticsForm.corporation"  :disabled="ifDisable === false">
                         <p slot="append">与营业执照上法定代表人姓名保持一致。</p>
                     </el-input>
                 </el-form-item>
                 <el-form-item label="统一社会信用代码（营业执照）：" maxlength="18"  prop="creditCode">
-                    <el-input v-model="logisticsForm.creditCode">
+                    <el-input v-model="logisticsForm.creditCode" :disabled="ifDisable === false">
                     </el-input>
                 </el-form-item>
                 <el-form-item label="代收货款：" >
-                        <el-radio v-model="logisticsForm.isCollection" label="1">是</el-radio>
-                        <el-radio v-model="logisticsForm.isCollection" label="0">否</el-radio>
+                        <el-radio v-model="logisticsForm.isCollection" label="1" :disabled="ifDisable === false">是</el-radio>
+                        <el-radio v-model="logisticsForm.isCollection" label="0" :disabled="ifDisable === false">否</el-radio>
                 </el-form-item>
                 <el-form-item label="企业LOGO：" prop="companyFile">
-                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.companyFile" />
+                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.companyFile" v-if="ifDisable == 'false'"/>
+                    <img class="showPicture" :src="logisticsForm.companyFile ? logisticsForm.companyFile: defaultImg" alt="" v-else>
                     <el-button  class="preview" type="primary" plain v-show="logisticsForm.companyFile ? true : false" v-showPicture :imgurl="logisticsForm.companyFile">点击预览</el-button>
                 </el-form-item>
                 <el-form-item label="公司简介："  class="textarea" prop="companyDes">
                     <el-input
                         type="textarea"
+                        :disabled="ifDisable === false"
                         :autosize="{ minRows: 5, maxRows: 10}"
                         placeholder="请输入内容"
                         v-model="logisticsForm.companyDes">
                     </el-input>
+                    <span>{{totalNumber}} / {{maxlength}}</span>
                     <p>建议您详细的介绍公司的物流服务，有什么服务优势，能被发货客户搜索到</p>
                 </el-form-item>
                 <el-form-item label="服务类型："  class="moreWidth" prop="serviceTypeArr">
                     <el-checkbox-group v-model="serviceTypeArr" >
-                        <el-checkbox v-for="server in serverClassify" :label="server.code"  :key="server.id">{{server.name}}</el-checkbox>
+                        <el-checkbox v-for="server in serverClassify" :label="server.code" :disabled="ifDisable === false" :key="server.id">{{server.name}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
                 <el-form-item label="产品与服务：" class="moreWidth" >
                     <el-checkbox-group v-model="productServiceCodeArr" >
-                        <el-checkbox v-for="server in optionsProductService" :label="server.code" :key="server.id">{{server.name}}</el-checkbox>
+                        <el-checkbox v-for="server in optionsProductService" :label="server.code" :disabled="ifDisable === false" :key="server.id">{{server.name}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
                 <el-form-item label="增值服务：" class="moreWidth">
                     <el-checkbox-group v-model="otherServiceCodeArr" >
-                        <el-checkbox v-for="server in optionsOtherService" :label="server.code" :key="server.id">{{server.name}}</el-checkbox>
+                        <el-checkbox v-for="server in optionsOtherService" :label="server.code"  :disabled="ifDisable === false" :key="server.id">{{server.name}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
             </div>
@@ -83,11 +89,11 @@
             <div class="contactInformation information">
                 <h2>联系方式</h2>
                 <el-form-item label="联系人："  prop="contactsName">
-                    <el-input v-model="logisticsForm.contactsName">
+                    <el-input v-model="logisticsForm.contactsName" :disabled="ifDisable === false">
                     </el-input>
                 </el-form-item>
                 <el-form-item label="手机："  label-width="150px" prop="mobile">
-                    <el-input v-model="logisticsForm.mobile" maxlength="11"  v-numberOnly>
+                    <el-input v-model="logisticsForm.mobile" maxlength="11"  v-numberOnly   :disabled="ifDisable === false">
                     </el-input>
                 </el-form-item>
                 <el-form-item label="公司所在地：" prop="belongCityName">
@@ -99,15 +105,16 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item label="联系电话：">
-                    <el-input v-model="logisticsForm.contactsTel" maxlength="11" >
+                    <el-input v-model="logisticsForm.contactsTel" maxlength="11" :disabled="ifDisable === false">
                     </el-input>
                 </el-form-item>
                 <el-form-item label="QQ：" label-width="150px">
-                    <el-input v-model="logisticsForm.qq" v-numberOnly>
+                    <el-input v-model="logisticsForm.qq" v-numberOnly :disabled="ifDisable === false">
                     </el-input>
                 </el-form-item>
                 <el-form-item label="微信二维码上传：">
-                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.wechatCode" />
+                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.wechatCode" v-if="ifDisable == 'false'"/>
+                    <img class="showPicture" :src="logisticsForm.wechatCode ? logisticsForm.wechatCode: defaultImg" alt="" v-else>
                     <el-button  class="preview" type="primary" plain v-show="logisticsForm.wechatCode ? true : false" v-showPicture :imgurl="logisticsForm.wechatCode">点击预览</el-button>
                 </el-form-item>
             </div>
@@ -116,23 +123,27 @@
                 <h2>物流公司认证照片</h2>
                 <el-form-item   label-width="50px" prop="businessLicenceFile">
                     <p><span>*</span>上传营业执照照片：</p>
-                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.businessLicenceFile" />
+                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.businessLicenceFile" v-if="ifDisable == 'false'"/>
+                    <img class="showPicture" :src="logisticsForm.businessLicenceFile ? logisticsForm.businessLicenceFile: defaultImg" alt="" v-else>
                     <el-button  class="preview" type="primary" plain v-show="logisticsForm.businessLicenceFile ? true : false" v-showPicture :imgurl="logisticsForm.businessLicenceFile">点击预览</el-button>
                 </el-form-item>
                 <el-form-item   label-width="50px" prop="takeIdCardFile">
                     <p><span>*</span>负责人手持身份证正面照片：</p>
-                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.takeIdCardFile" />
+                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.takeIdCardFile" v-if="ifDisable == 'false'"/>
+                    <img class="showPicture" :src="logisticsForm.takeIdCardFile? logisticsForm.takeIdCardFile: defaultImg" alt="" v-else>
+                    
                     <el-button  class="preview" type="primary" plain v-show="logisticsForm.takeIdCardFile ? true : false" v-showPicture :imgurl="logisticsForm.takeIdCardFile">点击预览</el-button>
                 </el-form-item>
                 <el-form-item  label-width="50px" prop="companyFacadeFile">
                     <p><span>*</span>上传公司或者档口照片：</p>
-                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.companyFacadeFile" />
+                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.companyFacadeFile" v-if="ifDisable == 'false'"/>
+                    <img class="showPicture" :src="logisticsForm.companyFacadeFile ? logisticsForm.companyFacadeFile: defaultImg" alt="" v-else>
                     <el-button  class="preview" type="primary" plain v-show="logisticsForm.companyFacadeFile ? true : false" v-showPicture :imgurl="logisticsForm.companyFacadeFile">点击预览</el-button>
                 </el-form-item>
             </div>
             <el-form-item class="fromfooter">
-                <el-button size="medium" type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
-                <el-button size="medium" @click="resetForm('ruleForm')">重置</el-button>
+                <el-button size="medium" @click="resetForm('ruleForm')" v-show="ifDisable">取消</el-button>
+                <el-button size="medium" type="primary" @click="submitForm('ruleForm')" v-show="ifDisable">确认提交</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -174,6 +185,8 @@ export default {
             }
         };
         return {
+            defaultImg:'/static/default.png',//默认加载失败图片
+            ifDisable:false,
             pickerOptions:{
                 disabledDate(time) {
                     return time.getTime() > Date.now();
@@ -220,6 +233,8 @@ export default {
                     }
                 }]
             },
+            totalNumber:0,//當前字數
+            maxlength:200,
             serviceType:'AF028',//服务类型
             belongBrand:'AF029',//品牌code
             productServiceCode:'AF027',//产品与服务code
@@ -303,12 +318,33 @@ export default {
             }
         };
     },
+    computed:{
+        totalNum() {
+    　　　　return this.logisticsForm.companyDes;
+    　　},
+        disabled(){
+            return this.logisticsForm.authStatusName;
+        }
+    },
     watch:{
-        productServiceCodeArr(newVal){
-            console.log(newVal)
+        totalNum:{
+            handler(val, oldVal){
+            //    console.log(val.length)
+                if(val){
+                    this.totalNumber = val.length;
+                }
+            },
+            deep:true
         },
-          otherServiceCodeArr(newVal){
-            console.log(newVal)
+        disabled:{
+            handler(newVal){
+                if(newVal == '待认证' || newVal == '认证成功'){
+                    this.ifDisable = false;
+                }else{
+                    this.ifDisable = true;
+                }
+            },
+            deep:true
         }
     },
     mounted(){
@@ -328,7 +364,6 @@ export default {
                 this.serviceTypeArr = JSON.parse(this.logisticsForm.serviceType) || [];
                 this.productServiceCodeArr = JSON.parse(this.logisticsForm.productServiceCode)  || [];
                 this.otherServiceCodeArr = JSON.parse(this.logisticsForm.otherServiceCode)  || [];
-
 
             }).catch(err => {
                
@@ -435,5 +470,17 @@ export default {
                     }
                 }
             }
+        }
+        
+         .carrierIdentification .el-form .information .textarea .el-form-item__content {
+            .el-textarea{
+                .el-textarea__inner{
+                    padding-bottom: 15px;
+                }
+            }
+        }
+
+        .carrierIdentification .el-form .information .textarea .el-form-item__content span {
+            bottom: 22px;
         }
 </style>
