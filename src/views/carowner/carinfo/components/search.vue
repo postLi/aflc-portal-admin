@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { REGEX }  from '@/utils/validate'
+import { REGEX } from '@/utils/validate'
 
 export default {
   props: {
@@ -36,21 +36,21 @@ export default {
       type: Number
     }
   },
-  data () {
-    let _this = this
-    const validateFormMobile = function (rule, value, callback) {
-      if(validateMobile(value)){
+  data() {
+    const _this = this
+    const validateFormMobile = function(rule, value, callback) {
+      if (validateMobile(value)) {
         callback()
       } else {
         callback(new Error('请输入有效的手机号码'))
       }
     }
 
-    const validateFormEmployeer = function (rule, value, callback) {
+    const validateFormEmployeer = function(rule, value, callback) {
       callback()
     }
 
-    const validateFormNumber = function (rule, value, callback) {
+    const validateFormNumber = function(rule, value, callback) {
       _this.searchForm.mobile = value.replace(REGEX.NO_NUMBER, '')
       callback()
     }
@@ -62,25 +62,25 @@ export default {
       },
       rules: {
         mobile: [{
-          //validator: validateFormMobile, trigger: 'blur'
+          // validator: validateFormMobile, trigger: 'blur'
           validator: validateFormNumber, trigger: 'change'
         }]
       }
     }
   },
   watch: {
-    orgid(newVal){
+    orgid(newVal) {
     }
   },
-  mounted () {
+  mounted() {
   },
   methods: {
-    getOrgid (id){
+    getOrgid(id) {
     },
-    onSubmit () {
+    onSubmit() {
       this.$emit('change', this.searchForm)
     },
-    clearForm () {
+    clearForm() {
       this.searchForm.strartAddress = ''
       this.searchForm.endAddress = ''
     }
@@ -91,7 +91,7 @@ export default {
 
 <style lang="scss">
     .carrier_searchinfo{
-        padding:0 0 10px;
+        padding:10px 0 10px;
         margin: 0 10px;
         border-bottom:1px dashed #999;
         .el-form-item{
