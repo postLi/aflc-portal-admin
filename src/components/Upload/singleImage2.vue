@@ -1,5 +1,5 @@
 <template>
-    <div >
+    <div :class="{'hideUploadBtn': filelist.length >= limit}">
       <el-upload
         v-if="uploadUrl" 
         :data="upload" 
@@ -13,10 +13,10 @@
         :on-exceed="onexceed"
         :on-success="handleImageScucess"
         :on-remove="handleRemove">
-        <i v-if="filelist.length < limit" class="el-icon-plus"></i>
+        <i class="el-icon-plus"></i>
       </el-upload>
-      <el-dialog :visible.sync="dialogVisible">
-        <img width="100%" :src="dialogImageUrl" alt="">
+      <el-dialog lock-scroll custom-class="pop-show-img-wrapper" :visible.sync="dialogVisible">
+        <img  class="pop-show-img" :src="dialogImageUrl" alt="">
       </el-dialog>
     </div>
 </template>
@@ -194,95 +194,21 @@ export default {
 }
 </script>
 <style lang="scss">
-.uploadlist{
-    display: inline-block;
-    width: auto !important;
-    height: auto;
-
-    .el-upload {
-        width: auto;
-
-        .el-button{
-            margin-top: 0;
-        }
-    }
+.hideUploadBtn{
+  div.el-upload.el-upload--picture-card{
+    display: none;
+  }
 }
-</style>
-
-<style rel="stylesheet/scss" lang="scss" scoped>
-    @import "src/styles/mixin.scss";
-    
-    .upload-container {
-        width: 100%;
-        position: relative;
-        @include clearfix;
-
-        .el-upload .el-upload-dragger{
-            height: 116px;
-        }
-        .image-uploader {
-            width: 100%;
-            height: 100%;
-        }
-        .image-preview {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            background-color:#fff;
-            top:0;
-            left:0;
-            .image-preview-wrapper {
-                position: relative;
-                width: 100%;
-                height: 100%;
-                img {
-                    width: 100%;
-                    height: 100%;
-                }
-            }
-            .image-preview-action {
-                position: absolute;
-                width: 100%;
-                height: 100%;
-                left: 0;
-                top: 0;
-                cursor: default;
-                text-align: center;
-                color: #fff;
-                opacity: 0;
-                font-size: 20px;
-                background-color: rgba(0, 0, 0, .5);
-                transition: opacity .3s;
-                cursor: pointer;
-                text-align: center;
-                line-height: 200px;
-                .el-icon-delete {
-                    font-size: 36px;
-                }
-            }
-            &:hover {
-                .image-preview-action {
-                    opacity: 1;
-                }
-            }
-        }
-        .el-button{
-            margin-top: 24px;
-        }
-        .el-upload__text{
-            margin-top: 10px;
-            margin-bottom: 5px;
-            font-size: 12px;
-        }
-        .upload__tip{
-            font-size:12px;
-            color:#999;
-        }
-        .upload__title{
-            font-size:13px;
-            color:#666;
-            margin-top:14px;
-        }
-    }
-
+.pop-show-img-wrapper{
+ .el-dialog__body{
+   text-align: center;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+ } 
+}
+.pop-show-img{
+  max-width: 100%;
+  max-height: 100%;
+}
 </style>
