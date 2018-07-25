@@ -15,7 +15,7 @@ export default {
   name: '车主管理',
   icon: 'gongsiguanli',
   // 用户类型
-  memberType: 'AF00101',
+  memberType: 'AF00102',
   children: [
     // 基本信息
     {

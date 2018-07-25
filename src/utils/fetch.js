@@ -94,6 +94,10 @@ service.interceptors.response.use(
           store.dispatch('FedLogOut').then(() => {
             location.reload()// 为了重新实例化vue-router对象 避免bug
           })
+        }).catch(() => {
+          store.dispatch('FedLogOut').then(() => {
+            location.reload()// 为了重新实例化vue-router对象 避免bug
+          })
         })
       } else {
         Message({
@@ -115,8 +119,8 @@ service.interceptors.response.use(
 )
 
 export function checkStatus(res) {
-  // if (res.status !== 100 && res.status !== -1 && res.status !== 40001 && res.status !== 415) {
-  if (res.status === 200) {
+  if (res.status !== 100 && res.status !== -1 && res.status !== 40001 && res.status !== 415) {
+  // if (res.status === 200 || res.code === 200) {
     return res
   } else {
     console.log('axios res err: ', res)

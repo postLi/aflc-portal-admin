@@ -1,3 +1,27 @@
+.tab-info-title{
+    padding: 18px 20px;
+    color: #333;
+    background: #fff;
+    
+    h2{
+        font-size: 18px;
+        font-weight: normal;
+        border-bottom: solid 1px #0d91e9;
+        height: 30px;
+        line-height: 26px;
+
+        span{
+            position: relative;
+            display: inline-block;
+            border-bottom: 4px solid #0d91e9;
+        }
+    }
+}
+
+.btns_box{
+    margin-bottom: 10px;
+}
+
 .tab-wrapper{
   .eltab{
     width: 100%;

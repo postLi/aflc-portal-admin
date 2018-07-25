@@ -1,8 +1,13 @@
 <template>
   <div class="carrier-manager" v-loading="loading">
+    <div class="tab-info-title">
+      <h2><span>管理车源信息</span></h2>
+    </div>
+
     <SearchForm :orgid="otherinfo.orgid" :issender="true" @change="getSearchParam" :btnsize="btnsize" />  
     <div class="tab_info">
       <div class="btns_box">
+         <el-button type="primary" size="mini"  @click="createNew">发布车源</el-button>
       </div>
       <div class="info_tab">
         <el-table
@@ -52,8 +57,8 @@
             label="常跑线路"
             >
             <template slot-scope="scope">
-                <el-button type="info" v-if="scope.row.isCommonRoute === '1'" @click="setRemote(scope.row.id, '0')">取消常跑</el-button>
-                <el-button type="primary" v-if="scope.row.isCommonRoute === '0'" @click="setRemote(scope.row.id, '1')">设置常跑</el-button>
+                <el-button size="mini" type="info" v-if="scope.row.isCommonRoute === '1'" @click="setRemote(scope.row.id, '0')">取消常跑</el-button>
+                <el-button size="mini" type="primary" v-if="scope.row.isCommonRoute === '0'" @click="setRemote(scope.row.id, '1')">设置常跑</el-button>
             </template>
           </el-table-column>
           <el-table-column
@@ -73,16 +78,16 @@
             width="230"
             label="操作">
             <template slot-scope="scope">
-                <el-button type="primary" @click="changeItem(scope.row.id)">修改</el-button>
-                <el-button type="danger" @click="deleteItem(scope.row.id)">删除</el-button>
-                <el-button type="primary" v-if="scope.row.isEnable === '0'" @click="enableItem(scope.row.id,'1')">启用</el-button>
-                <el-button type="info" v-if="scope.row.isEnable === '1'" @click="enableItem(scope.row.id,'0')">禁用</el-button>
+                <el-button size="mini" type="primary" @click="changeItem(scope.row.id)">修改</el-button>
+                <el-button size="mini" type="danger" @click="deleteItem(scope.row.id)">删除</el-button>
+                <el-button size="mini" type="primary" v-if="scope.row.isEnable === '0'" @click="enableItem(scope.row.id,'1')">启用</el-button>
+                <el-button size="mini" type="info" v-if="scope.row.isEnable === '1'" @click="enableItem(scope.row.id,'0')">禁用</el-button>
                   {{ scope.row.contractEndtime | parseTime('{y}{m}{d}') }}
             </template>
           </el-table-column>
         </el-table>
       </div>
-      <div class="info_tab_footer">共计:{{ total }} <div class="show_pager"> <Pager :total="total" @change="handlePageChange" /></div> </div>    
+      <div class="info_tab_footer">共计:{{ total }} <div class="show_pager"> <Pager :sizes="sizes" :total="total" @change="handlePageChange" /></div> </div>    
     </div>
   </div>
 </template>
@@ -123,9 +128,10 @@ export default {
       selectInfo: {},
       // 选中的行
       selected: [],
+      sizes: [20, 50, 100],
       searchQuery: {
         'currentPage': 1,
-        'pageSize': 100,
+        'pageSize': 20,
         'vo': {
           endAddress: '',
           strartAddress: ''
@@ -134,6 +140,9 @@ export default {
     }
   },
   methods: {
+    createNew() {
+      this.$router.push('/carowner/carinfo/create')
+    },
     fetchAllCustomer() {
       this.loading = true
       return carApi.getCarList(this.searchQuery).then(data => {
@@ -157,18 +166,18 @@ export default {
     showImport() {
       // 显示导入窗口
     },
-    setRemote(id,type){
-      return carApi.putSetRouteType(id, type).then(()=>{
+    setRemote(id, type) {
+      return carApi.putSetRouteType(id, type).then(() => {
         this.fetchData()
       }).catch(err => {
-        this.$message.error('操作出错了： '+ JSON.stringify(err))
+        this.$message.error('操作出错了： ' + JSON.stringify(err))
       })
     },
-    enableItem(id, type){
-      return carApi.putEnableType(id, type).then(()=>{
+    enableItem(id, type) {
+      return carApi.putEnableType(id, type).then(() => {
         this.fetchData()
       }).catch(err => {
-        this.$message.error('操作出错了： '+ JSON.stringify(err))
+        this.$message.error('操作出错了： ' + JSON.stringify(err))
       })
     },
     doAction(type) {
@@ -256,32 +265,32 @@ export default {
       // 清除选中状态，避免影响下个操作
       this.$refs.multipleTable.clearSelection()
     },
-    deleteItem(id){
+    deleteItem(id) {
       this.$confirm('确定要删除吗？', '提示', {
-          confirmButtonText: '删除',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          carApi.deleteCarInfo(id).then(res => {
-            this.$message({
-              type: 'success',
-              message: '删除成功!'
-            })
-            this.fetchData()
-          }).catch(err => {
-            this.$message({
-              type: 'info',
-              message: '删除失败，原因：' + err.errorInfo ? err.errorInfo : JSON.stringify(err)
-            })
+        confirmButtonText: '删除',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        carApi.deleteCarInfo(id).then(res => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
           })
-        }).catch(() => {
+          this.fetchData()
+        }).catch(err => {
           this.$message({
             type: 'info',
-            message: '已取消删除'
+            message: '删除失败，原因：' + err.errorInfo ? err.errorInfo : JSON.stringify(err)
           })
         })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
     },
-    changeItem(id){
+    changeItem(id) {
 
     },
     setTable() {
@@ -302,7 +311,7 @@ export default {
     getSelection(selection) {
       this.selected = selection
     },
-    onSubmit(){
+    onSubmit() {
 
     }
   }
@@ -310,7 +319,6 @@ export default {
 </script>
 <style lang="scss" scoped>
   .carrier-manager{
-    height: 100%;
     width: 100%;
     padding: 0 0 40px;
   }

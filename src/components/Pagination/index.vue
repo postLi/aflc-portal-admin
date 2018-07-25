@@ -65,19 +65,19 @@ export default {
     }
   },
   computed: {
-    pages () {
-      return Math.ceil(this.total/this.size)
+    pages() {
+      return Math.ceil(this.total / this.size)
     }
   },
   watch: {
-    pageNum () {
+    pageNum() {
       this.inputval = this.pageNum
     },
-    size () {
+    size() {
       this.pageNum = 1
     }
   },
-  data () {
+  data() {
     return {
       pageNum: 1,
       oldValue: 0,
@@ -86,35 +86,37 @@ export default {
       size: 100
     }
   },
+  mounted() {
+    this.size = this.sizes[0]
+  },
   methods: {
     handleFocus(event) {
       this.oldValue = event.target.value
     },
-    changeEvent () {
+    changeEvent() {
       // 判断页码是否实际发生了变化
-      if(this.oldNum !== this.pageNum){
+      if (this.oldNum !== this.pageNum) {
         this.oldNum = this.pageNum
-        this.$emit('change',{
+        this.$emit('change', {
           pageNum: this.pageNum,
           pageSize: this.size
         })
       }
-      
     },
-    handleCurrentChange (current) {
+    handleCurrentChange(current) {
       this.pageNum = current
       this.changeEvent()
     },
-    handleSizeChange (sizes) {
+    handleSizeChange(sizes) {
       this.size = sizes
       this.changeEvent()
     },
-    handleChange (value) {
-      const num = parseInt(value, 10);
+    handleChange(value) {
+      const num = parseInt(value, 10)
       if (!isNaN(num)) {
         if (num < 1) {
           this.inputval = 1
-          //this.$refs.input.$el.querySelector('input').value = 1
+          // this.$refs.input.$el.querySelector('input').value = 1
         } else if (num > this.pages) {
           this.inputval = this.pages
           // this.$refs.input.$el.querySelector('input').value = this.pages
@@ -123,25 +125,24 @@ export default {
         }
       } else {
         this.inputval = 1
-        //this.$refs.input.$el.querySelector('input').value = 1
+        // this.$refs.input.$el.querySelector('input').value = 1
       }
-      
     },
     handleBlur({ target }) {
-     this.handleChange(target.value)
-     this.jumpTo(this.inputval)
+      this.handleChange(target.value)
+      this.jumpTo(this.inputval)
     },
     handleKeyup({ keyCode, target }) {
       console.log(keyCode, target)
       if (keyCode === 13 && this.oldValue && target.value !== this.oldValue) {
-        this.handleChange(target.value);
-        this.oldValue = ""
+        this.handleChange(target.value)
+        this.oldValue = ''
       }
     },
-    jumpTo(num){
-      if(num < 1  ){
+    jumpTo(num) {
+      if (num < 1) {
         this.pageNum = 1
-      } else if(num > this.pages){
+      } else if (num > this.pages) {
         this.pageNum = this.pages
       } else {
         this.pageNum = num
