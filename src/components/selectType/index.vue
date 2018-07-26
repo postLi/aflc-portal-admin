@@ -18,7 +18,6 @@ import { getSelectType } from '@/api/common'
 import { mapGetters } from 'vuex'
 import CACHE from '@/utils/cache'
 
-
 /**
  * 可选的type值
 AF018	车辆类型
@@ -66,12 +65,7 @@ export default {
   watch: {
     value: {
       handler(newVal) {
-        // 针对以id为value值的，将传过来的值做一次统一的转换为数值
-        if (/\d+/.test(newVal)) {
-          this.val = parseInt(newVal, 10) || ''
-        } else {
-          this.val = newVal || ''
-        }
+        this.val = newVal || ''
       },
       immediate: true
     }

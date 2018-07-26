@@ -16,7 +16,7 @@
     </table>
 </div>
 <div class="aflcmap-pop-footer" slot="footer">
-  <el-button type="primary" @click="submitForm">确 定</el-button>
+  <el-button type="primary" :disabled="noinfo" @click="submitForm">确 定</el-button>
   <el-button type="info" @click="close">取 消</el-button>
   
 </div>
@@ -31,21 +31,20 @@ export default {
       default: false
     }
   },
+  watch: {
+    popVisible(newVal) {
+      this.dialogTableVisible = this.popVisible
+      if (this.popVisible) {
+        this.loadMap()
+      }
+    }
+  },
   mounted() {
     this.dialogTableVisible = this.popVisible
     console.log('this.popVisible:', this.popVisible)
   },
   created() {
-    if (window.AMap) {
-      this.initMap()
-    } else {
-      loadJs('https://webapi.amap.com/maps?v=1.4.8&key=73bdb8428fbfe511ed6c5f3328b5734b&plugin=AMap.Autocomplete,AMap.PlaceSearch,AMap.Geocoder').then(() => {
-        // loadJs('//webapi.amap.com/ui/1.0/main-async.js').then(() => {
-        loadJs('//webapi.amap.com/ui/1.0/main.js').then(() => {
-          this.initMap()
-        })
-      })
-    }
+
   },
   // 关闭时清空地图数据
   destoryed() {
@@ -55,10 +54,22 @@ export default {
   },
   data() {
     return {
+      noinfo: true,
       dialogTableVisible: false
     }
   },
   methods: {
+    loadMap() {
+      if (window.AMap) {
+        this.initMap()
+      } else {
+        loadJs('https://webapi.amap.com/maps?v=1.4.8&key=73bdb8428fbfe511ed6c5f3328b5734b&plugin=AMap.Autocomplete,AMap.PlaceSearch,AMap.Geocoder').then(() => {
+         // loadJs('//webapi.amap.com/ui/1.0/main.js').then(() => {
+          this.initMap()
+         // })
+        })
+      }
+    },
     close(done) {
       this.$emit('update:popVisible', false)
       if (typeof done === 'function') {
@@ -80,8 +91,9 @@ export default {
       var auto = new AMap.Autocomplete(autoOptions)
       var placeSearch = new AMap.PlaceSearch({
         map: map
+        // type: '商务住宅|生活服务|公司企业|地名地址信息'
       })
-      AMapUI.loadUI(['misc/PositionPicker'], function(PositionPicker) {
+      /* AMapUI.loadUI(['misc/PositionPicker'], function(PositionPicker) {
         var map = new AMap.Map('container', {
           zoom: 16
         })
@@ -97,7 +109,57 @@ export default {
           console.log('fail:', positionResult)
         })
         // start方法可以接受一个经纬度参数作为，拖拽的起始点
+        positionPicker.start()
+      }) */
+
+          // 构造点标记
+      /* var marker = new AMap.Marker({
+        icon: 'https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png',
+        position: [116.405467, 39.907761]
+      }) */
+
+      // 在指定位置打开信息窗体
+      /* function openInfo() {
+        // 构建信息窗体中显示的内容
+        var info = []
+        info.push('<div><div><img style="float:left;" src=" https://webapi.amap.com/images/autonavi.png "/></div> ')
+        info.push('<div style="padding:0px 0px 0px 4px;"><b>高德软件</b>')
+        info.push('电话 : 010-84107000   邮编 : 100102')
+        info.push('地址 :北京市朝阳区望京阜荣街10号首开广场4层</div></div>')
+        infoWindow = new AMap.InfoWindow({
+          content: info.join('<br/>')  // 使用默认信息窗体框样式，显示信息内容
+        })
+        infoWindow.open(map, map.getCenter())
+      } */
+
+      var contextMenu = new AMap.ContextMenu()
+      var contextMenuPositon = []
+      var marker
+      function clearMarker() {
+        if (marker) {
+          marker.setMap(null)
+          marker = null
+        }
+      }
+       // 右键添加Marker标记
+      contextMenu.addItem('添加标记', function(e) {
+        // 删除上一个标记
+        clearMarker()
+        // 清除搜素结果
+        placeSearch.clear()
+
+        marker = new AMap.Marker({
+          map: map,
+          position: contextMenuPositon // 基点位置
+        })
+      }, 3)
+
+        // 地图绑定鼠标右击事件——弹出右键菜单
+      map.on('rightclick', function(e) {
+        contextMenu.open(map, e.lnglat)
+        contextMenuPositon = e.lnglat
       })
+
       map.on('click', function(e) {
         console.log('e:', e)
       })
@@ -109,7 +171,7 @@ export default {
       function select(e) {
         console.log('select e:', e)
         placeSearch.setCity(e.poi.adcode)
-        // positionPicker.start()
+        //
         placeSearch.search(e.poi.name)  // 关键字查询查询
       }
     },
