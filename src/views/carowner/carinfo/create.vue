@@ -83,7 +83,6 @@
       <el-form-item label="联系电话" prop="name">
         <span class="require">上传车辆45°招聘</span>
         <upload :limit="5" listtype="picture-card" :title="'身份证'" :showFileList="true" v-model="ruleForm.carFile" />
-        
       </el-form-item>
 
       <el-form-item>

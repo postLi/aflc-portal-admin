@@ -8,7 +8,7 @@
         </div>
         <div class="searchInformation information">
             <h2>基本信息</h2>
-            <el-form-item label="出发地：" prop="name">
+            <el-form-item label="出发地：" >
                 <el-input v-model="ruleForm.startLocation"></el-input>
             </el-form-item>
             <el-form-item label="联系人：" prop="startLocationContacts" label-width="150px">
@@ -17,7 +17,7 @@
             <el-form-item label="联系电话：" prop="startLocationContactsMobile" label-width="150px">
                 <el-input v-model="ruleForm.startLocationContactsMobile" maxlength="11"></el-input>
             </el-form-item><br>
-            <el-form-item label="到达地：" prop="name">
+            <el-form-item label="到达地：" >
                 <el-input v-model="ruleForm.endLocation"></el-input>
             </el-form-item>
             <el-form-item label="联系人：" prop="endLocationContacts" label-width="150px">
@@ -132,7 +132,7 @@
                 <p class="supplement">请对您的线路进行补充说明，尽量使用市场上或物流行业内的常用词。</p>
             </el-form-item>
             <el-form-item label="专线照片：" prop="rangeType">
-                <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="ruleForm.rangeLogo" :listtype="listtype"/>
+                <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" :limit="5" listtype="picture-card" :showFileList = 'true' v-model="ruleForm.rangeLogo"/>
             </el-form-item> 
         </div>
         <el-form-item class="fromfooter">
@@ -147,7 +147,7 @@ import { getDictionary } from '@/api/common.js'
 import { newTransportRangeList,TransportRangeInfo,changeTransportRange } from '@/api/carrier/TransportRange.js'
 import { getUserInfo } from '@/utils/auth.js'
 import { REGEX } from '@/utils/validate.js'
-import upload from '@/components/Upload/singleImage'
+import upload from '@/components/Upload/singleImage2'
 
 
 export default {
@@ -357,7 +357,7 @@ export default {
         },
         //提交按钮
         submitForm(formName) {
-            // console.log(this.ruleForm)
+            console.log(this.ruleForm)
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                 this.completeName();
@@ -367,7 +367,6 @@ export default {
                 }else{
                     commitFunction = newTransportRangeList(this.ruleForm)
                 }
-
                 commitFunction.then(res => {
                     console.log('res',res)
                     if(res.status == 200){
@@ -381,10 +380,10 @@ export default {
                 }).catch(err=>{
                     console.log(err)
                 })
-            } else {
-                console.log('error submit!!');
-                return false;
-            }
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
             });
         },
     }
@@ -534,11 +533,6 @@ export default {
 
                         //     }
                         // }
-                    }
-                }
-                .el-form-item:last-child,{
-                    .el-form-item__content{
-                        width: 250px;
                     }
                 }
             }
