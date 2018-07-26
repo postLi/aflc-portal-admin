@@ -153,10 +153,10 @@ export default {
       handler(newVal) {
         switch (newVal) {
           case 'aflc-1':
-            this.loginForm.memberType = 'AF00101'
+            this.loginForm.memberType = 'AF00102'
             break
           case 'aflc-2':
-            this.loginForm.memberType = 'AF00102'
+            this.loginForm.memberType = 'AF00101'
             break
           case 'aflc-5':
             this.loginForm.memberType = 'AF00107'

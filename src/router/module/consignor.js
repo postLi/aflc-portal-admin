@@ -14,7 +14,7 @@ export default {
   redirect: '/consignor/baseInfo',
   name: '货主管理',
   icon: 'gongsiguanli',
-  memberType: 'AF00102',
+  memberType: 'AF00101',
   children: [
     // 基本信息
     {

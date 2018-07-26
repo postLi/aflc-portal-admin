@@ -1,8 +1,6 @@
 import fetch from '@/utils/fetch'
 
-
-const baseUrl= 'aflccommonservice' ;
-
+const baseUrl = 'aflccommonservice'
 
 /**
  * 获取城市数据
@@ -67,42 +65,75 @@ export function getSelectType(type = '') {
   })
 }
 
-
-//通过数据字典查询
+// 通过数据字典查询
 /**
  * @export
  * @param {*} code 数据字典code值
  * @returns
  */
 export function getDictionary(code) {
-    return fetch.axios({
-      url: '/'+baseUrl+'/sysDict/getSysDictByCodeGet/'+code,
-      method: 'get'
-    })
-  }
+  return fetch.axios({
+    url: '/' + baseUrl + '/sysDict/getSysDictByCodeGet/' + code,
+    method: 'get'
+  })
+}
 
-
-
-//根据手机号码获取货主信息
+// 根据手机号码获取货主信息
 export function getShipperInfoByMobile(phone) {
-    return fetch.axios({
-      url: '/'+baseUrl+'/common/aflcMemberCenter/v1/getShipperInfoByMobile?'+'mobile='+phone,
-      method: 'get',
-    })
-  }
+  return fetch.axios({
+    url: '/' + baseUrl + '/common/aflcMemberCenter/v1/getShipperInfoByMobile?' + 'mobile=' + phone,
+    method: 'get'
+  })
+}
 
-//根据手机号码获取车主信息
+// 根据手机号码获取车主信息
 export function getDriverInfoByMobile(phone) {
-    return fetch.axios({
-      url: '/'+baseUrl+'/common/aflcMemberCenter/v1/getDriverInfoByMobile?'+'mobile='+phone,
-      method: 'get',
-    })
+  return fetch.axios({
+    url: '/' + baseUrl + '/common/aflcMemberCenter/v1/getDriverInfoByMobile?' + 'mobile=' + phone,
+    method: 'get'
+  })
+}
+
+// 根据手机号码获取物流公司信息
+export function getLogisticsCompanyInfoByMobile(phone) {
+  return fetch.axios({
+    url: '/' + baseUrl + '/common/aflcMemberCenter/v1/getLogisticsCompanyInfoByMobile?' + 'mobile=' + phone,
+    method: 'get'
+  })
+}
+
+/**
+ * 修改密码
+{
+  mobile,
+  oldPassword,
+  newPassword,
+  surePassword
+}
+ */
+export function putChangeMyPassword(memberType, obj) {
+  const form = new FormData()
+  for (const i in obj) {
+    form.append(i, obj[i])
   }
 
-//根据手机号码获取物流公司信息
-  export function getLogisticsCompanyInfoByMobile(phone) {
-    return fetch.axios({
-      url: '/'+baseUrl+'/common/aflcMemberCenter/v1/getLogisticsCompanyInfoByMobile?'+'mobile='+phone,
-      method: 'get',
-    })
+  let str = ''
+  for (const i in obj) {
+    str += '&' + i + '=' + obj[i]
   }
+
+  return fetch.request({
+    url: '/aflccommonservice/common/aflcMemberCenter/v1/updatePassword' + '?memberType=' + memberType,
+    method: 'put',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    data: str
+  })
+
+  // let str = ''
+  // for (const i in obj) {
+  //   str += '&' + i + '=' + obj[i]
+  // }
+  // return fetch.put('/aflccommonservice/common/aflcMemberCenter/v1/updatePassword' + '?memberType=' + memberType + str)
+}

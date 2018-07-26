@@ -45,31 +45,31 @@ export default {
   props: {
     value: [String, Array],
     title: {
-        type: String,
-        default: ''
+      type: String,
+      default: ''
     },
     tip: {
-        type: String,
-        default: '（jpg/png。小于5M）'
+      type: String,
+      default: '（jpg/png。小于5M）'
     },
     size: {
-        type: String,
-        default: 'mini'
+      type: String,
+      default: 'mini'
     },
-    "showFileList": {
-        type: Boolean,
-        default: false
+    'showFileList': {
+      type: Boolean,
+      default: false
     },
     limit: {
-        type:Number,
-        default: 10
+      type: Number,
+      default: 10
     },
     listtype: {
-        type: String,
-        default: 'picture',
-        enum: ['text', 'picture', 'picture-card']
+      type: String,
+      default: 'picture',
+      enum: ['text', 'picture', 'picture-card']
     },
-    disabled:{
+    disabled: {
       type: Boolean,
       default: false
     }
@@ -89,8 +89,8 @@ export default {
         'key': '', // 文件名称
         'policy': '',
         'OSSAccessKeyId': '',
-        'success_action_status': '201', //让服务端返回200,不然，默认会返回204;201会返回xml格式
-        //'callback': 'callbackbody',
+        'success_action_status': '201', // 让服务端返回200,不然，默认会返回204;201会返回xml格式
+        // 'callback': 'callbackbody',
         'signature': ''
       },
       uploadUrl: '',
@@ -100,33 +100,33 @@ export default {
   },
   watch: {
     value: {
-        handler(newVal){
-            if(this.showFileList){
-                let arr = Array.isArray(newVal) ? newVal : newVal ?  newVal.split(',') : []
-                arr = arr.filter(el => el)
-                this.filelist = arr.map(el => {
-                    let obj = {}
-                    obj.url = el
-                    return obj
+      handler(newVal) {
+          if (this.showFileList) {
+              let arr = Array.isArray(newVal) ? newVal : newVal ? newVal.split(',') : []
+              arr = arr.filter(el => el)
+              this.filelist = arr.map(el => {
+                  const obj = {}
+                  obj.url = el
+                  return obj
                 })
             }
         },
-        immediate: true
+      immediate: true
     }
   },
-  mounted () {
-    this.init()  
+  mounted() {
+    this.init()
   },
   methods: {
-    init(){
+    init() {
         // 从后台获取policy
-        getUploadPolicy().then(data => {
-            this.upload.OSSAccessKeyId = data.accessid
-            this.upload.policy = data.policy
-            this.upload.signature = data.signature
-            this.uploadUrl = data.host
-            this.dir = data.dir
-            this.upload.key = data.dir + this.random_string() + type
+      getUploadPolicy().then(data => {
+          this.upload.OSSAccessKeyId = data.accessid
+          this.upload.policy = data.policy
+          this.upload.signature = data.signature
+          this.uploadUrl = data.host
+          this.dir = data.dir
+          this.upload.key = data.dir + this.random_string() + type
         }).catch(err => {
         })
     },
@@ -134,48 +134,48 @@ export default {
       this.emitInput('')
     },
     // 超出上传数量
-    onexceed (file, filelist) {
-        this.$message.error(`最多上传 ${this.limit} 张!`)
+    onexceed(file, filelist) {
+      this.$message.error(`最多上传 ${this.limit} 张!`)
     },
     // 删除列表
-    handleRemove (file, fileList) {
-        console.log("handleRemove:", file, fileList)
-        this.filelist = fileList
-        this.emitInput()
+    handleRemove(file, fileList) {
+      console.log('handleRemove:', file, fileList)
+      this.filelist = fileList
+      this.emitInput()
     },
     // 设置随机的文件名
     random_string(len) {
-    　　len = len || 32
-    　　var chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678'
-    　　var maxPos = chars.length
-    　　var pwd = ''
-    　　for (var i = 0; i < len; i++) {
-            pwd += chars.charAt(Math.floor(Math.random() * maxPos))
-        }
-        return pwd
+      　　len = len || 32
+      　　var chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678'
+      　　var maxPos = chars.length
+      　　var pwd = ''
+      　　for (var i = 0; i < len; i++) {
+      pwd += chars.charAt(Math.floor(Math.random() * maxPos))
+    }
+      return pwd
     },
     emitInput(val) {
-      if(val){
+      if (val) {
         this.filelist.push({
-            url: val
+          url: val
         })
       }
-      
+
       this.$emit('input', this.showFileList ? this.filelist.map(el => {
-          return el.url
+        return el.url
       }).join(',') : val)
     },
     handleImageScucess(xml) {
-        let url = ''
-        if(xml.indexOf('Location') !== -1){
-            url = xml.match(/<Location>([^<]+)<\/Location>/m)
-            url = url ? url[1] : ''
+      let url = ''
+      if (xml.indexOf('Location') !== -1) {
+          url = xml.match(/<Location>([^<]+)<\/Location>/m)
+          url = url ? url[1] : ''
         }
       this.emitInput(url)
-      //this.imageUrl = url
+      // this.imageUrl = url
     },
-    handleError (err) {
-        this.$emit('error', err)
+    handleError(err) {
+      this.$emit('error', err)
     },
     beforeUpload(file) {
       const _self = this
@@ -186,15 +186,15 @@ export default {
 
       return new Promise((resolve, reject) => {
         if (!isJPG) {
-            this.$message.error('上传头像图片只能是 JPG/PNG 格式!')
-            reject(false)
-        }else if (!isLt5M) {
-            this.$message.error('上传头像图片大小不能超过 5MB!')
-            reject(false)
+          this.$message.error('上传头像图片只能是 JPG/PNG 格式!')
+          reject(false)
+        } else if (!isLt5M) {
+          this.$message.error('上传头像图片大小不能超过 5MB!')
+          reject(false)
         } else {
             // 设置文件名
-            this.upload.key = this.dir + parseTime(new Date(), '{y}{m}{d}') + '/' + this.random_string() + type
-            resolve(true)
+          this.upload.key = this.dir + parseTime(new Date(), '{y}{m}{d}') + '/' + this.random_string() + type
+          resolve(true)
         }
       })
     }

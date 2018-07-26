@@ -14,9 +14,22 @@ export function parseTime(time, cFormat) {
   if (typeof time === 'object') {
     date = time
   } else {
+    // 判断时毫秒还是字符串
     time = typeof time === 'number' ? time : ('' + time).trim()
-    if (('' + time).length === 10) time = parseInt(time) * 1000
+    // 如果是秒级单位则转成毫秒
+    if (('' + time).length === 10) {
+      time = parseInt(time) * 1000
+    } else if (/(\d){4}-(\d){2}-(\d){2}\s+(\d){2}:(\d){2}:(\d){2}/.test(time)) {
+      // IE需要标准格式
+      // time = time.replace(/(\d{4})-(\d{2})-(\d{2})\s+(\d{2}):(\d{2}):(\d{2})/, '$1-$2-$3T$4:$5:$6Z')
+      time = time.replace(/-/g, '/')
+    }
+
     date = new Date(time)
+  }
+  // 如果不能正确转换，则返回原有的数据
+  if (date.toString().indexOf('Invalid') !== -1) {
+    return time
   }
   const formatObj = {
     y: date.getFullYear(),
@@ -534,4 +547,44 @@ export function getTotal() {
   })
   console.log('total args:', args, total, 'final:', (total / 10000))
   return (total / 10000)
+}
+/**
+ * 加载js
+ * 返回promise对象
+ */
+export function loadJs(src, callback) {
+  return new Promise((resolve, reject) => {
+    var doc = document
+    var script = doc.createElement('script')
+    var head = doc.head || doc.getElementsByTagName('head')[0] || doc.documentElement
+    script.async = 'async'
+
+    script.onload = script.onreadystatechange = function() {
+      if (!script.readyState || /loaded|complete/.test(script.readyState)) {
+      // Handle memory leak in IE
+        script.onload = script.onreadystatechange = null
+
+      // Remove the script
+        if (head && script.parentNode) {
+          head.removeChild(script)
+        }
+
+      // Dereference the script
+        script = undefined
+
+      // Callback if not abort
+        if (callback) {
+          callback()
+        }
+        resolve()
+      }
+    }
+
+    script.onerror = function(err) {
+      reject('加载失败:' + JSON.stringify(err))
+    }
+
+    script.src = src
+    head.insertBefore(script, head.firstChild)
+  })
 }
