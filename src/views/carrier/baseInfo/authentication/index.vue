@@ -352,7 +352,7 @@ export default {
     },  
     methods: {
         getMoreInformation(){
-             let res = getUserInfo() ;
+            let res = getUserInfo() ;
             Promise.all([getDictionary(this.belongBrand),getDictionary(this.productServiceCode),getDictionary(this.otherServiceCode),getDictionary(this.serviceType),getLogisticsCompanyInfoByMobile(res.mobile)]).then(resArr => {
                 // this.loading = false
                 console.log(resArr)

@@ -178,7 +178,7 @@ export default {
                         }else{
                             this.$message({
                                 type: 'info',
-                                message: '操作失败，原因：' + errorInfo ? errorInfo : err.text
+                                message: '操作失败，原因：' + res.errorInfo ? res.errorInfo : res.text
                             })
                         }
                     }).catch(err=>{

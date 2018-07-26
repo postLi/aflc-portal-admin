@@ -3,7 +3,7 @@
         <el-form :model="logisticsForm" ref="ruleForm" label-width="110px" class="demo-ruleForm">
             <div class="carrierTitle">
                 <div class="realname">
-                    <h2>管理我的网点</h2>
+                    <h2>管理我的专线</h2>
                 </div>
             </div>
             <div class="searchInformation information">
@@ -24,9 +24,9 @@
             </div> -->
             <div class="information">
                 <div class="created">
-                    <el-button type="primary" @click="handleNew">发布网点</el-button>  
+                    <el-button type="primary" @click="handleNew">发布专线</el-button>  
                 </div>
-                <div>
+                <div class="tableStyle">
                     <el-table
                     :data="tableData"
                     ref="multipleTable"
@@ -41,67 +41,91 @@
                         </el-table-column>
                         <el-table-column
                             fixed
-                            prop="pointName"
                             label="出发地"
                             width="180">
+                            <template slot-scope="scope">
+                               <span>{{scope.row.startLocation}}</span>
+                            </template>
                         </el-table-column>
                         <el-table-column
-                            prop="address"
-                            label="目的地"
+                            prop="endLocation"
+                            label="到达地"
                             width="250">
                         </el-table-column>
                         <el-table-column
-                            prop="name"
                             label="运输时效"
                             width="180">
+                             <template slot-scope="scope">
+                               {{scope.row.transportAging}}天
+                            </template>
                         </el-table-column>
                         <el-table-column
-                            prop="mobile"
                             label="发车频率"
                             width="180">
+                            <template slot-scope="scope">
+                               <span>{{scope.row.departureHzData}}天/{{scope.row.departureHzTime}}次</span> 
+                            </template>
                         </el-table-column>
                         <el-table-column
-                            prop="telNum"
                             label="重货价格" 
-                            width="180">
+                            width="220">
+                            <template slot-scope="scope">
+                                <p v-if="scope.row.weightcargo.length == 0">
+                                    <span class="interview">面谈</span>
+                                </p>
+                                <p class="cargo" v-for="(item,idx) in scope.row.weightcargo" :key="item.id" v-else>
+                                    <span v-if="idx == 0">{{item.endVolume}}公斤以下,{{item.primeryPrice}}元/公斤</span>
+                                    <span v-else-if="idx == scope.row.weightcargo.length-1">{{item.endVolume}}公斤以上,{{item.primeryPrice}}元/公斤</span>
+                                    <span v-else>{{item.startVolume}}-{{item.endVolume}}公斤,{{item.primeryPrice}}元/公斤</span>
+                                </p>
+                            </template>
                         </el-table-column>
                         <el-table-column
-                            prop="pointFile"
                             label="轻货价格"
-                            width="210">
-                                <template  slot-scope="scope"> 
-                                    <img  :src="scope.row.pointFile ? scope.row.pointFile : defaultImg" />
-                                </template>
+                            width="220">
+                            <template slot-scope="scope">
+                                <p v-if="scope.row.lightcargo.length == 0">
+                                    <span class="interview">面谈</span>
+                                </p>
+                                <p class="cargo" v-for="(item,idx) in scope.row.lightcargo" :key="idx"  v-else>
+                                    <span v-if="idx == 0">{{item.endVolume}}立方以下,{{item.primeryPrice}}元/立方</span>
+                                    <span v-else-if="idx == scope.row.lightcargo.length-1">{{item.endVolume}}立方以上,{{item.primeryPrice}}元/立方</span>
+                                    <span v-else>{{item.startVolume}}-{{item.endVolume}}立方,{{item.primeryPrice}}元/立方</span>
+                                </p>
+                            </template>
                         </el-table-column>
                         <el-table-column
-                            prop="telNum"
+                            prop="lowerPrice"
                             label="最低一票价格（元）" 
                             width="180">
                         </el-table-column>
                         <el-table-column
-                            prop="telNum"
+                            prop="publishName"
                             label="创建人" 
                             width="180">
                         </el-table-column>
                         <el-table-column
-                            prop="telNum"
+                            prop="Time"
                             label="创建时间" 
-                            width="180">
+                            width="220">
                         </el-table-column>
                         <el-table-column
-                            prop="telNum"
                             label="专线类型" 
                             width="180">
+                            <template slot-scope="scope">
+                               <span class="rangeTypeName">{{scope.row.rangeTypeName}}</span> 
+                            </template>
                         </el-table-column>
                         <el-table-column
                             fixed="right"
                             prop="address"
                             label="操作"
+                            width="300"
                             >
                                 <template slot-scope="scope">
                                     <el-button @click="handleEdit(scope.row)" type="primary" size="mini">修改</el-button>
                                     <el-button @click="handleDelete(scope.row)" type="primary" size="mini">删除</el-button>
-                                    <el-button @click="handleStatus(scope.row)" :type="scope.row.pointStatus == 1 ? 'primary' : 'info'" size="mini">{{scope.row.pointStatus == 1 ? '启用' : '禁用'}}</el-button>
+                                    <el-button @click="handleStatus(scope.row)" :type="scope.row.rangeStatus == 0 ? 'primary' : 'info'" size="mini">{{scope.row.rangeStatus == 0 ? '启用' : '禁用'}}</el-button>
                                 </template>
                         </el-table-column>
                     </el-table>
@@ -114,14 +138,12 @@
 <script>
 
 import '@/styles/identification.scss'
-import { getDictionary,getLogisticsCompanyInfoByMobile, } from '@/api/common.js'
-import { getPointNetwork,PointNetworkStatus,deletePointNetwork } from '@/api/carrier/index.js'
-import { REGEX } from '@/utils/validate.js'
-import upload from '@/components/Upload/singleImage'
+import { getTransportRangeList,TransportRangeStatus,deleteTransportRange } from '@/api/carrier/TransportRange.js'
+import { parseTime } from '@/utils/index.js'
 
 export default {
     components:{
-        upload
+        
     },
     data() {
        
@@ -131,11 +153,8 @@ export default {
             page:1,
             pagesize:20,
             logisticsForm: {
-                pointName: '',//网点名称
-                address: '',//网点详细地址
-                name: '',//联系人
-                mobile: '',//手机号
-                telNum: '',//固定电话
+                startLocation: '',//出发地
+                endLocation: '',//到达地
             },
             tableData: [],
         };
@@ -147,17 +166,33 @@ export default {
         this.firstblood();
     },  
     methods: {
-        //完善信息
-        completeInfo(){
-
-            
-        },
-
         firstblood(){
-            getPointNetwork(this.page,this.pagesize,this.logisticsForm).then(res=>{
-                console.log(res)
+            getTransportRangeList(this.page,this.pagesize,this.logisticsForm).then(res=>{
                 this.tableData = res.data.list;
                 this.totalCount = res.data.totalCount;
+                this.tableData.forEach(el=>{
+                    el.Time = parseTime(el.createTime); 
+                    el.weightcargo =[];
+                    el.lightcargo = [];
+                    el.rangePrices.forEach(item => {
+                        switch(item.type){
+                            case '0':
+                                el.lightcargo.push(item);
+                                break;
+                            case '1':
+                                el.weightcargo.push(item)
+                                break;
+                        }
+                    })
+                    el.lightcargo.sort(function(a,b){  
+                        return a.startVolume - b.startVolume;  
+                    })  
+                    el.weightcargo.sort(function(a,b){  
+                        return a.startVolume - b.startVolume;  
+                    })  
+                })
+                
+                console.log(this.tableData)
             })
         },
         clearSearch(){
@@ -170,21 +205,20 @@ export default {
         },
         //新增网点
         handleNew(){
-            this.$router.push({name: '发布我的网点'});
+            this.$router.push({name: '发布物流专线'});
         },
         //修改
         handleEdit(row) {
-            console.log(row);
-            this.$router.push({name: '发布我的网点',params:{ data:row}});
+            this.$router.push({name: '发布物流专线',params:{data:row,ifrevise:'1'}});
         },
         //删除网点
         handleDelete(row) {
-            this.$confirm('确定要删除'+ row.pointName +' 该网点名吗？', '提示', {
+            this.$confirm('确定要删除 '+ row.startLocation +'-'+ row.endLocation +' 该条专线吗？', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(()=>{
-                deletePointNetwork(row.id).then(res => {
+                deleteTransportRange(row.id).then(res => {
                     this.firstblood();
                 }).catch(err => {
                     this.$message({
@@ -201,9 +235,7 @@ export default {
         },
         //更改状态
         handleStatus(row) {
-            console.log(row);
-            PointNetworkStatus(row.id).then(res => {
-                console.log(res)
+            TransportRangeStatus(row.id).then(res => {
                 this.firstblood();
             }).catch(err=>{
                 this.$message({
@@ -212,14 +244,6 @@ export default {
                 })
             })
         },
-        handleClickMore(){
-            this.$refs['topSearch'].$el.classList.add('longSearchBox')
-        },
-        setShort(){
-            this.$refs['topSearch'].$el.classList.remove('longSearchBox')
-
-        }
-
     },
   
 }
@@ -228,21 +252,23 @@ export default {
 <style type="text/css" lang="scss">
     .TransportRange{
         .el-form{
-            .btnChoose{
-                width: 200px;
-                float: right;
-                .el-form-item__content{
-                    margin-left: 0 !important;
-                    width: 155px !important;
+            .tableStyle{
+                .cargo{
+                    text-align: left;
+                    text-indent: 20px;
                 }
-            }
-            .searchInformation{
-                .el-form-item{
-                    display: inline-block;
+                .rangeTypeName{
+                    padding: 5px 15px;
+                    border-radius: 20%  / 50%;
+                    background: #eca438;
+                    color: #fff;
                 }
-            }
-            .created{
-                margin-bottom: 20px;
+                .interview{
+                    padding: 5px 15px;
+                    border-radius: 5px;
+                    background: #eb0a0a;
+                    color: #fff;
+                }
             }
         }
     }

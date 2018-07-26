@@ -72,7 +72,6 @@
       {{ 1234567890 | toThousandslsFilter }}
     </p>
   </div>
-  </div>
 </template>
 <script>
 export default {

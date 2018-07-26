@@ -61,7 +61,7 @@ service.interceptors.response.use(
         message: ((res.errorInfo || '') + ' : ' + (res.msg || '') + ' : ' + (res.code || '') + ' : ' + (res.text || '') + ' : ' + (res.status || '')),
         type: 'error',
         duration: 5 * 1000
-      })
+      }) 
       // return Promise.reject(res)
       return res
     } else {

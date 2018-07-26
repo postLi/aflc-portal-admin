@@ -1,0 +1,34 @@
+import fetch from '@/utils/fetch'
+
+const baseUrl = 'aflcorderservice'
+
+//根据条件获取订单信息列表
+export function getGoodsSourceList(page,pagesize,data){
+    return fetch.axios({
+      url: '/'+baseUrl+'/order/fclOrder/v1/list',
+      method: 'post',
+      data:{
+        "currentPage": page,
+        "pageSize": pagesize,
+        "vo": data
+      }
+    })
+  }
+
+
+  //更改订单状态
+export function GoodsSourceStatus(id){
+    return fetch.axios({
+      url: '/'+baseUrl+'/usercenter/aflcTransportRange/v1/updateAflcTransportRangeStatus/'+id,
+      method: 'PUT',
+    })
+  }
+
+
+  //删除订单
+export function deleteTransportRange(id){
+    return fetch.axios({
+      url: '/'+baseUrl+'/usercenter/aflcTransportRange/v1/delete/'+id,
+      method: 'delete',
+    })
+  }

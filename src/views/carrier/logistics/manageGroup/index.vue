@@ -36,13 +36,14 @@
                     </el-input>
                 </div>
             </div> -->
-            <div class="information">
-                <div>
+            <div class="information" style="height:72%">
+                <div style="height:100%">
                     <el-table
                     :data="tableData"
                     ref="multipleTable"
                     stripe
                     border
+                    height="100%"
                     style="width: 100%">
                         <el-table-column
                             fixed
@@ -93,12 +94,13 @@
                                     <!-- <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button> -->
                                     <el-button @click="handleEdit(scope.row)" type="primary" size="mini">修改</el-button>
                                     <el-button @click="handleDelete(scope.row)" type="primary" size="mini">删除</el-button>
-                                    <el-button @click="handleStatus(scope.row)" :type="scope.row.pointStatus == 1 ? 'primary' : 'info'" size="mini">{{scope.row.pointStatus == 1 ? '启用' : '禁用'}}</el-button>
+                                    <el-button @click="handleStatus(scope.row)" :type="scope.row.pointStatus == 0 ? 'primary' : 'info'" size="mini">{{scope.row.pointStatus == 0 ? '启用' : '禁用'}}</el-button>
                                 </template>
                         </el-table-column>
                     </el-table>
                 </div>
             </div>  
+            <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>    
         </el-form>
     </div>
 </template>
@@ -110,10 +112,12 @@ import { getDictionary,getLogisticsCompanyInfoByMobile, } from '@/api/common.js'
 import { getPointNetwork,PointNetworkStatus,deletePointNetwork } from '@/api/carrier/index.js'
 import { REGEX } from '@/utils/validate.js'
 import upload from '@/components/Upload/singleImage'
+import Pager from '@/components/Pagination/index'
 
 export default {
     components:{
-        upload
+        upload,
+        Pager
     },
     data() {
        
@@ -144,7 +148,10 @@ export default {
 
             
         },
-
+        handlePageChange(obj) {
+            this.page = obj.pageNum
+            this.pagesize = obj.pageSize
+        },
         firstblood(){
             getPointNetwork(this.page,this.pagesize,this.logisticsForm).then(res=>{
                 console.log(res)
@@ -220,18 +227,6 @@ export default {
 <style type="text/css" lang="scss">
     .PointNetwork{
         .el-form{
-            .btnChoose{
-                width: 200px;
-                .el-form-item__content{
-                    margin-left: 0 !important;
-                    width: 155px !important;
-                }
-            }
-            .searchInformation{
-                .el-form-item{
-                    display: inline-block;
-                }
-            }
             .el-table{
                 .cell{
                     img{
@@ -258,6 +253,26 @@ export default {
             .el-input__inner{
                 width: 400px;
             }
+        }
+        .info_tab_footer{
+            padding-left: 20px;
+            background: #eee;
+            height: 40px;
+            line-height: 40px;
+            box-shadow: 0 -2px 2px rgba(0,0,0,.1);
+            position: relative;
+            z-index: 10;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+        }
+
+        .show_pager{
+            float: right;
+            line-height: 40px;
+            height: 40px;
+            overflow: hidden;
         }
     }
 </style>

@@ -159,6 +159,7 @@ export default {
         .main-container-wrap{
             float: left;
             flex: 1;
+            overflow: auto;
         }
         .navbar-wrapper{
             width: 100%;
