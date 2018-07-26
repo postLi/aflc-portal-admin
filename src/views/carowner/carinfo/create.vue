@@ -96,7 +96,7 @@
       </el-form-item>
   
     </el-form>
-    <tmsmap @success="getInfo" pos="1,2" name="abc" :popVisible.sync="popVisible" />
+    <tmsmap @success="getInfo" pos="" name="" :popVisible.sync="popVisible" />
   </div>
 </template>
 <script>
@@ -123,6 +123,7 @@ export default {
       popVisible: false,
       labelArr: [],
       rules: {},
+      current: '',
       ruleForm: {
         // 'beginTime': '', // 发车开始时间
         'belongDriver': '', // 车源所属车主
@@ -135,6 +136,7 @@ export default {
         'carSourceType': '', // 车源类型  "AF01801","回程车" "AF01802","本地车"
         'carSpec': '', // 车辆规格
         'carTag': '', // 车辆标签属性（用|分割）
+        'carTagName': '', // 车辆标签属性（用|分割）
         'carType': '', // 车类型
         'carVolume': 0, // 车辆体积
         'carWidth': 0, // 车宽
@@ -181,11 +183,26 @@ export default {
     selectTag(label) {
       label.ischeck = !label.ischeck
     },
-    getInfo(info) {
+    getInfo(pos, name, info) {
       // info.name  info.pos
+      switch (this.current) {
+        case 'strartAddress':
+          this.ruleForm.strartAddress = name
+          this.ruleForm.strartAddressCoordinate = pos
+          break
+        case 'endAddress':
+          this.ruleForm.endAddress = name
+          this.ruleForm.endAddressCoordinate = pos
+          break
+        case 'viaAddress':
+          this.ruleForm.viaAddress = name
+          this.ruleForm.viaAddressCoordinate = pos
+          break
+      }
     },
     showMap(name) {
       this.popVisible = true
+      this.current = name
     },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
@@ -193,6 +210,8 @@ export default {
           this.loading = true
           const data = Object.assign({}, this.ruleForm)
           data.title = data.strartAddress + '->' + data.endAddress
+          data.carTag = this.labelArr.filter(el => el.ischeck).map(el => el.code).join('|')
+          data.carTagName = this.labelArr.filter(el => el.ischeck).map(el => el.name).join('|')
           let promiseObj
           // 判断操作，调用对应的函数
           if (this.isModify) {

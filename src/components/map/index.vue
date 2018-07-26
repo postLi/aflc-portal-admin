@@ -16,6 +16,7 @@
     </table>
 </div>
 <div class="aflcmap-pop-footer" slot="footer">
+  <div class="addrname">当前选中的地址：{{this.thename}}<br>当前经纬度信息：{{this.thepos}}</div>
   <el-button type="primary" :disabled="noinfo" @click="submitForm">确 定</el-button>
   <el-button type="info" @click="close">取 消</el-button>
   
@@ -26,6 +27,14 @@
 import { loadJs } from '@/utils/'
 export default {
   props: {
+    pos: {
+      type: [String, Array],
+      default: ''
+    },
+    name: {
+      type: String,
+      default: ''
+    },
     popVisible: {
       type: Boolean,
       default: false
@@ -33,10 +42,13 @@ export default {
   },
   watch: {
     popVisible(newVal) {
-      this.dialogTableVisible = this.popVisible
-      if (this.popVisible) {
-        this.loadMap()
-      }
+      this.init()
+    },
+    name() {
+      this.thename = this.name
+    },
+    pos() {
+      this.thepos = this.pos
     }
   },
   mounted() {
@@ -48,17 +60,35 @@ export default {
   },
   // 关闭时清空地图数据
   destoryed() {
-    if (this.map && this.map.destroy) {
-      this.map.destroy()
-    }
+    this.exit()
   },
   data() {
     return {
       noinfo: true,
-      dialogTableVisible: false
+      dialogTableVisible: false,
+      thepos: '',
+      thename: '',
+      theobj: {}
     }
   },
   methods: {
+    exit() {
+      if (this.map && this.map.destroy) {
+        this.map.destroy()
+      }
+    },
+    init() {
+      this.dialogTableVisible = this.popVisible
+      // 当为展现时，初始化
+      if (this.popVisible) {
+        this.thepos = this.pos
+        this.thename = this.name
+        this.loadMap()
+      } else {
+      // 隐藏时，摧毁地图对象
+        this.exit()
+      }
+    },
     loadMap() {
       if (window.AMap) {
         this.initMap()
@@ -77,10 +107,11 @@ export default {
       }
     },
     initMap() {
+      const _this = this
       const AMap = window.AMap
       const AMapUI = window.AMapUI
        // 地图加载
-      this.map = new AMap.Map('mapcontainer', {
+      _this.map = new AMap.Map('mapcontainer', {
         resizeEnable: true
       })
       const map = this.map
@@ -90,7 +121,8 @@ export default {
       }
       var auto = new AMap.Autocomplete(autoOptions)
       var placeSearch = new AMap.PlaceSearch({
-        map: map
+        map: map,
+        extensions: 'base' // all base
         // type: '商务住宅|生活服务|公司企业|地名地址信息'
       })
       /* AMapUI.loadUI(['misc/PositionPicker'], function(PositionPicker) {
@@ -112,29 +144,18 @@ export default {
         positionPicker.start()
       }) */
 
-          // 构造点标记
-      /* var marker = new AMap.Marker({
-        icon: 'https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png',
-        position: [116.405467, 39.907761]
-      }) */
-
-      // 在指定位置打开信息窗体
-      /* function openInfo() {
-        // 构建信息窗体中显示的内容
-        var info = []
-        info.push('<div><div><img style="float:left;" src=" https://webapi.amap.com/images/autonavi.png "/></div> ')
-        info.push('<div style="padding:0px 0px 0px 4px;"><b>高德软件</b>')
-        info.push('电话 : 010-84107000   邮编 : 100102')
-        info.push('地址 :北京市朝阳区望京阜荣街10号首开广场4层</div></div>')
-        infoWindow = new AMap.InfoWindow({
-          content: info.join('<br/>')  // 使用默认信息窗体框样式，显示信息内容
-        })
-        infoWindow.open(map, map.getCenter())
-      } */
-
+      var infoWindow = new AMap.InfoWindow({
+        offset: new AMap.Pixel(0, -30),
+        content: ''  // 使用默认信息窗体框样式，显示信息内容
+      })
+      var geocoder = new AMap.Geocoder({
+        radius: 1000 // 范围，默认：500
+      })
+        // infoWindow.open(map, map.getCenter())
       var contextMenu = new AMap.ContextMenu()
       var contextMenuPositon = []
       var marker
+
       function clearMarker() {
         if (marker) {
           marker.setMap(null)
@@ -147,18 +168,54 @@ export default {
         clearMarker()
         // 清除搜素结果
         placeSearch.clear()
+        // 关闭上一个信息窗口
+        infoWindow.close()
 
-        marker = new AMap.Marker({
-          map: map,
-          position: contextMenuPositon // 基点位置
-        })
+        findInfo(contextMenuPositon)
       }, 3)
+
+      function findInfo(pos) {
+        geocoder.getAddress(pos, function(status, result) {
+          if (status === 'complete' && result.info === 'OK') {
+            geocoder_CallBack(result, pos)
+          } else {
+            clearMarker()
+            alert('获取不到当前位置的地址信息~')
+          }
+        })
+      }
 
         // 地图绑定鼠标右击事件——弹出右键菜单
       map.on('rightclick', function(e) {
-        contextMenu.open(map, e.lnglat)
-        contextMenuPositon = e.lnglat
+        console.log('right click:', e)
+        var pos = e.lnglat
+
+        contextMenu.open(map, pos)
+        contextMenuPositon = pos
       })
+
+      function geocoder_CallBack(data, pos) {
+        var haspx = !!pos.lat
+
+        console.log('geocodeer:', data)
+        var addr = data.regeocode.formattedAddress
+        if (haspx) {
+          marker = new AMap.Marker({
+            map: map,
+            position: pos // 基点位置
+          })
+
+          marker.on('click', function(e) {
+            infoWindow.open(map, e.target.getPosition())
+          })
+          marker.emit('click', {
+            target: marker
+          })
+          infoWindow.setContent(addr)
+        }
+
+        _this.setData(haspx ? pos.lng + ',' + pos.lat : pos, addr, data.regeocode)
+      }
 
       map.on('click', function(e) {
         console.log('e:', e)
@@ -168,6 +225,11 @@ export default {
         map.addControl(new AMap.ToolBar())
       })
       AMap.event.addListener(auto, 'select', select)// 注册监听，当选中某条记录时会触发
+      AMap.event.addListener(placeSearch, 'markerClick', function(e) {
+        const loc = e.data.location
+        findInfo(loc)
+        // findInfo(loc)
+      })
       function select(e) {
         console.log('select e:', e)
         placeSearch.setCity(e.poi.adcode)
@@ -175,9 +237,16 @@ export default {
         placeSearch.search(e.poi.name)  // 关键字查询查询
       }
     },
+    // 设置获取到的信息
+    setData(pos, addr, obj) {
+      this.thepos = pos
+      this.thename = addr
+      this.theobj = obj
+      this.noinfo = false
+    },
     submitForm() {
-      // 提交数据
-      // submitForm
+      this.$emit('success', this.thepos, this.thename, this.theobj)
+      this.close()
     }
   }
 }
