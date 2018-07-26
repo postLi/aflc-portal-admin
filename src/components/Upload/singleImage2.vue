@@ -1,11 +1,14 @@
 <template>
     <div :class="{'hideUploadBtn': filelist.length >= limit}">
       <el-upload
+        drag
         v-if="uploadUrl" 
         :data="upload" 
         :action="uploadUrl"
         :multiple="false" 
         list-type="picture-card"
+        :show-file-list="showFileList" 
+        :file-list="filelist"
         :limit="limit"
         :before-upload="beforeUpload"
         :on-preview="handlePictureCardPreview"

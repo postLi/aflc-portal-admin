@@ -58,7 +58,8 @@ service.interceptors.response.use(
 
     if (res.status !== 200 && response.config.url.indexOf('/uaa/oauth/token') === -1) {
       Message({
-        message: ((res.errorInfo || '') + ' : ' + (res.msg || '') + ' : ' + (res.code || '') + ' : ' + (res.text || '') + ' : ' + (res.status || '')),
+        // message: ((res.errorInfo || '') + ' : ' + (res.msg || '') + ' : ' + (res.code || '') + ' : ' + (res.text || '') + ' : ' + (res.status || '')),
+        message: ((res.errorInfo || '') + ' : ' + (res.text || '')),
         type: 'error',
         duration: 5 * 1000
       }) 

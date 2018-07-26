@@ -40,6 +40,7 @@ Vue.directive('numberOnly', {
     hasPoint = arg.indexOf('point') !== -1
     // 判断需要小数点后几位，默认为 俩位
     pointNum = parseInt(arg.replace('point', ''), 10) || 2
+    console.log('bind el:', VueDirectiveObject.findInput(el))
     VueDirectiveObject.findInput(el).addEventListener('input', VueDirectiveObject.keepNumber)
     VueDirectiveObject.findInput(el).addEventListener('keydown', VueDirectiveObject.onkeydown)
   },
