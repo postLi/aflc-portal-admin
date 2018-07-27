@@ -14,8 +14,7 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item label="网点地址：">
-                    <el-input v-model="logisticsForm.address">
-                    </el-input>
+                    <el-input @focus="()=>{showMap('strartAddress')}" v-model="logisticsForm.address"></el-input>
                 </el-form-item>
                 <el-form-item label="联系人：" maxlength="18"  prop="name">
                     <el-input v-model="logisticsForm.name">
@@ -44,7 +43,13 @@
                 <el-button size="medium" type="primary" @click="submitForm('ruleForm')" v-else>立即发布</el-button>
             </el-form-item>
         </el-form>
+
+
+        <tmsmap @success="getInfo" pos="" name="" :popVisible.sync="popVisible" />
+
     </div>
+
+    
 </template>
 
 <script>
@@ -54,10 +59,13 @@ import { getDictionary,getLogisticsCompanyInfoByMobile } from '@/api/common.js'
 import { NewPointNetwork,changePointNetwork } from '@/api/carrier/index.js'
 import { REGEX } from '@/utils/validate.js'
 import upload from '@/components/Upload/singleImage'
+import tmsmap from '@/components/map/index'
+
 
 export default {
     components:{
-        upload
+        upload,
+        tmsmap
     },
     watch: {
     // 监测路由变化,只要变化了就调用获取路由参数方法将数据存储本组件即可
@@ -105,6 +113,8 @@ export default {
             }
         };
         return {
+            current:'',
+            popVisible:false,
             logisticsForm: {
                 pointName: '',//网点名称
                 address: '',//网点详细地址
@@ -113,6 +123,9 @@ export default {
                 telNum: '',//固定电话
                 contactQq: '',//qq
                 pointFile:'',//企业LOGO
+                belongCityName:'',
+                longitude:'',//经度
+                latitude:'',//纬度
             },
             rules: {
                 pointName: [
@@ -131,9 +144,22 @@ export default {
         };
     },
     mounted(){
-        this.getParams()
+        this.getParams() ;
     },  
     methods: {
+        getInfo(pos, name, info) {
+            // info.name  info.pos
+            console.log(pos, name, info)
+            let posArr = pos.split(',');
+            this.logisticsForm.address = name ;
+            this.logisticsForm.longitude = posArr[0];
+            this.logisticsForm.latitude = posArr[1];
+            this.logisticsForm.belongCityName = info.addressComponent.province +'-'+info.addressComponent.city+'-'+info.addressComponent.district;
+        },
+        showMap(name) {
+            this.popVisible = true ;
+            this.current = name
+        },
         getParams(){
             if(this.$route.params.data){
                 let dataObj = this.$route.params.data;//接收数据
@@ -197,6 +223,8 @@ export default {
 
 <style type="text/css" lang="scss">
 
-    
+    .newPointNetwork .el-form .information > .el-form-item .el-form-item__content {
+        line-height: 28px;
+        width: 25%;
+    }
 </style>
-0.

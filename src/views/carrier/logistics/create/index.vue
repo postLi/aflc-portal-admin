@@ -8,8 +8,8 @@
         </div>
         <div class="searchInformation information">
             <h2>基本信息</h2>
-            <el-form-item label="出发地：" >
-                <el-input v-model="ruleForm.startLocation"></el-input>
+            <el-form-item label="出发地：" prop="startLocation">
+                <el-input @focus="()=>{showMap('strartAddress')}"  v-model="ruleForm.startLocation"></el-input>
             </el-form-item>
             <el-form-item label="联系人：" prop="startLocationContacts" label-width="150px">
                 <el-input v-model="ruleForm.startLocationContacts"></el-input>
@@ -17,8 +17,8 @@
             <el-form-item label="联系电话：" prop="startLocationContactsMobile" label-width="150px">
                 <el-input v-model="ruleForm.startLocationContactsMobile" maxlength="11"></el-input>
             </el-form-item><br>
-            <el-form-item label="到达地：" >
-                <el-input v-model="ruleForm.endLocation"></el-input>
+            <el-form-item label="到达地：" prop="endLocation">
+                <el-input @focus="()=>{showMap('endAddress')}" v-model="ruleForm.endLocation"></el-input>
             </el-form-item>
             <el-form-item label="联系人：" prop="endLocationContacts" label-width="150px">
                 <el-input v-model="ruleForm.endLocationContacts"></el-input>
@@ -69,9 +69,9 @@
                             <el-input v-model="form.discountPrice"  v-number-only:point></el-input>
                             元/公斤
                         </li>
-                        <span  @click="addItem('weight')" class="addItem" v-if="keys == weigthPriceForms.length-1">
+                        <span  @click="addItem('weight')" class="addItem" v-if="keys == weigthPriceForms.length-1 && form.endVolume!= ''">
                         </span>
-                        <span  @click="reduceItem(keys,'weight')" class="reduceItem" v-if="keys == weigthPriceForms.length-1 && weigthPriceForms.length !=1" >
+                        <span  @click="reduceItem(keys,'weight')" class="reduceItem" v-if="keys == weigthPriceForms.length-1 && weigthPriceForms.length !=1 " >
                         </span>
                     </ul>
                 </div>
@@ -99,7 +99,7 @@
                             <el-input v-model="form.discountPrice" v-numberOnly></el-input>
                             元/立方
                         </li>
-                         <span  @click="addItem('light')" class="addItem" v-if="keys == ligthPriceForms.length-1">
+                         <span  @click="addItem('light')" class="addItem" v-if="keys == ligthPriceForms.length-1 && form.endVolume!= ''">
                         </span>
                         <span  @click="reduceItem(keys,'light')" class="reduceItem" v-if="keys == ligthPriceForms.length-1 && ligthPriceForms.length !=1">
                         </span>
@@ -140,6 +140,8 @@
             <el-button type="primary" @click="submitForm('ruleForm')" v-else>确认提交</el-button>
         </el-form-item>
     </el-form>
+    <tmsmap @success="getInfo" pos="" name="" :popVisible.sync="popVisible" />
+
   </div>
 </template>
 <script>
@@ -148,13 +150,26 @@ import { newTransportRangeList,TransportRangeInfo,changeTransportRange } from '@
 import { getUserInfo } from '@/utils/auth.js'
 import { REGEX } from '@/utils/validate.js'
 import upload from '@/components/Upload/singleImage2'
+import tmsmap from '@/components/map/index'
 
 export default {
     components:{
         upload,
+        tmsmap
     },
     data() {
+        var checkaa  = (rule, value, callback) => {
+            if (value === '') {
+            console.log(value)
+            console.log(this.ruleForm.startLocation)
+                callback(new Error('请输入手机号码'));
+            }else{
+                 callback();
+            }
+        };
         var checkStartLocationContactsMobile  = (rule, value, callback) => {
+            
+            console.log(value)
             if (value === '') {
                 callback(new Error('请输入手机号码'));
             } else {
@@ -175,6 +190,8 @@ export default {
             }
         };
         return {
+            current:'',
+            popVisible:false,
             listtype:'picture-card',
             ifShowRangeType:'0',
             dedicated:'AF033',
@@ -224,8 +241,11 @@ export default {
                 }
             ],
             rules: {
-                name: [
-                    { required: true, message: '请输入活动名称', trigger: 'blur' },
+                startLocation:[
+                    { required: true, validator: checkaa, trigger: 'change' },
+                ],
+                endLocation: [
+                    { required: true, message: '请输入到达地', trigger: 'change' },
                 ],
                 startLocationContacts: [
                     { required: true, message: '请输入联系人信息', trigger: 'blur' }
@@ -249,7 +269,6 @@ export default {
         'ruleForm.rangeType':{
             handler(val, oldVal){
                 if(val){
-                    // console.log(val)
                     this.ruleForm.rangeTypeName = this.rangeTypeClassfy.find(item => item.code === val)['name'];
                 }
             },
@@ -270,15 +289,29 @@ export default {
         this.getParams()
     },
     methods:{
+        getInfo(pos, name, info) {
+            // info.name  info.pos
+            console.log(pos, name, info)
+            switch (this.current) {
+                case 'strartAddress':
+                this.ruleForm.startLocation = info.addressComponent.province +'-'+info.addressComponent.city+'-'+info.addressComponent.district;
+                break;
+                case 'endAddress':
+                this.ruleForm.endLocation = info.addressComponent.province +'-'+info.addressComponent.city+'-'+info.addressComponent.district;
+                break;
+            }
+        },
+        showMap(name) {
+            this.popVisible = true ;
+            this.current = name;
+        },
         getParams(){
             if(this.$route.params.data){
                 this.ifShowRangeType = this.$route.params.ifrevise;
                 let dataObj = this.$route.params.data;//接收数据
                 this.ligthPriceForms = dataObj.lightcargo;
                 this.weigthPriceForms = dataObj.weightcargo;
-                let userInfo = getUserInfo();
-                this.ruleForm.publishName = userInfo.contactsName;
-                this.ruleForm.publishId = userInfo.id;
+            
                 TransportRangeInfo(dataObj.id).then(res=>{
                     this.ruleForm = res.data;
                 })
@@ -305,7 +338,9 @@ export default {
                 this.rangeTypeClassfy = resArr[0].data;
                 this.departClassfy = resArr[1].data;
             })
-          
+            let userInfo = getUserInfo();
+            this.ruleForm.publishName = userInfo.companyName;
+            this.ruleForm.publishId = userInfo.id;
         },
         //添加子节点新增
         addItem(type){
@@ -342,7 +377,7 @@ export default {
                     this.ligthPriceForms.splice(idx,1);
                     break;
             }
-        },
+        },  
         completeName(){
             this.ruleForm.rangePrices = [];
 

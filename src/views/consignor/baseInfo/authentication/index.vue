@@ -78,7 +78,7 @@
                     <el-input v-model="logisticsForm.contacts" :disabled="ifDisable === false">
                     </el-input>
                 </el-form-item>
-                <el-form-item label="手机："  label-width="150px" prop="mobile" >
+                <el-form-item label="手机："   prop="mobile" >
                     <el-input v-model="logisticsForm.mobile" maxlength="11"  v-numberOnly :disabled="ifDisable === false">
                     </el-input>
                 </el-form-item>
@@ -86,7 +86,7 @@
                     <el-input v-model="logisticsForm.belongCity">
                     </el-input>
                 </el-form-item> 
-                <el-form-item label="详细地址："  label-width="150px" prop="address">
+                <el-form-item label="详细地址："   prop="address">
                     <el-input v-model="logisticsForm.address">
                     </el-input>
                 </el-form-item>
@@ -94,7 +94,7 @@
                     <el-input v-model="logisticsForm.contactsTel" maxlength="12"  :disabled="ifDisable === false">
                     </el-input>
                 </el-form-item>
-                <el-form-item label="QQ：" label-width="150px">
+                <el-form-item label="QQ：" >
                     <el-input v-model="logisticsForm.qq" v-numberOnly placeholder="填写QQ，方便物流公司联系您" :disabled="ifDisable === false">
                     </el-input>
                 </el-form-item>
@@ -103,19 +103,19 @@
                 <!-- 物流公司认证照片 -->
             <div class="picInformation information" v-if="logisticsForm.shipperType == 'AF0010202'"><!-- 企业货主code -->
                 <h2>物流公司认证照片</h2>
-                <el-form-item   label-width="50px">
+                <el-form-item  >
                     <p><span>*</span>上传营业执照照片：</p>
                     <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.businessLicenceFile" v-if="ifDisable == 'false'"/>
                     <img class="showPicture" :src="logisticsForm.businessLicenceFile" alt="营业执照" v-else>
                     <el-button  class="preview" type="primary" plain v-show="logisticsForm.businessLicenceFile ? true : false" v-showPicture :imgurl="logisticsForm.businessLicenceFile">点击预览</el-button>
                 </el-form-item>
-                <el-form-item   label-width="50px" prop="companyFacadeFile" >
+                <el-form-item   prop="companyFacadeFile" >
                     <p><span>*</span>上传公司或者档口照片：</p>
                     <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.companyFacadeFile" v-if="ifDisable == 'false'" />
                     <img class="showPicture" :src="logisticsForm.companyFacadeFile" alt="公司或者档口照片" v-else>
                     <el-button  class="preview" type="primary" plain v-show="logisticsForm.companyFacadeFile ? true : false" v-showPicture :imgurl="logisticsForm.companyFacadeFile">点击预览</el-button>
                 </el-form-item>
-                <el-form-item  label-width="50px" prop="shipperCardFile">
+                <el-form-item  prop="shipperCardFile">
                     <p><span>*</span>上传发货人名片照片：</p>
                     <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.shipperCardFile" v-if="ifDisable == 'false'"/>
                     <img class="showPicture" :src="logisticsForm.shipperCardFile" alt="" v-else>
@@ -135,10 +135,9 @@
 import '@/styles/identification.scss'
 
 import upload from '@/components/Upload/singleImage'
-import { identifyCarrier } from '@/api/carrier/index.js'
 import { getDictionary,getShipperInfoByMobile } from '@/api/common.js'
 import { getUserInfo } from '@/utils/auth.js'
-import { identifyShipper } from '@/api/shipper/index.js'
+import { identifyShipper } from '@/api/consignor/index.js'
 import { REGEX } from '@/utils/validate.js'
 export default {
     components:{

@@ -7,12 +7,12 @@
                 </div>
             </div>
             <div class="searchInformation information">
-                <el-form-item label="出发地：" prop="name">
-                    <el-input v-model="logisticsForm.name">
+                <el-form-item label="出发地：" prop="startLocation">
+                    <el-input v-model="logisticsForm.startLocation">
                     </el-input>
                 </el-form-item>
-                <el-form-item label="到达地：" prop="address">
-                    <el-input v-model="logisticsForm.address">
+                <el-form-item label="到达地：" prop="endLocation">
+                    <el-input v-model="logisticsForm.endLocation">
                     </el-input>
                 </el-form-item>
                 <el-form-item class="btnChoose" style="margin-left:20px;">
@@ -148,7 +148,7 @@ import Pager from '@/components/Pagination/index'
 
 export default {
     components:{
-        
+        Pager,
     },
     data() {
        

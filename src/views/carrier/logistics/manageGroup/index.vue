@@ -7,8 +7,8 @@
                 </div>
             </div>
             <div class="searchInformation information">
-                <el-form-item label="网点名称" prop="name">
-                    <el-input v-model="logisticsForm.name">
+                <el-form-item label="网点名称" prop="pointName">
+                    <el-input v-model="logisticsForm.pointName">
                     </el-input>
                 </el-form-item>
                 <el-form-item label="网点地址：" prop="address">
@@ -63,7 +63,7 @@
                         <el-table-column
                             prop="address"
                             label="网点地址"
-                            width="250">
+                            width="400">
                         </el-table-column>
                         <el-table-column
                             prop="name"
@@ -73,17 +73,17 @@
                         <el-table-column
                             prop="mobile"
                             label="手机"
-                            width="200">
+                            width="180">
                         </el-table-column>
                         <el-table-column
                             prop="telNum"
                             label="固话" 
-                            width="200">
+                            width="180">
                         </el-table-column>
                         <el-table-column
                             prop="pointFile"
                             label="网点图片"
-                            width="250">
+                            width="200">
                                 <template  slot-scope="scope"> 
                                     <img  :src="scope.row.pointFile ? scope.row.pointFile : defaultImg" />
                                 </template>
@@ -113,21 +113,16 @@
 <script>
 
 import '@/styles/identification.scss'
-import { getDictionary,getLogisticsCompanyInfoByMobile, } from '@/api/common.js'
 import { getPointNetwork,PointNetworkStatus,deletePointNetwork } from '@/api/carrier/index.js'
-import { REGEX } from '@/utils/validate.js'
-import upload from '@/components/Upload/singleImage'
 import Pager from '@/components/Pagination/index'
 
 export default {
     components:{
-        upload,
         Pager
     },
     data() {
        
         return {
-            defaultImg:'/static/default.png',//默认加载失败图片
             totalCount:0,
             page:1,
             pagesize:20,
@@ -253,31 +248,6 @@ export default {
                     }
                 }
             }
-        }
-        .longSearchBox{
-            .el-input__inner{
-                width: 400px;
-            }
-        }
-        .info_tab_footer{
-            padding-left: 20px;
-            background: #eee;
-            height: 40px;
-            line-height: 40px;
-            box-shadow: 0 -2px 2px rgba(0,0,0,.1);
-            position: relative;
-            z-index: 10;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-        }
-
-        .show_pager{
-            float: right;
-            line-height: 40px;
-            height: 40px;
-            overflow: hidden;
         }
     }
 </style>
