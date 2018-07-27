@@ -23,7 +23,7 @@
                     <el-input v-model="logisticsForm.mobile" maxlength="11">
                     </el-input>
                 </el-form-item>
-                <el-form-item class="btnChoose" style="margin-left:20px;">
+                <el-form-item class="btnChoose" style="margin-left:0;">
                     <el-button type="primary" @click="handleSearch">搜索</el-button>
                     <el-button type="primary" @click="clearSearch">清空</el-button>
                 </el-form-item>
@@ -37,13 +37,16 @@
                 </div>
             </div> -->
             <div class="information" style="height:72%">
+                <div class="created">
+                    <el-button type="primary" @click="handleNew">发布专线</el-button>  
+                </div>
                 <div style="height:100%">
                     <el-table
                     :data="tableData"
                     ref="multipleTable"
                     stripe
                     border
-                    height="100%"
+                    height="90%"
                     style="width: 100%">
                         <el-table-column
                             fixed
@@ -70,31 +73,33 @@
                         <el-table-column
                             prop="mobile"
                             label="手机"
-                            width="180">
+                            width="200">
                         </el-table-column>
                         <el-table-column
                             prop="telNum"
                             label="固话" 
-                            width="180">
+                            width="200">
                         </el-table-column>
                         <el-table-column
                             prop="pointFile"
                             label="网点图片"
-                            width="210">
+                            width="250">
                                 <template  slot-scope="scope"> 
                                     <img  :src="scope.row.pointFile ? scope.row.pointFile : defaultImg" />
                                 </template>
                         </el-table-column>
-                        <el-table-column
+                        <el-table-column 
                             fixed="right"
                             prop="address"
                             label="操作"
                             >
                                 <template slot-scope="scope">
                                     <!-- <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button> -->
-                                    <el-button @click="handleEdit(scope.row)" type="primary" size="mini">修改</el-button>
-                                    <el-button @click="handleDelete(scope.row)" type="primary" size="mini">删除</el-button>
-                                    <el-button @click="handleStatus(scope.row)" :type="scope.row.pointStatus == 0 ? 'primary' : 'info'" size="mini">{{scope.row.pointStatus == 0 ? '启用' : '禁用'}}</el-button>
+                                    <el-button-group>
+                                        <el-button @click="handleEdit(scope.row)" type="primary" size="mini">修改</el-button>
+                                        <el-button @click="handleDelete(scope.row)" type="danger" size="mini">删除</el-button>
+                                        <el-button @click="handleStatus(scope.row)" :type="scope.row.pointStatus == 0 ? 'primary' : 'info'" size="mini">{{scope.row.pointStatus == 0 ? '启用' : '禁用'}}</el-button>
+                                    </el-button-group>
                                 </template>
                         </el-table-column>
                     </el-table>

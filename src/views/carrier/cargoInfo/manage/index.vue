@@ -75,31 +75,33 @@
                             width="150">
                         </el-table-column>
                         <el-table-column
-                            prop="lowerPrice"
+                            prop="createrName"
                             label="发布人" 
                             width="180">
                         </el-table-column>
                         <el-table-column
-                            prop="publishName"
+                            prop="time"
                             label="发布时间" 
                             width="180">
                         </el-table-column>
                         <el-table-column
                             fixed="right"
                             prop="address"
-                            label="操作"
-                            width="300"
+                            label="操作" 
+                            width="250"
                             >
                                 <template slot-scope="scope">
-                                    <el-button @click="handleEdit(scope.row)" type="primary" size="mini">修改</el-button>
-                                    <el-button @click="handleDelete(scope.row)" type="primary" size="mini">删除</el-button>
-                                    <el-button @click="handleStatus(scope.row)" :type="scope.row.rangeStatus == 0 ? 'primary' : 'info'" size="mini">{{scope.row.rangeStatus == 0 ? '启用' : '禁用'}}</el-button>
+                                    <el-button-group>
+                                         <el-button @click="handleEdit(scope.row)" type="primary" size="mini">修改</el-button>
+                                        <!-- <el-button @click="handleDelete(scope.row)" type="primary" size="mini">删除</el-button> -->
+                                        <el-button @click="handleStatus(scope.row)" :type="scope.row.isEnable == 0 ? 'primary' : 'info'" size="mini">{{scope.row.isEnable == 0 ? '启用' : '禁用'}}</el-button>
+                                    </el-button-group>
                                 </template>
                         </el-table-column>
                     </el-table>
                 </div>
             </div>  
-            <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>    
+            <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" :sizes="sizes"/></div> </div>    
 
         </el-form>
     </div>
@@ -108,11 +110,10 @@
 <script>
 
 import '@/styles/identification.scss'
-import { getTransportRangeList,TransportRangeStatus,deleteTransportRange } from '@/api/carrier/TransportRange.js'
 import { parseTime } from '@/utils/index.js'
 import { getGoodsSourceList,GoodsSourceStatus } from '@/api/carrier/goodssource.js'
 import Pager from '@/components/Pagination/index'
-
+ 
 export default {
     components:{
         Pager
@@ -123,6 +124,7 @@ export default {
             defaultImg:'/static/default.png',//默认加载失败图片
             totalCount:0,
             page:1,
+            sizes:[20,50,100],
             pagesize:20,
             logisticsForm: {
                 queryType:'2',
@@ -140,20 +142,20 @@ export default {
         this.firstblood();
     },  
     methods: {
-        //完善信息
-        completeInfo(){
-
-            
-        },
         handlePageChange(obj) {
-            this.page = obj.pageNum
-            this.pagesize = obj.pageSize
+            console.log(obj)
+            this.page = obj.pageNum;
+            this.pagesize = obj.pageSize;
+            this.firstblood();
         },
         firstblood(){
             getGoodsSourceList(this.page,this.pagesize,this.logisticsForm).then(res=>{
                 console.log(res)
                 this.tableData = res.data.list;
                 this.totalCount = res.data.totalCount;
+                this.tableData.forEach(el => {
+                    el.time = parseTime(el.createTime)
+                })
             })
         },
         clearSearch(){
@@ -196,7 +198,9 @@ export default {
         },
         //更改状态
         handleStatus(row) {
-            GoodsSourceStatus(row.id).then(res => {
+            let type = row.isEnable == '0' ? '1' : '0';
+            
+            GoodsSourceStatus(row.id,type).then(res => {
                 this.firstblood();
             }).catch(err=>{
                 this.$message({

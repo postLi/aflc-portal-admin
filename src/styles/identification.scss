@@ -12,6 +12,9 @@
             .el-form-item__content{
                 margin-left: 0 !important;
                 width: 155px !important;
+                .el-button{
+                    padding: 6px 20px;
+                }
             }
         }
         .searchInformation{
@@ -102,11 +105,9 @@
             word-break:break-all;
         }
         .information{
-            
             background: #fff;
             padding: 18px 20px;
             margin-bottom: 20px;
-           
             .tableStyle{
                 height: 100%;
             }

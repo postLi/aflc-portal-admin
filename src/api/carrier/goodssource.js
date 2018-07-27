@@ -1,7 +1,6 @@
 import fetch from '@/utils/fetch'
 
 const baseUrl = 'aflcorderservice'
-
 //根据条件获取订单信息列表
 export function getGoodsSourceList(page,pagesize,data){
     return fetch.axios({
@@ -16,19 +15,27 @@ export function getGoodsSourceList(page,pagesize,data){
   }
 
 
-  //更改订单状态
-export function GoodsSourceStatus(id){
+//   //更改订单状态
+// export function GoodsSourceStatus(id){
+//     return fetch.axios({
+//       url: '/'+baseUrl+'/usercenter/aflcTransportRange/v1/updateAflcTransportRangeStatus/'+id,
+//       method: 'PUT',
+//     })
+//   }
+
+
+   //更改订单状态
+/**
+ *
+ *
+ * @export
+ * @param {*} id 
+ * @param {*} type 状态码'0' '1'
+ * @returns
+ */
+export function GoodsSourceStatus(id,type){
     return fetch.axios({
-      url: '/'+baseUrl+'/usercenter/aflcTransportRange/v1/updateAflcTransportRangeStatus/'+id,
+      url: '/'+baseUrl+'/order/fclOrder/v1/setEnableType/'+id+'/'+type,
       method: 'PUT',
-    })
-  }
-
-
-  //删除订单
-export function deleteTransportRange(id){
-    return fetch.axios({
-      url: '/'+baseUrl+'/usercenter/aflcTransportRange/v1/delete/'+id,
-      method: 'delete',
     })
   }

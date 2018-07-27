@@ -20,9 +20,8 @@
                     <el-button type="primary" @click="clearSearch">清空</el-button>
                 </el-form-item>
             </div>
-            <!-- <div class="information">
-            </div> -->
-            <div class="information">
+          
+            <div class="information syStyle">
                 <div class="created">
                     <el-button type="primary" @click="handleNew">发布专线</el-button>  
                 </div>
@@ -32,6 +31,7 @@
                     ref="multipleTable"
                     stripe
                     border
+                    height="91%"
                     style="width: 100%">
                         <el-table-column
                             fixed
@@ -120,17 +120,20 @@
                             fixed="right"
                             prop="address"
                             label="操作"
-                            width="300"
+                            width="250"
                             >
                                 <template slot-scope="scope">
-                                    <el-button @click="handleEdit(scope.row)" type="primary" size="mini">修改</el-button>
-                                    <el-button @click="handleDelete(scope.row)" type="primary" size="mini">删除</el-button>
-                                    <el-button @click="handleStatus(scope.row)" :type="scope.row.rangeStatus == 0 ? 'primary' : 'info'" size="mini">{{scope.row.rangeStatus == 0 ? '启用' : '禁用'}}</el-button>
+                                    <el-button-group>
+                                        <el-button @click="handleEdit(scope.row)" type="primary" size="mini">修改</el-button>
+                                        <el-button @click="handleDelete(scope.row)" type="danger" size="mini">删除</el-button>
+                                        <el-button @click="handleStatus(scope.row)" :type="scope.row.rangeStatus == 0 ? 'primary' : 'info'" size="mini">{{scope.row.rangeStatus == 0 ? '启用' : '禁用'}}</el-button>
+                                    </el-button-group>
                                 </template>
                         </el-table-column>
                     </el-table>
                 </div>
             </div>  
+            <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>    
         </el-form>
     </div>
 </template>
@@ -140,6 +143,8 @@
 import '@/styles/identification.scss'
 import { getTransportRangeList,TransportRangeStatus,deleteTransportRange } from '@/api/carrier/TransportRange.js'
 import { parseTime } from '@/utils/index.js'
+import Pager from '@/components/Pagination/index'
+
 
 export default {
     components:{
@@ -194,6 +199,10 @@ export default {
                 
                 console.log(this.tableData)
             })
+        },
+        handlePageChange(obj) {
+            this.page = obj.pageNum
+            this.pagesize = obj.pageSize
         },
         clearSearch(){
             this.$refs.ruleForm.resetFields();
@@ -252,6 +261,9 @@ export default {
 <style type="text/css" lang="scss">
     .TransportRange{
         .el-form{
+            .syStyle{
+                height: 72%;
+            }
             .tableStyle{
                 .cargo{
                     text-align: left;

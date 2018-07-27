@@ -149,7 +149,6 @@ import { getUserInfo } from '@/utils/auth.js'
 import { REGEX } from '@/utils/validate.js'
 import upload from '@/components/Upload/singleImage2'
 
-
 export default {
     components:{
         upload,
@@ -277,14 +276,16 @@ export default {
                 let dataObj = this.$route.params.data;//接收数据
                 this.ligthPriceForms = dataObj.lightcargo;
                 this.weigthPriceForms = dataObj.weightcargo;
+                let userInfo = getUserInfo();
+                this.ruleForm.publishName = userInfo.contactsName;
+                this.ruleForm.publishId = userInfo.id;
                 TransportRangeInfo(dataObj.id).then(res=>{
-                    console.log(res)
                     this.ruleForm = res.data;
                 })
+
             }
         },
         handlerChoose(){
-            // console.log('123')
             let type = this.ruleForm.transportAgingUnit;
             let transportAging = this.ruleForm.transportAging;
             if(type != '多天'){
@@ -300,14 +301,11 @@ export default {
             }
         },
         getInformations(){
-            let userInfo = getUserInfo();
             Promise.all([ getDictionary(this.dedicated), getDictionary(this.depart)]).then(resArr => {
                 this.rangeTypeClassfy = resArr[0].data;
                 this.departClassfy = resArr[1].data;
             })
-
-            this.ruleForm.publishName = userInfo.contactsName;
-            this.ruleForm.publishId = userInfo.id;
+          
         },
         //添加子节点新增
         addItem(type){
@@ -346,6 +344,7 @@ export default {
             }
         },
         completeName(){
+            this.ruleForm.rangePrices = [];
 
             this.ligthPriceForms.forEach(item => {
                 this.ruleForm.rangePrices.push(item) 
