@@ -189,8 +189,9 @@ export default {
             this.loading = false
             // 获取登录前的页面地址
             // 有可能会出现前一个页面是现在登录账号没有权限访问的？
-            const nexturl = this.$route.query.tourl
-            this.$router.push({ path: nexturl && nexturl.indexOf('/login') === -1 ? nexturl : '/' })
+            // const nexturl = this.$route.query.tourl
+            // this.$router.push({ path: nexturl && nexturl.indexOf('/login') === -1 ? nexturl : '/' })
+            this.$router.push({ path: '/' })
           }).catch(() => {
             this.loading = false
           })
