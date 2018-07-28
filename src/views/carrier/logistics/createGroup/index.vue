@@ -9,7 +9,7 @@
             <div class="companyInformation information">
                 <h2>基本信息</h2>
                 <el-form-item label="网点名称" prop="pointName">
-                    <el-input v-model="logisticsForm.pointName" @change="limitNum">
+                    <el-input v-model="logisticsForm.pointName">
                         <p slot="append">请填写网点名称</p>
                     </el-input>
                 </el-form-item>
@@ -60,6 +60,7 @@ import { NewPointNetwork,changePointNetwork } from '@/api/carrier/index.js'
 import { REGEX } from '@/utils/validate.js'
 import upload from '@/components/Upload/singleImage'
 import tmsmap from '@/components/map/index'
+import { getUserInfo } from '@/utils/auth.js'
 
 
 export default {
@@ -126,6 +127,8 @@ export default {
                 belongCityName:'',
                 longitude:'',//经度
                 latitude:'',//纬度
+                publishName:'',
+                publishId:''
             },
             rules: {
                 pointName: [
@@ -169,23 +172,13 @@ export default {
             }
             console.log(this.logisticsForm)
         },
-        limitNum(val){
-
-            if(val.length>25){
-
-            }
-        },
-        //完善信息
-        completeInfo(){
-
-            
-        },
         submitForm(formName) {
 
             this.$refs[formName].validate((valid) => {  
-                // console.log(form)
                 if (valid) {
-                    // this.logisticsForm.\
+                    let userInfo = getUserInfo();
+                    this.logisticsForm.publishName = userInfo.companyName;
+                    this.logisticsForm.publishId = userInfo.id;
                     let commitFunction;
                     if(this.logisticsForm.id){
                         commitFunction = changePointNetwork(this.logisticsForm);

@@ -143,11 +143,6 @@ export default {
         this.firstblood();
     },  
     methods: {
-        //完善信息
-        completeInfo(){
-
-            
-        },
         handlePageChange(obj) {
             this.page = obj.pageNum
             this.pagesize = obj.pageSize
@@ -165,7 +160,7 @@ export default {
         },
         //搜索
         handleSearch(){
-            this.firstblood()
+            this.firstblood();
         },
         //新增网点
         handleNew(){
