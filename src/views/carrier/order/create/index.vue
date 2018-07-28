@@ -7,21 +7,23 @@
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
       <h3>线路信息 <span class="important">提示：带*为必填项</span></h3> 
       <div class="order-base-info clearfix">
-      <el-form-item required  label="车牌号">
+      <el-form-item required  label="出发地：">
         <el-input v-model="ruleForm.carNum"></el-input>
       </el-form-item>
-      <el-form-item required label="车辆类型">
+      <el-form-item required label="街道/门牌号：">
         <selectType v-model="ruleForm.carType" type="AF018" clearable size="mini"></selectType>
       </el-form-item>
-      <el-form-item class="carvinfo" required label="车长">
+      <el-form-item class="carvinfo" required label="到达地：">
         长 <el-input v-numberOnly v-model="ruleForm.carLength"></el-input>
         宽 <el-input v-model="ruleForm.carWidth"></el-input>
         高 <el-input v-model="ruleForm.carHeight"></el-input>（米）
       </el-form-item>
-
-      <el-form-item required label="车辆载重">
+      <el-form-item required label="街道/门牌号：">
         <el-input v-model="ruleForm.carLoad"></el-input>（吨）
       </el-form-item>
+      </div>
+      <div class="cargo-info">
+        <h3></h3>
       <el-form-item required label="车辆体积">
         <el-input v-model="ruleForm.carVolume"></el-input>（立方米）
       </el-form-item>

@@ -7,7 +7,7 @@ const baseUrl = 'aflcusercenterservice'
  * @param {*} id car id
  */
 export function getCarInfo(id) {
-  return fetch.get('/aflcusercenterservice/usercenter/aflcCarInfo/v1/' + id)
+  return fetch.get('/aflcusercenterservice/usercenter/aflcCarInfo/v1/getDetails/' + id)
 }
 /**
  * 新增车源信息
@@ -158,7 +158,7 @@ export function getCarList(data) {
 }
  */
 export function putChangeCarInfo(data) {
-  return fetch.put('/aflcusercenterservice/usercenter/aflcCarInfo/v1/update' + data)
+  return fetch.put('/aflcusercenterservice/usercenter/aflcCarInfo/v1/update', data)
 }
 /**
  * 设置启用路线

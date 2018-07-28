@@ -1,29 +1,30 @@
 <template>
   <div class="create-carinfo page-main">
     <div class="tab-info-title">
-      <h2><span>管理车源信息</span></h2>
+      <h2><span>{{title}}车辆信息</span></h2>
     </div>
 
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-      <h3>基本信息</h3>
+      <div class="car-baseinfo-wrapper">
+      <div class="tab-info-stitle"><strong>基本信息：</strong>(打<span class="important">*</span>为必填项)</div>
       <div class="car-base-info clearfix">
       <el-form-item required  label="车牌号">
-        <el-input v-model="ruleForm.carNum"></el-input>
+        <el-input maxlength="15" v-model="ruleForm.carNum"></el-input>
       </el-form-item>
       <el-form-item required label="车辆类型">
         <selectType v-model="ruleForm.carType" type="AF018" clearable size="mini"></selectType>
       </el-form-item>
       <el-form-item class="carvinfo" required label="车长">
-        长 <el-input v-numberOnly v-model="ruleForm.carLength"></el-input>
-        宽 <el-input v-model="ruleForm.carWidth"></el-input>
-        高 <el-input v-model="ruleForm.carHeight"></el-input>（米）
+        长 <el-input maxlength="5" v-numberOnly:point1 v-model="ruleForm.carLength"></el-input>
+        宽 <el-input maxlength="5" v-numberOnly:point1 v-model="ruleForm.carWidth"></el-input>
+        高 <el-input maxlength="5" v-numberOnly:point1 v-model="ruleForm.carHeight"></el-input>（米）
       </el-form-item>
 
       <el-form-item required label="车辆载重">
         <el-input v-model="ruleForm.carLoad"></el-input>（吨）
       </el-form-item>
       <el-form-item required label="车辆体积">
-        <el-input v-model="ruleForm.carVolume"></el-input>（立方米）
+        <el-input disabled v-model="ruleForm.carVolume"></el-input>（立方米）
       </el-form-item>
       <el-form-item label="车辆规格">
         <selectType v-model="ruleForm.carSpec" type="AF009" clearable size="mini"></selectType>
@@ -56,18 +57,18 @@
           </el-date-picker>
       </el-form-item>
       
-      <el-form-item label="期望运价">
-        <el-input v-model="ruleForm.expectPrice"></el-input>元/车<br>（运价不填自动为面议）
+      <el-form-item class="carinfo-expect" label="期望运价">
+        <el-input v-model="ruleForm.expectPrice"></el-input>元/车  （运价不填自动为面议）
       </el-form-item>
-
-      </div>
-
       <el-form-item label="即时/长期">
         <el-radio-group v-model="ruleForm.isLongCar">
           <el-radio label="1">即时车源</el-radio>
           <el-radio label="0">长期车源</el-radio>
         </el-radio-group>
       </el-form-item>
+      </div>
+
+      <div class="carinfo-remark">
       <el-form-item label="备注">
         <div class="label-content clearfix">
           <span :key="index" v-for="(label, index) in labelArr" @click="selectTag(label)" :class="{'active': label.ischeck}">{{label.name}}</span>
@@ -76,23 +77,23 @@
           type="textarea"
           :rows="2"
           maxlength="30"
-          placeholder="请输入内容"
+          placeholder="请输入备注"
           v-model="ruleForm.remark">
         </el-input>
         请填写备注（{{ruleForm.remark.length}}-30字）。<span class="important-info">提供“原创”说明有利于提升线路效果</span>
       </el-form-item>
+      </div>
+</div>
 
-
-      <h3>车辆照片上传</h3>
-      <el-form-item >
-        <span class="require">上传车辆45°招聘</span>
+<div class="car-picinfo">
+      <div class="tab-info-stitle"><strong>车主认证照片：</strong><span class="important">（上传的图片不超过5M，并且为JPG/PNG/JPEG中的一种格式）</span></div>
+      <el-form-item required  >
+        <span class="info-require">上传车辆45°招聘</span>
         <upload :limit="5" listtype="picture-card" :title="'身份证'" :showFileList="true" v-model="ruleForm.carFile" />
       </el-form-item>
-
-      <el-form-item>
-        <el-button type="primary" @click="submitForm('ruleForm')">立即发布</el-button>
+</div>
+        <el-button class="create-carinfo-btn" type="primary" @click="submitForm('ruleForm')">立即发布</el-button>
         <!-- <el-button @click="resetForm('ruleForm')">重置</el-button> -->
-      </el-form-item>
   
     </el-form>
     <tmsmap @success="getInfo" pos="" name="" :popVisible.sync="popVisible" />
@@ -112,12 +113,20 @@ export default {
     tmsmap
   },
   mounted() {
-    this.ruleForm.belongDriver = this.otherinfo.contactsName
-    this.ruleForm.driverId = this.otherinfo.id
-    this.initLabel()
+    this.id = this.$route.query.id
+    
+    this.initLabel().then(()=>{
+      if (this.id) {
+        this.initModify()
+      } else {
+        this.initNew()
+      }
+    })
   },
   data() {
     return {
+      id: '',
+      title: '发布',
       ifDisable: false,
       popVisible: false,
       labelArr: [],
@@ -167,11 +176,52 @@ export default {
       }
     }
   },
+  watch:{
+    "ruleForm.carLength":{
+      handler(){
+        this.getCarVolum()
+      }
+    },
+    "ruleForm.carWidth":{
+      handler(){
+        this.getCarVolum()
+      }
+    },
+    "ruleForm.carHeight":{
+      handler(){
+        this.getCarVolum()
+      }
+    }
+  },
   methods: {
+    initModify() {
+      ReqApi.getCarInfo(this.id).then(res => {
+        const data = res.data
+        for (const i in this.ruleForm) {
+          this.ruleForm[i] = data[i]
+        }
+        var labels = data.carTag.split('|')
+        console.log(labels, this.labelArr)
+        this.labelArr = this.labelArr.map(el => {
+          if (labels.indexOf(el.code) !== -1) {
+            el.ischeck = true
+          }
+          return el
+        })
+        this.isModify = true
+        this.title="修改"
+      }).catch(() => {
+        // 如果拿不到信息
+        this.$message.error('查找不到相关信息~')
+        this.initNew()
+      })
+    },
+    initNew() {
+      this.ruleForm.belongDriver = this.otherinfo.contactsName
+      this.ruleForm.driverId = this.otherinfo.id
+    },
     initLabel() {
       return getSelectType('AF042').then(data => {
-        // data = [{ 'id': '82161237f2c24434a7efcaa32033a7b3', 'name': '加长', 'pid': '628702868d894ce8868868bb2f33e8e4', 'code': 'AF00901', 'value': null, 'status': true, 'remark': '加长', 'isDefault': true, 'createTime': 1527498041000, 'updateTime': 1527498041000, 'updater': 'fangjian', 'creater': 'fangjian', 'delFlag': false, 'pidName': null }, { 'id': '0b93218ad7fe46329257705de783c8ca', 'name': '厢车', 'pid': '628702868d894ce8868868bb2f33e8e4', 'code': 'AF00902', 'value': null, 'status': true, 'remark': '厢车', 'isDefault': true, 'createTime': 1527498041000, 'updateTime': 1527498041000, 'updater': 'fangjian', 'creater': 'fangjian', 'delFlag': false, 'pidName': null }, { 'id': 'ca707ebf24e74ce9bb72de13cb144bcf', 'name': '高栏', 'pid': '628702868d894ce8868868bb2f33e8e4', 'code': 'AF00903', 'value': null, 'status': true, 'remark': '高栏', 'isDefault': true, 'createTime': 1527498041000, 'updateTime': 1527498041000, 'updater': 'fangjian', 'creater': 'fangjian', 'delFlag': false, 'pidName': null }]
-        // data = data.concat(data, data, data)
         this.labelArr = data.map(el => {
           const obj = el
           obj.ischeck = false
@@ -181,6 +231,10 @@ export default {
     },
     selectTag(label) {
       label.ischeck = !label.ischeck
+    },
+    getCarVolum(){
+      this.ruleForm.carVolume = this.ruleForm.carLength * this.ruleForm.carWidth * this.ruleForm.carHeight
+      this.ruleForm.carVolume = this.ruleForm.carVolume ? this.ruleForm.carVolume.toFixed(2) : 0 
     },
     getInfo(pos, name, info) {
       // info.name  info.pos
@@ -214,7 +268,8 @@ export default {
           let promiseObj
           // 判断操作，调用对应的函数
           if (this.isModify) {
-            // promiseObj = putCarrier(data)
+            data.id = this.id
+            promiseObj = ReqApi.putChangeCarInfo(data)
           } else {
             promiseObj = ReqApi.postCarInfo(data)
           }
@@ -225,6 +280,7 @@ export default {
               confirmButtonText: '确定',
               callback: action => {
                 this.$emit('success')
+                this.eventBus.$emit('replaceCurrentView', '/carowner/carinfo/manage')
               }
             })
           }).catch(err => {
@@ -240,7 +296,7 @@ export default {
 </script>
 <style lang="scss">
 .create-carinfo{
-  padding: 10px;
+  padding:20px;
   height: 100%;
   .car-base-info{
     .el-form-item{
@@ -256,6 +312,41 @@ export default {
       width: 50px;
     }
   }
+  .tab-info-stitle{
+    font-size: 12px;
+    color: #333;
+    strong{
+      font-size: 16px;
+    }
+  }
+  .car-baseinfo-wrapper{
+    margin: 20px 0;
+    background: #fff;
+    padding: 18px 20px;
+  }
+  .car-base-info{
+    padding: 30px 50px 0;
+  }
+  .car-picinfo{
+    padding: 20px;
+    background: #fff;
+  }
+  .carinfo-remark{
+    padding: 0 50px;
+    .el-textarea{
+      display: block;
+      width: 80%;
+    }
+  }
+  .carinfo-expect{
+    .el-input{
+      width: 40%;
+    }
+  }
+  .create-carinfo-btn{
+    margin: 40px auto 100px;
+    display: block;
+  }
   .label-content{
     span{
       float: left;
@@ -266,8 +357,10 @@ export default {
       text-align: center;
       margin-right: 10px;
       margin-bottom: 10px;
-      background: #fff;
-      border: 1px solid #ccc;
+      background: #498fe1;
+      color: #fff;
+      border-radius: 2px;
+      opacity: 0.5;
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
@@ -279,7 +372,8 @@ export default {
       }
 
       &.active{
-        background: #00c1de;
+        opacity: 1;
+        background: #498fe1;
         color: #fff;
       }
     }

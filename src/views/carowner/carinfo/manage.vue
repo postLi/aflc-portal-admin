@@ -291,7 +291,7 @@ export default {
       })
     },
     changeItem(id) {
-
+      this.$router.push('/carowner/carinfo/create?id=' + id)
     },
     setTable() {
       this.setupTableVisible = true
