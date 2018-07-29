@@ -114,8 +114,8 @@ export default {
   },
   mounted() {
     this.id = this.$route.query.id
-    
-    this.initLabel().then(()=>{
+
+    this.initLabel().then(() => {
       if (this.id) {
         this.initModify()
       } else {
@@ -176,19 +176,19 @@ export default {
       }
     }
   },
-  watch:{
-    "ruleForm.carLength":{
-      handler(){
+  watch: {
+    'ruleForm.carLength': {
+      handler() {
         this.getCarVolum()
       }
     },
-    "ruleForm.carWidth":{
-      handler(){
+    'ruleForm.carWidth': {
+      handler() {
         this.getCarVolum()
       }
     },
-    "ruleForm.carHeight":{
-      handler(){
+    'ruleForm.carHeight': {
+      handler() {
         this.getCarVolum()
       }
     }
@@ -209,7 +209,7 @@ export default {
           return el
         })
         this.isModify = true
-        this.title="修改"
+        this.title = '修改'
       }).catch(() => {
         // 如果拿不到信息
         this.$message.error('查找不到相关信息~')
@@ -232,9 +232,9 @@ export default {
     selectTag(label) {
       label.ischeck = !label.ischeck
     },
-    getCarVolum(){
+    getCarVolum() {
       this.ruleForm.carVolume = this.ruleForm.carLength * this.ruleForm.carWidth * this.ruleForm.carHeight
-      this.ruleForm.carVolume = this.ruleForm.carVolume ? this.ruleForm.carVolume.toFixed(2) : 0 
+      this.ruleForm.carVolume = this.ruleForm.carVolume ? this.ruleForm.carVolume.toFixed(2) : 0
     },
     getInfo(pos, name, info) {
       // info.name  info.pos
@@ -312,13 +312,7 @@ export default {
       width: 50px;
     }
   }
-  .tab-info-stitle{
-    font-size: 12px;
-    color: #333;
-    strong{
-      font-size: 16px;
-    }
-  }
+  
   .car-baseinfo-wrapper{
     margin: 20px 0;
     background: #fff;

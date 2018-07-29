@@ -5,91 +5,92 @@
     </div>
 
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-      <h3>线路信息 <span class="important">提示：带*为必填项</span></h3> 
+      <!-- 线路信息 -->
       <div class="order-base-info clearfix">
-      <el-form-item required  label="出发地：">
-        <el-input v-model="ruleForm.carNum"></el-input>
-      </el-form-item>
-      <el-form-item required label="街道/门牌号：">
-        <selectType v-model="ruleForm.carType" type="AF018" clearable size="mini"></selectType>
-      </el-form-item>
-      <el-form-item class="carvinfo" required label="到达地：">
-        长 <el-input v-numberOnly v-model="ruleForm.carLength"></el-input>
-        宽 <el-input v-model="ruleForm.carWidth"></el-input>
-        高 <el-input v-model="ruleForm.carHeight"></el-input>（米）
-      </el-form-item>
-      <el-form-item required label="街道/门牌号：">
-        <el-input v-model="ruleForm.carLoad"></el-input>（吨）
-      </el-form-item>
+        <div class="tab-info-stitle"><strong>线路信息</strong><span class="important">提示：带*为必填项</span></div>
+        <el-form-item required  label="出发地：">
+          <el-input v-model="ruleForm.carNum"></el-input>
+        </el-form-item>
+        <el-form-item required label="街道/门牌号：">
+          <el-input v-model="ruleForm.carNum"></el-input>
+          <!-- <selectType v-model="ruleForm.carType" type="AF018" clearable size="mini"></selectType> -->
+        </el-form-item>
+        <el-form-item  required label="到达地：">
+          <el-input v-numberOnly v-model="ruleForm.carLength"></el-input>
+        </el-form-item>
+        <el-form-item required label="街道/门牌号：">
+          <el-input v-model="ruleForm.carLoad"></el-input>
+        </el-form-item>
       </div>
+      <!-- 货物信息 -->
       <div class="cargo-info">
-        <h3></h3>
-      <el-form-item required label="车辆体积">
-        <el-input v-model="ruleForm.carVolume"></el-input>（立方米）
-      </el-form-item>
-      <el-form-item label="车辆规格">
-        <selectType v-model="ruleForm.carSpec" type="AF009" clearable size="mini"></selectType>
-      </el-form-item>
-      <el-form-item required label="车辆常驻地">
-        <el-input v-model="ruleForm.usualPlace"></el-input>
-      </el-form-item>
-      <el-form-item label="车源类型">
-        <el-radio-group v-model="ruleForm.carSourceType">
-          <el-radio label="AF01801">回程车</el-radio>
-          <el-radio label="AF01802">本地车</el-radio>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item required label="出发地">
-        <el-input @focus="()=>{showMap('strartAddress')}" v-model="ruleForm.strartAddress"></el-input>
-      </el-form-item>
-      <el-form-item required label="到达地">
-        <el-input @focus="()=>{showMap('endAddress')}" v-model="ruleForm.endAddress"></el-input>
-      </el-form-item>
-      <el-form-item label="途径点">
-        <el-input @focus="()=>{showMap('viaAddress')}" v-model="ruleForm.viaAddress"></el-input>
-      </el-form-item>
-      <el-form-item label="发车时间">
-        <el-date-picker
-            v-model="ruleForm.startTime"
-            type="date"
-            placeholder="选择日期"
-            value-format="timestamp"
-            >
-          </el-date-picker>
-      </el-form-item>
-      
-      <el-form-item label="期望运价">
-        <el-input v-model="ruleForm.expectPrice"></el-input>元/车<br>（运价不填自动为面议）
-      </el-form-item>
-
+        <div class="tab-info-stitle"><strong>货物信息</strong></div> 
+        <ul>
+           <li :key="index" v-for="(item, index) in cargoList">
+             <el-form-item required label="货物名称：">
+                <el-input v-model="ruleForm.carVolume"></el-input>（立方米）
+              </el-form-item>
+              <el-form-item required label="总件数：">
+                <el-input v-model="ruleForm.carVolume"></el-input>件
+              </el-form-item>
+              <el-form-item required label="预估重量：">
+                <el-input v-model="ruleForm.carVolume"></el-input>公斤
+              </el-form-item>
+              <el-form-item required label="预估体积：">
+                <el-input v-model="ruleForm.carVolume"></el-input>立方
+              </el-form-item>
+              <el-form-item  class="cargo-button">
+                <el-button type="primary" v-if="index === (cargoList.length-1)" @click="submitForm('ruleForm')">重置</el-button>
+                <el-button type="primary" v-if="index === (cargoList.length-1) && cargoList.length < 6" @click="submitForm('ruleForm')">+</el-button>
+              </el-form-item>
+           </li>
+        </ul>
       </div>
-
-      <el-form-item label="即时/长期">
-        <el-radio-group v-model="ruleForm.isLongCar">
-          <el-radio label="1">即时车源</el-radio>
-          <el-radio label="0">长期车源</el-radio>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="备注">
-        <div class="label-content clearfix">
-          <span :key="index" v-for="(label, index) in labelArr" @click="selectTag(label)" :class="{'active': label.ischeck}">{{label.name}}</span>
+      <!-- 选择物流公司 -->
+      <div class="select-line">
+        <div class="tab-info-stitle"><strong>选择物流公司：</strong>（选择出发地跟到达地之后，为您精准匹配物流承运商）<span class="important">选择承运商，直接下单；不选择承运商，发布货源</span></div>
+        
+      </div>
+      <!-- 货源类型 -->
+      <div class="cargo-class">
+        <el-form-item label="货源类型">
+          <el-radio-group v-model="ruleForm.isLongCar">
+            <el-radio label="1">单次急发货源</el-radio>
+            <el-radio label="0">长期稳定货源</el-radio>
+          </el-radio-group>
+        </el-form-item>
+      </div>
+      <!-- 联系方式 -->
+      <div class="select-contact">
+          <h3>联系方式</h3>
+          <ul class="concat-list">
+            <li>
+              <el-form-item required label="发货人：">
+                <el-input v-model="ruleForm.expectPrice"></el-input>
+              </el-form-item>
+              <el-form-item required label="发货人手机">
+                <el-input v-model="ruleForm.expectPrice"></el-input>
+              </el-form-item>
+              <el-form-item >
+                <el-button type="primary" @click="submitForm('ruleForm')">选择常用发货人</el-button>
+                <el-checkbox v-model="checked">保存到常用发货人</el-checkbox>
+              </el-form-item>
+            </li>
+            <li>
+              <el-form-item label="收货人：">
+                <el-input v-model="ruleForm.expectPrice"></el-input>
+              </el-form-item>
+              <el-form-item label="收货人手机">
+                <el-input v-model="ruleForm.expectPrice"></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="submitForm('ruleForm')">选择常用收货人</el-button>
+                <el-checkbox v-model="checked">保存到常用收货人</el-checkbox>
+              </el-form-item>
+            </li>
+          </ul>
         </div>
-        <el-input
-          type="textarea"
-          :rows="2"
-          maxlength="30"
-          placeholder="请输入内容"
-          v-model="ruleForm.remark">
-        </el-input>
-        请填写备注（{{ruleForm.remark.length}}-30字）。<span class="important-info">提供“原创”说明有利于提升线路效果</span>
-      </el-form-item>
 
-
-      <h3>车辆照片上传</h3>
-      <el-form-item >
-        <span class="require">上传车辆45°招聘</span>
-        <upload :limit="5" listtype="picture-card" :title="'身份证'" :showFileList="true" v-model="ruleForm.carFile" />
-      </el-form-item>
 
       <el-form-item>
         <el-button type="primary" @click="submitForm('ruleForm')">立即发布</el-button>
@@ -120,6 +121,7 @@ export default {
   },
   data() {
     return {
+      cargoList: [{}],
       ifDisable: false,
       popVisible: false,
       labelArr: [],
@@ -172,8 +174,6 @@ export default {
   methods: {
     initLabel() {
       return getSelectType('AF042').then(data => {
-        // data = [{ 'id': '82161237f2c24434a7efcaa32033a7b3', 'name': '加长', 'pid': '628702868d894ce8868868bb2f33e8e4', 'code': 'AF00901', 'value': null, 'status': true, 'remark': '加长', 'isDefault': true, 'createTime': 1527498041000, 'updateTime': 1527498041000, 'updater': 'fangjian', 'creater': 'fangjian', 'delFlag': false, 'pidName': null }, { 'id': '0b93218ad7fe46329257705de783c8ca', 'name': '厢车', 'pid': '628702868d894ce8868868bb2f33e8e4', 'code': 'AF00902', 'value': null, 'status': true, 'remark': '厢车', 'isDefault': true, 'createTime': 1527498041000, 'updateTime': 1527498041000, 'updater': 'fangjian', 'creater': 'fangjian', 'delFlag': false, 'pidName': null }, { 'id': 'ca707ebf24e74ce9bb72de13cb144bcf', 'name': '高栏', 'pid': '628702868d894ce8868868bb2f33e8e4', 'code': 'AF00903', 'value': null, 'status': true, 'remark': '高栏', 'isDefault': true, 'createTime': 1527498041000, 'updateTime': 1527498041000, 'updater': 'fangjian', 'creater': 'fangjian', 'delFlag': false, 'pidName': null }]
-        // data = data.concat(data, data, data)
         this.labelArr = data.map(el => {
           const obj = el
           obj.ischeck = false
