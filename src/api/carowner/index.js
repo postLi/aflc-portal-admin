@@ -1,14 +1,13 @@
 import fetch from '@/utils/fetch'
 
-
-const baseUrl = 'aflcusercenterservice';
+const baseUrl = 'aflcusercenterservice'
 
 /**
  * 查询car信息
  * @param {*} id car id
  */
 export function getCarInfo(id) {
-  return fetch.get('/aflcusercenterservice/usercenter/aflcCarInfo/v1/' + id)
+  return fetch.get('/aflcusercenterservice/usercenter/aflcCarInfo/v1/getDetails/' + id)
 }
 /**
  * 新增车源信息
@@ -159,7 +158,7 @@ export function getCarList(data) {
 }
  */
 export function putChangeCarInfo(data) {
-  return fetch.put('/aflcusercenterservice/usercenter/aflcCarInfo/v1/update' + data)
+  return fetch.put('/aflcusercenterservice/usercenter/aflcCarInfo/v1/update', data)
 }
 /**
  * 设置启用路线
@@ -178,12 +177,11 @@ export function putSetRouteType(id, type) {
   return fetch.put('/aflcusercenterservice/usercenter/aflcCarInfo/v1/setRouteType/' + id + '/' + type)
 }
 
-
-//认证车主
-export function identifyOwner(data){
-    return fetch.axios({
-      url: '/aflcusercenterservice/usercenter/aflcDriver/v1/authAflcDriver',
-      method: 'post',
-      data:data
-    })
-  }
+// 认证车主
+export function identifyOwner(data) {
+  return fetch.axios({
+    url: '/aflcusercenterservice/usercenter/aflcDriver/v1/authAflcDriver',
+    method: 'post',
+    data: data
+  })
+}

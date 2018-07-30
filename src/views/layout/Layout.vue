@@ -90,6 +90,16 @@ export default {
     this.eventBus.$on('hideCreateOrder', (orderid) => {
       this.showCreateVisible = false
     })
+    // 用来替换当前路由
+    // 调用方式类似：
+    // this.eventBus.$emit('replaceCurrentView', '/operation/order/transfer')
+    this.eventBus.$on('replaceCurrentView', (route) => {
+      const lastRoute = this.$route
+      route = typeof route === 'string' ? { 'path': route } : route
+      this.$router.replace(route, () => {
+        this.$store.dispatch('delVisitedViews', lastRoute)
+      })
+    })
     this._orderobj = objectMerge2({}, this.orderobj)
   },
   methods: {
