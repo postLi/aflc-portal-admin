@@ -1,0 +1,93 @@
+$stepWith : 884px;
+$stepLength : 54px;
+
+.ComplaintInfo{
+    .step{
+        width:  $stepWith ;
+        height:  $stepLength ;
+        margin: 22px auto;
+        background: url('../assets/tousu_01.png') no-repeat center;
+    }
+    .step-one{
+        background: url('../assets/tousu_01.png') no-repeat center;
+    }
+    .step-tow{
+        background: url('../assets/tousu_02.png') no-repeat center;
+    }
+    .step-three{
+        background: url('../assets/tousu_03.png') no-repeat center;
+    }
+    .ComplaintInfomation{
+        margin:0 20px;
+        .complaint_content{
+            padding-bottom: 30px;
+            background: #fff;
+            margin-bottom: 40px;
+            h2{
+                text-align: center;
+                font-size: 16px;
+                color: #333333;
+                line-height: 22px;
+                padding: 21px 0;
+            }
+            
+        }
+        .complaint_info{
+            div{
+                width: 1309px;
+                margin: 0 auto;
+                border-top:1px solid #ccc;
+                border-left:1px solid #ccc;
+                box-sizing: border-box;
+                font-size:0;
+                p{
+                    display: inline-block;
+                    font-size: 14px;
+                    line-height: 20px;
+                    border-right:1px solid #ccc;
+                    border-bottom:1px solid #ccc;
+                    padding: 14px 20px;
+                    span{
+                        color:red;
+                    }
+                }
+                p:nth-child(2n-1){
+                    width: 252px;
+                    text-align: right;
+                }
+                p:nth-child(2n){
+                    width: 1056px;
+                }
+                p:nth-child(3),p:nth-child(4),p:nth-child(7),p:nth-child(8){
+                    background: #f2f2f2;
+                }
+            }
+        }
+        .complaint_reply{
+            .el-textarea{
+                width: 1309px;
+                margin: 0 auto 60px;
+                display: block;      
+                font-size: 12px;
+                position: relative;
+            }
+            .count{
+                position: absolute;
+                right: 0;
+                bottom: 0;
+            }
+            .el-button{
+                display: block;
+                margin: 0 auto;
+                padding: 12px 52px;
+            }
+            .complaint_replyinfo{
+                text-indent: 20%;
+                font-size: 12px;
+                line-height: 18px;
+                color: #333333;
+                margin-bottom: 100px;
+            }
+        }
+    }
+}

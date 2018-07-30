@@ -3,7 +3,7 @@
         <el-form :model="logisticsForm" :rules="rules" ref="ruleForm" label-width="250px" class="demo-ruleForm">
             <div class="carrierTitle">
                 <div class="realname">
-                    <h2>完善实名认证 <span :class="{certified:logisticsForm.authStatusName == '待认证' ,certify:logisticsForm.authStatusName == '认证成功'}">( {{logisticsForm.authStatusName}} )</span> </h2>
+                    <h2>完善实名认证 <span :class="{certified:logisticsForm.authStatusName == '待认证' ,certify:logisticsForm.authStatusName == '已认证'}">( {{logisticsForm.authStatusName}} )</span> </h2>
                 </div>
                 <div class="prompt">
                     <p><span class="tishi"><i class="el-icon-warning"></i>小提示： </span>(打<span class="star">*</span>号为必填项)</p>
@@ -13,12 +13,13 @@
             <div class="companyInformation information">
                 <h2>公司信息</h2>
                 <el-form-item label="物流公司名称：" prop="companyName">
-                    <el-input v-model="logisticsForm.companyName" @change="limitNum" :disabled="ifDisable === false">
+                    <el-input v-model="logisticsForm.companyName" @change="limitNum" :disabled="ifDisable == false">
+                       
                         <p slot="append">请填写企业在工商局注册的全称，完整的信息让客户更加信赖您。</p>
                     </el-input>
                 </el-form-item>
                 <el-form-item label="品牌：" >
-                    <el-input v-model="logisticsForm.belongBrand" @change="limitNum" disabled v-if="ifDisable === false">
+                    <el-input v-model="logisticsForm.belongBrand" @change="limitNum" disabled v-if="ifDisable == false">
                     </el-input>
                     <el-select v-model="logisticsForm.belongBrandCode" placeholder="请选择" v-else>
                         <el-option
@@ -243,7 +244,6 @@ export default {
             optionsBelongBrand:[],//品牌
             optionsProductService:[],//产品与服务
             optionsOtherService:[],//增值服务
-
             otherServiceCodeArr:[],
             productServiceCodeArr:[],
             serviceTypeArr:[],
@@ -338,7 +338,7 @@ export default {
         },
         disabled:{
             handler(newVal){
-                if(newVal == '待认证' || newVal == '认证成功'){
+                if(newVal == '待认证' || newVal == '已认证'){
                     this.ifDisable = false;
                 }else{
                     this.ifDisable = true;
@@ -349,6 +349,7 @@ export default {
     },
     mounted(){
         this.getMoreInformation();
+        console.log(this.ifDisable)
     },  
     methods: {
         getMoreInformation(){

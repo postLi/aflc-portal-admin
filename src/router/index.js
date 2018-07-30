@@ -11,6 +11,7 @@ import Layout from '../views/layout/Layout'
 import carowner from './module/carowner'
 import carrier from './module/carrier'
 import consignor from './module/consignor'
+// import complaint from './module/complaintsInfo'
 
 // components DEMO
 import Components from './module/componentsDemo'
@@ -64,5 +65,6 @@ export const asyncRouterMap = [
   carowner,
   consignor,
   carrier,
+//   complaint,
   { path: '*', redirect: '/404', hidden: true }
 ]

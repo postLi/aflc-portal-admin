@@ -2,6 +2,71 @@
     background: #f2f2f2;
     width: 100%;
     height: 100%;
+    .carrierTitle{
+        background: #fff;
+        padding: 18px 20px;
+        margin-bottom: 20px;
+        .realname{
+            border-bottom: solid 1px #0E91E9;
+            margin-bottom: 10px;
+            h2{
+                display: inline-block;
+                line-height: 26px;
+                font-size: 22px;
+                font-weight: normal;
+                color: #333333;
+                border-bottom: 4px solid #0E91E9;
+            }
+            span{
+                display: inline-block;
+                line-height: 20px;
+                font-size: 14px;
+                color: #ff300d;
+                font-weight: bold;
+            }
+            .certified{
+                color: #e6a23c;
+            }
+            .certify{
+                color: rgba(12, 231, 23, 0.842);
+            }
+        }
+        .prompt{
+            padding: 12px 27px 19px;
+            background-color: #d1e0f2;
+            margin-bottom: 13px;
+            & p:nth-child(1){
+                margin-bottom: 5px;
+            }
+            p{
+                line-height: 17px;
+                font-size: 14px;
+                color: #333333;
+                .tishi{
+                    line-height: 20px;
+                    font-size: 14px;
+                    font-weight: bold;
+                    position: relative;
+                    &>i{
+                        position: absolute;
+                        top: 2px;
+                        left: -17px;
+                        color: #ff300d;
+                    }
+                }
+                .star{
+                    color: #ff300d;
+                    font-weight: bold;
+                    padding: 0 2px;
+                }
+                .site{
+                    color: #0e91e9;
+                    font-weight: bold;
+                }
+            }
+
+        }
+    }
     .el-form{
         width: 100%;
         height: 100%;
@@ -25,71 +90,7 @@
         .created{
             margin-bottom: 20px;
         }
-        .carrierTitle{
-            background: #fff;
-            padding: 18px 20px;
-            margin-bottom: 20px;
-            .realname{
-                border-bottom: solid 1px #0E91E9;
-                margin-bottom: 10px;
-                h2{
-                    display: inline-block;
-                    line-height: 26px;
-                    font-size: 22px;
-                    font-weight: normal;
-                    color: #333333;
-                    border-bottom: 4px solid #0E91E9;
-                }
-                span{
-                    display: inline-block;
-                    line-height: 20px;
-                    font-size: 14px;
-                    color: #ff300d;
-                    font-weight: bold;
-                }
-                .certified{
-                    color: #e6a23c;
-                }
-                .certify{
-                    color: rgba(12, 231, 23, 0.842);
-                }
-            }
-            .prompt{
-                padding: 12px 27px 19px;
-                background-color: #d1e0f2;
-                margin-bottom: 13px;
-                & p:nth-child(1){
-                    margin-bottom: 5px;
-                }
-                p{
-                    line-height: 17px;
-                    font-size: 14px;
-                    color: #333333;
-                    .tishi{
-                        line-height: 20px;
-                        font-size: 14px;
-                        font-weight: bold;
-                        position: relative;
-                        &>i{
-                            position: absolute;
-                            top: 2px;
-                            left: -17px;
-                            color: #ff300d;
-                        }
-                    }
-                    .star{
-                        color: #ff300d;
-                        font-weight: bold;
-                        padding: 0 2px;
-                    }
-                    .site{
-                        color: #0e91e9;
-                        font-weight: bold;
-                    }
-                }
-    
-            }
-        }
+       
         h2{
             line-height: 24px;
             font-size: 20px;

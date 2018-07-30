@@ -24,8 +24,9 @@ export default {
           path: '/carrier/baseInfo/authentication', icon: 'QQ', name: '完善实名认证', component: _import('carrier/baseInfo/authentication/index'), meta: { role: ['admin'], title: '完善实名认证', noCache: false }
         },
         {
-          path: '/changePassword', icon: 'QQ', name: '修改登录密码', component: _import('changePassword'), meta: { role: ['admin'], title: '修改登录密码', noCache: false }
-        }
+          path: '/changePassword', icon: 'QQ', name: '修改登录密码', component: _import('changePassword'), meta: { role: ['admin'], title: '修改登录密码', noCache: false },
+        },
+      
       ]
     },
     // 订单管理
@@ -43,6 +44,10 @@ export default {
         },
         {
           path: '/carrier/order/complaints', icon: 'QQ', name: '投诉管理', component: _import('carrier/order/complaints/index'), meta: { role: ['admin'], title: '投诉管理', noCache: false }
+        },
+        {
+            
+            path: '/complaintsInfo/index', icon: 'QQ',name: '投诉详情', component: _import('complaintsInfo/index'),meta: { role: ['admin'], title: '投诉详情',istab: true, noCache: false },
         }
       ]
     },
