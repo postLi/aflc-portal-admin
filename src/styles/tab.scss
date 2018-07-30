@@ -21,9 +21,18 @@
     font-size: 12px;
     color: #333;
     strong{
-      font-size: 16px;
+        font-size: 16px;
     }
-  }
+}
+.tab-info-panel{
+    background: #fff;
+    margin: 20px 0;
+    padding: 20px;
+}
+.tab-create-btn{
+    display: block;
+    margin: 30px auto 100px;
+}
 
 .btns_box{
     margin-bottom: 10px;

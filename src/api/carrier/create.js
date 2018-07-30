@@ -10,7 +10,7 @@ import fetch from '@/utils/fetch'
       "goodsNum": 0, // 总件数
       "goodsVolume": "string", // 货物体积（方）
       "goodsWeight": "string", // 货物重量（吨）
-      "title": "string" // 标题
+      // "title": "string" // 标题
     }
   ],
   "aflcOrderAddressWebDtoList": [
@@ -18,10 +18,10 @@ import fetch from '@/utils/fetch'
       "contacts": "string", // 联系人
       "contactsPhone": "string", // 联系电话
       "isSave": false, // 是否保存常用收发货人
+      "type": "string", // 类型（0：发货人，1：收货人）
 
-      "type": "string", // 类型（0：常用发货人，1：常用收货人）
       "provinceCityArea": "string", // 省市区
-      "viaAddress": "string", // 途径地
+      viaAddress": "string", // 途径地
       "viaAddressCoordinate": "string", // 途径地坐标
       //"viaAddressName": "string", // 途径名地址名称
       "viaOrder": 0 // 途径地顺序（0：出发地；1：目的地）
@@ -31,7 +31,7 @@ import fetch from '@/utils/fetch'
   "memberType": "string", // 会员类型(货主:AF00101,车主:AF00102,物流公司:AF00107)
   "orderClass": "string", // 货源类型(0单次急发货源1长期稳定货源)
   "orderFrom": "string", // 订单来源(APP端:AF0040001;WEB端:AF0040002;微信公众号:AF0040003;小程序:AF004004)
-  "shipperId": "string", // 货主id
+  "shipperId": "string", // 货主id 用户id
   "title": "string", // 标题
   "totalAmount": 0, // 订单总金额
   "wlId": "string", // 物流公司id
@@ -203,7 +203,9 @@ export function postAddContact(data) {
 }
  */
 export function getContactList(data) {
-  return fetch.post('/aflcusercenterservice/usercenter/aflcShipperContacts/v1/list', data)
+  return fetch.post('/aflcusercenterservice/usercenter/aflcShipperContacts/v1/list', data).then(res => {
+    return res.data || { list: [], totalCount: 0 }
+  })
 }
 /**
  * 根据id修改常用收发货人
@@ -229,4 +231,13 @@ export function getContactList(data) {
  */
 export function putChangeContact(data) {
   return fetch.put('/aflcusercenterservice/usercenter/aflcShipperContacts/v1/update', data)
+}
+/**
+ * 获取货品的预估价格
+ * @param {*} data 查询参数
+ */
+export function getTotalPrice(data) {
+  return fetch.get('/aflcorderservice/order/fclOrder/v1/getGoodsPrice', {
+    params: data
+  })
 }
