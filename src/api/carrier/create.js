@@ -235,9 +235,92 @@ export function putChangeContact(data) {
 /**
  * 获取货品的预估价格
  * @param {*} data 查询参数
+{
+  transportRangeId: '', // 物流公司专线id
+  weight:'', // 货物重量
+  volume: '' // 货物体积
+}
  */
 export function getTotalPrice(data) {
-  return fetch.get('/aflcorderservice/order/fclOrder/v1/getGoodsPrice', {
+  return fetch.get('/aflcorderservice-xmy/order/fclOrder/v1/getEstimateTotalPieces', {
     params: data
   })
+}
+/**
+ * 根据物流公司ID获取最近网点（出发地，到达地）
+ * @param {*} cid companyId
+ * @param {*} data 查询参数
+{
+  endLatitude:'', // 到达地上传坐标纬度
+  endLocation:'', // 目的地
+  endLongitude:'', // 到达地上传坐标经度
+  startLatitude:'', // 出发地上传坐标纬度
+  startLocation:'', // 出发地
+  startLongitude:'' // 出发地上传坐标经度
+}
+ */
+export function getBestNet(cid, data) {
+  return fetch.post('/aflcusercenterservice/usercenter/aflcPointNetwork/v1/listPointByCompanyId/' + cid, data)
+}
+/**
+ * 根据物流公司ID获取出发网点、到达网点
+ * @param {*} cid companyId
+ * @param {*} data 查询参数
+{
+  endLatitude:'', // 到达地上传坐标纬度
+  endLocation:'', // 目的地
+  endLongitude:'', // 到达地上传坐标经度
+  startLatitude:'', // 出发地上传坐标纬度
+  startLocation:'', // 出发地
+  startLongitude:'' // 出发地上传坐标经度
+}
+ */
+export function getAllNet(cid, data) {
+  return fetch.post('/aflcusercenterservice/usercenter/aflcPointNetwork/v1/listCompanyPointByCompanyId/' + cid, data)
+}
+/**
+ * 承运获取物流专线列表
+ * @param {*} data 搜索参数
+{
+  "currentPage": 0,
+  "pageSize": 0,
+  "vo": {
+    "assessNumber": 0,
+    "browseNumber": 0,
+    "createTime": "2018-07-31T11:03:55.118Z",
+    "creater": "string",
+    "delFlag": "string",
+    "departureHzData": 0,
+    "departureHzTime": 0,
+    "departureTime": "string",
+    "departureTimeCode": "string",
+    "endLocation": "string",
+    "endLocationContacts": "string",
+    "endLocationContactsMobile": "string",
+    "endLocationCoordinate": "string",
+    "id": "string",
+    "lowerPrice": 0,
+    "orderNumber": 0,
+    "otherService": "string",
+    "otherServiceCode": "string",
+    "publishId": "string",
+    "publishName": "string",
+    "rangeLogo": "string",
+    "rangeStatus": "string",
+    "rangeType": "string",
+    "rangeTypeName": "string",
+    "startLocation": "string",
+    "startLocationContacts": "string",
+    "startLocationContactsMobile": "string",
+    "startLocationCoordinate": "string",
+    "transportAging": "string",
+    "transportAgingUnit": "string",
+    "transportRemark": "string",
+    "updateTime": "2018-07-31T11:03:55.150Z",
+    "updater": "string"
+  }
+}
+ */
+export function getCompany(data) {
+  return fetch.post('/aflcusercenterservice/usercenter/aflcTransportRange/v1/getMemberAflcTransportRangeList', data)
 }

@@ -9,17 +9,17 @@
       <div class="order-base-info tab-info-panel clearfix">
         <div class="tab-info-stitle"><strong>线路信息</strong><span class="important">提示：带*为必填项</span></div>
         <el-form-item required  label="出发地：">
-          <el-input v-model="aflcOrderAddressWebDtoList[0].provinceCityArea"></el-input>
+          <el-input   @focus="()=>{showMap('strartAddress')}" v-model="aflcOrderAddressWebDtoList[0].provinceCityArea"></el-input>
         </el-form-item>
         <el-form-item required label="街道/门牌号：">
-          <el-input v-model="aflcOrderAddressWebDtoList[0].viaAddress"></el-input>
+          <el-input  @focus="()=>{showMap('strartAddress')}" v-model="aflcOrderAddressWebDtoList[0].viaAddress"></el-input>
           <!-- <selectType v-model="ruleForm.carType" type="AF018" clearable size="mini"></selectType> -->
         </el-form-item>
         <el-form-item  required label="到达地：">
-          <el-input  v-model="aflcOrderAddressWebDtoList[1].provinceCityArea"></el-input>
+          <el-input   @focus="()=>{showMap('endAddress')}" v-model="aflcOrderAddressWebDtoList[1].provinceCityArea"></el-input>
         </el-form-item>
         <el-form-item required label="街道/门牌号：">
-          <el-input v-model="aflcOrderAddressWebDtoList[1].viaAddress"></el-input>
+          <el-input  @focus="()=>{showMap('endAddress')}" v-model="aflcOrderAddressWebDtoList[1].viaAddress"></el-input>
         </el-form-item>
       </div>
       <!-- 货物信息 -->
@@ -73,47 +73,86 @@
             style="width: 100%">
             <el-table-column
               fixed
-              sortable
-              type="selection"
               width="50">
+                <template slot-scope="scope">
+                  <el-radio v-model="wlindex" ></el-radio>
+                </template>
             </el-table-column>
             <el-table-column
-              fixed
+              prop="publishName"
               label="承运商">
-              <template slot-scope="scope">
-                <span class="vipline" v-if="scope.row.isCommonRoute === '1'"></span>
-                {{ scope.row.strartAddress + '->' + scope.row.endAddress }}
-              </template>
             </el-table-column>
             <el-table-column
-              prop="carNum"
+              prop="lowerPrice"
               width="120"
               label="起步价">
             </el-table-column>
             <el-table-column
               prop="carTypeName"
-              width="120"
+              width="200"
               label="重货">
+              <template slot-scope="scope">
+                <span class="important">65</span>元/公斤 
+                <el-popover
+                  placement="bottom"
+                  popper-class="showjieti-info-pop"
+                  width="300"
+                  trigger="hover"
+                  >
+                  <div class="showjieti-info">
+                    <div class="jieti-title">最低一票价格：25元</div>
+                    <ul>
+                      <li :key="index" v-if="item.type==='1'" v-for="(item, index) in scope.row.rangePrices">
+                        <span class="jietiv">{{ item.startVolume }}公斤~{{ item.endVolume }}公斤</span>
+                        <span class="jietih">{{ item.primeryPrice }}元/公斤</span>
+                        <span class="jietid">折后价{{ item.discountPrice }}元/公斤</span>
+                      </li>
+                    </ul>
+                  </div>
+                  <span slot="reference" class="showjieti">阶梯价格</span>
+                </el-popover>
+              </template>
             </el-table-column>
             
             <el-table-column
               prop="carSourceTypeName"
-              width="120"
+              width="200"
               label="轻货">
+              <template slot-scope="scope">
+                <span class="important">65</span>元/立方 <el-popover
+                  placement="bottom"
+                  popper-class="showjieti-info-pop"
+                  width="300"
+                  trigger="hover"
+                  >
+                  <div class="showjieti-info">
+                    <div class="jieti-title">最低一票价格：25元</div>
+                    <ul>
+                      <li :key="index" v-if="item.type==='0'" v-for="(item, index) in scope.row.rangePrices">
+                        <span class="jietiv">{{ item.startVolume }}立方~{{ item.endVolume }}立方</span>
+                        <span class="jietih">{{ item.primeryPrice }}元/立方</span>
+                        <span class="jietid">折后价{{ item.discountPrice }}元/立方</span>
+                      </li>
+                    </ul>
+                  </div>
+                  <span slot="reference" class="showjieti">阶梯价格</span>
+                </el-popover>
+              </template>
             </el-table-column>
             <el-table-column
               label="时效"
               >
               <template slot-scope="scope">
-                  <el-button size="mini" type="info" v-if="scope.row.isCommonRoute === '1'" @click="setRemote(scope.row.id, '0')">取消常跑</el-button>
-                  <el-button size="mini" type="primary" v-if="scope.row.isCommonRoute === '0'" @click="setRemote(scope.row.id, '1')">设置常跑</el-button>
+                  <span class="important">{{scope.row.transportAging}}</span>{{scope.row.transportAgingUnit}}达
               </template>
             </el-table-column>
             <el-table-column
-              prop="createrName"
               width="120"
               label="发车频率"
               >
+              <template slot-scope="scope">
+                  <span class="important">{{scope.row.departureHzData}}天{{scope.row.departureHzTime}}次</span>
+              </template>
             </el-table-column>
           </el-table>
         </div>
@@ -143,7 +182,7 @@
                 <el-input v-model="aflcOrderAddressWebDtoList[0].contactsPhone"></el-input>
               </el-form-item>
               <el-form-item >
-                <el-button type="primary" @click="showContactPop(1)">选择常用发货人</el-button>
+                <el-button type="primary" @click="showContactPop(0)">选择常用发货人</el-button>
                 <el-checkbox v-model="aflcOrderAddressWebDtoList[0].isSave">保存到常用发货人</el-checkbox>
               </el-form-item>
             </li>
@@ -155,7 +194,7 @@
                 <el-input v-model="aflcOrderAddressWebDtoList[1].contactsPhone"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="showContactPop(0)">选择常用收货人</el-button>
+                <el-button type="primary" @click="showContactPop(1)">选择常用收货人</el-button>
                 <el-checkbox v-model="aflcOrderAddressWebDtoList[1].isSave">保存到常用收货人</el-checkbox>
               </el-form-item>
             </li>
@@ -164,7 +203,7 @@
 
 
       <el-form-item>
-        <el-button class="tab-create-btn" type="primary" @click="submitForm('ruleForm')">立即发布</el-button>
+        <el-button class="tab-create-btn" size="middle" type="primary" @click="submitForm('ruleForm')">立即发布</el-button>
         <!-- <el-button @click="resetForm('ruleForm')">重置</el-button> -->
       </el-form-item>
 
@@ -174,24 +213,24 @@
     <tmsmap @success="getInfo" pos="" name="" :popVisible.sync="popVisible" />
 
     <!-- 查看常用收发货人 -->
-    <el-dialog :title="contactTitle" :visible.sync="contactPopVisible">
-        <el-input v-model="ruleForm.name" auto-complete="off">
-          <el-button slot="append" >搜索</el-button>
+    <el-dialog :title="contactTitle" custom-class="ususalContactList" :visible.sync="contactPopVisible">
+        <el-input placeholder="请输入姓名、手机号或地址搜索" size="small" class="search-input" v-model="ruleForm.name" auto-complete="off">
+          <el-button size="small" slot="append" >搜索</el-button>
         </el-input>
-        <el-button @click="showNewContactPop">添加常用发货人</el-button>
+        <el-button class="addNewContact" size="mini" @click="showNewContactPop">添加常用发货人</el-button>
 
-        <ul>
-          <li :key="index" v-for="(item, index) in popContactList">
+        <ul class="contactPopList">
+          <li @click="selectContact(item)" class="clearfix" :key="index" v-for="(item, index) in popContactList">
             <span class="contactName">{{item.contacts}}</span>
             <span class="contactMobile">{{item.contactsPhone}}</span>
             <span class="contactAddres">{{item.address}}</span>
-            <span class="contactManage" @click="showModifyContact(item)">修改</span>
+            <span class="contactManage" @click.prevent.stop="showModifyContact(item)">修改</span>
           </li>
         </ul>
     </el-dialog>
     <!-- 修改/新建收发货人 -->
-    <el-dialog :title="popContactTitle + contactTitle" :visible.sync="dialogFormVisible">
-      <el-form :label-width="100" :model="contactform">
+    <el-dialog :title="popContactTitle + contactTitle" custom-class="ususalContactList ususalContacModify" :visible.sync="dialogFormVisible">
+      <el-form size="mini" label-width="70px" :model="contactform">
         <el-form-item label="姓名：" >
           <el-input v-model="contactform.contacts" auto-complete="off">
           </el-input>
@@ -201,13 +240,13 @@
           </el-input>
         </el-form-item>
         <el-form-item label="地址：" >
-          <el-input v-model="contactform.address" auto-complete="off">
+          <el-input @focus="()=>{showMap('contactAddress')}" v-model="contactform.address" auto-complete="off">
           </el-input>
         </el-form-item>
         <el-form-item  >
-          <el-check true-label="1" false-label="0" v-model="contactform.isDefault">
+          <el-checkbox true-label="1" false-label="0" v-model="contactform.isDefault">
             设置为默认地址
-          </el-check>
+          </el-checkbox>
         </el-form-item>
 
       </el-form>
@@ -275,6 +314,8 @@ export default {
       cargoListPre: [],
       rules: {},
       current: '',
+      // 选中的是第几个物流商
+      wlindex: '',
       ruleForm: {
         "clientIp": "", // 终端ip
         "memberType": "", // 会员类型(货主:AF00101,车主:AF00102,物流公司:AF00107)
@@ -287,26 +328,29 @@ export default {
         "orderFrom": "AF0040002" // 订单来源(APP端:AF0040001;WEB端:AF0040002;微信公众号:AF0040003;小程序:AF004004)
       },
       usersArr: [],
+      //netQuery: {},
+      netQuery:{endLatitude: "22.524114", endLocation: "广东省-江门市-新会区", endLongitude: "113.03524", startLatitude: "23.124017", startLocation: "广东省-广州市-天河区",startLongitude:"113.3682"},
       // 收发货人
+      currentType: 0, // 当前操作的联系类型
       contactTitle:'常用发货人',
       popContactTitle: '添加',
       popContactList:[],
       contactPopVisible: false,
       dialogFormVisible: false,
       contactform:{
-        "address": "string", //详细地址
-        "contacts": "string", //联系人
-        "contactsPhone": "string", //联系电话
-        "coordinate": "string", //发货地坐标
+        "address": "", //详细地址
+        "contacts": "", //联系人
+        "contactsPhone": "", //联系电话
+        "coordinate": "", //发货地坐标
         //"createTime": "2018-07-27T06:28:38.733Z", //创建时间
         //"creater": "string", //创建人
         //"delFlag": "string", //删除状态
-        "floorHousenum": "string", //楼层及门牌号 跟地址保持一致
+        "floorHousenum": "", //楼层及门牌号 跟地址保持一致
         //"id": "string", //编号
-        "isDefault": "string", //是否默默常用联系人（0：否；1：是）
-        "shipperId": "string", //货主ID userid
+        "isDefault": "0", //是否默默常用联系人（0：否；1：是）
+        "shipperId": "", //货主ID userid
         //"summary": "string", //简称
-        "type": "string" //类型（0：常用发货人，1：常用收货人）
+        "type": "0" //类型（0：常用发货人，1：常用收货人）
         //"updateTime": "2018-07-27T06:28:38.733Z", //更新时间
         //"updater": "string", //修改人
         // "version": "string" //版本
@@ -322,6 +366,7 @@ export default {
     } else {
       this.initNew()
     }
+    this.getCompany()
   },
   methods: {
     initNew(){
@@ -346,19 +391,29 @@ export default {
       label.ischeck = !label.ischeck
     },
     getInfo(pos, name, info) {
+      console.log("map info: ", info)
+      let obj = info.addressComponent
+      let str = obj.province +'-'+obj.city+'-'+obj.district
+      let str2 = obj.township + obj.street + obj.streetNumber + obj.building
       // info.name  info.pos
       switch (this.current) {
+        case "contactAddress":
+          this.contactform.address = name
+          this.contactform.floorHousenum = name
+          this.contactform.coordinate = pos
+
         case 'strartAddress':
-          this.ruleForm.strartAddress = name
-          this.ruleForm.strartAddressCoordinate = pos
+          
+          this.aflcOrderAddressWebDtoList[0].provinceCityArea = str
+          this.aflcOrderAddressWebDtoList[0].viaAddress = str2
+          this.aflcOrderAddressWebDtoList[0].viaAddressCoordinate = pos
+          this.findNetList()
           break
         case 'endAddress':
-          this.ruleForm.endAddress = name
-          this.ruleForm.endAddressCoordinate = pos
-          break
-        case 'viaAddress':
-          this.ruleForm.viaAddress = name
-          this.ruleForm.viaAddressCoordinate = pos
+           this.aflcOrderAddressWebDtoList[1].provinceCityArea = str
+          this.aflcOrderAddressWebDtoList[1].viaAddress = str2
+          this.aflcOrderAddressWebDtoList[1].viaAddressCoordinate = pos
+          this.findNetList()
           break
       }
     },
@@ -382,12 +437,53 @@ export default {
       }))
       // this.cargoList[index]
     },
+    /*****  选择物流公司   */
+    findNetList(){
+      // 判断必要参数是否存在
+      let obj = this.aflcOrderAddressWebDtoList
+      let pos0 = obj[0].viaAddressCoordinate.split(',')
+      let pos1 = obj[1].viaAddressCoordinate.split(',')
+      console.log("find data:",obj[0].viaAddressCoordinate,obj[1].viaAddressCoordinate,pos0,pos1)
+      // 当有俩个的坐标信息时，表示已经填写相关信息
+      if(pos0.length === 2 && pos1.length === 2){
+        let data = {
+          endLatitude:pos1[1], // 到达地上传坐标纬度
+          endLocation:obj[1].provinceCityArea, // 目的地
+          endLongitude:pos1[0], // 到达地上传坐标经度
+          startLatitude:pos0[1], // 出发地上传坐标纬度
+          startLocation:obj[0].provinceCityArea, // 出发地
+          startLongitude:pos0[0] // 出发地上传坐标经度
+        }
+        console.log("find data:",data)
+        this.netQuery = data
+        this.getCompany()
+      }
+      
+    },
     //计算总价
     calcTotalFee(){
 
     },
+    getCompany(){
+      ReqApi.getCompany({
+        currentPage: 1,
+        "pageSize": 100,
+        vo:{
+          "startLocation": this.netQuery.startLocation,
+          "endLocation": this.netQuery.endLocation
+        }
+      }).then(res => {
+        this.usersArr = res.data.list || []
+      })
+    },
+    getNet(id){
+      ReqApi.getBestNet(id ,this.netQuery).then(res=>{
+        
+      })
+    },
     // 收发货人
     showContactPop(type){
+      this.currentType = type
       ReqApi.getContactList({
         currentPage: 1,
         pageSize: 100,
@@ -402,16 +498,47 @@ export default {
       })
       
     },
+    // 点击选择
+    selectContact(item){
+      let obj = this.aflcOrderAddressWebDtoList[this.currentType]
+      obj.contacts = item.contacts
+      obj.contactsPhone = item.contactsPhone
+      // 关闭弹窗
+      this.contactPopVisible = false
+    },
     showNewContactPop(){
+      for(const i in this.contactform){
+        this.contactform[i] = ''
+      }
+      delete this.contactform.id
       this.dialogFormVisible = true
     },
     // 修改
     showModifyContact(item){
+      for(const i in this.contactform){
+        this.contactform[i] = item[i]
+      }
+      this.contactform.id = item.id
       this.dialogFormVisible = true
     },
     // 新建/修改提交
     submitContactForm(){
-      this.dialogFormVisible = false
+      this.contactform.shipperId = this.otherinfo.id
+      this.contactform.type = this.currentType
+      let prom 
+      if(this.contactform.id){
+        prom = ReqApi.putChangeContact(this.contactform)
+      } else {
+        prom = ReqApi.postAddContact(this.contactform)
+      }
+
+      prom.then(res => {
+        this.$message.success("保存成功~")
+        this.dialogFormVisible = false
+        this.showContactPop(this.currentType)
+      }).catch(err=>{
+        this.$message.error("保存失败：" + JSON.stringify(err))
+      })
     },
     // 提交表单
     submitForm(formName) {
@@ -464,6 +591,39 @@ export default {
     }
   }
 }
+.showjieti-info-pop{
+  padding: 0;
+  background: transparent;
+  .popper__arrow{
+    display: none;
+  }
+}
+.showjieti-info{
+  color: #666;
+  width: 300px;
+  padding: 5px;
+  border: 1px solid #969696;
+  background: #fff6d2;
+  font-size: 12px;
+  li{
+    clear: both;
+    height: 30px;
+    line-height: 30px;
+    span{
+      float: left;
+      white-space:nowrap;
+    }
+    .jietiv{
+      width: 33%;
+    }
+    .jietih{
+      width: 25%;
+    }
+    .jietid{
+      width: 42%;
+    }
+  }
+}
 
 .create-orderinfo{
   padding: 20px;
@@ -499,6 +659,91 @@ export default {
       .el-form-item__content{
         margin-left: 10px !important;
       }
+    }
+  }
+  // 阶梯价格
+  .showjieti{
+    color: #0e91e9;
+    text-decoration: underline;
+    font-size: 12px;
+    margin-left: 10px;
+  }
+  // 弹窗
+  .ususalContactList{
+    width: 486px;
+
+    .search-input{
+      width: 266px;
+      .el-input-group__append{
+        background-color: #1aadef;
+        color: #fff;
+      }
+    }
+    .addNewContact{
+      width: 105px;
+      height: 28px;
+      background-color: #23c3f5;
+      border-radius: 4px;
+      color: #fff;
+      margin-left: 60px;
+    }
+    .el-dialog__header{
+      height: 28px;
+      line-height: 28px;
+      padding: 0 23px;
+      
+      background-image: linear-gradient(180deg, 
+		#0d91e9 0%, 
+    #22c3f5 100%);
+    
+      .el-dialog__title{
+        font-size: 12px;
+        color: #fff;
+      }
+      .el-dialog__headerbtn{
+        top: 5px;
+        right: 10px;
+      }
+      .el-dialog__close{
+        color: #fff;
+      }
+    }
+    .el-dialog__body{
+      padding-top: 5px;
+    }
+  }
+  .contactPopList{
+    max-height: 300px;
+    overflow: auto;
+    margin-top: 5px;
+    font-size: 12px;
+
+    li{
+      clear: both;
+      border-bottom: dashed 1px #cccccc;
+      padding: 10px 0;
+      cursor: pointer;
+
+      &:hover{
+        background: rgba(0,0,0,.05);
+      }
+    }
+    span{
+      float: left;
+      width: 25%;
+      height: 28px;
+    }
+    .contactManage{
+      color: #ef0000;
+      text-align: center;
+      cursor: pointer;
+    }
+  }
+
+  .ususalContacModify{
+    .el-form-item--mini.el-form-item{
+      margin-top: 20px;
+      margin-bottom: 20px;
     }
   }
   .concat-list{
