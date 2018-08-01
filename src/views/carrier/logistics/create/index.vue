@@ -294,10 +294,10 @@ export default {
             console.log(pos, name, info)
             switch (this.current) {
                 case 'strartAddress':
-                this.ruleForm.startLocation = info.addressComponent.province +'-'+info.addressComponent.city+'-'+info.addressComponent.district;
+                this.ruleForm.startLocation = info.addressComponent.province+info.addressComponent.cit+info.addressComponent.district;
                 break;
                 case 'endAddress':
-                this.ruleForm.endLocation = info.addressComponent.province +'-'+info.addressComponent.city+'-'+info.addressComponent.district;
+                this.ruleForm.endLocation = info.addressComponent.province+info.addressComponent.cit+info.addressComponent.district;
                 break;
             }
         },

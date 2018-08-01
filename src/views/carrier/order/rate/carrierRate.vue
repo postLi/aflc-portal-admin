@@ -1,10 +1,5 @@
 <template>
     <div class="orderRate identification">
-        <div class="carrierTitle">
-            <div class="realname">
-                <h2>评价管理</h2>
-            </div>
-        </div>
         <el-form :model="logisticsForm" ref="ruleForm" label-width="110px" class="demo-ruleForm">
             <div class="searchInformation information">
                 <el-form-item label="订单号：" prop="pointName">
@@ -52,7 +47,7 @@
                         </el-table-column>
                         <el-table-column
                             prop="address"
-                            label="我对物流公司的评价"
+                            label="我对货主的评价"
                             width="400">
                             <el-table-column
                             prop="name"
@@ -87,7 +82,7 @@
                         </el-table-column>
                             <el-table-column
                             prop="address"
-                            label="物流公司对我的评价"
+                            label="货主对我的评价"
                             width="400">
                             <el-table-column
                             prop="name"

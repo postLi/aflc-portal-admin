@@ -72,7 +72,6 @@
         height: 100%;
         position: relative;
         .btnChoose{
-            width: 200px;
             float: right;
             .el-form-item__content{
                 margin-left: 0 !important;
@@ -85,6 +84,7 @@
         .searchInformation{
             .el-form-item{
                 display: inline-block;
+                margin-bottom: 0px;
             }
         }
         .created{

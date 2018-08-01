@@ -1,0 +1,395 @@
+<template>
+    <div class="rate identification">
+            <div class="carrierTitle">
+                <div class="realname">
+                    <h2>评价详情</h2>
+                </div>
+            </div>
+            <div class="rateInfomation">
+                <div class="">
+                    <div class="rate_content rate_orderInfo">
+                        <h2>订单信息</h2>       
+                        <div class="orderInfo">
+                            <ul>
+                                <li>订单号：{{orderForm.orderSerial}}</li>
+                                <li>货品名称：{{orderForm.goodsName}}</li>
+                                <li>货品预估总体积（方）：{{orderForm.goodsVolume}}</li>
+                                <li>出发地：{{orderForm.startAddress}}</li>
+                                <li>发货人：{{orderForm.consignor}}</li>
+                                <li>收货人：{{orderForm.consignee}}</li>
+                            </ul>
+                            <ul>
+                                <li>下单时间：{{orderForm.orderSerial}} 
+                                    <el-popover
+                                    width="100%"
+                                    trigger="hover"
+                                    >
+                                    <p style="margin:5px;">提货时间：{{orderForm.goodsNum}}</p>
+                                    <p style="margin:5px;">发货时间：{{orderForm.goodsNum}}</p>
+                                    <p style="margin:5px;">收货时间：{{orderForm.goodsNum}}</p>
+                                    <span slot="reference" class="reference" icon="el-icon-caret-bottom">更多<i icon="el-icon-caret-bottom"></i></span>
+                                    </el-popover>
+                                </li>
+                                <li>货品总数量（件）：{{orderForm.goodsNum}}</li>
+                                <li>货物类型：{{orderForm.orderSerial}}</li>
+                                <li>到达地：{{orderForm.endAddress}}</li>
+                                <li>发货人手机：{{orderForm.consignorPhone}}</li>
+                                <li>收货人手机：{{orderForm.consigneePhone}}</li>
+                            </ul>
+                            <ul>
+                                <li>物流公司：{{orderForm.wlName}}</li>
+                                <li>货品预估总重量（公斤）：{{orderForm.goodsWeight}}</li>
+                                <li>预估总费用（元）：{{orderForm.totalAmount}}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="rate_content rate_info fl" style="margin-right:6%;">
+                        <h2>我对物流公司的评价</h2>
+                        <div class="clearfix rate_info_content">
+                            <div class="clearfix rate_info_order ">
+                                <div>
+                                    <div class="rateStar">
+                                        <p>
+                                            服务价格：
+                                            <el-rate
+                                            show-score
+                                            v-model="value3"
+                                            allow-half
+                                            >   
+                                            </el-rate>
+                                        </p>
+                                        <p>
+                                            服务质量：
+                                            <el-rate
+                                            v-model="value3"
+                                            show-score
+                                            :texts="textsArr"
+                                            allow-half
+                                            >
+                                            </el-rate>
+                                        </p>
+                                        <p>
+                                            运输时效：
+                                            <el-rate
+                                            v-model="value3"
+                                            show-score
+                                            :texts="textsArr"
+                                            allow-half
+                                            >
+                                            </el-rate>
+                                        </p>
+                                        <p>
+                                            评价说明：<span>货物包装很好，付款真的很及时。</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="rateReply">
+                                    <h4>物流公司对我的回复</h4>
+                                    <div class="rateReply_info">
+                                        <p>
+                                            感谢您对本公司的点评，我们会悉心接受你的意见，公司将会更加努力做好服务，期待您的再次下单。<br>
+                                            <span>2018-12-25  12:25:45</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                             
+                        </div>     
+                    </div>
+                    <div class="rate_content rate_info fl">
+                        <h2>物流公司对我的评价</h2>
+                        <div class="clearfix rate_info_content">
+                             <div class="clearfix rate_info_order ">
+                                <div>
+                                    <div class="rateStar">
+                                        <p>
+                                            货物包装：
+                                            <el-rate
+                                            show-score
+                                            allow-half
+                                            score-template="{value}"
+                                            >   
+                                            </el-rate>
+                                        </p>
+                                        <p>
+                                            付款及时：
+                                            <el-rate
+                                            v-model="value3"
+                                            show-score
+                                            :texts="textsArr"
+                                            allow-half
+                                            >
+                                            </el-rate>
+                                        </p>
+                                        <p>
+                                            装卸安排：
+                                            <el-rate
+                                            v-model="value3"
+                                            show-score
+                                            :texts="textsArr"
+                                            allow-half
+                                            >
+                                            </el-rate>
+                                        </p>
+
+                                        <p>
+                                            评价说明：<span>货物包装很好，付款真的很及时。</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="rateReply">
+                                    <h4>我对物流公司的回复</h4>
+                                    <div class="rateReply_info">
+                                        <p>
+                                            感谢您对本公司的点评，我们会悉心接受你的意见，公司将会更加努力做好服务，期待您的再次下单。<br>
+                                            <span>2018-12-25  12:25:45</span>
+                                        </p>
+                                        <div class="rateReply_input">
+                                            <el-input
+                                            type="textarea"
+                                            :rows="2"
+                                            :maxlength="retalength"
+                                            placeholder="可在此输入回复内容，回复后不可修改"
+                                            v-model="textarea">
+                                            </el-input>
+                                            <p><span>{{textarea.length}}</span> / {{retalength}}</p>
+                                        </div>
+                                        <el-button type="primary">回复</el-button>
+                                    </div>
+                                </div>
+                            </div>
+                             
+                        </div>     
+                    </div>
+                </div>
+            </div>
+    </div>
+</template>
+
+<script>
+
+// import '@/styles/identification.scss'
+import { getUserInfo } from '@/utils/auth.js'
+import {  getAflcOrderComplain,getDetails,addOrderComplain,getDetailsByOrderSerial } from '@/api/carrier/Complaint.js'
+import { getDictionary, } from '@/api/common.js'
+ 
+export default {
+    components:{
+    },
+    data() {
+        return {
+            textsArr:['1分  非常不满','2分  不满意','3分  一般','4分  满意','5分  非常满意'],
+            value3:'',
+            complainType:"AF041",//投诉原因
+            retalength:200,//回复字数
+            step:'step',
+            stepname:'',
+            textarea:'',
+            complaintForm:{},
+            UserInfo:{},
+            ruleForm:{
+                complainType:'',//投诉类型
+                complainDes:'',//投诉描述
+                platformOrderType:'1'
+            },
+            orderForm:{
+
+            },
+            optionsReason:[],
+        };
+    },  
+    mounted(){
+        // this.firstblood();
+    },  
+    methods: {
+        getValue(val){
+            console.log(val)
+        },
+        firstblood(){
+            this.stepname = this.$route.query.type;
+            let orderSerial = this.$route.query.orderSerial;
+
+            getDetailsByOrderSerial(orderSerial).then(res => {
+                console.log(res)
+                if(res.status == 200){
+                    this.complaintForm = res.data ;
+                    this.stepname = this.complaintForm.complainStatus == 'AF04002' ? 'step-three' : 'step-tow' ;
+                }else{
+                    this.stepname = 'step-one';
+                    Promise.all([getDetails('24c0f4218e1d4bf099d185b3c6964441'), getDictionary(this.complainType)]).then(resArr => {
+                        console.log(this.orderForm)
+                        this.orderForm = resArr[0].data;
+                        this.optionsReason = resArr[1].data;
+                        this.UserInfo = getUserInfo();
+                    })
+                }
+            })
+        },
+        submitForm(formName) {
+            this.$refs[formName].validate((valid) => {
+                console.log()
+                if (valid) {
+                    this.$confirm('确认要投诉该物流公司吗？', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(()=>{
+                        this.ruleForm.complainTypeName = this.optionsReason.find(item => item.code === this.ruleForm.complainType)['name'];
+                        this.ruleForm.complainName = this.UserInfo.contactsName;
+                        this.ruleForm.complainId = this.UserInfo.id;
+                        this.ruleForm.orderSerial = '24c0f4218e1d4bf099d185b3c6964441';
+                        // console.log(this.ruleForm)
+                        addOrderComplain(this.ruleForm).then(res => {
+                            console.log(res)
+                            this.stepname = 'step-tow';
+                        })
+                        
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消'
+                        })
+                    })
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
+        },
+    },
+  
+}
+</script>
+
+<style type="text/css" lang="scss">
+    .rate{
+        .rateInfomation{
+        margin:0 20px;
+        .rate_content{
+            padding-bottom: 30px;
+            background: #fff;
+            margin-bottom: 40px;
+            h2{
+                text-align: center;
+                font-size: 16px;
+                color: #333333;
+                line-height: 22px;
+                padding: 21px 0;
+            }
+            
+        }
+        .rate_info{
+            width:47%;
+            min-height: 430px;
+            h2{
+                border-bottom: 2px solid #ccc;
+                text-align: left;
+                text-indent: 67px;
+            }
+            .rate_info_content{
+                padding: 16px 67px;
+                .rate_info_order{
+                    box-sizing: border-box;
+                    h4{
+                        font-size: 16px;
+                        line-height: 20px;
+                        margin-bottom: 10px;
+                    }
+                    .rateStar{
+                        font-size: 14px;
+                        color: #666666;
+                        padding-left: 20px;
+                        p{
+                            margin:10px 0;
+                        }
+                        .el-rate{
+                            display: inline-block;
+                            .el-rate__text{
+                                margin-left: 10px;
+                                color: #ed001d !important;
+                            }
+                        }
+                        p:last-child{
+                            margin-top: 20px;
+                            font-weight: bold;
+                            span{
+                                font-weight: normal;
+                            }
+                        }
+                    }
+                    .rateReply{
+                        margin-top: 20px;
+                        .rateReply_info{
+                            padding-left: 20px;
+                            p{
+                                font-size: 14px;
+                                line-height: 20px;
+                                color: #333333;
+                                span{
+                                    margin-top: 10px;
+                                    font-size: 12px;
+                                    color: #999999;
+                                }
+                            }
+
+                            .rateReply_input{
+                                position: relative;
+                                .el-textarea__inner{
+                                    padding-bottom: 18px;
+                                    font-size: 12px;
+                                }
+                                p{
+                                    font-size: 12px;
+                                    color: #999999;
+                                    position: absolute;
+                                    right: 15px;
+                                    bottom: 2px;
+                                    span{
+                                        color: #ed001d;
+                                    }
+                                }
+                            }
+                            .el-button{
+                                display: block;
+                                margin: 0 auto;
+                                margin-top: 40px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .rate_orderInfo{
+            h2{
+                border-bottom: 1px solid #ccc;
+                text-align: left;
+                text-indent: 67px;
+            }
+            .orderInfo{
+                display: flex;
+                justify-content:space-between;
+                padding: 20px 234px 60px;
+                ul{
+                    li{
+                        font-size: 14px;
+                        line-height: 20px;
+                        color: #333333;
+                        margin-bottom: 10px;
+                        .reference{
+                            margin-left: 22px;
+                            color:#0e91e9;
+                            i{
+                                margin-left: 3px;
+                                display: inline-block;
+                                width: 9px;
+                                height: 9px;
+                                background: url('../../../../assets/png/arrar.png') no-repeat center;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    }
+</style>

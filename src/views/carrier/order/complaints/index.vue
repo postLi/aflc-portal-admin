@@ -157,47 +157,12 @@ export default {
         },
         //搜索
         handleSearch(){
-            this.firstblood()
+            this.firstblood();
         },
         //投诉回复
         handleComplain(row,type) {
             console.log(row,type);
-            this.$router.push({name: '投诉详情',params:{ data:row,type:type}});
-        },
-        //删除网点
-        handleDelete(row) {
-            this.$confirm('确定要删除'+ row.pointName +' 该网点名吗？', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(()=>{
-                deletePointNetwork(row.id).then(res => {
-                    this.firstblood();
-                }).catch(err => {
-                    this.$message({
-                        type: 'info',
-                        message: '操作失败，原因：' + errorInfo ? errorInfo : err.text
-                    })
-                })
-            }).catch(() => {
-                this.$message({
-                    type: 'info',
-                    message: '已取消'
-                })
-            })
-        },
-        //更改状态
-        handleStatus(row) {
-            console.log(row);
-            PointNetworkStatus(row.id).then(res => {
-                console.log(res)
-                this.firstblood();
-            }).catch(err=>{
-                this.$message({
-                    type: 'info',
-                    message: '操作失败，原因：' + err.text ? err.text : err
-                })
-            })
+            this.$router.push({name: '投诉详情',query:{ orderSerial:row.orderSerial,type:type}});
         },
     },
   

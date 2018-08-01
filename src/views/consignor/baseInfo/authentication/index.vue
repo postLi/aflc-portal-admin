@@ -81,15 +81,13 @@
                 <el-form-item label="手机："   prop="mobile" >
                     <el-input v-model="logisticsForm.mobile" maxlength="11"  v-numberOnly :disabled="ifDisable === false">
                     </el-input>
-                </el-form-item>
+                </el-form-item><br>
                 <el-form-item label="公司所在地：" prop="belongCityName">
-                    <el-input v-model="logisticsForm.belongCity">
-                    </el-input>
+                    <el-input @focus="()=>{showMap('endAddress')}" v-model="logisticsForm.belongCity" :disabled="ifDisable === false"></el-input>
                 </el-form-item> 
-                <el-form-item label="详细地址："   prop="address">
-                    <el-input v-model="logisticsForm.address">
-                    </el-input>
-                </el-form-item>
+                <el-form-item label="详细地址："  class="moreWidth"  prop="address">
+                    <el-input @focus="()=>{showMap('endAddress')}" v-model="logisticsForm.address" :disabled="ifDisable === false"></el-input>
+                </el-form-item><br>
                 <el-form-item label="联系电话：">
                     <el-input v-model="logisticsForm.contactsTel" maxlength="12"  :disabled="ifDisable === false">
                     </el-input>
@@ -127,6 +125,8 @@
                 <el-button size="medium" type="primary" @click="submitForm('ruleForm')" v-show="ifDisable">确认</el-button>
             </el-form-item>
         </el-form>
+        <tmsmap @success="getInfo" pos="" name="" :popVisible.sync="popVisible" />
+
     </div>
 </template>
 
@@ -139,9 +139,12 @@ import { getDictionary,getShipperInfoByMobile } from '@/api/common.js'
 import { getUserInfo } from '@/utils/auth.js'
 import { identifyShipper } from '@/api/consignor/index.js'
 import { REGEX } from '@/utils/validate.js'
+import tmsmap from '@/components/map/index'
+
 export default {
     components:{
         upload,
+        tmsmap
     },
     computed: {
         totalNum() {
@@ -250,6 +253,7 @@ export default {
                     }
                 }]
             },
+            popVisible:false,
             ifDisable:true,
             driverPhone:'',//货主电话（账户）
             totalNumber:0,//當前字數
@@ -313,6 +317,17 @@ export default {
         this.getMoreInformation();
     },  
     methods: {
+        getInfo(pos, name, info) {
+            // info.name  info.pos
+            console.log(pos, name, info)
+          
+            this.logisticsForm.belongCity = info.addressComponent.province +info.addressComponent.city+info.addressComponent.district;
+            
+            this.logisticsForm.address = name;
+        },
+        showMap(name) {
+            this.popVisible = true ;
+        },
         getMoreInformation(){
 
             let res = getUserInfo() ;

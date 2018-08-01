@@ -13,7 +13,7 @@
             <div class="companyInformation information">
                 <h2>基本信息</h2>
                 <el-form-item label="车主：" prop="driverName">
-                    <el-input v-model="logisticsForm.driverName" @change="limitNum" placeholder="请填写车主姓名" :disabled="ifDisable === false">
+                    <el-input v-model="logisticsForm.driverName"  placeholder="请填写车主姓名" :disabled="ifDisable === false">
                     </el-input>
                 </el-form-item> 
                 <el-form-item label="身份证号：" prop="driverCardid">
@@ -42,22 +42,22 @@
             <!-- 物流公司认证照片 -->
             <div class="picInformation information" >
                 <h2>车主认证照片</h2>
-                <el-form-item   label-width="50px" prop="drivingLicenceFile">
+                <el-form-item    prop="drivingLicenceFile">
                     <p><span>*</span>上传驾驶证照片：</p>
                     <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.drivingLicenceFile" v-if="ifDisable == 'false'"/>
-                    <img class="showPicture" :src="logisticsForm.drivingLicenceFile" alt="驾驶证照片"  v-else/>
+                    <img class="showPicture" :src="logisticsForm.drivingLicenceFile ? logisticsForm.drivingLicenceFile: defaultImg" alt="驾驶证照片"  v-else/>
                     <el-button  class="preview" type="primary" plain v-show="logisticsForm.drivingLicenceFile ? true : false" v-showPicture :imgurl="logisticsForm.drivingLicenceFile">点击预览</el-button>
                 </el-form-item>
-                <el-form-item   label-width="50px" prop="idCardFile">
+                <el-form-item    prop="idCardFile">
                     <p><span>*</span>上传车主身份证照片：</p>
                     <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.idCardFile" v-if="ifDisable == 'false'"/>
-                    <img class="showPicture" :src="logisticsForm.idCardFile" alt="车主身份证照片" v-else/>
+                    <img class="showPicture" :src="logisticsForm.idCardFile ? logisticsForm.idCardFile: defaultImg" alt="车主身份证照片" v-else/>
                     <el-button  class="preview" type="primary" plain v-show="logisticsForm.idCardFile ? true : false" v-showPicture :imgurl="logisticsForm.idCardFile">点击预览</el-button>
                 </el-form-item>
-                <el-form-item  label-width="50px" prop="personalImageFile">
+                <el-form-item   prop="personalImageFile">
                     <p><span>*</span>上传车主个人形象照：</p>
                     <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.personalImageFile" v-if="ifDisable == 'false'"/>
-                    <img class="showPicture" :src="logisticsForm.personalImageFile" alt="车主个人形象照" v-else/>
+                    <img class="showPicture" :src="logisticsForm.personalImageFile ? logisticsForm.personalImageFile: defaultImg" alt="车主个人形象照" v-else/>
                     <el-button  class="preview" type="primary" plain v-show="logisticsForm.personalImageFile ? true : false" v-showPicture :imgurl="logisticsForm.personalImageFile">点击预览</el-button>
                 </el-form-item>
             </div>
@@ -125,6 +125,7 @@ export default {
             }
         };
         return {
+            defaultImg:'/static/default.png',//默认加载失败图片
             ifDisable:false,
             totalNumber:0,//当前字数
             maxlength:200,
@@ -170,20 +171,12 @@ export default {
     methods: {
         getMoreInformation(){
            let res = getUserInfo() ;
-           console.log(res)
+        //    console.log(res)
            getDriverInfoByMobile(res.mobile).then(res=>{
-               console.log(res)
+            //    console.log(res)
                this.logisticsForm = res.data;
            })
 
-        },
-        limitNum(val){
-            console.log(val)
-            console.log(val.length)
-
-            if(val.length>25){
-
-            }
         },
         submitForm(formName) {
 

@@ -43,6 +43,12 @@ export default {
           path: '/carrier/order/rate', icon: 'QQ', name: '评价管理', component: _import('carrier/order/rate/index'), meta: { role: ['admin'], title: '评价管理', noCache: false }
         },
         {
+            path: '/carrier/order/rateInfo', icon: 'QQ', name: '评价详情', component: _import('carrier/order/rateInfo/index'), meta: { role: ['admin'], title: '评价详情', noCache: false }
+          },
+          {
+            path: '/carrier/order/rateInfoplant', icon: 'QQ', name: '平台评价', component: _import('carrier/order/rateInfoplant/index'), meta: { role: ['admin'], title: '平台评价', noCache: false }
+          },
+        {
           path: '/carrier/order/complaints', icon: 'QQ', name: '投诉管理', component: _import('carrier/order/complaints/index'), meta: { role: ['admin'], title: '投诉管理', noCache: false }
         },
         {

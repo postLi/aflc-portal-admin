@@ -42,6 +42,9 @@ export default {
           path: '/consignor/order/rate', icon: 'QQ', name: '评价管理', component: _import('consignor/order/rate/index'), meta: { role: ['admin'], title: '评价管理', noCache: false }
         },
         {
+            path: '/consignor/order/rateInfo', icon: 'QQ', name: '评价详情', component: _import('consignor/order/rateInfo/index'), meta: { role: ['admin'], title: '评价详情', noCache: false }
+          },
+        {
           path: '/consignor/order/complaints', icon: 'QQ', name: '投诉管理', component: _import('consignor/order/complaints/index'), meta: { role: ['admin'], title: '投诉管理', noCache: false }
         },
         {

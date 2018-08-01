@@ -16,12 +16,24 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item label="投诉类型：" maxlength="18"  prop="complainType">
-                    <el-input v-model="logisticsForm.complainType">
-                    </el-input>
+                    <el-select v-model="logisticsForm.complainType" clearable placeholder="请选择">
+                        <el-option
+                        v-for="item in OptionsComplainType"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.code">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
                  <el-form-item label="投诉状态：" maxlength="18"  prop="complainStatus">
-                    <el-input v-model="logisticsForm.complainStatus">
-                    </el-input>
+                    <el-select v-model="logisticsForm.complainStatus" clearable placeholder="请选择">
+                        <el-option
+                        v-for="item in  OptionscomplainStatus"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.code">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item class="btnChoose" style="margin-left:0;">
                     <el-button type="primary" @click="handleSearch">搜索</el-button>
@@ -76,8 +88,7 @@
                             >
                                 <template slot-scope="scope">
                                     <el-button-group>
-                                        <el-button @click="handleEdit(scope.row)" type="primary" size="mini">查看</el-button>
-                                        <el-button @click="handleEdit(scope.row)" type="primary" size="mini">投诉查看</el-button>
+                                        <el-button @click="handleEdit(scope.row)" type="primary" size="mini">投诉详情</el-button>
                                     </el-button-group>
                                 </template>
                         </el-table-column>
@@ -105,6 +116,8 @@ export default {
     },
     data() {
         return {
+            complainType:"AF041",
+            complainStatus:'AF040',
             totalCount:0,
             page:1,
             pagesize:20,
@@ -116,6 +129,18 @@ export default {
                 platformOrderType:'1',
             },
             tableData: [],
+            OptionsComplainType:[
+                {
+                    code:'',
+                    name:'全部'
+                }
+            ],
+            OptionscomplainStatus:[
+                {
+                    code:'',
+                    name:'全部'
+                }
+            ],
         };
     },
     watch:{
@@ -135,6 +160,19 @@ export default {
                 this.tableData = res.data.list;
                 this.totalCount = res.data.totalCount;
             })
+            getDictionary(this.complainType).then(res => {
+                console.log(res)
+                res.data.forEach(el => {
+                    this.OptionsComplainType.push(el)
+                })
+            })
+            getDictionary(this.complainStatus).then(res => {
+                console.log(res)
+                res.data.forEach(el => {
+                    this.OptionscomplainStatus.push(el)
+                })
+            })
+
         },
         clearSearch(){
             this.$refs.ruleForm.resetFields();
@@ -144,50 +182,12 @@ export default {
         handleSearch(){
             this.firstblood()
         },
-        //新增网点
-        handleNew(){
-            this.$router.push({name: '投诉详情'});
-        },
         //修改
         handleEdit(row) {
             console.log(row);
-            this.$router.push({name: '投诉详情',params:{ data:row}});
+            this.$router.push({name: '投诉详情',query:{ id:row.orderSerial}});
         },
-        //删除网点
-        handleDelete(row) {
-            this.$confirm('确定要删除'+ row.pointName +' 该网点名吗？', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(()=>{
-                deletePointNetwork(row.id).then(res => {
-                    this.firstblood();
-                }).catch(err => {
-                    this.$message({
-                        type: 'info',
-                        message: '操作失败，原因：' + errorInfo ? errorInfo : err.text
-                    })
-                })
-            }).catch(() => {
-                this.$message({
-                    type: 'info',
-                    message: '已取消'
-                })
-            })
-        },
-        //更改状态
-        handleStatus(row) {
-            console.log(row);
-            PointNetworkStatus(row.id).then(res => {
-                console.log(res)
-                this.firstblood();
-            }).catch(err=>{
-                this.$message({
-                    type: 'info',
-                    message: '操作失败，原因：' + err.text ? err.text : err
-                })
-            })
-        },
+        
     },
   
 }

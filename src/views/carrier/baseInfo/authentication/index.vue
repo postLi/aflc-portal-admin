@@ -13,13 +13,13 @@
             <div class="companyInformation information">
                 <h2>公司信息</h2>
                 <el-form-item label="物流公司名称：" prop="companyName">
-                    <el-input v-model="logisticsForm.companyName" @change="limitNum" :disabled="ifDisable == false">
+                    <el-input v-model="logisticsForm.companyName" :disabled="ifDisable == false">
                        
                         <p slot="append">请填写企业在工商局注册的全称，完整的信息让客户更加信赖您。</p>
                     </el-input>
                 </el-form-item>
                 <el-form-item label="品牌：" >
-                    <el-input v-model="logisticsForm.belongBrand" @change="limitNum" disabled v-if="ifDisable == false">
+                    <el-input v-model="logisticsForm.belongBrand" disabled v-if="ifDisable == false">
                     </el-input>
                     <el-select v-model="logisticsForm.belongBrandCode" placeholder="请选择" v-else>
                         <el-option
@@ -64,7 +64,7 @@
                         type="textarea"
                         :disabled="ifDisable === false"
                         :autosize="{ minRows: 5, maxRows: 10}"
-                        placeholder="请输入内容"
+                        placeholder="企业自成立以来，秉承“诚信为本，信誉第一”的经营理念，以“安全、快捷、准确、方便”为宗旨,以市场为导向，企业竭诚为客户提供优质满意的服务，企业 努力打造物流行业一流品牌，企业 欢迎您光临指导。"
                         v-model="logisticsForm.companyDes">
                     </el-input>
                     <span>{{totalNumber}} / {{maxlength}}</span>
@@ -96,15 +96,13 @@
                 <el-form-item label="手机："  prop="mobile">
                     <el-input v-model="logisticsForm.mobile" maxlength="11"  v-numberOnly   :disabled="ifDisable === false">
                     </el-input>
-                </el-form-item>
+                </el-form-item><br>
                 <el-form-item label="公司所在地：" prop="belongCityName">
-                    <el-input v-model="logisticsForm.belongCityName">
-                    </el-input>
+                    <el-input @focus="()=>{showMap('endAddress')}" v-model="logisticsForm.belongCityName" :disabled="ifDisable === false"></el-input>
                 </el-form-item> 
-                <el-form-item label="详细地址："  prop="address">
-                    <el-input v-model="logisticsForm.address">
-                    </el-input>
-                </el-form-item>
+                <el-form-item label="详细地址：" class="moreWidth" prop="address">
+                    <el-input @focus="()=>{showMap('endAddress')}" v-model="logisticsForm.address" :disabled="ifDisable === false"></el-input>
+                </el-form-item><br>
                 <el-form-item label="联系电话：">
                     <el-input v-model="logisticsForm.contactsTel" maxlength="11" :disabled="ifDisable === false">
                     </el-input>
@@ -112,7 +110,7 @@
                 <el-form-item label="QQ：">
                     <el-input v-model="logisticsForm.qq" v-numberOnly :disabled="ifDisable === false">
                     </el-input>
-                </el-form-item>
+                </el-form-item><br>
                 <el-form-item label="微信二维码上传：">
                     <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.wechatCode" v-if="ifDisable == 'false'"/>
                     <img class="showPicture" :src="logisticsForm.wechatCode ? logisticsForm.wechatCode: defaultImg" alt="" v-else>
@@ -147,6 +145,8 @@
                 <el-button size="medium" type="primary" @click="submitForm('ruleForm')" v-show="ifDisable">确认提交</el-button>
             </el-form-item>
         </el-form>
+        <tmsmap @success="getInfo" pos="" name="" :popVisible.sync="popVisible" />
+
     </div>
 </template>
 
@@ -158,10 +158,12 @@ import { identifyCarrier } from '@/api/carrier/index.js'
 import { getDictionary,getLogisticsCompanyInfoByMobile } from '@/api/common.js'
 import { REGEX } from '@/utils/validate.js'
 import { getUserInfo } from '@/utils/auth.js'
+import tmsmap from '@/components/map/index'
 
 export default {
     components:{
         upload,
+        tmsmap
     },
     data() {
         var checkCreditCode = (rule, value, callback) => {
@@ -186,6 +188,7 @@ export default {
             }
         };
         return {
+            popVisible:false,
             defaultImg:'/static/default.png',//默认加载失败图片
             ifDisable:false,
             pickerOptions:{
@@ -352,6 +355,17 @@ export default {
         console.log(this.ifDisable)
     },  
     methods: {
+        getInfo(pos, name, info) {
+            // info.name  info.pos
+            console.log(pos, name, info)
+          
+            this.logisticsForm.belongCityName = info.addressComponent.province +info.addressComponent.city+info.addressComponent.district;
+            
+            this.logisticsForm.address = name;
+        },
+        showMap(name) {
+            this.popVisible = true ;
+        },
         getMoreInformation(){
             let res = getUserInfo() ;
             Promise.all([getDictionary(this.belongBrand),getDictionary(this.productServiceCode),getDictionary(this.otherServiceCode),getDictionary(this.serviceType),getLogisticsCompanyInfoByMobile(res.mobile)]).then(resArr => {
@@ -369,12 +383,6 @@ export default {
             }).catch(err => {
                
             })
-        },
-        limitNum(val){
-
-            if(val.length>25){
-
-            }
         },
         //完善信息
         completeInfo(){
@@ -408,8 +416,6 @@ export default {
                     }
                 })
             })
-
-
 
             //服务类型
             this.logisticsForm.serviceType = JSON.stringify(this.serviceTypeArr);                         
@@ -452,9 +458,9 @@ export default {
             this.serviceTypeArr = [];
             this.serverClassify = [];
         },
+    
 
-
-    },
+    }
   
 }
 </script>
@@ -476,4 +482,7 @@ export default {
         .carrierIdentification .el-form .information .textarea .el-form-item__content span {
             bottom: 22px;
         }
+
+
+
 </style>
