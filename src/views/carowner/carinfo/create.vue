@@ -30,7 +30,7 @@
         <selectType v-model="ruleForm.carSpec" type="AF009" clearable size="mini"></selectType>
       </el-form-item>
       <el-form-item required label="车辆常驻地">
-        <el-input v-model="ruleForm.usualPlace"></el-input>
+        <el-input  @focus="()=>{showMap('usualPlace')}" v-model="ruleForm.usualPlace" ></el-input>
       </el-form-item>
       <el-form-item label="车源类型">
         <el-radio-group v-model="ruleForm.carSourceType">
@@ -45,7 +45,7 @@
         <el-input @focus="()=>{showMap('endAddress')}" v-model="ruleForm.endAddress"></el-input>
       </el-form-item>
       <el-form-item label="途径点">
-        <el-input @focus="()=>{showMap('viaAddress')}" v-model="ruleForm.viaAddress"></el-input>
+        <el-input v-model="ruleForm.viaAddress"></el-input>
       </el-form-item>
       <el-form-item label="发车时间">
         <el-date-picker
@@ -170,8 +170,8 @@ export default {
         // 'updateTime': '',
         // 'updater': 'string', // 更新人
         'usualPlace': '', // 车俩常驻地
-        'viaAddress': '', // 途径地
-        'viaAddressCoordinate': '' // 途径地坐标
+        'usualPlaceCoordinate': '', // 常驻地坐标
+        'viaAddress': '' // 途径地
         // 'viaAddressName': 'string'// 途径地地址名称
       }
     }
@@ -247,9 +247,9 @@ export default {
           this.ruleForm.endAddress = name
           this.ruleForm.endAddressCoordinate = pos
           break
-        case 'viaAddress':
-          this.ruleForm.viaAddress = name
-          this.ruleForm.viaAddressCoordinate = pos
+        case 'usualPlace':
+          this.ruleForm.usualPlace = name
+          this.ruleForm.usualPlaceCoordinate = pos
           break
       }
     },
