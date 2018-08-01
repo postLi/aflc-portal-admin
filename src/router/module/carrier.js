@@ -24,15 +24,18 @@ export default {
           path: '/carrier/baseInfo/authentication', icon: 'QQ', name: '完善实名认证', component: _import('carrier/baseInfo/authentication/index'), meta: { role: ['admin'], title: '完善实名认证', noCache: false }
         },
         {
-          path: '/changePassword', icon: 'QQ', name: '修改登录密码', component: _import('changePassword'), meta: { role: ['admin'], title: '修改登录密码', noCache: false },
-        },
-      
+          path: '/changePassword', icon: 'QQ', name: '修改登录密码', component: _import('changePassword'), meta: { role: ['admin'], title: '修改登录密码', noCache: false }
+        }
+
       ]
     },
     // 订单管理
     {
       path: '/carrier/order', icon: 'QQ', name: '订单管理', component: _import('carrier/order/index'), redirect: '/carrier/order/manage', meta: { role: ['admin'], title: '订单管理', istab: true, noCache: false },
       children: [
+        {
+          path: '/carrier/order/manage', icon: 'QQ', name: '全部订单', component: _import('carrier/order/manage/index'), meta: { role: ['admin'], title: '全部订单', noCache: false }
+        },
         {
           path: '/carrier/order/create', icon: 'QQ', name: '创建订单', component: _import('carrier/order/create/index'), meta: { role: ['admin'], title: '创建订单', noCache: false }
         },
@@ -52,8 +55,8 @@ export default {
           path: '/carrier/order/complaints', icon: 'QQ', name: '投诉管理', component: _import('carrier/order/complaints/index'), meta: { role: ['admin'], title: '投诉管理', noCache: false }
         },
         {
-            
-            path: '/complaintsInfo/index', icon: 'QQ',name: '投诉详情', component: _import('complaintsInfo/index'),meta: { role: ['admin'], title: '投诉详情',istab: true, noCache: false },
+
+          path: '/complaintsInfo/index', icon: 'QQ', name: '投诉详情', component: _import('complaintsInfo/index'), meta: { role: ['admin'], title: '投诉详情', istab: true, noCache: false }
         }
       ]
     },
