@@ -82,7 +82,7 @@
                   placement="bottom"
                   popper-class="wlname-info-pop"
                   width="300"
-                  trigger="click"
+                  trigger="hover"
                   >
                   <div class="wlname-info">
                     <div class="wlname-title">最佳网点</div>
