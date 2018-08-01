@@ -29,6 +29,7 @@
            <li :key="index" v-for="(item, index) in cargoList">
              <el-form-item required label="货物名称：">
                <el-popover
+                  :visible-arrow="false"
                   placement="bottom"
                   width="400"
                   trigger="focus"
@@ -72,15 +73,32 @@
             :default-sort = "{prop: 'id', order: 'ascending'}"
             style="width: 100%">
             <el-table-column
-              fixed
-              width="50">
-                <template slot-scope="scope">
-                  <el-radio v-model="wlindex" ></el-radio>
-                </template>
-            </el-table-column>
-            <el-table-column
-              prop="publishName"
+              class="select-line-1-clumn"
               label="承运商">
+              <template slot-scope="scope">
+                <el-popover
+                 :visible-arrow="false"
+                 @show="getNet(scope.row.companyId,scope.row.$index)"
+                  placement="bottom"
+                  popper-class="wlname-info-pop"
+                  width="300"
+                  trigger="click"
+                  >
+                  <div class="wlname-info">
+                    <div class="wlname-title">最佳网点</div>
+                    <ul>
+                      <li :key="index" v-for="(item, index) in wlbestlist[scope.row.$index]">
+                        <span class="wlnamev">{{ index === 0 ? '出发地' : '目的地'}}网点：<span>{{item.pointName}}</span></span><span class="wlnameh">距{{ index === 0 ? '发' : '收'}}货地：<span>{{item.distance}}km</span></span>
+                        <p>{{item.address}}</p>
+                        <p>联系人：{{item.name}}</p>
+                        <p>联系电话：{{item.telNum}}</p>
+                      </li>
+                    </ul>
+                    <div @click="showSlectNet(scope.row.companyId)" class="select-other-net">重新选择网点</div>
+                  </div>
+                  <span slot="reference" class="wlname"><el-radio v-model="wlindex" :label="scope.row.companyId" >{{scope.row.publishName}}</el-radio></span>
+                </el-popover>
+              </template>
             </el-table-column>
             <el-table-column
               prop="lowerPrice"
@@ -92,15 +110,16 @@
               width="200"
               label="重货">
               <template slot-scope="scope">
-                <span class="important">65</span>元/公斤 
+                <span class="important">{{findLowestPrice(scope.row.rangePrices,'1')}}</span>元/公斤 
                 <el-popover
+                  :visible-arrow="false"
                   placement="bottom"
                   popper-class="showjieti-info-pop"
                   width="300"
                   trigger="hover"
                   >
                   <div class="showjieti-info">
-                    <div class="jieti-title">最低一票价格：25元</div>
+                    <div class="jieti-title">最低一票价格：{{findLowestPrice(scope.row.rangePrices,'1')}}元</div>
                     <ul>
                       <li :key="index" v-if="item.type==='1'" v-for="(item, index) in scope.row.rangePrices">
                         <span class="jietiv">{{ item.startVolume }}公斤~{{ item.endVolume }}公斤</span>
@@ -119,14 +138,15 @@
               width="200"
               label="轻货">
               <template slot-scope="scope">
-                <span class="important">65</span>元/立方 <el-popover
+                <span class="important">{{findLowestPrice(scope.row.rangePrices,'0')}}</span>元/立方 <el-popover
                   placement="bottom"
+                  :visible-arrow="false"
                   popper-class="showjieti-info-pop"
                   width="300"
                   trigger="hover"
                   >
                   <div class="showjieti-info">
-                    <div class="jieti-title">最低一票价格：25元</div>
+                    <div class="jieti-title">最低一票价格：{{findLowestPrice(scope.row.rangePrices,'0')}}元</div>
                     <ul>
                       <li :key="index" v-if="item.type==='0'" v-for="(item, index) in scope.row.rangePrices">
                         <span class="jietiv">{{ item.startVolume }}立方~{{ item.endVolume }}立方</span>
@@ -255,6 +275,31 @@
         <el-button type="primary" @click="submitContactForm">保 存</el-button>
       </div>
     </el-dialog>
+    <!-- 网点选择 -->
+    <el-dialog title="网点选择" custom-class="ususalContactList netListContent" :visible.sync="showPopNet">
+        <div class="popnet-title">请选择距您最近的出发地和到达地网点：</div>
+
+        <div class="selectNetListPanel clearfix">
+          <ul class="netPopChoiceList">
+            <li class="start-net-icon"><span class="start-icon"></span>出发地:{{ startSelect }}</li>
+            <li @click="selectNet(item)" class="clearfix" :key="index" v-for="(item, index) in popPointList.startPoints">
+              <span class="wlListName"><el-radio v-model="startSelectIndex" @click.native="startSelect = item.pointName" :label="item.id">{{item.pointName}}</el-radio></span><span class="wlListMobile">距离：{{item.distance}}km</span>
+              <span class="wlListAddres">{{item.address}}</span>
+            </li>
+          </ul>
+          <ul class="netPopChoiceList">
+            <li class="end-net-icon"><span class="end-icon"></span>目的地:{{ endSelect }}</li>
+            <li @click="selectNet(item)" class="clearfix" :key="index" v-for="(item, index) in popPointList.endPoints">
+              <span class="wlListName"><el-radio v-model="endSelectIndex"  @click.native="endSelect = item.pointName" :label="item.id">{{item.pointName}}</el-radio></span><span class="wlListMobile">距离：{{item.distance}}km</span>
+              <span class="wlListAddres">{{item.address}}</span>
+            </li>
+          </ul>
+        </div>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="showPopNet = false">取 消</el-button>
+          <el-button type="primary" @click="submitNetForm">确 定</el-button>
+        </div>
+    </el-dialog>
 
   </div>
 </template>
@@ -275,37 +320,37 @@ export default {
     return {
       maxCargoLength: 5,
       cargoInfo: {
-        "goodsName": "", // 货物名称
-        "goodsNum": 0, // 总件数
-        "goodsVolume": "0", // 货物体积（方）
-        "goodsWeight": "0" // 货物重量（吨）
+        'goodsName': '', // 货物名称
+        'goodsNum': 0, // 总件数
+        'goodsVolume': '0', // 货物体积（方）
+        'goodsWeight': '0' // 货物重量（吨）
         // "title": "string" // 标题
       },
       // 常用地址、收发货人信息
-      "aflcOrderAddressWebDtoList": [
+      'aflcOrderAddressWebDtoList': [
         {
-          "contacts": "", // 联系人
-          "contactsPhone": "", // 联系电话
-          "isSave": false, // 是否保存常用收发货人
-          "type": "0", // 类型（0：发货人，1：收货人）
+          'contacts': '', // 联系人
+          'contactsPhone': '', // 联系电话
+          'isSave': false, // 是否保存常用收发货人
+          'type': '0', // 类型（0：发货人，1：收货人）
 
-          "provinceCityArea": "", // 省市区
-          viaAddress: "", // 途径地
-          "viaAddressCoordinate": "", // 途径地坐标
-          //"viaAddressName": "string", // 途径名地址名称
-          "viaOrder": 0 // 途径地顺序（0：出发地；1：目的地）
+          'provinceCityArea': '', // 省市区
+          viaAddress: '', // 途径地
+          'viaAddressCoordinate': '', // 途径地坐标
+          // "viaAddressName": "string", // 途径名地址名称
+          'viaOrder': 0 // 途径地顺序（0：出发地；1：目的地）
         },
         {
-          "contacts": "", // 联系人
-          "contactsPhone": "", // 联系电话
-          "isSave": false, // 是否保存常用收发货人
-          "type": "1", // 类型（0：发货人，1：收货人）
+          'contacts': '', // 联系人
+          'contactsPhone': '', // 联系电话
+          'isSave': false, // 是否保存常用收发货人
+          'type': '1', // 类型（0：发货人，1：收货人）
 
-          "provinceCityArea": "", // 省市区
-          viaAddress: "", // 途径地
-          "viaAddressCoordinate": "", // 途径地坐标
-          //"viaAddressName": "string", // 途径名地址名称
-          "viaOrder": 1 // 途径地顺序（0：出发地；1：目的地）
+          'provinceCityArea': '', // 省市区
+          viaAddress: '', // 途径地
+          'viaAddressCoordinate': '', // 途径地坐标
+          // "viaAddressName": "string", // 途径名地址名称
+          'viaOrder': 1 // 途径地顺序（0：出发地；1：目的地）
         }
       ],
       cargoList: [],
@@ -315,44 +360,56 @@ export default {
       rules: {},
       current: '',
       // 选中的是第几个物流商
+      showPopNet: false, // 控制选择网点的弹窗显示
+      startSelectIndex: 0,
+      startSelect: '',
+      endSelectIndex: 0,
+      endSelect: '',
+      wlbestlist: [],
       wlindex: '',
       ruleForm: {
-        "clientIp": "", // 终端ip
-        "memberType": "", // 会员类型(货主:AF00101,车主:AF00102,物流公司:AF00107)
-        "shipperId": "", // 货主id 用户id
-        "orderClass": "", // 货源类型(0单次急发货源1长期稳定货源)
-        "title": "", // 标题
-        "totalAmount": 0, // 订单总金额
-        "wlId": "", // 物流公司id
-        "wlName": "", // 物流公司名称
-        "orderFrom": "AF0040002" // 订单来源(APP端:AF0040001;WEB端:AF0040002;微信公众号:AF0040003;小程序:AF004004)
+        startPointId: '',
+        endPointId: '',
+        'clientIp': '', // 终端ip
+        'memberType': '', // 会员类型(货主:AF00101,车主:AF00102,物流公司:AF00107)
+        'shipperId': '', // 货主id 用户id
+        'orderClass': '', // 货源类型(0单次急发货源1长期稳定货源)
+        'title': '', // 标题
+        'totalAmount': 0, // 订单总金额
+        'wlId': '', // 物流公司id
+        'wlName': '', // 物流公司名称
+        'orderFrom': 'AF0040002' // 订单来源(APP端:AF0040001;WEB端:AF0040002;微信公众号:AF0040003;小程序:AF004004)
       },
       usersArr: [],
-      //netQuery: {},
-      netQuery:{endLatitude: "22.524114", endLocation: "广东省-江门市-新会区", endLongitude: "113.03524", startLatitude: "23.124017", startLocation: "广东省-广州市-天河区",startLongitude:"113.3682"},
+      // netQuery: {},
+      netQuery: { endLatitude: '22.524114', endLocation: '广东省-江门市-新会区', endLongitude: '113.03524', startLatitude: '23.124017', startLocation: '广东省-广州市-天河区', startLongitude: '113.3682' },
       // 收发货人
       currentType: 0, // 当前操作的联系类型
-      contactTitle:'常用发货人',
+      contactTitle: '常用发货人',
       popContactTitle: '添加',
-      popContactList:[],
+      popContactList: [],
+      popPointList: {
+        startPoints: [],
+        endPoints: []
+      },
       contactPopVisible: false,
       dialogFormVisible: false,
-      contactform:{
-        "address": "", //详细地址
-        "contacts": "", //联系人
-        "contactsPhone": "", //联系电话
-        "coordinate": "", //发货地坐标
-        //"createTime": "2018-07-27T06:28:38.733Z", //创建时间
-        //"creater": "string", //创建人
-        //"delFlag": "string", //删除状态
-        "floorHousenum": "", //楼层及门牌号 跟地址保持一致
-        //"id": "string", //编号
-        "isDefault": "0", //是否默默常用联系人（0：否；1：是）
-        "shipperId": "", //货主ID userid
-        //"summary": "string", //简称
-        "type": "0" //类型（0：常用发货人，1：常用收货人）
-        //"updateTime": "2018-07-27T06:28:38.733Z", //更新时间
-        //"updater": "string", //修改人
+      contactform: {
+        'address': '', // 详细地址
+        'contacts': '', // 联系人
+        'contactsPhone': '', // 联系电话
+        'coordinate': '', // 发货地坐标
+        // "createTime": "2018-07-27T06:28:38.733Z", //创建时间
+        // "creater": "string", //创建人
+        // "delFlag": "string", //删除状态
+        'floorHousenum': '', // 楼层及门牌号 跟地址保持一致
+        // "id": "string", //编号
+        'isDefault': '0', // 是否默默常用联系人（0：否；1：是）
+        'shipperId': '', // 货主ID userid
+        // "summary": "string", //简称
+        'type': '0' // 类型（0：常用发货人，1：常用收货人）
+        // "updateTime": "2018-07-27T06:28:38.733Z", //更新时间
+        // "updater": "string", //修改人
         // "version": "string" //版本
       }
 
@@ -361,7 +418,7 @@ export default {
   mounted() {
     this.id = this.$route.query.id
     this.initCargo()
-    if(this.id){
+    if (this.id) {
       this.initModify()
     } else {
       this.initNew()
@@ -369,12 +426,12 @@ export default {
     this.getCompany()
   },
   methods: {
-    initNew(){
-      this.cargoList = [Object.assign({},this.cargoInfo)]
+    initNew() {
+      this.cargoList = [Object.assign({}, this.cargoInfo)]
       this.ruleForm.shipperId = this.otherinfo.id
       this.ruleForm.memberType = this.otherinfo.rolesIdList[0]
     },
-    initModify(){
+    initModify() {
 
     },
     initCargo() {
@@ -391,26 +448,26 @@ export default {
       label.ischeck = !label.ischeck
     },
     getInfo(pos, name, info) {
-      console.log("map info: ", info)
-      let obj = info.addressComponent
-      let str = obj.province +'-'+obj.city+'-'+obj.district
-      let str2 = obj.township + obj.street + obj.streetNumber + obj.building
+      console.log('map info: ', info)
+      const obj = info.addressComponent
+      const str = obj.province + '-' + obj.city + '-' + obj.district
+      const str2 = obj.township + obj.street + obj.streetNumber + obj.building
       // info.name  info.pos
       switch (this.current) {
-        case "contactAddress":
+        case 'contactAddress':
           this.contactform.address = name
           this.contactform.floorHousenum = name
           this.contactform.coordinate = pos
 
         case 'strartAddress':
-          
+
           this.aflcOrderAddressWebDtoList[0].provinceCityArea = str
           this.aflcOrderAddressWebDtoList[0].viaAddress = str2
           this.aflcOrderAddressWebDtoList[0].viaAddressCoordinate = pos
           this.findNetList()
           break
         case 'endAddress':
-           this.aflcOrderAddressWebDtoList[1].provinceCityArea = str
+          this.aflcOrderAddressWebDtoList[1].provinceCityArea = str
           this.aflcOrderAddressWebDtoList[1].viaAddress = str2
           this.aflcOrderAddressWebDtoList[1].viaAddressCoordinate = pos
           this.findNetList()
@@ -422,67 +479,87 @@ export default {
       this.current = name
     },
     // 货物信息
-    resetCargo(){
+    resetCargo() {
       this.cargoList = [{}]
     },
-    removeCargo(index){
-      this.cargoList.splice(index,1)
+    removeCargo(index) {
+      this.cargoList.splice(index, 1)
     },
-    addCargo(index){
-      this.cargoList.push(Object.assign({},this.cargoInfo))
+    addCargo(index) {
+      this.cargoList.push(Object.assign({}, this.cargoInfo))
     },
-    setCargoName(index, name){
-      this.$set(this.cargoList,index,Object.assign(this.cargoList[index], {
+    setCargoName(index, name) {
+      this.$set(this.cargoList, index, Object.assign(this.cargoList[index], {
         goodsName: name
       }))
       // this.cargoList[index]
     },
-    /*****  选择物流公司   */
-    findNetList(){
+    /** ***  选择物流公司   */
+    findLowestPrice(list, type) {
+      const find = list.filter(el => el.type === type)[0]
+      return !find ? 0 : find.discountPrice
+    },
+    findNetList() {
       // 判断必要参数是否存在
-      let obj = this.aflcOrderAddressWebDtoList
-      let pos0 = obj[0].viaAddressCoordinate.split(',')
-      let pos1 = obj[1].viaAddressCoordinate.split(',')
-      console.log("find data:",obj[0].viaAddressCoordinate,obj[1].viaAddressCoordinate,pos0,pos1)
+      const obj = this.aflcOrderAddressWebDtoList
+      const pos0 = obj[0].viaAddressCoordinate.split(',')
+      const pos1 = obj[1].viaAddressCoordinate.split(',')
+      console.log('find data:', obj[0].viaAddressCoordinate, obj[1].viaAddressCoordinate, pos0, pos1)
       // 当有俩个的坐标信息时，表示已经填写相关信息
-      if(pos0.length === 2 && pos1.length === 2){
-        let data = {
-          endLatitude:pos1[1], // 到达地上传坐标纬度
-          endLocation:obj[1].provinceCityArea, // 目的地
-          endLongitude:pos1[0], // 到达地上传坐标经度
-          startLatitude:pos0[1], // 出发地上传坐标纬度
-          startLocation:obj[0].provinceCityArea, // 出发地
-          startLongitude:pos0[0] // 出发地上传坐标经度
+      if (pos0.length === 2 && pos1.length === 2) {
+        const data = {
+          endLatitude: pos1[1], // 到达地上传坐标纬度
+          endLocation: obj[1].provinceCityArea, // 目的地
+          endLongitude: pos1[0], // 到达地上传坐标经度
+          startLatitude: pos0[1], // 出发地上传坐标纬度
+          startLocation: obj[0].provinceCityArea, // 出发地
+          startLongitude: pos0[0] // 出发地上传坐标经度
         }
-        console.log("find data:",data)
+        console.log('find data:', data)
         this.netQuery = data
         this.getCompany()
       }
-      
     },
-    //计算总价
-    calcTotalFee(){
+    // 计算总价
+    calcTotalFee() {
 
     },
-    getCompany(){
+    getCompany() {
       ReqApi.getCompany({
         currentPage: 1,
-        "pageSize": 100,
-        vo:{
-          "startLocation": this.netQuery.startLocation,
-          "endLocation": this.netQuery.endLocation
+        'pageSize': 100,
+        vo: {
+          'startLocation': this.netQuery.startLocation,
+          'endLocation': this.netQuery.endLocation
         }
       }).then(res => {
         this.usersArr = res.data.list || []
       })
     },
-    getNet(id){
-      ReqApi.getBestNet(id ,this.netQuery).then(res=>{
-        
+    getNet(id, index) {
+      ReqApi.getBestNet(id, this.netQuery).then(res => {
+        this.$set(this.wlbestlist, index, res.data)
       })
     },
+    getAllNet(id) {
+      ReqApi.getAllNet(id, this.netQuery).then(res => {
+        this.popPointList.startPoints = res.data.startPoints
+        this.popPointList.endPoints = res.data.endPoints
+      })
+    },
+    /** 重新选择网点 */
+    showSlectNet(id) {
+      this.showPopNet = true
+      this.getAllNet(id)
+    },
+    selectNet(item) {
+
+    },
+    submitNetForm() {
+
+    },
     // 收发货人
-    showContactPop(type){
+    showContactPop(type) {
       this.currentType = type
       ReqApi.getContactList({
         currentPage: 1,
@@ -493,51 +570,50 @@ export default {
       }).then(data => {
         this.contactPopVisible = true
         this.popContactList = data.list
-      }).catch(()=>{
-        this.$message.error("加载数据失败~")
+      }).catch(() => {
+        this.$message.error('加载数据失败~')
       })
-      
     },
     // 点击选择
-    selectContact(item){
-      let obj = this.aflcOrderAddressWebDtoList[this.currentType]
+    selectContact(item) {
+      const obj = this.aflcOrderAddressWebDtoList[this.currentType]
       obj.contacts = item.contacts
       obj.contactsPhone = item.contactsPhone
       // 关闭弹窗
       this.contactPopVisible = false
     },
-    showNewContactPop(){
-      for(const i in this.contactform){
+    showNewContactPop() {
+      for (const i in this.contactform) {
         this.contactform[i] = ''
       }
       delete this.contactform.id
       this.dialogFormVisible = true
     },
     // 修改
-    showModifyContact(item){
-      for(const i in this.contactform){
+    showModifyContact(item) {
+      for (const i in this.contactform) {
         this.contactform[i] = item[i]
       }
       this.contactform.id = item.id
       this.dialogFormVisible = true
     },
     // 新建/修改提交
-    submitContactForm(){
+    submitContactForm() {
       this.contactform.shipperId = this.otherinfo.id
       this.contactform.type = this.currentType
-      let prom 
-      if(this.contactform.id){
+      let prom
+      if (this.contactform.id) {
         prom = ReqApi.putChangeContact(this.contactform)
       } else {
         prom = ReqApi.postAddContact(this.contactform)
       }
 
       prom.then(res => {
-        this.$message.success("保存成功~")
+        this.$message.success('保存成功~')
         this.dialogFormVisible = false
         this.showContactPop(this.currentType)
-      }).catch(err=>{
-        this.$message.error("保存失败：" + JSON.stringify(err))
+      }).catch(err => {
+        this.$message.error('保存失败：' + JSON.stringify(err))
       })
     },
     // 提交表单
@@ -591,20 +667,66 @@ export default {
     }
   }
 }
-.showjieti-info-pop{
+.showjieti-info-pop,.wlname-info-pop{
   padding: 0;
   background: transparent;
   .popper__arrow{
     display: none;
   }
 }
-.showjieti-info{
-  color: #666;
+.wlname-info,.showjieti-info{
+   color: #666;
   width: 300px;
   padding: 5px;
   border: 1px solid #969696;
   background: #fff6d2;
   font-size: 12px;
+}
+.wlname-info{
+  width: 380px;
+  background: #fff5d2;
+  .wlname-title{
+    font-size: 14px;
+    line-height: 29px;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 5px;
+  }
+  li{
+    margin-bottom: 15px;
+    p{
+      color: #666;
+    }
+  }
+  .wlnamev,.wlnameh{
+    display: inline-block;
+    width: 50%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #333;
+
+    span{
+      color: #ff300d;
+    }
+  }
+  .select-other-net{
+    width: 98px;
+    height: 24px;
+    background-color: #23c3f5;
+    display: block;
+    margin: 10px auto;
+    text-align: center;
+    line-height: 24px;
+    font-size: 12px;
+    color: #fff;
+    cursor: pointer;
+
+    &:hover{
+      background: #23c1f5;
+    }
+  }
+}
+.showjieti-info{
   li{
     clear: both;
     height: 30px;
@@ -624,7 +746,62 @@ export default {
     }
   }
 }
+.netListContent{
+  width: 486px;
+  height: 418px;
+  background: #fff;
+  border: 1px solid #19aaef;
+  font-size: 12px;
+  color: #343639;
 
+  .el-dialog__body{
+    padding: 5px 0;
+    font-size: 12px;
+  }
+
+  .popnet-title{
+    text-align: center;
+    margin: 10px 0 20px;
+  }
+  .netPopChoiceList{
+    float: left;
+    margin-left: 11px;
+    width: 225px;
+    height: 274px;
+    border: 1px solid #ccc;
+  }
+  .start-net-icon,.end-net-icon{
+    line-height: 28px;
+    background: #19acef;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    
+  }
+  li{
+    padding: 5px 0;
+    border-bottom: 1px solid #ccc;
+    .wlListMobile,.wlListName{
+      display: inline-block;
+      width: 50%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .wlListMobile{
+      text-align: right;
+    }
+    .wlListAddres{
+      display: block;
+      color: #999;
+      padding-left: 25px;
+    }
+  }
+  
+}
 .create-orderinfo{
   padding: 20px;
   height: 100%;
@@ -667,6 +844,11 @@ export default {
     text-decoration: underline;
     font-size: 12px;
     margin-left: 10px;
+  }
+  .wlname{
+    display: block;
+    padding: 0 10px;
+    text-align: left;
   }
   // 弹窗
   .ususalContactList{
