@@ -52,8 +52,8 @@ export default {
     }
   },
   mounted() {
-    this.dialogTableVisible = this.popVisible
-    console.log('this.popVisible:', this.popVisible)
+    // this.dialogTableVisible = this.popVisible
+    
   },
   created() {
 
@@ -76,9 +76,14 @@ export default {
       if (this.map && this.map.destroy) {
         this.map.destroy()
       }
+      this.thepos = ''
+      this.thename = ''
+      this.theobj = {}
+      this.noinfo = true
     },
     init() {
       this.dialogTableVisible = this.popVisible
+      console.log('this.popVisible:', this.popVisible)
       // 当为展现时，初始化
       if (this.popVisible) {
         this.thepos = this.pos

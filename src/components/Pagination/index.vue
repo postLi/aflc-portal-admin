@@ -57,7 +57,7 @@ export default {
   props: {
     sizes: {
       type: Array,
-      default: () => [100, 200, 300, 400]
+      default: () => [20, 50, 100, 200]
     },
     total: {
       type: Number,
@@ -83,7 +83,7 @@ export default {
       oldValue: 0,
       inputval: 1,
       oldNum: 1,
-      size: 100
+      size: 20
     }
   },
   mounted() {

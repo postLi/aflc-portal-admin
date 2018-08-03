@@ -37,7 +37,7 @@
                   <ul class="preCaogoList clearfix">
                     <li @click="setCargoName(index, item.name)" :key="inx" v-for="(item, inx) in cargoListPre">{{ item.name }}</li>
                   </ul>
-                  <el-input slot="reference" v-model="item.goodsName"></el-input>
+                  <el-input  @blur="calcTotalFee" slot="reference" v-model="item.goodsName"></el-input>
                 </el-popover>
                 
               </el-form-item>
@@ -45,7 +45,7 @@
                 <el-input v-model="item.goodsNum"><template slot="append">件</template></el-input>
               </el-form-item>
               <el-form-item required label="预估重量：">
-                <el-input @blur="calcTotalFee" v-model="item.goodsWeight"><template slot="append">公斤</template></el-input>
+                <el-input  @blur="calcTotalFee" v-model="item.goodsWeight"><template slot="append">公斤</template></el-input>
               </el-form-item>
               <el-form-item required label="预估体积：">
                 <el-input @blur="calcTotalFee" v-model="item.goodsVolume"><template slot="append">立方米</template></el-input>
@@ -68,7 +68,6 @@
             :data="usersArr"
             stripe
             border
-            height="100%"
             tooltip-effect="dark"
             :default-sort = "{prop: 'id', order: 'ascending'}"
             style="width: 100%">
@@ -78,7 +77,7 @@
               <template slot-scope="scope">
                 <el-popover
                  :visible-arrow="false"
-                 @show="getNet(scope.row.companyId,scope.row.$index)"
+                 @show="getNet(scope.row.companyId,scope.$index)"
                   placement="bottom"
                   popper-class="wlname-info-pop"
                   width="300"
@@ -87,16 +86,17 @@
                   <div class="wlname-info">
                     <div class="wlname-title">最佳网点</div>
                     <ul>
-                      <li :key="index" v-for="(item, index) in wlbestlist[scope.row.$index]">
+                      <li :key="index" v-for="(item, index) in wlbestlist[scope.$index]">
                         <span class="wlnamev">{{ index === 0 ? '出发地' : '目的地'}}网点：<span>{{item.pointName}}</span></span><span class="wlnameh">距{{ index === 0 ? '发' : '收'}}货地：<span>{{item.distance}}km</span></span>
                         <p>{{item.address}}</p>
                         <p>联系人：{{item.name}}</p>
                         <p>联系电话：{{item.telNum}}</p>
                       </li>
                     </ul>
-                    <div @click="showSlectNet(scope.row.companyId)" class="select-other-net">重新选择网点</div>
+                    <div @click="showSlectNet(scope.row.companyId, scope.$index)" class="select-other-net">重新选择网点</div>
                   </div>
-                  <span slot="reference" class="wlname"><el-radio v-model="wlindex" :label="scope.row.companyId" >{{scope.row.publishName}}</el-radio></span>
+                  <!-- <span slot="reference" class="wlname"><el-radio v-model="wlindex" @click.native="calcTotalFee(scope)" :label="scope.row.id" >{{scope.row.publishName}}</el-radio></span> -->
+                  <span slot="reference" class="wlname"><el-radio v-model="wlindex" :label="scope.row.id" >{{scope.row.publishName}}</el-radio></span>
                 </el-popover>
               </template>
             </el-table-column>
@@ -177,7 +177,7 @@
           </el-table>
         </div>
         <div class="prePrice">
-          预估运费总金额：{{ruleForm.totalAmount}}元
+          预估运费总金额：{{ruleForm.forecastPrice}}元
         </div>
       </div>
       <!-- 货源类型 -->
@@ -234,13 +234,13 @@
 
     <!-- 查看常用收发货人 -->
     <el-dialog :title="contactTitle" custom-class="ususalContactList" :visible.sync="contactPopVisible">
-        <el-input placeholder="请输入姓名、手机号或地址搜索" size="small" class="search-input" v-model="ruleForm.name" auto-complete="off">
+        <el-input placeholder="请输入姓名、手机号或地址搜索" size="small" class="search-input" v-model="popContactListSearch" auto-complete="off">
           <el-button size="small" slot="append" >搜索</el-button>
         </el-input>
         <el-button class="addNewContact" size="mini" @click="showNewContactPop">添加常用发货人</el-button>
 
         <ul class="contactPopList">
-          <li @click="selectContact(item)" class="clearfix" :key="index" v-for="(item, index) in popContactList">
+          <li @click="selectContact(item)" class="clearfix" :key="index" v-for="(item, index) in searchPopContactList">
             <span class="contactName">{{item.contacts}}</span>
             <span class="contactMobile">{{item.contactsPhone}}</span>
             <span class="contactAddres">{{item.address}}</span>
@@ -282,15 +282,15 @@
         <div class="selectNetListPanel clearfix">
           <ul class="netPopChoiceList">
             <li class="start-net-icon"><span class="start-icon"></span>出发地:{{ startSelect }}</li>
-            <li @click="selectNet(item)" class="clearfix" :key="index" v-for="(item, index) in popPointList.startPoints">
-              <span class="wlListName"><el-radio v-model="startSelectIndex" @click.native="startSelect = item.pointName" :label="item.id">{{item.pointName}}</el-radio></span><span class="wlListMobile">距离：{{item.distance}}km</span>
+            <li @click="selectNet(item, true)" class="clearfix" :key="index" v-for="(item, index) in popPointList.startPoints">
+              <span class="wlListName"><el-radio v-model="startSelectIndex" @click.native="startSelect = item.pointName" :label="item.id" >{{item.pointName}}</el-radio></span><span class="wlListMobile">距离：{{item.distance}}km</span>
               <span class="wlListAddres">{{item.address}}</span>
             </li>
           </ul>
           <ul class="netPopChoiceList">
             <li class="end-net-icon"><span class="end-icon"></span>目的地:{{ endSelect }}</li>
             <li @click="selectNet(item)" class="clearfix" :key="index" v-for="(item, index) in popPointList.endPoints">
-              <span class="wlListName"><el-radio v-model="endSelectIndex"  @click.native="endSelect = item.pointName" :label="item.id">{{item.pointName}}</el-radio></span><span class="wlListMobile">距离：{{item.distance}}km</span>
+              <span class="wlListName"><el-radio v-model="endSelectIndex" :label="item.id"  @click.native="endSelect = item.pointName" >{{item.pointName}}</el-radio></span><span class="wlListMobile">距离：{{item.distance}}km</span>
               <span class="wlListAddres">{{item.address}}</span>
             </li>
           </ul>
@@ -359,6 +359,7 @@ export default {
       cargoListPre: [],
       rules: {},
       current: '',
+      currentShowNetIndex: 0,
       // 选中的是第几个物流商
       showPopNet: false, // 控制选择网点的弹窗显示
       startSelectIndex: 0,
@@ -366,6 +367,7 @@ export default {
       endSelectIndex: 0,
       endSelect: '',
       wlbestlist: [],
+      wlbestlistObj: {}, // 用来标记是否已经加载过
       wlindex: '',
       ruleForm: {
         startPointId: '',
@@ -375,19 +377,24 @@ export default {
         'shipperId': '', // 货主id 用户id
         'orderClass': '', // 货源类型(0单次急发货源1长期稳定货源)
         'title': '', // 标题
-        'totalAmount': 0, // 订单总金额
-        'wlId': '', // 物流公司id
+        'totalAmount': 0, // 总价格
+        'wlId': '', // 专线id
         'wlName': '', // 物流公司名称
-        'orderFrom': 'AF0040002' // 订单来源(APP端:AF0040001;WEB端:AF0040002;微信公众号:AF0040003;小程序:AF004004)
+        'orderFrom': 'AF0040002', // 订单来源(APP端:AF0040001;WEB端:AF0040002;微信公众号:AF0040003;小程序:AF004004)
+         startPointId: '', // 最佳出发网点
+        endPointId: '', // 最佳结束网点
+        goodsType: 0, // 价格状态
+        forecastPrice: 0 // 获取到总价格
       },
       usersArr: [],
-      // netQuery: {},
-      netQuery: { endLatitude: '22.524114', endLocation: '广东省-江门市-新会区', endLongitude: '113.03524', startLatitude: '23.124017', startLocation: '广东省-广州市-天河区', startLongitude: '113.3682' },
+      netQuery: {},
+      // netQuery: { endLatitude: '22.524114', endLocation: '广东省-江门市-新会区', endLongitude: '113.03524', startLatitude: '23.124017', startLocation: '广东省-广州市-天河区', startLongitude: '113.3682' },
       // 收发货人
       currentType: 0, // 当前操作的联系类型
       contactTitle: '常用发货人',
       popContactTitle: '添加',
       popContactList: [],
+      popContactListSearch:'',
       popPointList: {
         startPoints: [],
         endPoints: []
@@ -415,6 +422,24 @@ export default {
 
     }
   },
+  computed:{
+    noCanSubmit(){
+      // 判断是否能提交
+      return false
+    },
+    searchPopContactList(){
+      return this.popContactList.filter(el => {
+        return el.contacts.indexOf(this.popContactListSearch) !== -1 || el.contactsPhone.indexOf(this.popContactListSearch) !== -1 || el.address.indexOf(this.popContactListSearch) !== -1
+      })
+    }
+  },
+  watch:{
+    wlindex(newVal){
+      if(newVal){
+        this.calcTotalFee()
+      }
+    }
+  },
   mounted() {
     this.id = this.$route.query.id
     this.initCargo()
@@ -423,7 +448,7 @@ export default {
     } else {
       this.initNew()
     }
-    this.getCompany()
+    //this.getCompany()
   },
   methods: {
     initNew() {
@@ -522,7 +547,66 @@ export default {
     },
     // 计算总价
     calcTotalFee() {
+      // 必须要有货物信息跟物流公司信息
+      // 重量跟体积必须要有一个值
+      let transportRangeId = this.wlindex
+      // 必须要有名称的才能参与计算
+      let cargolist = this.cargoList.filter(el => el.goodsName)
 
+      // 获取价格前初始化下数据
+      this.ruleForm.wlId = ''
+      this.ruleForm.forecastPrice = 0
+      this.ruleForm.goodsType = ''
+      this.ruleForm.totalAmount = 0
+      if(transportRangeId){
+        let $index = 0
+        let obj = this.usersArr.filter((el,index)=>{
+          if(el.id === transportRangeId){
+            $index = index
+            return true
+          } else {
+            return false
+          }
+        })
+        this.ruleForm.wlName = obj.publishName
+        let data = this.wlbestlist[$index]
+        this.ruleForm.startPointId = data[0] ? data[0].id : ''
+        this.ruleForm.endPointId = data[1] ? data[1].id : ''
+      }
+      
+      
+      console.log("get Total price:",transportRangeId,cargolist)
+      if(cargolist.length && transportRangeId){
+        let weight = cargolist.reduce((pre,item)=>{
+          return pre + parseFloat(item.goodsWeight,10)
+        }, 0)
+        let volume = cargolist.reduce((pre,item)=>{
+          return pre + parseFloat(item.goodsVolume,10)
+        }, 0)
+        let amount = cargolist.reduce((pre,item)=>{
+          return pre + parseFloat(item.goodsNum,10)
+        }, 0)
+        console.log("get Total price:",transportRangeId,weight,volume,cargolist)
+        if(weight>0 || volume > 0){
+          ReqApi.getTotalPrice({
+            transportRangeId,// 物流公司专线id
+            weight,// 货物重量
+            volume// 货物体积
+          }).then(res => {
+            let data = res.data
+            if(data){
+              this.ruleForm.wlId = data.transportRangeId
+              this.ruleForm.forecastPrice = data.forecastPrice
+              this.ruleForm.goodsType = data.goodsType
+              this.ruleForm.totalAmount = data.forecastPrice
+              
+            }
+          }).catch(err => {
+            this.$message.error('获取价格失败： ' + JSON.stringify(err))
+          })
+        }
+        
+      }
     },
     getCompany() {
       ReqApi.getCompany({
@@ -533,30 +617,118 @@ export default {
           'endLocation': this.netQuery.endLocation
         }
       }).then(res => {
+        //this.usersArr = res.data.list || []
+        // 每次搜索出专线列表，重置部分参数
+        this.wlbestlistObj = {}
+        this.wlindex = ''
+        this.startSelectIndex = ""
+        this.endSelectIndex = ""
+        this.startSelect = ''
+        this.endSelect = ''
+        this.currentShowNetIndex = 0
+        this.wlbestlist = []
+
+
         this.usersArr = res.data.list || []
+        /* this.usersArr = res.data.list ? res.data.list.concat(res.data.list.map(el=>{
+          let ell = Object.assign({},el)
+          ell.companyId = '1234243'
+          ell.id = '112324'
+          ell.publishName = 'abcdded'
+          return ell
+        })) : [] */
       })
     },
     getNet(id, index) {
-      ReqApi.getBestNet(id, this.netQuery).then(res => {
-        this.$set(this.wlbestlist, index, res.data)
-      })
+      console.log("getNet:", id, index)
+      // 重新搜索后，要重置部分参数
+      if(!this.wlbestlistObj[index]){
+        ReqApi.getBestNet(id, this.netQuery).then(res => {
+          this.$set(this.wlbestlist, index, res.data)
+          this.wlbestlistObj[index] = true
+        })
+      }
     },
     getAllNet(id) {
       ReqApi.getAllNet(id, this.netQuery).then(res => {
-        this.popPointList.startPoints = res.data.startPoints
-        this.popPointList.endPoints = res.data.endPoints
+        /* res.data.startPoints = res.data.startPoints.concat(res.data.startPoints.map(el=>{
+          let ell = Object.assign({},el)
+          ell.id = '111'
+          ell.pointName = "1111"
+          return ell
+        }))
+        res.data.endPoints = res.data.endPoints.concat(res.data.endPoints.map(el=>{
+          let ell = Object.assign({},el)
+          ell.id = '222'
+          ell.pointName = "222222"
+          return ell
+        })) */
+
+        this.startSelectIndex = ""
+        this.endSelectIndex = ""
+        let obj = this.wlbestlist[this.currentShowNetIndex]
+
+        this.popPointList.startPoints = res.data.startPoints.map(el=>{
+          el.ischecked = false
+          if(el.id === obj[0].id){
+            this.startSelectIndex = obj[0].id
+          }
+          return el
+        })
+        this.popPointList.endPoints = res.data.endPoints.map(el=>{
+          el.ischecked = false
+          if(el.id === obj[1].id){
+            this.endSelectIndex = obj[1].id
+          }
+          return el
+        })
       })
     },
     /** 重新选择网点 */
-    showSlectNet(id) {
+    showSlectNet(id,index) {
       this.showPopNet = true
+      this.currentShowNetIndex = index
       this.getAllNet(id)
     },
-    selectNet(item) {
-
+    selectNet(item, isStart) {
+      if(isStart){
+        this.startSelectIndex = item.id
+        this.startSelect = item.pointName
+      } else {
+        this.endSelectIndex = item.id
+        this.endSelect = item.pointName
+      }
     },
     submitNetForm() {
-
+      // 判断是否有选择网点
+      let ischeck = true
+      if(this.popPointList.startPoints.length){
+        if(!this.startSelectIndex){
+          ischeck = false
+        }
+      }
+      if(this.popPointList.endPoints.length){
+        if(!this.endSelectIndex){
+          ischeck = false
+        }
+      }
+      if(ischeck){
+        this.showPopNet = false
+        // 返回给最佳网点那里显示
+        if(this.startSelectIndex){
+          this.$set(this.wlbestlist[this.currentShowNetIndex], 0 , this.popPointList.startPoints.filter(el => {
+            return el.id === this.startSelectIndex
+          })[0])
+        }
+        if(this.endSelectIndex){
+          this.$set(this.wlbestlist[this.currentShowNetIndex], 1 , this.popPointList.endPoints.filter(el => {
+            return el.id === this.endSelectIndex
+          })[0])
+        }
+      } else{
+        this.$message.info("请选择一个网点~")
+      }
+      
     },
     // 收发货人
     showContactPop(type) {
@@ -622,23 +794,24 @@ export default {
         if (valid) {
           this.loading = true
           const data = Object.assign({}, this.ruleForm)
-          data.title = data.strartAddress + '->' + data.endAddress
-          data.carTag = this.cargoListPre.filter(el => el.ischeck).map(el => el.code).join('|')
-          data.carTagName = this.cargoListPre.filter(el => el.ischeck).map(el => el.name).join('|')
+          data.aflcOrderAddressWebDtoList = this.aflcOrderAddressWebDtoList
+          data.aflcFCLOrderGoodsDtoList = this.cargoList
+          
           let promiseObj
           // 判断操作，调用对应的函数
           if (this.isModify) {
             // promiseObj = putCarrier(data)
           } else {
-            promiseObj = ReqApi.postCarInfo(data)
+            promiseObj = ReqApi.postCreateOrder(this.otherinfo.userToken ,data)
           }
 
           promiseObj.then(res => {
             this.loading = false
-            this.$alert('操作成功', '提示', {
+            this.$alert('保存成功', '提示', {
               confirmButtonText: '确定',
               callback: action => {
                 this.$emit('success')
+                this.eventBus.$emit('replaceCurrentView', '/carrier/order/manage')
               }
             })
           }).catch(err => {
