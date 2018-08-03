@@ -185,7 +185,7 @@ export default {
         //修改
         handleEdit(row) {
             console.log(row);
-            this.$router.push({name: '投诉详情',query:{ id:row.orderSerial}});
+            this.$router.push({name: '投诉详情',query:{ orderSerial:row.orderSerial}});
         },
         
     },

@@ -38,7 +38,7 @@
             </div> -->
             <div class="information" style="height:72%">
                 <div class="created">
-                    <el-button type="primary" @click="handleNew">发布专线</el-button>  
+                    <el-button type="primary" @click="handleNew">发布网点</el-button>  
                 </div>
                 <div style="height:100%">
                     <el-table

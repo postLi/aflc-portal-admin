@@ -7,13 +7,13 @@
         </div>
         <el-form :model="logisticsForm" ref="ruleForm" label-width="110px" class="demo-ruleForm">
             <div class="searchInformation information">
-                <el-form-item label="订单号：" prop="pointName">
-                    <el-input v-model="logisticsForm.pointName">
+                <el-form-item label="订单号：" prop="orderSerial">
+                    <el-input v-model="logisticsForm.orderSerial">
                     </el-input>
                 </el-form-item>
-                <el-form-item label="货物类型：" prop="address" class="timechoose">
+                <el-form-item label="评价时间：" prop="address" class="timechoose">
                     <el-date-picker
-                        v-model="logisticsForm.address"
+                        v-model="time"
                         type="datetimerange"
                         :picker-options="pickerOptions2"
                         range-separator="至"
@@ -36,8 +36,7 @@
                     ref="multipleTable"
                     stripe
                     border
-                    height="100%"
-                    style="width: 100%">
+                    style="width: 100%;height:100%;">
                         <el-table-column
                             fixed
                             label="序号"
@@ -46,90 +45,103 @@
                         </el-table-column>
                         <el-table-column
                             fixed
-                            prop="pointName"
                             label="订单编号"
-                            width="180">
+                            width="250">
+                                <template slot-scope="scope">
+                                        {{scope.row.ateOrderSerial ? scope.row.ateOrderSerial : scope.row.aseOrderSerial}}
+                                </template>
                         </el-table-column>
                         <el-table-column
-                            prop="address"
                             label="我对物流公司的评价"
-                            width="400">
+                            >
                             <el-table-column
-                            prop="name"
                             label="评价信用"
-                            width="180">
+                            width="250">
+                                <template slot-scope="scope">
+                                    <div v-if="scope.row.ateOrderSerial">
+                                        <p>服务价格：{{scope.row.ateServerPriceStarLevel}}</p>
+                                        <p>服务质量：{{scope.row.ateServerQualityStarLevel}}</p>
+                                        <p>运输时效：{{scope.row.ateTransportAgingStarLevel}}</p>
+                                    </div>
+                                </template>
                             </el-table-column>
                             <el-table-column
-                            prop="name"
+                            prop="ateEvaluationDes"
                             label="评价内容"
-                            width="180">
+                            width="300">
                             </el-table-column>
                             <el-table-column
-                            prop="name"
+                            prop="ateEvaluationName"
                             label="评价人"
-                            width="180">
+                            width="150">
                             </el-table-column>
                             <el-table-column
-                            prop="name"
+                            prop="ateEvaluationTime"
                             label="评价时间"
-                            width="180">
+                            width="200">
                             </el-table-column>
                             <el-table-column
-                            prop="name"
+                            prop="ateReplyName"
                             label="回复人"
-                            width="180">
+                            width="150">
                             </el-table-column>
                              <el-table-column
-                            prop="name"
+                            prop="ateReplyTime"
                             label="回复时间"
-                            width="180">
+                            width="200 ">
                             </el-table-column>
                         </el-table-column>
                             <el-table-column
                             prop="address"
                             label="物流公司对我的评价"
-                            width="400">
+                            >
                             <el-table-column
                             prop="name"
                             label="评价信用"
-                            width="180">
+                            width="250">
+                                 <template slot-scope="scope">
+                                     <div v-if="scope.row.aseOrderSerial">
+                                        <p>货物包装：{{scope.row.aseGoodsStarLevel}}</p>
+                                        <p>付款及时：{{scope.row.asePayStarLevel}}</p>
+                                        <p>装卸安排：{{scope.row.aseDockStarLevel}}</p>
+                                     </div>
+                                </template>
                             </el-table-column>
                             <el-table-column
-                            prop="name"
+                            prop="aseEvaluationDes"
                             label="评价内容"
-                            width="180">
+                            width="300">
                             </el-table-column>
                             <el-table-column
-                            prop="name"
+                            prop="aseEvaluationName"
                             label="评价人"
-                            width="180">
+                            width="150">
                             </el-table-column>
                             <el-table-column
-                            prop="name"
+                            prop="aseEvaluationTime"
                             label="评价时间"
-                            width="180">
+                            width="200">
                             </el-table-column>
                             <el-table-column
-                            prop="name"
+                            prop="aseReplyName"
                             label="回复人"
-                            width="180">
+                            width="150">
                             </el-table-column>
                              <el-table-column
-                            prop="name"
+                            prop="aseReplyTime"
                             label="回复时间"
-                            width="180">
+                            width="200">
                             </el-table-column>
                         </el-table-column>
                         <el-table-column 
                             fixed="right"
-                            prop="address"
                             label="操作"
+                            width="120"
                             >
                                 <template slot-scope="scope">
                                     <el-button-group>
-                                        <el-button @click="handleEdit(scope.row)" type="primary" size="mini">修改</el-button>
-                                        <el-button @click="handleDelete(scope.row)" type="danger" size="mini">删除</el-button>
-                                        <el-button @click="handleStatus(scope.row)" :type="scope.row.pointStatus == 0 ? 'primary' : 'info'" size="mini">{{scope.row.pointStatus == 0 ? '启用' : '禁用'}}</el-button>
+                                        <el-button @click="handleEdit(scope.row)" v-if="scope.row.aseEvaluationName && !scope.row.aseReplyName" type="primary" size="mini">评价回复</el-button>
+                                        <el-button @click="handleEdit(scope.row)" v-else type="primary" size="mini">评价详情</el-button>
                                     </el-button-group>
                                 </template>
                         </el-table-column>
@@ -144,7 +156,7 @@
 <script>
 
 import '@/styles/identification.scss'
-import { getPointNetwork,PointNetworkStatus,deletePointNetwork } from '@/api/carrier/index.js'
+import { listShipperRate } from '@/api/consignor/rate.js'
 import Pager from '@/components/Pagination/index'
 
 export default {
@@ -152,18 +164,16 @@ export default {
         Pager
     },
     data() {
-       
         return {
             totalCount:0,
             page:1,
             pagesize:20,
             logisticsForm: {
-                pointName: '',//网点名称
-                address: '',//网点详细地址
-                name: '',//联系人
-                mobile: '',//手机号
-                telNum: '',//固定电话
+                orderSerial:'',//订单流水号
+                endTime:'',
+                startTimne:''
             },
+            time:[],
             tableData: [],
             pickerOptions2: {
                 shortcuts: [{
@@ -214,7 +224,7 @@ export default {
             this.pagesize = obj.pageSize
         },
         firstblood(){
-            getPointNetwork(this.page,this.pagesize,this.logisticsForm).then(res=>{
+            listShipperRate(this.page,this.pagesize,this.logisticsForm).then(res=>{
                 console.log(res)
                 this.tableData = res.data.list;
                 this.totalCount = res.data.totalCount;
@@ -226,51 +236,19 @@ export default {
         },
         //搜索
         handleSearch(){
+            if(this.time.length != 0){
+                this.logisticsForm.startTimne = this.time[0];
+                this.logisticsForm.endTimne = this.time[1];
+            }
             this.firstblood();
+            // console.log(this.time)
         },
         //修改
         handleEdit(row) {
             console.log(row);
-            this.$router.push({name: '发布我的网点',params:{ data:row}});
+            this.$router.push({name: '评价详情',query:{ orderSerial:row.ateOrderSerial ? row.ateOrderSerial : row.aseOrderSerial}});
         },
-        //删除网点
-        handleDelete(row) {
-            this.$confirm('确定要删除'+ row.pointName +' 该网点名吗？', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(()=>{
-                deletePointNetwork(row.id).then(res => {
-                    this.firstblood();
-                }).catch(err => {
-                    this.$message({
-                        type: 'info',
-                        message: '操作失败，原因：' + errorInfo ? errorInfo : err.text
-                    })
-                })
-            }).catch(() => {
-                this.$message({
-                    type: 'info',
-                    message: '已取消'
-                })
-            })
-        },
-        //更改状态
-        handleStatus(row) {
-            console.log(row);
-            PointNetworkStatus(row.id).then(res => {
-                console.log(res)
-                this.firstblood();
-            }).catch(err=>{
-                this.$message({
-                    type: 'info',
-                    message: '操作失败，原因：' + err.text ? err.text : err
-                })
-            })
-        },
-
     },
-  
 }
 </script>
 
@@ -294,6 +272,16 @@ export default {
                     }
                 }
 
+            }
+
+            .el-table{
+                td{
+                    .cell{
+                        p{
+                            margin: 5px 0;
+                        }
+                    }
+                }
             }
         }
     }

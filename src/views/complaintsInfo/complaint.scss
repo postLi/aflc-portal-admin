@@ -29,6 +29,16 @@ $stepLength : 54px;
                 color: #333333;
                 line-height: 22px;
                 padding: 21px 0;
+                position: relative;
+                i{
+                    display: inline-block;
+                    width: 44px;
+                    height: 44px;
+                    background: url('../../assets//icom/25xinxi.png') center no-repeat;
+                    position: absolute;
+                    left: 42%;
+                    top: 13%;
+                }
             }
             
         }

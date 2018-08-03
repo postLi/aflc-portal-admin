@@ -19,7 +19,7 @@
                                 <li>收货人：{{orderForm.consignee}}</li>
                             </ul>
                             <ul>
-                                <li>下单时间：{{orderForm.orderSerial}} 
+                                <li>下单时间：{{orderForm.placeOrderTimne}} 
                                     <el-popover
                                     width="100%"
                                     trigger="hover"
@@ -43,118 +43,133 @@
                             </ul>
                         </div>
                     </div>
+                   
                     <div class="rate_content rate_info fl" style="margin-right:6%;">
                         <h2>我对物流公司的评价</h2>
                         <div class="clearfix rate_info_content">
-                            <div class="clearfix rate_info_order ">
+                             <div class="clearfix rate_info_order ">
                                 <div>
                                     <div class="rateStar">
                                         <p>
                                             服务价格：
                                             <el-rate
+                                            v-model="carrierSerial.serverPriceStarLevelScore"
                                             show-score
-                                            v-model="value3"
-                                            allow-half
+                                            text-color="#ed001d"
+                                            disabled
                                             >   
                                             </el-rate>
+                                            <span class="des">{{carrierSerial.serverPriceStarLevelDes}}</span>
                                         </p>
                                         <p>
                                             服务质量：
                                             <el-rate
-                                            v-model="value3"
+                                            v-model="carrierSerial.serverQualityStarLevelScore"
+                                            text-color="#ed001d"
                                             show-score
-                                            :texts="textsArr"
-                                            allow-half
+                                            disabled
                                             >
                                             </el-rate>
+                                            <span class="des">{{carrierSerial.serverQualityStarLevelDes}}</span>
                                         </p>
                                         <p>
                                             运输时效：
                                             <el-rate
-                                            v-model="value3"
+                                            v-model="carrierSerial.transportAgingStarLevelScore"
+                                            text-color="#ed001d"
                                             show-score
-                                            :texts="textsArr"
-                                            allow-half
+                                            disabled
                                             >
                                             </el-rate>
+                                            <span class="des">{{carrierSerial.transportAgingStarLevelDes}}</span>
                                         </p>
-                                        <p>
-                                            评价说明：<span>货物包装很好，付款真的很及时。</span>
+                                        <p v-if="carrierSerial.evaluationDes">
+                                            评价说明：<span>{{carrierSerial.evaluationDes}}</span>
                                         </p>
                                     </div>
                                 </div>
-                                <div class="rateReply">
+                                <div class="rateReply" >
                                     <h4>物流公司对我的回复</h4>
-                                    <div class="rateReply_info">
+                                    <div class="rateReply_info" v-if="carrierSerial.replyDes">
                                         <p>
-                                            感谢您对本公司的点评，我们会悉心接受你的意见，公司将会更加努力做好服务，期待您的再次下单。<br>
-                                            <span>2018-12-25  12:25:45</span>
+                                           {{carrierSerial.replyDes}}<br>
+                                            <span>{{carrierSerial.replyTime}}</span>
                                         </p>
+                                    </div>
+                                    <div  class="rateReply_info" v-else>
+                                        <p>等待物流公司回复</p>
                                     </div>
                                 </div>
                             </div>
                              
                         </div>     
                     </div>
-                    <div class="rate_content rate_info fl">
+                     <div class="rate_content rate_info fl" >
                         <h2>物流公司对我的评价</h2>
                         <div class="clearfix rate_info_content">
-                             <div class="clearfix rate_info_order ">
+                            <div class="clearfix rate_info_order ">
                                 <div>
                                     <div class="rateStar">
                                         <p>
                                             货物包装：
                                             <el-rate
+                                            v-model="consignorSerial.goodsStarLevelScore"
                                             show-score
-                                            allow-half
-                                            score-template="{value}"
+                                            disabled
+                                            text-color="#ed001d"
+
                                             >   
                                             </el-rate>
+                                            <span class="des">{{consignorSerial.goodsStarLevelDes}}</span>
                                         </p>
                                         <p>
                                             付款及时：
                                             <el-rate
-                                            v-model="value3"
+                                            v-model="consignorSerial.payStarLevelScore"
                                             show-score
-                                            :texts="textsArr"
-                                            allow-half
+                                            text-color="#ed001d"
+                                            disabled
                                             >
                                             </el-rate>
+                                            <span class="des">{{consignorSerial.payStarLevelDes}}</span>
                                         </p>
                                         <p>
                                             装卸安排：
                                             <el-rate
-                                            v-model="value3"
+                                            v-model="consignorSerial.dockStarLevelScore"
+                                            text-color="#ed001d"
                                             show-score
-                                            :texts="textsArr"
-                                            allow-half
+                                            disabled
                                             >
                                             </el-rate>
-                                        </p>
+                                            <span class="des">{{consignorSerial.dockStarLevelDes}}</span>
 
+                                        </p>
                                         <p>
-                                            评价说明：<span>货物包装很好，付款真的很及时。</span>
+                                            评价说明：<span>{{consignorSerial.evaluationDes}}</span>
                                         </p>
                                     </div>
                                 </div>
-                                <div class="rateReply">
+                                <div class="rateReply" >
                                     <h4>我对物流公司的回复</h4>
-                                    <div class="rateReply_info">
-                                        <p>
-                                            感谢您对本公司的点评，我们会悉心接受你的意见，公司将会更加努力做好服务，期待您的再次下单。<br>
-                                            <span>2018-12-25  12:25:45</span>
+                                     <div class="rateReply_info">
+                                        <p v-if="consignorSerial.replyDes">
+                                            {{consignorSerial.replyDes}}<br>
+                                            <span>{{consignorSerial.replyTime}}</span>
                                         </p>
-                                        <div class="rateReply_input">
-                                            <el-input
-                                            type="textarea"
-                                            :rows="2"
-                                            :maxlength="retalength"
-                                            placeholder="可在此输入回复内容，回复后不可修改"
-                                            v-model="textarea">
-                                            </el-input>
-                                            <p><span>{{textarea.length}}</span> / {{retalength}}</p>
+                                        <div v-else>
+                                            <div class="rateReply_input" >
+                                                <el-input
+                                                type="textarea"
+                                                :rows="2"
+                                                :maxlength="retalength"
+                                                placeholder="可在此输入回复内容，回复后不可修改"
+                                                v-model="replyDes">
+                                                </el-input>
+                                                <p><span>{{replyDes.length}}</span> / {{retalength}}</p>
+                                            </div>
+                                            <el-button type="primary" :disabled="!replyDes" @click="submitForm">回复</el-button>
                                         </div>
-                                        <el-button type="primary">回复</el-button>
                                     </div>
                                 </div>
                             </div>
@@ -168,10 +183,11 @@
 
 <script>
 
-// import '@/styles/identification.scss'
+import '@/styles/identification.scss'
 import { getUserInfo } from '@/utils/auth.js'
-import {  getAflcOrderComplain,getDetails,addOrderComplain,getDetailsByOrderSerial } from '@/api/carrier/Complaint.js'
-import { getDictionary, } from '@/api/common.js'
+import { getDictionary,getDetailsByOrderSerial} from '@/api/common.js'
+import { carrierSerial,consignorSerial,updateShipperRate } from '@/api/carrier/rate.js'
+import { parseTime } from '@/utils/index.js'
  
 export default {
     components:{
@@ -179,82 +195,49 @@ export default {
     data() {
         return {
             textsArr:['1分  非常不满','2分  不满意','3分  一般','4分  满意','5分  非常满意'],
-            value3:'',
-            complainType:"AF041",//投诉原因
             retalength:200,//回复字数
-            step:'step',
-            stepname:'',
-            textarea:'',
-            complaintForm:{},
+          
             UserInfo:{},
-            ruleForm:{
-                complainType:'',//投诉类型
-                complainDes:'',//投诉描述
-                platformOrderType:'1'
-            },
-            orderForm:{
+            //货主对我的评价
+            carrierSerial:{
 
             },
+            replyDes:'',
+            //我对货主的评价
+            consignorSerial:{
+
+            },
+            orderForm:{},
             optionsReason:[],
         };
     },  
     mounted(){
-        // this.firstblood();
+        this.firstblood();
     },  
     methods: {
         getValue(val){
             console.log(val)
         },
-        firstblood(){
-            this.stepname = this.$route.query.type;
-            let orderSerial = this.$route.query.orderSerial;
-
-            getDetailsByOrderSerial(orderSerial).then(res => {
-                console.log(res)
-                if(res.status == 200){
-                    this.complaintForm = res.data ;
-                    this.stepname = this.complaintForm.complainStatus == 'AF04002' ? 'step-three' : 'step-tow' ;
-                }else{
-                    this.stepname = 'step-one';
-                    Promise.all([getDetails('24c0f4218e1d4bf099d185b3c6964441'), getDictionary(this.complainType)]).then(resArr => {
-                        console.log(this.orderForm)
-                        this.orderForm = resArr[0].data;
-                        this.optionsReason = resArr[1].data;
-                        this.UserInfo = getUserInfo();
-                    })
-                }
-            })
+        textsArray(){
+             
         },
-        submitForm(formName) {
-            this.$refs[formName].validate((valid) => {
-                console.log()
-                if (valid) {
-                    this.$confirm('确认要投诉该物流公司吗？', '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                        type: 'warning'
-                    }).then(()=>{
-                        this.ruleForm.complainTypeName = this.optionsReason.find(item => item.code === this.ruleForm.complainType)['name'];
-                        this.ruleForm.complainName = this.UserInfo.contactsName;
-                        this.ruleForm.complainId = this.UserInfo.id;
-                        this.ruleForm.orderSerial = '24c0f4218e1d4bf099d185b3c6964441';
-                        // console.log(this.ruleForm)
-                        addOrderComplain(this.ruleForm).then(res => {
-                            console.log(res)
-                            this.stepname = 'step-tow';
-                        })
-                        
-                    }).catch(() => {
-                        this.$message({
-                            type: 'info',
-                            message: '已取消'
-                        })
-                    })
-                } else {
-                    console.log('error submit!!');
-                    return false;
-                }
-            });
+        firstblood(){
+            let orderSerial = this.$route.query.orderSerial;
+            this.UserInfo = getUserInfo();
+            Promise.all([carrierSerial(orderSerial),consignorSerial(orderSerial),getDetailsByOrderSerial('AFTC201807271126115176970')]).then(resArr=> {
+                console.log('resArr',resArr)
+                this.carrierSerial = resArr[0].data || {};
+                this.consignorSerial = resArr[1].data || {};
+                this.orderForm = resArr[2].data || {};
+                this.orderForm.placeOrderTimne = parseTime(this.orderForm.useTime);
+            })            
+        },
+         submitForm() {
+            
+            let rata = Object.assign({},{id:this.consignorSerial.id,replyDes:this.replyDes,replyId:this.UserInfo.id,replyName:this.UserInfo.contactsName});
+            updateShipperRate(rata).then(res => {
+                this.firstblood();
+            })
         },
     },
   
@@ -301,6 +284,11 @@ export default {
                         padding-left: 20px;
                         p{
                             margin:10px 0;
+                            .des{
+                                display: inline-block;
+                                margin-left: 10px;
+                                color: #ed001d;
+                            }
                         }
                         .el-rate{
                             display: inline-block;
@@ -326,6 +314,7 @@ export default {
                                 line-height: 20px;
                                 color: #333333;
                                 span{
+                                    display: inline-block;
                                     margin-top: 10px;
                                     font-size: 12px;
                                     color: #999999;

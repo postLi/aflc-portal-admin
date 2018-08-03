@@ -23,16 +23,7 @@ export function getAflcOrderComplain(id) {
       method: 'get'
     })
   }
-
-
-  // 根据id获取订单表
-export function getDetails(id) {
-    return fetch.axios({
-      url:'/'+baseUrl+'/order/fclOrder/v1/getDetails/' + id,
-      method: 'get'
-    })
-  }
-
+ 
   //新建订单投诉建议
   export function addOrderComplain(data) {
     return fetch.axios({
@@ -44,10 +35,20 @@ export function getDetails(id) {
 
 
     // 根据orderSerial获取订单投诉建议
-export function getDetailsByOrderSerial(orderSerial) {
+export function getDetails(orderSerial) {
     return fetch.axios({
       url:'/'+baseUrl+'/order/aflcOrderComplain/v1/findAflcOrderComplainByOrderSerial/' + orderSerial,
       method: 'get'
     })
   }
+
+    //根据id修改订单投诉建议表
+    export function changeOrderComplain(data) {
+        return fetch.axios({
+          url:'/'+baseUrl+'/order/aflcOrderComplain/v1/update',
+          method: 'post',
+          data:data
+        })
+      }
+    
 

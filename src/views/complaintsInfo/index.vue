@@ -66,7 +66,6 @@
                                         v-model="ruleForm.complainDes" :maxlength="Reasonmaxlength">
                                     </el-input>
                                     <p class="count"><span>{{ruleForm.complainDes.length}}</span>/{{Reasonmaxlength}}</p>
-
                                 </el-form-item>
                                     <el-button type="primary" @click="submitForm('ruleForm')">提交投诉</el-button>
                             </el-form>
@@ -84,10 +83,10 @@
                                 <p><span>{{complaintForm.workSerial}}</span></p>
                                 <p>投诉时间</p>
                                 <p>{{complaintForm.complainTime}}</p>
-                            </div>
+                            </div>  
                         </div>
                         <div class="complaint_content" v-if="stepname == 'step-tow'">
-                            <h2>等待物流公司处理</h2>
+                            <h2> <i class="tishi"></i> 等待物流公司处理</h2>
                             <p style="text-align:center;">物流公司会尽快处理，请耐心等待！</p>
                         </div>
                         <div class="complaint_content complaint_reply">
@@ -98,11 +97,11 @@
                                         type="textarea"
                                         :autosize="{ minRows: 3, maxRows: 10}"
                                         placeholder="请输入内容"
-                                        v-model="textarea" :maxlength="maxlength">
+                                        v-model="reply" :maxlength="maxlength">
                                     </el-input>
                                     <p class="count"><span>{{textarea.length}}</span>/{{maxlength}}</p>
                                 </div>
-                                <el-button type="primary" >回复</el-button>
+                                <el-button type="primary" :disabled="!reply" @click="handlerReply">回复</el-button>
                             </div>
                             <div class="complaint_replyinfo" v-else>
                                 {{complaintForm.reply}}
@@ -118,8 +117,8 @@
 import '@/styles/identification.scss'
 import './complaint.scss'
 import { getUserInfo } from '@/utils/auth.js'
-import {  getAflcOrderComplain,getDetails,addOrderComplain,getDetailsByOrderSerial } from '@/api/carrier/Complaint.js'
-import { getDictionary, } from '@/api/common.js'
+import { addOrderComplain,getDetails,changeOrderComplain } from '@/api/carrier/Complaint.js'
+import { getDictionary,getDetailsByOrderSerial } from '@/api/common.js'
  
 export default {
     components:{
@@ -137,12 +136,14 @@ export default {
             ruleForm:{
                 complainType:'',//投诉类型
                 complainDes:'',//投诉描述
-                platformOrderType:'1'
+                platformOrderType:'1',
+
             },
             orderForm:{
 
             },
             optionsReason:[],
+            reply:'',//回复内容
         };
     },  
     mounted(){
@@ -150,20 +151,19 @@ export default {
     },  
     methods: {
         firstblood(){
-            this.stepname = this.$route.query.type;
             let orderSerial = this.$route.query.orderSerial;
-
-            getDetailsByOrderSerial(orderSerial).then(res => {
-                console.log(res)
+            getDetails(orderSerial).then(res => {
+                console.log('判断第几步',res)
                 if(res.status == 200){
                     this.complaintForm = res.data ;
                     this.stepname = this.complaintForm.complainStatus == 'AF04002' ? 'step-three' : 'step-tow' ;
                 }else{
                     this.stepname = 'step-one';
-                    Promise.all([getDetails('24c0f4218e1d4bf099d185b3c6964441'), getDictionary(this.complainType)]).then(resArr => {
+                    Promise.all([getDetailsByOrderSerial(orderSerial), getDictionary(this.complainType)]).then(resArr => {
                         console.log(this.orderForm)
                         this.orderForm = resArr[0].data;
                         this.optionsReason = resArr[1].data;
+                        this.orderForm.complainType = this.optionsReason[0].code; 
                         this.UserInfo = getUserInfo();
                     })
                 }
@@ -186,6 +186,7 @@ export default {
                         addOrderComplain(this.ruleForm).then(res => {
                             console.log(res)
                             this.stepname = 'step-tow';
+                            this.firstblood();
                         })
                         
                     }).catch(() => {
@@ -200,6 +201,14 @@ export default {
                 }
             });
         },
+        //投诉回复
+        handlerReply(){
+            let replyForm = Object.assign({},{reply:this.reply},{id:this.complaintForm.id})
+            changeOrderComplain(replyForm).then(res =>{
+                console.log(res)
+                this.firstblood();
+            })
+        }
     },
   
 }

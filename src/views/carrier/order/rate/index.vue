@@ -8,7 +8,7 @@
         <!-- </el-badge> -->
         
         <!-- 未认证 -->
-            <el-tab-pane label="货源评价" name="consignorRate">
+            <el-tab-pane label="专线评价" name="consignorRate">
                 <consignorRate :isvisible="rateName === 'consignorRate'"></consignorRate>
             </el-tab-pane>
     </el-tabs>

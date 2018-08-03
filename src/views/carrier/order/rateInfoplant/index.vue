@@ -1,5 +1,5 @@
 <template>
-    <div class="rate identification">
+    <div class="rateplant identification">
             <div class="carrierTitle">
                 <div class="realname">
                     <h2>评价详情</h2>
@@ -19,54 +19,35 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>专线ID：AFZG201812240001</td>
-                                        <td rowspan="3" class="priceTimeOut">
-                                            <p>运输时效：3-5天</p><br>
-                                            <p>运输时效：3-5天</p>
-                                        </td>
-                                         <td>
-                                            <p>0-50公斤</p>
-                                            <p>原报价：<del>500</del>元/公斤</p>
-                                            <p>折后价：<span>500</span>元/公斤</p>
-                                        </td>
-                                          <td>
-                                            <p>0-50公斤</p>
-                                            <p>原报价：<del>500</del>元/公斤</p>
-                                            <p>折后价：<span>500</span>元/公斤</p>
-                                        </td>
-                                    </tr>
-                                    <tr>
                                         <td class="moreWidth">
-                                            出发地：广东省广州市白云区长安街道
+                                            出发地：{{rangeForm.startLocation}}
                                         </td>
-                                         <td>
-                                            <p>0-50公斤</p>
-                                            <p>原报价：<del>500</del>元/公斤</p>
-                                            <p>折后价：<span>500</span>元/公斤</p>
+                                        <td rowspan="2" class="priceTimeOut">
+                                            <p>运输时效：{{rangeForm.transportAging}} {{rangeForm.transportAgingUnit}}</p><br>
                                         </td>
-                                         <td>
-                                            <p>0-50公斤</p>
-                                            <p>原报价：<del>500</del>元/公斤</p>
-                                            <p>折后价：<span>500</span>元/公斤</p>
+                                         <td rowspan="2">
+                                             <div v-for="item in rangeForm.weightcargo" :key="item.id" class="cargo">
+                                                <p>{{item.startVolume}}-{{item.endVolume}}公斤</p>
+                                                <p>原报价：<del>{{item.primeryPrice}}</del>元/公斤</p>
+                                                <p>折后价：<span>{{item.discountPrice}}</span>元/公斤</p>
+                                             </div>
+                                        </td>
+                                          <td rowspan="2">
+                                            <div v-for="item in rangeForm.lightcargo" :key="item.id" class="cargo">
+                                                <p>{{item.startVolume}}-{{item.endVolume}}公斤</p>
+                                                <p>原报价：<del>{{item.primeryPrice}}</del>元/公斤</p>
+                                                <p>折后价：<span>{{item.discountPrice}}</span>元/公斤</p>
+                                             </div>
                                         </td>
                                     </tr>
                                      <tr>
                                          <td>
-                                            到达地：湖北省武汉市江夏区
-                                        </td>
-                                         <td>
-                                            <p>0-50立方</p>
-                                            <p>原报价：<del>500</del>元/立方</p>
-                                            <p>折后价：<span>500</span>元/立方</p>
-                                        </td>
-                                         <td>
-                                            <p>0-50立方</p>
-                                            <p>原报价：<del>500</del>元/立方</p>
-                                            <p>折后价：<span>500</span>元/立方</p>
+                                            到达地：{{rangeForm.endLocation}}
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
+                            <h4>最低一票价格：<span>{{rangeForm.lowerPrice}}</span> 元  <span>专线类型：{{rangeForm.rangeTypeName}}</span> <span>发车时间：{{rangeForm.departureTime}}</span></h4>
                         </div>   
                     </div>
                     <div class="rate_content rate_info ">
@@ -78,55 +59,59 @@
                                         <p>
                                             服务价格：
                                             <el-rate
+                                            v-model="transportForm.serverPriceStarLevelScore"
                                             show-score
-                                            allow-half
-                                            score-template="{value}"
+                                            text-color="#ed001d"
                                             >   
                                             </el-rate>
+                                            <span class="des">{{transportForm.serverPriceStarLevelDes}}</span>
                                         </p>
                                         <p>
                                             服务质量：
                                             <el-rate
-                                            v-model="value3"
+                                            v-model="transportForm.serverQualityStarLevelScore"
                                             show-score
-                                            :texts="textsArr"
-                                            allow-half
+                                            text-color="#ed001d"
                                             >
                                             </el-rate>
+                                            <span class="des">{{transportForm.serverQualityStarLevelDes}}</span>
                                         </p>
                                         <p>
                                             运输时效：
                                             <el-rate
-                                            v-model="value3"
+                                            v-model="transportForm.transportAgingStarLevelScore"
                                             show-score
-                                            :texts="textsArr"
-                                            allow-half
+                                            text-color="#ed001d"
                                             >
                                             </el-rate>
+                                            <span class="des">{{transportForm.transportAgingStarLevelDes}}</span>
                                         </p>
                                         <p>
-                                            评价说明：<span>货物包装很好，付款真的很及时。</span>
+                                            评价说明：<span> {{transportForm.evaluationDes}}</span>
                                         </p>
                                     </div>
                                 </div>
                                 <div class="rateReply">
                                     <h4>我对游客的回复</h4>
                                     <div class="rateReply_info">
-                                        <p>
-                                            感谢您对本公司的点评，我们会悉心接受你的意见，公司将会更加努力做好服务，期待您的再次下单。<br>
-                                            <span>2018-12-25  12:25:45</span>
+                                        <p v-if="transportForm.replyDes">
+                                           {{transportForm.replyDes}}<br>
+                                            <span>{{transportForm.replyTime}}</span>
                                         </p>
-                                        <div class="rateReply_input">
-                                            <el-input
-                                            type="textarea"
-                                            :rows="2"
-                                            :maxlength="retalength"
-                                            placeholder="可在此输入回复内容，回复后不可修改"
-                                            v-model="textarea">
-                                            </el-input>
-                                            <p><span>{{textarea.length}}</span> / {{retalength}}</p>
+                                        <div v-else>
+                                            <div class="rateReply_input">
+                                                <el-input
+                                                type="textarea"
+                                                :rows="2"
+                                                :maxlength="retalength"
+                                                placeholder="可在此输入回复内容，回复后不可修改"
+                                                v-model="replyDes">
+                                                </el-input>
+                                                <p><span>{{replyDes.length}}</span> / {{retalength}}</p>
+                                            </div>
+                                            <el-button type="primary" :disabled="!replyDes" @click="submitForm">回复</el-button>
+
                                         </div>
-                                        <el-button type="primary">回复</el-button>
                                     </div>
                                 </div>
                             </div>
@@ -142,91 +127,72 @@
 
 // import '@/styles/identification.scss'
 import { getUserInfo } from '@/utils/auth.js'
-import {  getAflcOrderComplain,getDetails,addOrderComplain,getDetailsByOrderSerial } from '@/api/carrier/Complaint.js'
-import { getDictionary, } from '@/api/common.js'
+import { TransportInfo,TransportEvaluation,updateRate } from '@/api/carrier/rate.js' 
  
 export default {
     components:{
     },
     data() {
         return {
-            textsArr:['1分  非常不满','2分  不满意','3分  一般','4分  满意','5分  非常满意'],
-            value3:'',
-            complainType:"AF041",//投诉原因
             retalength:100,//回复字数
-            step:'step',
-            stepname:'',
-            textarea:'',
-            complaintForm:{},
             UserInfo:{},
-            ruleForm:{
-                complainType:'',//投诉类型
-                complainDes:'',//投诉描述
-                platformOrderType:'1'
-            },
-            orderForm:{
+            rangeForm:{
 
             },
+            replyDes:'',
+            transportForm:{},
             optionsReason:[],
         };
     },  
     mounted(){
-        // this.firstblood();
+        this.firstblood();
     },  
     methods: {
         getValue(val){
             console.log(val)
         },
         firstblood(){
-            this.stepname = this.$route.query.type;
-            let orderSerial = this.$route.query.orderSerial;
+            let transportRangeId = this.$route.query.transportRangeId;
+            let evaluationId = this.$route.query.evaluationId;
+            TransportInfo(transportRangeId).then(res => {
+                // console.log(res)
+                this.rangeForm = res.data;
+                
+                this.rangeForm.weightcargo =[];
+                this.rangeForm.lightcargo = [];
+                this.rangeForm.rangePrices.forEach(item => {
+                    switch(item.type){
+                        case '0':
+                            this.rangeForm.lightcargo.push(item);
+                            break;
+                        case '1':
+                            this.rangeForm.weightcargo.push(item)
+                            break;
+                    }
+                })
 
-            getDetailsByOrderSerial(orderSerial).then(res => {
-                console.log(res)
-                if(res.status == 200){
-                    this.complaintForm = res.data ;
-                    this.stepname = this.complaintForm.complainStatus == 'AF04002' ? 'step-three' : 'step-tow' ;
-                }else{
-                    this.stepname = 'step-one';
-                    Promise.all([getDetails('24c0f4218e1d4bf099d185b3c6964441'), getDictionary(this.complainType)]).then(resArr => {
-                        console.log(this.orderForm)
-                        this.orderForm = resArr[0].data;
-                        this.optionsReason = resArr[1].data;
-                        this.UserInfo = getUserInfo();
-                    })
-                }
+                this.rangeForm.lightcargo.sort(function(a,b){  
+                    return a.startVolume - b.startVolume;  
+                })  
+                this.rangeForm.weightcargo.sort(function(a,b){  
+                    return a.startVolume - b.startVolume;  
+                })  
+                
+                console.log('this.rangeForm',this.rangeForm)
             })
+
+            TransportEvaluation(evaluationId).then(res=>{
+                console.log('evaluationId',res)
+            
+                this.transportForm = res.data;
+            })
+
         },
-        submitForm(formName) {
-            this.$refs[formName].validate((valid) => {
-                console.log()
-                if (valid) {
-                    this.$confirm('确认要投诉该物流公司吗？', '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                        type: 'warning'
-                    }).then(()=>{
-                        this.ruleForm.complainTypeName = this.optionsReason.find(item => item.code === this.ruleForm.complainType)['name'];
-                        this.ruleForm.complainName = this.UserInfo.contactsName;
-                        this.ruleForm.complainId = this.UserInfo.id;
-                        this.ruleForm.orderSerial = '24c0f4218e1d4bf099d185b3c6964441';
-                        // console.log(this.ruleForm)
-                        addOrderComplain(this.ruleForm).then(res => {
-                            console.log(res)
-                            this.stepname = 'step-tow';
-                        })
-                        
-                    }).catch(() => {
-                        this.$message({
-                            type: 'info',
-                            message: '已取消'
-                        })
-                    })
-                } else {
-                    console.log('error submit!!');
-                    return false;
-                }
-            });
+        submitForm() {
+            let rata = Object.assign({},{id:this.transportForm.id,replyDes:this.replyDes,replyId:this.UserInfo.id,replyName:this.UserInfo.contactsName});
+            updateRate(rata).then(res => {
+                this.firstblood();
+            })
         },
     },
   
@@ -234,7 +200,7 @@ export default {
 </script>
 
 <style type="text/css" lang="scss">
-    .rate{
+    .rateplant{
         .rateInfomation{
         margin:0 20px;
         .rate_content{
@@ -272,12 +238,16 @@ export default {
                         padding-left: 20px;
                         p{
                             margin:10px 0;
+                            .des{
+                                display: inline-block;
+                                margin-left: 10px;
+                                color: #ed001d;
+                            }
                         }
                         .el-rate{
                             display: inline-block;
                             .el-rate__text{
                                 margin-left: 10px;
-                                color: #ed001d !important;
                             }
                         }
                         p:last-child{
@@ -297,6 +267,7 @@ export default {
                                 line-height: 20px;
                                 color: #333333;
                                 span{
+                                    display: inline-block;
                                     margin-top: 10px;
                                     font-size: 12px;
                                     color: #999999;
@@ -332,6 +303,9 @@ export default {
             }
         }
         .rate_orderInfo{
+            font-size: 14px;
+            color: #333333;
+            line-height: 20px;
             h2{
                 border-bottom: 1px solid #ccc;
                 text-align: left;
@@ -342,14 +316,12 @@ export default {
                 table{
                     border: 1px solid #dcdfe5;
                     width: 100%;
-                    font-size: 14px;
                     border-collapse: collapse;/*边框会合并为一个单一的边框*/
+                    margin-bottom: 10px;
                     th,td{
                         border: 1px solid #dcdfe5;
                         text-align: center;
                         padding: 1em 2em;
-                        color: #333333;
-                        line-height: 20px;
                     }
                     th{
                         background: #f5f5f5;
@@ -358,18 +330,44 @@ export default {
                         p{
                             display: inline-block;
                         }
-                        p:nth-child(2){
-                            margin: 0 40px;
-                        }
                         del,span{
                             color: #ed001d
                         }
                         white-space : nowrap ;
-                    }
-                    .priceTimeOut{
-                        >p:first-child{
-                            margin-bottom: 34px;
+                        .cargo{
+                            margin: 10px 0;
+                            p{
+                                text-align: left;
+                            }
+                            p:first-child{
+                                width: 30%;
+                            }
+                            p:nth-child(2){
+                                width: 35%;
+                            }
+                             p:last-child{
+                                width: 35%;
+                            }
                         }
+                        .cargo:first-child{
+                            margin: 0 0 10px 0;
+                        }
+                        .cargo:last-child{
+                            margin: 10px 0 0  0;
+                        }
+                    }
+                }
+
+                h4{
+                    span{
+                        font-weight: normal;
+                    }
+                    span:first-child{
+                       color: #ed001d;
+                       font-weight: bold;
+                    }
+                    span:nth-child(2){
+                        margin: 0 30px;
                     }
                 }
             }

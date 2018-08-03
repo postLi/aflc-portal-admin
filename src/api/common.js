@@ -102,6 +102,14 @@ export function getLogisticsCompanyInfoByMobile(phone) {
   })
 }
 
+//根据订单流水号获取详细信息
+export function getDetailsByOrderSerial(OrderSerial) {
+    return fetch.axios({
+      url: '/aflcorderservice/order/fclOrder/v1/getDetailsByOrderSerial/' + OrderSerial,
+      method: 'get'
+    })
+  }
+
 
 /**
  * 修改密码
