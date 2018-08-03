@@ -203,7 +203,7 @@ export default {
         },
         //投诉回复
         handlerReply(){
-            let replyForm = Object.assign({},{reply:this.reply},{id:this.complaintForm.id})
+            let replyForm = Object.assign({},{reply:this.reply},{id:this.complaintForm.id},{replyId:this.UserInfo.id,replyName:this.UserInfo.contactsName})
             changeOrderComplain(replyForm).then(res =>{
                 console.log(res)
                 this.firstblood();
