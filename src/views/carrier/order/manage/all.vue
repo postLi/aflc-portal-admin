@@ -17,158 +17,196 @@
           style="width: 100%">
           <el-table-column
             fixed
-            sortable
-            type="selection"
-            width="50">
-          </el-table-column>
-          <el-table-column
-            fixed
-            sortable
+            
             prop="customerId"
             label="序号"
             width="80">
+            <template slot-scope="scope">
+              {{ (searchQuery.currentPage - 1)*searchQuery.pageSize + scope.$index + 1 }}
+            </template>
           </el-table-column>
           <el-table-column
             fixed
-            sortable
-            prop="orderSn"
+            
+            prop="orderSerial"
             label="订单号"
             width="130">
           </el-table-column>
           <el-table-column
-            prop="orderStatus"
-            sortable
+            prop="orderStatusName"
+            
             label="订单状态"
             width="110">
           </el-table-column>
           <el-table-column
-            prop="shipSn"
-            sortable
+            prop="wlName"
+            
             label="物流公司"
             width="130">
           </el-table-column>
           <el-table-column
-            prop="orderEffective"
-            sortable
+            prop="goodsName"
+            
             label="商品名称"
             width="90">
           </el-table-column>
           <el-table-column
-            sortable
-            prop="orderPickupMethod"
+            
+            prop="goodsNum"
             label="货品总数量（件）"
             width="110">
           </el-table-column>
           <el-table-column
             label="预估总重量（公斤）"
-            prop="cargoName"
-            sortable
+            prop="goodsWeight"
+            
             width="90"
             >
           </el-table-column>
           <el-table-column
-            prop="cargoAmount"
+            prop="goodsVolume"
             label="预计总体积（方）"
-            sortable
+            
             width="80"
             >
           </el-table-column>
           <el-table-column
-            sortable
-            prop="idcard"
+            
+            prop="goodsTypeName"
             label="货物类型"
             width="80">
           </el-table-column>
           <el-table-column
-            prop="bankName"
+            prop="totalAmount"
             label="预估总运费（元）"
-            sortable
+            
             width="80"
             >
           </el-table-column>
           <el-table-column
-            prop="bankCardNumber"
+            prop="consignorAddress"
             label="出发地"
-            sortable
+            
             width="80"
             >
           </el-table-column>
           <el-table-column
-            prop="description"
+            prop="consigneeAddress"
             label="到达地"
-            sortable
+            
             width="110"
             >
           </el-table-column>
           <el-table-column
-            prop="orderTotalFee"
+            prop="consignor"
             label="发货人"
-            sortable
+            
             width="80"
             >
           </el-table-column>
           <el-table-column
-            prop="detailedAddress"
+            prop="consignorPhone"
             label="发货人手机"
-            sortable
+            
             width="110"
           >
           </el-table-column>
           <el-table-column
-            prop="orderSenderId"
+            prop="consignee"
             label="收货人"
-            sortable
+            
             width="90"
           >
           </el-table-column>
           <el-table-column
-            prop="senderMobile;"
+            prop="consigneePhone;"
             label="收货人手机"
-            sortable
+            
             width="120"
           >
           </el-table-column>
           <el-table-column
-            prop="orderReceiverId"
+            prop="createTime"
             label="下单时间"
-            sortable
+            
             width="100"
           >
           </el-table-column>
           <el-table-column
-            prop="receiverMobile"
             label="承运时间"
-            sortable
+            
             width="120"
           >
+          <template slot-scope="scope">
+            {{ scope.row.carrierTime | parseTime }}
+          </template>
           </el-table-column>
           <el-table-column
-            prop="refuseReason"
+            prop="pickUpGoodsTime"
             label="提货时间"
-            sortable
+            
             width="110"
           >
           </el-table-column>
           <el-table-column
-            prop="orderRemarks"
+            prop="deliveryTime"
             label="发货时间"
-            sortable
+            
             width="100"
           >
           </el-table-column>
           <el-table-column
-            prop="orderFromCityCode"
+            prop="receiveTime"
             label="收货时间"
-            sortable
+            
             width="110"
           >
           </el-table-column>
           <el-table-column
-            prop="orderToCityCode"
             label="操作"
-            sortable
             width="110"
           >
+          <template slot-scope="scope">
+            <el-button type="primary" :size="btnsize"  plain @click="viewDetail(scope.row)">查看</el-button>
+            <!-- 待承运 -->
+            <div v-if="scope.row.orderStatus === 'AF03702'">
+              <el-button  type="primary" :size="btnsize"  plain @click="confirmCarrier(scope.row)">确定承运</el-button>
+              <el-button type="primary" :size="btnsize"  plain @click="cancelCarrier(scope.row)">取消订单</el-button>
+            </div>
+            
+            <!-- 待提货 -->
+            <div v-if="scope.row.orderStatus === 'AF03703'">
+              
+              <el-button type="primary" :size="btnsize"  plain @click="confirmPickUp(scope.row)">确认提货</el-button>
+            </div>
+            <!-- 待发货 -->
+            <div v-if="scope.row.orderStatus === 'AF03704'">
+              <el-button type="primary" :size="btnsize"  plain @click="confirmDelivery(scope.row)">确认发货</el-button>
+            </div>
+            <!-- 待收货 -->
+            <div v-if="scope.row.orderStatus === 'AF03705'">
+              <el-button type="primary" :size="btnsize"  plain v-if="scope.row.complainWorkSerial" @click="replyComplain(scope.row)">投诉回复</el-button>
+              <el-button type="primary" :size="btnsize"  v-if="!scope.row.complainWorkSerial" plain @click="addComplain(scope.row)">我要投诉</el-button>
+              <el-button type="primary" :size="btnsize"  plain @click="confirmEvaluate(scope.row)">确认收货</el-button>
+
+            </div>
+            <!-- 待评价 -->
+            <div v-if="scope.row.orderStatus === 'AF03706'">
+             <el-button type="primary" :size="btnsize"  plain v-if="scope.row.complainWorkSerial" @click="replyComplain(scope.row)">投诉回复</el-button>
+              <el-button type="primary" :size="btnsize"  v-if="!scope.row.complainWorkSerial" plain @click="addComplain(scope.row)">我要投诉</el-button>
+              <el-button type="primary" v-if="!scope.row.evaluationId" :size="btnsize"  plain @click="addReview(scope.row)">我要评价</el-button>
+              <el-button type="primary" v-if="scope.row.evaluationId" :size="btnsize"  plain @click="viewReview(scope.row)">评价详情</el-button>
+            </div>
+            <!-- 已完成 -->
+            <div v-if="scope.row.orderStatus === 'AF03707'">
+              <el-button type="primary" :size="btnsize"  plain @click="viewComplain(scope.row)">投诉详情</el-button>
+              <el-button type="primary" :size="btnsize"  plain @click="viewReview(scope.row)">评价详情</el-button>
+
+            </div>
+            <!-- 已取消 -->
+            <div v-if="scope.row.orderStatus === 'AF03708'">
+            </div>
+          </template>
           </el-table-column>
         </el-table>
       </div>
@@ -181,7 +219,7 @@ import SearchForm from './components/search'
 import Pager from '@/components/Pagination/index'
 
 import orderManageApi from '@/api/operation/orderManage'
-import * as ReqApi from '@/api/carrier/create'
+import * as ReqApi from '@/api/carrier/manage'
 import { parseTime } from '@/utils/index'
 
 export default {
@@ -193,7 +231,6 @@ export default {
 
   },
   mounted() {
-    this.searchQuery.vo.userToken = this.otherinfo.userToken
     /* this.searchQuery.vo.orgid = this.otherinfo.orgid
     this.fetchAllOrder(this.otherinfo.orgid).then(res => {
       this.loading = false
@@ -231,24 +268,155 @@ export default {
     }
   },
   methods: {
-    viewDetails(row) {
-      this.$router.push({
-        path: '/operation/order/createOrder',
-        query: {
-          orderid: row.id,
-          type: 'view',
-          tab: '查看' + row.shipSn
-        }
+    viewDetail(row){
+      // 查看详情
+    },
+    confirmCarrier(row){
+      this.$confirm('确定要承运吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        ReqApi.putConfirmCarrier(row.orderSerial).then(res => {
+            this.$message({
+                type: 'success',
+                message: '操作成功!'
+              })
+            this.fetchData()
+          }).catch(err => {
+            this.$message({
+                type: 'info',
+                message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
+              })
+          })
+      }).catch(() => {
+        this.$message({
+            type: 'info',
+            message: '已取消'
+          })
       })
     },
-    showDetail(order) {
-      this.eventBus.$emit('showOrderDetail', order.id)
+    cancelCarrier(row){
+      this.$confirm('确定要取消承运吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        ReqApi.putCancelCarrrier(row.orderSerial).then(res => {
+            this.$message({
+                type: 'success',
+                message: '操作成功!'
+              })
+            this.fetchData()
+          }).catch(err => {
+            this.$message({
+                type: 'info',
+                message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
+              })
+          })
+      }).catch(() => {
+        this.$message({
+            type: 'info',
+            message: '已取消'
+          })
+      })
     },
+    confirmPickUp(row){
+      this.$confirm('确定要提货吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        ReqApi.putConfirmPickUp(row.orderSerial).then(res => {
+            this.$message({
+                type: 'success',
+                message: '操作成功!'
+              })
+            this.fetchData()
+          }).catch(err => {
+            this.$message({
+                type: 'info',
+                message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
+              })
+          })
+      }).catch(() => {
+        this.$message({
+            type: 'info',
+            message: '已取消'
+          })
+      })
+    },
+    confirmDelivery(row){
+      this.$confirm('确定要发货吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        ReqApi.putConfirmDelivery(row.orderSerial).then(res => {
+            this.$message({
+                type: 'success',
+                message: '操作成功!'
+              })
+            this.fetchData()
+          }).catch(err => {
+            this.$message({
+                type: 'info',
+                message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
+              })
+          })
+      }).catch(() => {
+        this.$message({
+            type: 'info',
+            message: '已取消'
+          })
+      })
+    },
+    confirmEvaluate(row){
+      this.$confirm('确定收货吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        ReqApi.putConfirmEvaluate(row.orderSerial).then(res => {
+            this.$message({
+                type: 'success',
+                message: '操作成功!'
+              })
+            this.fetchData()
+          }).catch(err => {
+            this.$message({
+                type: 'info',
+                message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
+              })
+          })
+      }).catch(() => {
+        this.$message({
+            type: 'info',
+            message: '已取消'
+          })
+      })
+    },
+    addComplain(row){
+      // 添加投诉
+    },
+    addReview(row){
+      // 添加评价
+    },
+    viewReview(row){
+      // 查看评价
+    },
+    viewComplain(row){
+      // 查看投诉
+    },
+    replyComplain(row){
+      //回复投诉
+    },
+
     fetchAllOrder() {
       this.loading = true
-      return ReqApi.getOrderList(this.searchQuery).then(data => {
+      return ReqApi.getOrderList(this.otherinfo.userToken,this.searchQuery).then(data => {
         this.usersArr = data.list
-        this.total = data.total
+        this.total = data.totalCount
         this.loading = false
       })
     },
@@ -266,151 +434,7 @@ export default {
       this.fetchData()
     },
     doAction(type) {
-      // 判断是否有选中项
-      if (!this.selected.length && type !== 'add') {
-        this.$message({
-          message: '请选择要操作的项~',
-          type: 'warning'
-        })
-        return false
-      }
-
-      console.log('this.selected:', this.selected)
-
-      switch (type) {
-          // 添加订单
-        case 'add':
-          this.isModify = false
-          this.selectInfo = {}
-          this.$router.push({ path: '/operation/order/createOrder/' })
-          break
-          // 修改订单信息
-        case 'modify':
-          this.isModify = true
-          if (this.selected.length > 1) {
-            this.$message({
-              message: '每次只能修改单条数据~',
-              type: 'warning'
-            })
-          }
-          this.selectInfo = this.selected[0]
-          this.$router.push({
-            path: '/operation/order/createOrder',
-            query: {
-              orderid: this.selectInfo.id,
-              type: 'modify',
-                  // tab: '修改' + this.selectInfo.shipSn
-              tab: '改单'
-            }
-          })
-          break
-          // 删除订单
-        case 'delete':
-          if (this.selected.length > 1) {
-            this.$message({
-              message: '每次只能操作单条数据~',
-              type: 'warning'
-            })
-          }
-          var deleteItem = this.selected.filter(el => el.shipStatus === 59)
-          console.log('delete:', deleteItem)
-          if (deleteItem.length === 0) {
-            this.$message({
-              message: '只有已入库状态才能删除~',
-              type: 'info'
-            })
-          } else {
-            var id = deleteItem[0].id
-            this.$confirm('确定要删除 ' + deleteItem[0].shipSn + '订运单吗？', '提示', {
-              confirmButtonText: '删除',
-              cancelButtonText: '取消',
-              type: 'warning'
-            }).then(() => {
-              orderManageApi.deleteOrderInfoById(id).then(res => {
-                this.$message({
-                  type: 'success',
-                  message: '删除成功!'
-                })
-                this.fetchData()
-              }).catch(err => {
-                this.$message({
-                  type: 'info',
-                  message: '删除失败，原因：' + err.errorInfo ? err.errorInfo : err
-                })
-              })
-            }).catch(() => {
-              this.$message({
-                type: 'info',
-                message: '已取消删除'
-              })
-            })
-          }
-          break
-          // 作废订单
-        case 'cancel':
-          if (this.selected.length > 1) {
-            this.$message({
-              message: '每次只能操作单条数据~',
-              type: 'warning'
-            })
-          }
-              // shipStatus 59 已入库
-          var cancelItem = this.selected.filter(el => el.shipStatus === 59)
-          if (cancelItem.length === 0) {
-            this.$message({
-              message: '只有已入库状态才能作废~',
-              type: 'info'
-            })
-          } else {
-            var theid = cancelItem[0].id
-
-            this.$confirm('确定要作废 ' + cancelItem[0].shipSn + '订运单吗？', '提示', {
-              confirmButtonText: '作废',
-              cancelButtonText: '取消',
-              type: 'warning'
-            }).then(() => {
-              orderManageApi.deleteCancleOrderById(theid).then(res => {
-                this.$message({
-                  type: 'success',
-                  message: '作废成功!'
-                })
-                this.fetchData()
-              }).catch(err => {
-                this.$message({
-                  type: 'info',
-                  message: '作废失败，原因：' + err.errorInfo ? err.errorInfo : err
-                })
-              })
-            }).catch(() => {
-              this.$message({
-                type: 'info',
-                message: '已取消作废'
-              })
-            })
-          }
-
-          break
-          // 导出数据
-        case 'export':
-          var ids2 = this.selected.map(el => {
-            return el.customerId
-          })
-          orderManageApi.getExportExcel(ids2.join(',')).then(res => {
-            this.$message({
-              type: 'success',
-              message: '即将自动下载!'
-            })
-          })
-          break
-      }
-      // 清除选中状态，避免影响下个操作
-      this.$refs.multipleTable.clearSelection()
-    },
-    setTable() {
-      this.setupTableVisible = true
-    },
-    closeSetupTable() {
-      this.setupTableVisible = false
+      this.$router.push({ path: '/carrier/order/create' })
     },
     clickDetails(row, event, column) {
       this.$refs.multipleTable.toggleRowSelection(row)

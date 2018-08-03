@@ -177,7 +177,7 @@
           </el-table>
         </div>
         <div class="prePrice">
-          预估运费总金额：{{ruleForm.forecastPrice}}元
+          预估运费总金额：{{theTotalPrice}}元
         </div>
       </div>
       <!-- 货源类型 -->
@@ -423,6 +423,9 @@ export default {
     }
   },
   computed:{
+    theTotalPrice(){
+      return this.ruleForm.forecastPrice === '' ? '面议' : this.ruleForm.forecastPrice
+    },
     noCanSubmit(){
       // 判断是否能提交
       return false
@@ -594,12 +597,15 @@ export default {
             volume// 货物体积
           }).then(res => {
             let data = res.data
-            if(data){
-              this.ruleForm.wlId = data.transportRangeId
+            this.ruleForm.wlId = data.transportRangeId
+            if(!data){
               this.ruleForm.forecastPrice = data.forecastPrice
               this.ruleForm.goodsType = data.goodsType
               this.ruleForm.totalAmount = data.forecastPrice
-              
+            } else {
+              this.ruleForm.forecastPrice = ''
+              this.ruleForm.goodsType = ''
+              this.ruleForm.totalAmount = ''
             }
           }).catch(err => {
             this.$message.error('获取价格失败： ' + JSON.stringify(err))

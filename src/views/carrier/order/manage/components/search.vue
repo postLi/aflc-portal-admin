@@ -1,5 +1,5 @@
 <template>
-  <el-form :inline="true" :size="btnsize" label-position="right" :rules="rules" :model="searchForm"  class="staff_searchinfo clearfix">
+  <el-form label-width="140px" :inline="true" :size="btnsize" label-position="right" :rules="rules" :model="searchForm"  class="staff_searchinfo clearfix">
       <el-form-item label="订单号/商品名称：">
           <el-input v-model="searchForm.orderSerialOrGoodsName" maxlength="20" auto-complete="off"></el-input>
       </el-form-item>

@@ -19,7 +19,7 @@ import shouhuo from './shouhuo'
 import pingjia from './pingjia'
 import wancheng from './wancheng'
 import quxiao from './quxiao'
-import * as ReqApi from '@/api/carrier/create'
+import * as ReqApi from '@/api/carrier/manage'
 
 export default {
   components: {
@@ -136,6 +136,11 @@ export default {
       background: #eee;
       border-bottom-color: #eee;
     }
+  }
+}
+.manage-orderinfo{
+  .el-table{
+    font-size: 12px;
   }
 }
 </style>
