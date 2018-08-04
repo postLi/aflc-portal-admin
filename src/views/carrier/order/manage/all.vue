@@ -170,14 +170,14 @@
             <el-button type="primary" :size="btnsize"  plain @click="viewDetail(scope.row)">查看</el-button>
             <!-- 待承运 -->
             <div v-if="scope.row.orderStatus === 'AF03702'">
-              <el-button  type="primary" :size="btnsize"  plain @click="confirmCarrier(scope.row)">确定承运</el-button>
+              <el-button  type="primary" v-if="isCarrier" :size="btnsize"  plain @click="confirmCarrier(scope.row)">确定承运</el-button>
               <el-button type="primary" :size="btnsize"  plain @click="cancelCarrier(scope.row)">取消订单</el-button>
             </div>
             
             <!-- 待提货 -->
             <div v-if="scope.row.orderStatus === 'AF03703'">
               
-              <el-button type="primary" :size="btnsize"  plain @click="confirmPickUp(scope.row)">确认提货</el-button>
+              <el-button type="primary" v-if="isCarrier" :size="btnsize"  plain @click="confirmPickUp(scope.row)">确认提货</el-button>
             </div>
             <!-- 待发货 -->
             <div v-if="scope.row.orderStatus === 'AF03704'">
@@ -191,6 +191,7 @@
 
             </div>
             <!-- 待评价 -->
+            <el-button type="primary" :size="btnsize"  v-if="!scope.row.complainWorkSerial" plain @click="addComplain(scope.row)">我要投诉</el-button>
             <div v-if="scope.row.orderStatus === 'AF03706'">
              <el-button type="primary" :size="btnsize"  plain v-if="scope.row.complainWorkSerial" @click="replyComplain(scope.row)">投诉回复</el-button>
               <el-button type="primary" :size="btnsize"  v-if="!scope.row.complainWorkSerial" plain @click="addComplain(scope.row)">我要投诉</el-button>
@@ -223,6 +224,12 @@ import * as ReqApi from '@/api/carrier/manage'
 import { parseTime } from '@/utils/index'
 
 export default {
+  props: {
+    isCarrier: {
+      type: Boolean,
+      default: false
+    }
+  },
   components: {
     SearchForm,
     Pager
@@ -262,159 +269,162 @@ export default {
           consignorPhone: '', // 发货人手机
           userToken: '',
           queryType: '1',
+          releaseOrCarrier: '1', // 订单查询标志（1：我创建的订单；2：我承运的订单）
           wlName: ''
         }
       }
     }
   },
   methods: {
-    viewDetail(row){
+    viewDetail(row) {
       // 查看详情
     },
-    confirmCarrier(row){
+    confirmCarrier(row) {
       this.$confirm('确定要承运吗？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
         ReqApi.putConfirmCarrier(row.orderSerial).then(res => {
+          this.$message({
+              type: 'success',
+              message: '操作成功!'
+            })
+          this.fetchData()
+        }).catch(err => {
             this.$message({
-                type: 'success',
-                message: '操作成功!'
-              })
-            this.fetchData()
-          }).catch(err => {
-            this.$message({
-                type: 'info',
-                message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
-              })
+              type: 'info',
+              message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
+            })
           })
       }).catch(() => {
         this.$message({
-            type: 'info',
-            message: '已取消'
-          })
+          type: 'info',
+          message: '已取消'
+        })
       })
     },
-    cancelCarrier(row){
+    cancelCarrier(row) {
       this.$confirm('确定要取消承运吗？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
         ReqApi.putCancelCarrrier(row.orderSerial).then(res => {
+          this.$message({
+              type: 'success',
+              message: '操作成功!'
+            })
+          this.fetchData()
+        }).catch(err => {
             this.$message({
-                type: 'success',
-                message: '操作成功!'
-              })
-            this.fetchData()
-          }).catch(err => {
-            this.$message({
-                type: 'info',
-                message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
-              })
+              type: 'info',
+              message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
+            })
           })
       }).catch(() => {
         this.$message({
-            type: 'info',
-            message: '已取消'
-          })
+          type: 'info',
+          message: '已取消'
+        })
       })
     },
-    confirmPickUp(row){
+    confirmPickUp(row) {
       this.$confirm('确定要提货吗？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
         ReqApi.putConfirmPickUp(row.orderSerial).then(res => {
+          this.$message({
+              type: 'success',
+              message: '操作成功!'
+            })
+          this.fetchData()
+        }).catch(err => {
             this.$message({
-                type: 'success',
-                message: '操作成功!'
-              })
-            this.fetchData()
-          }).catch(err => {
-            this.$message({
-                type: 'info',
-                message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
-              })
+              type: 'info',
+              message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
+            })
           })
       }).catch(() => {
         this.$message({
-            type: 'info',
-            message: '已取消'
-          })
+          type: 'info',
+          message: '已取消'
+        })
       })
     },
-    confirmDelivery(row){
+    confirmDelivery(row) {
       this.$confirm('确定要发货吗？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
         ReqApi.putConfirmDelivery(row.orderSerial).then(res => {
+          this.$message({
+              type: 'success',
+              message: '操作成功!'
+            })
+          this.fetchData()
+        }).catch(err => {
             this.$message({
-                type: 'success',
-                message: '操作成功!'
-              })
-            this.fetchData()
-          }).catch(err => {
-            this.$message({
-                type: 'info',
-                message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
-              })
+              type: 'info',
+              message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
+            })
           })
       }).catch(() => {
         this.$message({
-            type: 'info',
-            message: '已取消'
-          })
+          type: 'info',
+          message: '已取消'
+        })
       })
     },
-    confirmEvaluate(row){
+    confirmEvaluate(row) {
       this.$confirm('确定收货吗？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
         ReqApi.putConfirmEvaluate(row.orderSerial).then(res => {
+          this.$message({
+              type: 'success',
+              message: '操作成功!'
+            })
+          this.fetchData()
+        }).catch(err => {
             this.$message({
-                type: 'success',
-                message: '操作成功!'
-              })
-            this.fetchData()
-          }).catch(err => {
-            this.$message({
-                type: 'info',
-                message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
-              })
+              type: 'info',
+              message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
+            })
           })
       }).catch(() => {
         this.$message({
-            type: 'info',
-            message: '已取消'
-          })
+          type: 'info',
+          message: '已取消'
+        })
       })
     },
-    addComplain(row){
+    addComplain(row) {
       // 添加投诉
+      // /complaintsInfo/index?orderSerial=24c0f4218e1d4bf099d185b3c6964441
+      this.$router.push('/complaintsInfo/index?orderSerial=' + row.orderSerial)
     },
-    addReview(row){
+    addReview(row) {
       // 添加评价
     },
-    viewReview(row){
+    viewReview(row) {
       // 查看评价
     },
-    viewComplain(row){
+    viewComplain(row) {
       // 查看投诉
     },
-    replyComplain(row){
-      //回复投诉
+    replyComplain(row) {
+      // 回复投诉
     },
 
     fetchAllOrder() {
       this.loading = true
-      return ReqApi.getOrderList(this.otherinfo.userToken,this.searchQuery).then(data => {
+      return ReqApi.getOrderList(this.otherinfo.userToken, this.searchQuery).then(data => {
         this.usersArr = data.list
         this.total = data.totalCount
         this.loading = false
