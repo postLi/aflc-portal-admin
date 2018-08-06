@@ -53,8 +53,8 @@ export function getOrderList(user_token, data) {
 /**
  * 获取订单各个状态下的数量
  */
-export function getOrderListCount(user_token) {
-  return fetch.post('/aflcorderservice/order/fclOrder/v1/getOrderStatusGroupCountList?user_token=' + user_token).then(res => {
+export function getOrderListCount(user_token, data = {}) {
+  return fetch.post('/aflcorderservice/order/fclOrder/v1/getOrderStatusGroupCountList?user_token=' + user_token, data).then(res => {
     return res.data ? res.data[0] : {}
   })
 }
@@ -64,6 +64,13 @@ export function getOrderListCount(user_token) {
  */
 export function putCancelCarrrier(id) {
   return fetch.put('/aflcorderservice/order/fclOrder/v1/cancelCarrier/' + id)
+}
+/**
+ * 取消订单
+ * @param {*} id 运单id
+ */
+export function putCancelOrder(id) {
+  return fetch.put('/aflcorderservice/order/fclOrder/v1/cancelOrder/' + id)
 }
 /**
  * 确认承运

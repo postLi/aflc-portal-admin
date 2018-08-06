@@ -1,6 +1,6 @@
 <template>
   <div class="tab-content" v-loading="loading">
-    <SearchForm :isall="true"  @change="getSearchParam" :btnsize="btnsize" />  
+    <SearchForm :isall="isall"  @change="getSearchParam" :btnsize="btnsize" />  
     <div class="tab_info">
       <div class="btns_box">
           <el-button type="primary" :size="btnsize" icon="el-icon-circle-plus" plain @click="doAction('add')">创建订单</el-button>
@@ -119,7 +119,7 @@
           >
           </el-table-column>
           <el-table-column
-            prop="consigneePhone;"
+            prop="consigneePhone"
             label="收货人手机"
             
             width="120"
@@ -133,6 +133,7 @@
           >
           </el-table-column>
           <el-table-column
+            v-if="this.listtype!=='AF03702'"
             label="承运时间"
             
             width="120"
@@ -142,25 +143,31 @@
           </template>
           </el-table-column>
           <el-table-column
-            prop="pickUpGoodsTime"
             label="提货时间"
             
             width="110"
           >
+          <template slot-scope="scope">
+            {{ scope.row.pickUpGoodsTime | parseTime }}
+          </template>
           </el-table-column>
           <el-table-column
-            prop="deliveryTime"
             label="发货时间"
             
             width="100"
           >
+          <template slot-scope="scope">
+            {{ scope.row.deliveryTime | parseTime }}
+          </template>
           </el-table-column>
           <el-table-column
-            prop="receiveTime"
             label="收货时间"
             
             width="110"
           >
+          <template slot-scope="scope">
+            {{ scope.row.receiveTime | parseTime }}
+          </template>
           </el-table-column>
           <el-table-column
             label="操作"
@@ -171,7 +178,7 @@
             <!-- 待承运 -->
             <div v-if="scope.row.orderStatus === 'AF03702'">
               <el-button  type="primary" v-if="isCarrier" :size="btnsize"  plain @click="confirmCarrier(scope.row)">确定承运</el-button>
-              <el-button type="primary" :size="btnsize"  plain @click="cancelCarrier(scope.row)">取消订单</el-button>
+              <el-button type="primary" :size="btnsize"  plain @click="cancelOrder(scope.row)">取消订单</el-button>
             </div>
             
             <!-- 待提货 -->
@@ -219,7 +226,6 @@
 import SearchForm from './components/search'
 import Pager from '@/components/Pagination/index'
 
-import orderManageApi from '@/api/operation/orderManage'
 import * as ReqApi from '@/api/carrier/manage'
 import { parseTime } from '@/utils/index'
 
@@ -228,6 +234,10 @@ export default {
     isCarrier: {
       type: Boolean,
       default: false
+    },
+    listtype: {
+      type: String,
+      default: 'all'
     }
   },
   components: {
@@ -242,9 +252,39 @@ export default {
     this.fetchAllOrder(this.otherinfo.orgid).then(res => {
       this.loading = false
     }) */
+    const isOwner = this.$route.path.indexOf('owner') !== -1
+    this.searchQuery.vo.releaseOrCarrier = isOwner ? '1' : '2'
+    switch (this.listtype) {
+      case 'all':
+        this.isall = true
+        this.searchQuery.vo.orderStatus = ''
+        break
+      case 'chengyun':
+        this.searchQuery.vo.orderStatus = 'AF03702'
+        break
+      case 'tihuo':
+        this.searchQuery.vo.orderStatus = 'AF03703'
+        break
+      case 'fahuo':
+        this.searchQuery.vo.orderStatus = 'AF03704'
+        break
+      case 'shouhuo':
+        this.searchQuery.vo.orderStatus = 'AF03705'
+        break
+      case 'pingjia':
+        this.searchQuery.vo.orderStatus = 'AF03706'
+        break
+      case 'wancheng':
+        this.searchQuery.vo.orderStatus = 'AF03707'
+        break
+      case 'quxiao':
+        this.searchQuery.vo.orderStatus = 'AF03708'
+        break
+    }
   },
   data() {
     return {
+      isall: false,
       btnsize: 'mini',
       usersArr: [],
       total: 0,
@@ -268,7 +308,7 @@ export default {
           consignor: '', // 发货人
           consignorPhone: '', // 发货人手机
           userToken: '',
-          queryType: '1',
+          queryType: '1', // 1 为订单 2为货源
           releaseOrCarrier: '1', // 订单查询标志（1：我创建的订单；2：我承运的订单）
           wlName: ''
         }
@@ -287,16 +327,41 @@ export default {
       }).then(() => {
         ReqApi.putConfirmCarrier(row.orderSerial).then(res => {
           this.$message({
-              type: 'success',
-              message: '操作成功!'
-            })
+            type: 'success',
+            message: '操作成功!'
+          })
           this.fetchData()
         }).catch(err => {
-            this.$message({
-              type: 'info',
-              message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
-            })
+          this.$message({
+            type: 'info',
+            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
           })
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
+      })
+    },
+    cancelOrder(row) {
+      this.$confirm('确定要取消订单吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        ReqApi.putCancelOrder(row.orderSerial).then(res => {
+          this.$message({
+            type: 'success',
+            message: '操作成功!'
+          })
+          this.fetchData()
+        }).catch(err => {
+          this.$message({
+            type: 'info',
+            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
+          })
+        })
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -312,16 +377,16 @@ export default {
       }).then(() => {
         ReqApi.putCancelCarrrier(row.orderSerial).then(res => {
           this.$message({
-              type: 'success',
-              message: '操作成功!'
-            })
+            type: 'success',
+            message: '操作成功!'
+          })
           this.fetchData()
         }).catch(err => {
-            this.$message({
-              type: 'info',
-              message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
-            })
+          this.$message({
+            type: 'info',
+            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
           })
+        })
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -337,16 +402,16 @@ export default {
       }).then(() => {
         ReqApi.putConfirmPickUp(row.orderSerial).then(res => {
           this.$message({
-              type: 'success',
-              message: '操作成功!'
-            })
+            type: 'success',
+            message: '操作成功!'
+          })
           this.fetchData()
         }).catch(err => {
-            this.$message({
-              type: 'info',
-              message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
-            })
+          this.$message({
+            type: 'info',
+            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
           })
+        })
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -362,16 +427,16 @@ export default {
       }).then(() => {
         ReqApi.putConfirmDelivery(row.orderSerial).then(res => {
           this.$message({
-              type: 'success',
-              message: '操作成功!'
-            })
+            type: 'success',
+            message: '操作成功!'
+          })
           this.fetchData()
         }).catch(err => {
-            this.$message({
-              type: 'info',
-              message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
-            })
+          this.$message({
+            type: 'info',
+            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
           })
+        })
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -387,16 +452,16 @@ export default {
       }).then(() => {
         ReqApi.putConfirmEvaluate(row.orderSerial).then(res => {
           this.$message({
-              type: 'success',
-              message: '操作成功!'
-            })
+            type: 'success',
+            message: '操作成功!'
+          })
           this.fetchData()
         }).catch(err => {
-            this.$message({
-              type: 'info',
-              message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
-            })
+          this.$message({
+            type: 'info',
+            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
           })
+        })
       }).catch(() => {
         this.$message({
           type: 'info',
