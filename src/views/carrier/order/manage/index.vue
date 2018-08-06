@@ -5,7 +5,7 @@
     </div>
     <div class="list-tab-content">
       <keep-alive>
-        <component v-bind:is="component"></component>
+        <component :isCarrier="isCarrier" v-bind:is="component"></component>
       </keep-alive>
     </div>
   </div>
@@ -33,7 +33,10 @@ export default {
     quxiao
   },
   created(){
-    ReqApi.getOrderListCount().then(data =>{
+    if(this.$route.path.indexOf('carrier/order/manage') !== -1){
+      this.isCarrier = true
+    }
+    ReqApi.getOrderListCount(this.otherinfo.userToken).then(data =>{
       this.tabs.forEach(el => {
         if(data[el.type]){
           el.num = data[el.type]
@@ -85,7 +88,8 @@ export default {
         type: "AF03708",
         num: 0
       }],
-      component: 'all'
+      component: 'all',
+      isCarrier: false
     }
   }
 }

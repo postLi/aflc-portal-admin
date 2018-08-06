@@ -598,7 +598,7 @@ export default {
           }).then(res => {
             let data = res.data
             this.ruleForm.wlId = data.transportRangeId
-            if(!data){
+            if(data){
               this.ruleForm.forecastPrice = data.forecastPrice
               this.ruleForm.goodsType = data.goodsType
               this.ruleForm.totalAmount = data.forecastPrice

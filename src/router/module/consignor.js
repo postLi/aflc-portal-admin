@@ -30,26 +30,26 @@ export default {
     },
     // 订单管理
     {
-      path: '/consignor/order', icon: 'QQ', name: '订单管理', component: _import('consignor/order/index'), redirect: '/consignor/order/manage', meta: { role: ['admin'], title: '订单管理', istab: true, noCache: false },
+      path: '/consignor/order', icon: 'QQ', name: '订单管理', component: _import('carrier/order/index'), redirect: '/consignor/order/manage', meta: { role: ['admin'], title: '订单管理', istab: true, noCache: false },
       children: [
         {
-          path: '/consignor/order/create', icon: 'QQ', name: '创建订单', component: _import('consignor/order/create/index'), meta: { role: ['admin'], title: '创建订单', noCache: false }
+          path: '/carrier/order/manage', icon: 'QQ', name: '订单跟踪', component: _import('carrier/order/manage/index'), meta: { role: ['admin'], title: '订单跟踪', noCache: false }
         },
         {
-          path: '/consignor/order/track', icon: 'QQ', name: '运单跟踪', component: _import('consignor/order/track/index'), meta: { role: ['admin'], title: '运单跟踪', noCache: false }
+          path: '/consignor/order/create', icon: 'QQ', name: '创建订单', component: _import('carrier/order/create/index'), meta: { role: ['admin'], title: '创建订单', noCache: false }
         },
         {
-          path: '/consignor/order/rate', icon: 'QQ', name: '评价管理', component: _import('consignor/order/rate/index'), meta: { role: ['admin'], title: '评价管理', noCache: false }
+          path: '/consignor/order/rate', icon: 'QQ', name: '评价管理', component: _import('carrier/order/rate/index'), meta: { role: ['admin'], title: '评价管理', noCache: false }
         },
         {
-            path: '/consignor/order/rateInfo', icon: 'QQ', name: '评价详情', component: _import('consignor/order/rateInfo/index'), meta: { role: ['admin'], title: '评价详情', noCache: false }
-          },
-        {
-          path: '/consignor/order/complaints', icon: 'QQ', name: '投诉管理', component: _import('consignor/order/complaints/index'), meta: { role: ['admin'], title: '投诉管理', noCache: false }
+          path: '/consignor/order/rateInfo', icon: 'QQ', name: '评价详情', component: _import('carrier/order/rateInfo/index'), meta: { role: ['admin'], title: '评价详情', noCache: false }
         },
         {
-            
-            path: '/complaintsInfo/index', icon: 'QQ',name: '投诉详情', component: _import('complaintsInfo/index'),meta: { role: ['admin'], title: '投诉详情',istab: true, noCache: false },
+          path: '/consignor/order/complaints', icon: 'QQ', name: '投诉管理', component: _import('carrier/order/complaints/index'), meta: { role: ['admin'], title: '投诉管理', noCache: false }
+        },
+        {
+
+          path: '/complaintsInfo/index', icon: 'QQ', name: '投诉详情', component: _import('complaintsInfo/index'), meta: { role: ['admin'], title: '投诉详情', istab: true, noCache: false }
         }
       ]
     },
@@ -58,16 +58,16 @@ export default {
       path: '/consignor/cargoInfo', icon: 'QQ', name: '货源信息管理', component: _import('consignor/cargoInfo/index'), redirect: '/consignor/cargoInfo/manage', meta: { role: ['admin'], title: '货源信息管理', istab: true, noCache: false },
       children: [
         {
-          path: '/consignor/cargoInfo/create', icon: 'QQ', name: '发布货源', component: _import('consignor/cargoInfo/create/index'), meta: { role: ['admin'], title: '发布货源', noCache: false }
+          path: '/consignor/cargoInfo/create', icon: 'QQ', name: '发布货源', component: _import('carrier/order/create/index'), meta: { role: ['admin'], title: '发布货源', noCache: false }
         },
         {
-          path: '/consignor/cargoInfo/manage', icon: 'QQ', name: '管理货源', component: _import('consignor/cargoInfo/manage/index'), meta: { role: ['admin'], title: '管理货源', noCache: false }
+          path: '/consignor/cargoInfo/manage', icon: 'QQ', name: '管理货源', component: _import('carrier/cargoInfo/manage/index'), meta: { role: ['admin'], title: '管理货源', noCache: false }
         }
       ]
     },
     // 我的收藏
     {
-      path: '/consignor/collection', icon: 'QQ', name: '我的收藏', component: _import('consignor/collection/index'), redirect: '/consignor/collection/logistics', meta: { role: ['admin'], title: '我的收藏', istab: true, noCache: false },
+      path: '/consignor/collection', icon: 'QQ', hidden: true, name: '我的收藏', component: _import('consignor/collection/index'), redirect: '/consignor/collection/logistics', meta: { role: ['admin'], title: '我的收藏', istab: true, noCache: false },
       children: [
         {
           path: '/consignor/collection/logistics', icon: 'QQ', name: '物流公司收藏', component: _import('consignor/collection/logistics/index'), meta: { role: ['admin'], title: '物流公司收藏', noCache: false }
