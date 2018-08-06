@@ -370,9 +370,7 @@ export default {
     }
   },
   methods: {
-    viewDetail(row) {
-      // 查看详情
-    },
+
     confirmCarrier(row) {
       this.$confirm('确定要承运吗？', '提示', {
         confirmButtonText: '确定',
@@ -523,6 +521,10 @@ export default {
         })
       })
     },
+    viewDetail(row) {
+      // 查看详情
+      this.$router.push('/order/detail?id=' + row.id + '&type=' + this.isOwner)
+    },
     addComplain(row) {
       // 添加投诉
       // /complaintsInfo/index?orderSerial=24c0f4218e1d4bf099d185b3c6964441
@@ -539,9 +541,11 @@ export default {
     },
     viewComplain(row) {
       // 查看投诉
+      this.$router.push('/complaintsInfo/index?orderSerial=' + row.orderSerial)
     },
     replyComplain(row) {
       // 回复投诉
+      this.$router.push('/complaintsInfo/index?orderSerial=' + row.orderSerial)
     },
     // 再次下单
     oneMoreTime() {

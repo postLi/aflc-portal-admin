@@ -100,3 +100,10 @@ export function putConfirmEvaluate(id) {
 export function putConfirmPickUp(id) {
   return fetch.put('/aflcorderservice/order/fclOrder/v1/confirmPickUpGoods/' + id)
 }
+
+export function getOrderInfo(id) {
+  return fetch.get('/aflcorderservice/order/aflcOrder/v1/' + id).then(res =>
+  {
+    return res.data || {}
+  })
+}
