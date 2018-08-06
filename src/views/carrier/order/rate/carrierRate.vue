@@ -172,7 +172,7 @@ export default {
             logisticsForm: {
                 orderSerial:'',//订单流水号
                 endTime:'',
-                startTimne:''
+                startTime:''
             },
             time:[],
             tableData: [],
@@ -240,14 +240,17 @@ export default {
             })
         },
         clearSearch(){
+            this.logisticsForm.startTime = '';
+            this.logisticsForm.endTime = '';
+            this.time = [];
             this.$refs.ruleForm.resetFields();
             this.firstblood();
         },
         //搜索
         handleSearch(){
             if(this.time.length != 0){
-                this.logisticsForm.startTimne = this.time[0];
-                this.logisticsForm.endTimne = this.time[1];
+                this.logisticsForm.startTime = this.time[0];
+                this.logisticsForm.endTime = this.time[1];
             }
             this.firstblood();
             // console.log(this.time)

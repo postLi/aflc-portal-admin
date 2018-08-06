@@ -1,6 +1,6 @@
 import fetch from '@/utils/fetch'
 
-const baseUrl = 'aflcusercenterservice' ;
+const baseUrl = 'aflcusercenterservice-lyc' ;
 
 
 //零担-承运商会员中心-评价管理-评价列表
