@@ -45,7 +45,8 @@ export default {
     }
     const isOwner = this.$route.path.indexOf('owner') !== -1
     ReqApi.getOrderListCount(this.otherinfo.userToken, {
-      releaseOrCarrier: isOwner ? '1' : '2'
+      releaseOrCarrier: isOwner ? '1' : '2',
+      queryType: '1'
     }).then(data => {
       this.tabs.forEach(el => {
         if (data[el.type]) {

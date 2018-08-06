@@ -43,60 +43,59 @@
 </template>
 <script>
 import '@/styles/identification.scss'
-import { getDictionary,getDetailsByOrderSerial} from '@/api/common.js'
-import { carrierSerial,consignorSerial,updateRate } from '@/api/carrier/rate.js'
+import { getDictionary, getDetailsByOrderSerial } from '@/api/common.js'
+import { carrierSerial, consignorSerial, updateRate } from '@/api/carrier/rate.js'
 import { parseTime } from '@/utils/index.js'
 
 export default {
-  components:{
-    },
-    data() {
-        return {
-            textsArr:['1分  非常不满','2分  不满意','3分  一般','4分  满意','5分  非常满意'],
-            retalength:200,//回复字数
-            replyDes:'',
-            UserInfo:{},
-            //货主对我的评价
-            carrierSerial:{
+  components: {
+  },
+  data() {
+    return {
+      textsArr: ['1分  非常不满', '2分  不满意', '3分  一般', '4分  满意', '5分  非常满意'],
+      retalength: 200, // 回复字数
+      replyDes: '',
+      UserInfo: {},
+            // 货主对我的评价
+      carrierSerial: {
 
-            },
-            //我对货主的评价
-            consignorSerial:{
+      },
+            // 我对货主的评价
+      consignorSerial: {
 
-            },
-            orderForm:{},
-            optionsReason:[],
-        };
-    },  
-    mounted(){
-        this.firstblood();
-    },  
-    methods: {
-        getValue(val){
-            console.log(val)
-        },
-        textsArray(){
-             
-        },
-        firstblood(){
-            let orderSerial = this.$route.query.orderSerial;
-            this.UserInfo = getUserInfo();
-            Promise.all([carrierSerial(orderSerial),consignorSerial(orderSerial),getDetailsByOrderSerial('AFTC201807271126115176970')]).then(resArr=> {
-                console.log('resArr',resArr)
-                this.carrierSerial = resArr[0].data || {};
-                this.consignorSerial = resArr[1].data || {};
-                this.orderForm = resArr[2].data || {};
-                this.orderForm.placeOrderTimne = parseTime(this.orderForm.useTime);
-            })            
-        },
-        submitForm() {
-            
-            let rata = Object.assign({},{id:this.carrierSerial.id,replyDes:this.replyDes,replyId:this.UserInfo.id,replyName:this.UserInfo.contactsName});
-            updateRate(rata).then(res => {
-                this.firstblood();
-            })
-        },
+      },
+      orderForm: {},
+      optionsReason: []
     }
+  },
+  mounted() {
+    this.firstblood()
+  },
+  methods: {
+    getValue(val) {
+      console.log(val)
+    },
+    textsArray() {
+
+    },
+    firstblood() {
+      const orderSerial = this.$route.query.orderSerial
+      this.UserInfo = getUserInfo()
+      Promise.all([carrierSerial(orderSerial), consignorSerial(orderSerial), getDetailsByOrderSerial('AFTC201807271126115176970')]).then(resArr => {
+        console.log('resArr', resArr)
+        this.carrierSerial = resArr[0].data || {}
+        this.consignorSerial = resArr[1].data || {}
+        this.orderForm = resArr[2].data || {}
+        this.orderForm.placeOrderTimne = parseTime(this.orderForm.useTime)
+      })
+    },
+    submitForm() {
+      const rata = Object.assign({}, { id: this.carrierSerial.id, replyDes: this.replyDes, replyId: this.UserInfo.id, replyName: this.UserInfo.contactsName })
+      updateRate(rata).then(res => {
+        this.firstblood()
+      })
+    }
+  }
 }
 </script>
 <style type="text/css" lang="scss">
