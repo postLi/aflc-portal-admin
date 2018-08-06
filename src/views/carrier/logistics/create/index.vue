@@ -69,7 +69,7 @@
                             <el-input v-model="form.discountPrice"  v-number-only:point></el-input>
                             元/公斤
                         </li>
-                        <span  @click="addItem('weight')" class="addItem" v-if="keys == weigthPriceForms.length-1 && form.endVolume!= ''">
+                        <span  @click="addItem('weight',keys)" class="addItem" v-if="keys == weigthPriceForms.length-1 && form.endVolume!= ''">
                         </span>
                         <span  @click="reduceItem(keys,'weight')" class="reduceItem" v-if="keys == weigthPriceForms.length-1 && weigthPriceForms.length !=1 " >
                         </span>
@@ -99,7 +99,7 @@
                             <el-input v-model="form.discountPrice" v-numberOnly></el-input>
                             元/立方
                         </li>
-                         <span  @click="addItem('light')" class="addItem" v-if="keys == ligthPriceForms.length-1 && form.endVolume!= ''">
+                         <span  @click="addItem('light',keys)" class="addItem" v-if="keys == ligthPriceForms.length-1 && form.endVolume!= ''">
                         </span>
                         <span  @click="reduceItem(keys,'light')" class="reduceItem" v-if="keys == ligthPriceForms.length-1 && ligthPriceForms.length !=1">
                         </span>
@@ -343,12 +343,12 @@ export default {
             this.ruleForm.publishId = userInfo.id;
         },
         //添加子节点新增
-        addItem(type){
+        addItem(type,idx){
             console.log(type)
             switch(type){
                 case 'weight':
                     this.weigthPriceForms.push({
-                        startVolume:this.weigthPriceForms[0].endVolume,
+                        startVolume:this.weigthPriceForms[idx].endVolume,
                         endVolume:'',
                         primeryPrice:'',//标准价
                         discountPrice:'',//折后价
@@ -357,7 +357,7 @@ export default {
                     break;
                 case 'light':
                     this.ligthPriceForms.push({
-                        startVolume:this.ligthPriceForms[0].endVolume,
+                        startVolume:this.ligthPriceForms[idx].endVolume,
                         endVolume:'',
                         primeryPrice:'',//标准价
                         discountPrice:'',//折后价
@@ -428,6 +428,11 @@ export default {
         padding: 10px;
         height: 100%;
         .el-form{
+            >.searchInformation{
+                .el-form-item{
+                    margin-bottom: 20px;
+                }
+            }
             .priceTime{
                 .el-input{
                     width: 250px;
