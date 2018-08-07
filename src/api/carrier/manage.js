@@ -124,3 +124,31 @@ export function getOrderInfo(id) {
 export function postNewReview(data) {
   return fetch.post('/aflcusercenterservice/usercenter/aflcTransportEvaluation/v1/add', data)
 }
+
+/**
+ * 新增对货主的评论
+ * @param {*} data 评论数据
+{
+  "assessLevel": "string", // 评价等级
+  "evaluationDes": "string", // 评价描述
+  "evaluationId": "string", // 评价人ID
+  "evaluationName": "string", // 评价人姓名
+  "orderSerial": "string", // 订单流水号
+  "dockStarLevel": "string", // 装卸安排
+  "goodsStarLevel": "string", // 货物包装
+  "payStarLevel": "string" // 付款及时
+  "shipperId": "" // 货主id
+}
+ */
+export function postNewCarrierReview(data) {
+  return fetch.post('/aflcusercenterservice/usercenter/aflcTransportEvaluation/v1/add', data)
+}
+/**
+ * 根据id获取回传信息
+ * @param {*} id id
+ */
+export function getOrderDesc(id) {
+  return fetch.get('/aflcorderservice/order/fclOrder/v1/getAflcFCLOrder/' + id).then(res => {
+    return res.data || {}
+  })
+}

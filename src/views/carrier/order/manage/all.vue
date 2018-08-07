@@ -224,7 +224,7 @@
               <el-button type="primary" :size="btnsize"  plain @click="viewDetail(scope.row)">查看</el-button>
               <!-- 待承运 -->
               <div v-if="scope.row.orderStatus === 'AF03702'">
-                <el-button  type="primary" v-if="isCarrier" :size="btnsize"  plain @click="confirmCarrier(scope.row)">确定承运</el-button>
+                <el-button  type="primary" :size="btnsize"  plain @click="confirmCarrier(scope.row)">确定承运</el-button>
                 <el-button type="primary" :size="btnsize"  plain @click="cancelOrder(scope.row)">取消订单</el-button>
               </div>
               
@@ -246,14 +246,13 @@
               <!-- 待评价 -->
 
               <div v-if="scope.row.orderStatus === 'AF03706'">
-                <el-button type="primary" :size="btnsize"  plain v-if="scope.row.complainWorkSerial" @click="replyComplain(scope.row)">投诉回复</el-button>
-                <el-button type="primary" v-if="!scope.row.evaluationId" :size="btnsize"  plain @click="addReview(scope.row)">评价</el-button>
-                <el-button type="primary" v-if="scope.row.evaluationId" :size="btnsize"  plain @click="viewReview(scope.row)">评价详情</el-button>
+                
               </div>
               <!-- 已完成 -->
               <div v-if="scope.row.orderStatus === 'AF03707'">
-                <el-button v-if="scope.row.complainWorkSerial" type="primary" :size="btnsize"  plain @click="viewComplain(scope.row)">投诉详情</el-button>
-                <el-button v-if="scope.row.evaluationId" type="primary" :size="btnsize"  plain @click="viewReview(scope.row)">评价详情</el-button>
+                <el-button type="primary" :size="btnsize"  plain v-if="scope.row.complainWorkSerial" @click="replyComplain(scope.row)">投诉回复</el-button>
+                <el-button type="primary" v-if="!scope.row.evaluationId" :size="btnsize"  plain @click="addReview(scope.row)">评价</el-button>
+                <el-button type="primary" v-if="scope.row.evaluationId" :size="btnsize"  plain @click="viewReview(scope.row)">评价详情</el-button>
 
               </div>
               <!-- 已取消 -->
@@ -267,11 +266,13 @@
       <div class="info_tab_footer">共计:{{ total }} <div class="show_pager"> <Pager :total="total" @change="handlePageChange" /></div> </div>    
     </div>
     <AddReview :dialogVisible.sync="dialogVisible" :orderSerial="orderSerial" :transportRangeId="transportRangeId" />
+    <AddReview2 :dialogVisible.sync="dialogVisible2" :orderSerial="orderSerial" :shipperId="shipperId" />
   </div>
 </template>
 <script>
 import SearchForm from './components/search'
 import AddReview from './components/review'
+import AddReview2 from './components/reviewCarrier'
 import Pager from '@/components/Pagination/index'
 
 import * as ReqApi from '@/api/carrier/manage'
@@ -291,7 +292,8 @@ export default {
   components: {
     SearchForm,
     Pager,
-    AddReview
+    AddReview,
+    AddReview2
   },
   computed: {
 
@@ -301,9 +303,9 @@ export default {
     this.fetchAllOrder(this.otherinfo.orgid).then(res => {
       this.loading = false
     }) */
-    const isOwner = this.$route.path.indexOf('owner') !== -1
-    this.isOwner = isOwner
-    this.searchQuery.vo.releaseOrCarrier = isOwner ? '1' : '2'
+    const iscarrier = this.$route.path.indexOf('carrier') !== -1
+    this.isOwner = !iscarrier
+    this.searchQuery.vo.releaseOrCarrier = !iscarrier ? '1' : '2'
     switch (this.listtype) {
       case 'all':
         this.isall = true
@@ -335,8 +337,10 @@ export default {
   data() {
     return {
       dialogVisible: false,
+      dialogVisible2: false,
       orderSerial: '',
       transportRangeId: '',
+      shipperId: '',
 
       isOwner: false,
       isall: false,
@@ -538,10 +542,19 @@ export default {
       })
     },
     addReview(row) {
+      // shipperEvaluationId 货主评价id 物流公司拿
+      // transportEvaluationId 物流公司评价id 货主拿
+      // complainId 为空回复投诉 不为空查看详情
+      // complainWorkSerial 有没有投诉
       // 添加评价
       this.orderSerial = row.orderSerial
       this.transportRangeId = row.wlId
-      this.dialogVisible = true
+      this.shipperId = row.shipperId
+      if(this.isOwner){
+        this.dialogVisible = true
+      } else{
+        this.dialogVisible2 = true
+      }
     },
     viewReview(row) {
       // 查看评价

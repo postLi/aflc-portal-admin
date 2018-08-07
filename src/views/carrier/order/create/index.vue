@@ -464,7 +464,24 @@ export default {
       this.ruleForm.memberType = this.otherinfo.rolesIdList[0]
     },
     initModify() {
-      ReqApiManage.getOrderInfo(this.id).then(data => {
+      ReqApiManage.getOrderDesc(this.id).then(data => {
+        if(data.aflcOrderAddressWebDtoList){
+          this.aflcOrderAddressWebDtoList = this.aflcOrderAddressWebDtoList.map((el,index) => {
+            let type = el.type
+            el = data.aflcOrderAddressWebDtoList[index]
+            el.type = type
+            el.isSave = !!el.isSave
+            return el
+          })
+        }
+        if(data.aflcFCLOrderGoodsDtoList){
+          this.cargoList = data.aflcFCLOrderGoodsDtoList
+        }
+        for(let i in this.ruleForm){
+          this.ruleForm[i] = data[i]
+        }
+        this.ruleForm.id = data.id
+        this.isModify = true
 
       }).catch(err => {
         this.$confirm('查询出错：' + JSON.stringify(err), '提示', {
@@ -829,7 +846,7 @@ export default {
           let promiseObj
           // 判断操作，调用对应的函数
           if (this.isModify) {
-            // promiseObj = putCarrier(data)
+            promiseObj = ReqApi.putChangeOrder(this.otherinfo.userToken ,data)
           } else {
             promiseObj = ReqApi.postCreateOrder(this.otherinfo.userToken ,data)
           }
@@ -1005,10 +1022,10 @@ export default {
   
 }
 .create-orderinfo{
-  padding: 20px;
+  padding: 0;
   height: 100%;
   .tab-info-stitle{
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
   
   .order-base-info{
@@ -1023,7 +1040,7 @@ export default {
     }
   }
   .prePrice{
-    margin-top: 20px;
+    margin-top: 10px;
   }
   .cargo-info{
     .el-form-item{
@@ -1126,8 +1143,8 @@ export default {
 
   .ususalContacModify{
     .el-form-item--mini.el-form-item{
-      margin-top: 20px;
-      margin-bottom: 20px;
+      margin-top: 10px;
+      margin-bottom: 10px;
     }
   }
   .concat-list{
@@ -1135,6 +1152,9 @@ export default {
       width: 33%;
       float: left;
     }
+  }
+  .tab-info-panel{
+    margin: 10px auto;
   }
   
   .label-content{
