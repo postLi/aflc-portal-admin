@@ -146,7 +146,7 @@ export default {
             reply:'',//回复内容
         };
     },  
-    mounted(){
+    mounted(){ 
         this.firstblood();
     },  
     methods: {
@@ -181,7 +181,7 @@ export default {
                         this.ruleForm.complainTypeName = this.optionsReason.find(item => item.code === this.ruleForm.complainType)['name'];
                         this.ruleForm.complainName = this.UserInfo.contactsName;
                         this.ruleForm.complainId = this.UserInfo.id;
-                        this.ruleForm.orderSerial = '24c0f4218e1d4bf099d185b3c6964441';
+                        this.ruleForm.orderSerial = this.$route.query.orderSerial;
                         // console.log(this.ruleForm)
                         addOrderComplain(this.ruleForm).then(res => {
                             console.log(res)

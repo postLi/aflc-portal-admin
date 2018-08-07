@@ -89,10 +89,10 @@
                             width="120"
                             >
                                 <template slot-scope="scope">
-                                    <el-button-group>
+                                    <!-- <el-button-group> -->
                                         <el-button @click="handleEdit(scope.row)" v-if="scope.row.replyName" type="primary" size="mini">评价回复</el-button>
                                         <el-button @click="handleEdit(scope.row)" v-else type="primary" size="mini">评价详情</el-button>
-                                    </el-button-group>
+                                    <!-- </el-button-group> -->
                                 </template>
                         </el-table-column>
                     </el-table>
@@ -178,7 +178,7 @@ export default {
         }
     },
     mounted(){
-        this.firstblood();
+        //this.firstblood();
     },  
     methods: {
         handlePageChange(obj) {
