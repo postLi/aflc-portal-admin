@@ -524,7 +524,7 @@ export default {
     },
     viewDetail(row) {
       // 查看详情
-      this.$router.push('/order/detail?id=' + row.id + '&type=' + this.isOwner)
+      this.$router.push('/order/detail?id=' + row.id +  (!this.isOwner ? '&type=carrier' : ''))
     },
     addComplain(row) {
       // 添加投诉
@@ -545,7 +545,7 @@ export default {
     },
     viewReview(row) {
       // 查看评价
-      this.$router.push('/order/rateInfo?evaluationId=' + row.evaluationId)
+      this.$router.push('/order/rateInfo?evaluationId=' + row.evaluationId + (!this.isOwner ? '&type=carrier' : ''))
     },
     viewComplain(row) {
       // 查看投诉
