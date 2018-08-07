@@ -1,6 +1,6 @@
 <template>
   <div class="tab-content" v-loading="loading">
-    <SearchForm :isall="true"  @change="getSearchParam" :btnsize="btnsize" />  
+    <SearchForm :isall="isall"  @change="getSearchParam" :btnsize="btnsize" />  
     <div class="tab_info">
       <div class="btns_box">
           <el-button type="primary" :size="btnsize" icon="el-icon-circle-plus" plain @click="doAction('add')">创建订单</el-button>
@@ -14,7 +14,8 @@
           @row-click="clickDetails"
           @selection-change="getSelection"
           tooltip-effect="dark"
-          style="width: 100%">
+          :max-height="600"
+          style="width: 100%;">
           <el-table-column
             fixed
             
@@ -119,7 +120,7 @@
           >
           </el-table-column>
           <el-table-column
-            prop="consigneePhone;"
+            prop="consigneePhone"
             label="收货人手机"
             
             width="120"
@@ -133,79 +134,131 @@
           >
           </el-table-column>
           <el-table-column
+            v-if="/(chengyun)/.test(listtype) === false"
             label="承运时间"
             
             width="120"
           >
+            <template slot-scope="scope">
+              {{ scope.row.carrierTime | parseTime }}
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="提货时间"
+            v-if="/(chengyun|tihuo)/.test(listtype) === false"
+            width="110"
+          >
           <template slot-scope="scope">
-            {{ scope.row.carrierTime | parseTime }}
+            {{ scope.row.pickUpGoodsTime | parseTime }}
           </template>
           </el-table-column>
           <el-table-column
-            prop="pickUpGoodsTime"
-            label="提货时间"
-            
-            width="110"
-          >
-          </el-table-column>
-          <el-table-column
-            prop="deliveryTime"
             label="发货时间"
-            
+            v-if="/(chengyun|tihuo|fahuo)/.test(listtype) === false"
             width="100"
           >
+          <template slot-scope="scope">
+            {{ scope.row.deliveryTime | parseTime }}
+          </template>
           </el-table-column>
           <el-table-column
-            prop="receiveTime"
             label="收货时间"
-            
-            width="110"
-          >
-          </el-table-column>
-          <el-table-column
-            label="操作"
+            v-if="/(chengyun|tihuo|fahuo|shouhuo)/.test(listtype) === false"
             width="110"
           >
           <template slot-scope="scope">
-            <el-button type="primary" :size="btnsize"  plain @click="viewDetail(scope.row)">查看</el-button>
-            <!-- 待承运 -->
-            <div v-if="scope.row.orderStatus === 'AF03702'">
-              <el-button  type="primary" v-if="isCarrier" :size="btnsize"  plain @click="confirmCarrier(scope.row)">确定承运</el-button>
-              <el-button type="primary" :size="btnsize"  plain @click="cancelCarrier(scope.row)">取消订单</el-button>
-            </div>
-            
-            <!-- 待提货 -->
-            <div v-if="scope.row.orderStatus === 'AF03703'">
+            {{ scope.row.receiveTime | parseTime }}
+          </template>
+          </el-table-column>
+          <el-table-column
+            label="操作"
+            fixed="right"
+            width="110"
+          >
+          <template slot-scope="scope">
+            <!-- 承运商 -->
+            <div v-if="isOwner">
+              <el-button type="primary" :size="btnsize"  plain @click="viewDetail(scope.row)">查看</el-button>
+              <!-- 待承运 -->
+              <div v-if="scope.row.orderStatus === 'AF03702'">
+                <el-button  type="primary" :size="btnsize"  plain @click="modifyOrder(scope.row)">修改</el-button>
+                <el-button type="primary" :size="btnsize"  plain @click="cancelOrder(scope.row)">取消订单</el-button>
+              </div>
               
-              <el-button type="primary" v-if="isCarrier" :size="btnsize"  plain @click="confirmPickUp(scope.row)">确认提货</el-button>
-            </div>
-            <!-- 待发货 -->
-            <div v-if="scope.row.orderStatus === 'AF03704'">
-              <el-button type="primary" :size="btnsize"  plain @click="confirmDelivery(scope.row)">确认发货</el-button>
-            </div>
-            <!-- 待收货 -->
-            <div v-if="scope.row.orderStatus === 'AF03705'">
-              <el-button type="primary" :size="btnsize"  plain v-if="scope.row.complainWorkSerial" @click="replyComplain(scope.row)">投诉回复</el-button>
-              <el-button type="primary" :size="btnsize"  v-if="!scope.row.complainWorkSerial" plain @click="addComplain(scope.row)">我要投诉</el-button>
-              <el-button type="primary" :size="btnsize"  plain @click="confirmEvaluate(scope.row)">确认收货</el-button>
+              <!-- 待提货 -->
+              <div v-if="scope.row.orderStatus === 'AF03703'">
+              </div>
+              <!-- 待发货 -->
+              <div v-if="scope.row.orderStatus === 'AF03704'">
+              </div>
+              <!-- 待收货 -->
+              <div v-if="scope.row.orderStatus === 'AF03705'">
+                <el-button type="primary" :size="btnsize"  plain v-if="scope.row.complainWorkSerial" @click="viewComplain(scope.row)">投诉详情</el-button>
+                <el-button type="primary" :size="btnsize"  v-if="!scope.row.complainWorkSerial" plain @click="addComplain(scope.row)">投诉</el-button>
+              </div>
+              <!-- 待评价 -->
+              
+              <div v-if="scope.row.orderStatus === 'AF03706'">
+                <el-button type="primary" :size="btnsize"  v-if="!scope.row.complainWorkSerial" plain @click="addComplain(scope.row)">投诉</el-button>
+              <el-button type="primary" :size="btnsize"  plain v-if="scope.row.complainWorkSerial" @click="viewComplain(scope.row)">投诉详情</el-button>
 
-            </div>
-            <!-- 待评价 -->
-            <el-button type="primary" :size="btnsize"  v-if="!scope.row.complainWorkSerial" plain @click="addComplain(scope.row)">我要投诉</el-button>
-            <div v-if="scope.row.orderStatus === 'AF03706'">
-             <el-button type="primary" :size="btnsize"  plain v-if="scope.row.complainWorkSerial" @click="replyComplain(scope.row)">投诉回复</el-button>
-              <el-button type="primary" :size="btnsize"  v-if="!scope.row.complainWorkSerial" plain @click="addComplain(scope.row)">我要投诉</el-button>
-              <el-button type="primary" v-if="!scope.row.evaluationId" :size="btnsize"  plain @click="addReview(scope.row)">我要评价</el-button>
-              <el-button type="primary" v-if="scope.row.evaluationId" :size="btnsize"  plain @click="viewReview(scope.row)">评价详情</el-button>
-            </div>
-            <!-- 已完成 -->
-            <div v-if="scope.row.orderStatus === 'AF03707'">
-              <el-button type="primary" :size="btnsize"  plain @click="viewComplain(scope.row)">投诉详情</el-button>
-              <el-button type="primary" :size="btnsize"  plain @click="viewReview(scope.row)">评价详情</el-button>
+                <el-button type="primary" v-if="!scope.row.evaluationId" :size="btnsize"  plain @click="addReview(scope.row)">评价</el-button>
+                <el-button type="primary" v-if="scope.row.evaluationId" :size="btnsize"  plain @click="viewReview(scope.row)">评价详情</el-button>
+              </div>
+              <!-- 已完成 -->
+              <div v-if="scope.row.orderStatus === 'AF03707'">
+                <el-button type="primary" :size="btnsize"  v-if="!scope.row.complainWorkSerial" plain @click="addComplain(scope.row)">投诉</el-button>
+                <el-button type="primary" v-if="scope.row.complainWorkSerial" :size="btnsize"  plain @click="viewComplain(scope.row)">投诉详情</el-button>
+                <el-button type="primary" v-if="!scope.row.evaluationId" :size="btnsize"  plain @click="addReview(scope.row)">评价</el-button>
+                <el-button type="primary" v-if="scope.row.evaluationId" :size="btnsize"  plain @click="viewReview(scope.row)">评价详情</el-button>
 
+              </div>
+              <!-- 已取消 -->
+              <div v-if="scope.row.orderStatus === 'AF03708'">
+                <el-button type="primary" :size="btnsize"  plain @click="oneMoreTime(scope.row)">再次下单</el-button>
+              </div>
             </div>
-            <!-- 已取消 -->
-            <div v-if="scope.row.orderStatus === 'AF03708'">
+
+            <!-- 物流商 -->
+            <div v-if="!isOwner">
+              <el-button type="primary" :size="btnsize"  plain @click="viewDetail(scope.row)">查看</el-button>
+              <!-- 待承运 -->
+              <div v-if="scope.row.orderStatus === 'AF03702'">
+                <el-button  type="primary" v-if="isCarrier" :size="btnsize"  plain @click="confirmCarrier(scope.row)">确定承运</el-button>
+                <el-button type="primary" :size="btnsize"  plain @click="cancelOrder(scope.row)">取消订单</el-button>
+              </div>
+              
+              <!-- 待提货 -->
+              <div v-if="scope.row.orderStatus === 'AF03703'">
+                
+                <el-button type="primary" :size="btnsize"  plain @click="confirmPickUp(scope.row)">确认提货</el-button>
+              </div>
+              <!-- 待发货 -->
+              <div v-if="scope.row.orderStatus === 'AF03704'">
+                <el-button type="primary" :size="btnsize"  plain @click="confirmDelivery(scope.row)">确认发货</el-button>
+              </div>
+              <!-- 待收货 -->
+              <div v-if="scope.row.orderStatus === 'AF03705'">
+                <el-button type="primary" :size="btnsize"  plain v-if="scope.row.complainWorkSerial" @click="replyComplain(scope.row)">投诉回复</el-button>
+                <el-button type="primary" :size="btnsize"  plain @click="confirmEvaluate(scope.row)">确认收货</el-button>
+
+              </div>
+              <!-- 待评价 -->
+
+              <div v-if="scope.row.orderStatus === 'AF03706'">
+                <el-button type="primary" :size="btnsize"  plain v-if="scope.row.complainWorkSerial" @click="replyComplain(scope.row)">投诉回复</el-button>
+                <el-button type="primary" v-if="!scope.row.evaluationId" :size="btnsize"  plain @click="addReview(scope.row)">评价</el-button>
+                <el-button type="primary" v-if="scope.row.evaluationId" :size="btnsize"  plain @click="viewReview(scope.row)">评价详情</el-button>
+              </div>
+              <!-- 已完成 -->
+              <div v-if="scope.row.orderStatus === 'AF03707'">
+                <el-button v-if="scope.row.complainWorkSerial" type="primary" :size="btnsize"  plain @click="viewComplain(scope.row)">投诉详情</el-button>
+                <el-button v-if="scope.row.evaluationId" type="primary" :size="btnsize"  plain @click="viewReview(scope.row)">评价详情</el-button>
+
+              </div>
+              <!-- 已取消 -->
+              <div v-if="scope.row.orderStatus === 'AF03708'">
+              </div>
             </div>
           </template>
           </el-table-column>
@@ -213,13 +266,14 @@
       </div>
       <div class="info_tab_footer">共计:{{ total }} <div class="show_pager"> <Pager :total="total" @change="handlePageChange" /></div> </div>    
     </div>
+    <AddReview :dialogVisible.sync="dialogVisible" :orderid="orderid" />
   </div>
 </template>
 <script>
 import SearchForm from './components/search'
+import AddReview from './components/review'
 import Pager from '@/components/Pagination/index'
 
-import orderManageApi from '@/api/operation/orderManage'
 import * as ReqApi from '@/api/carrier/manage'
 import { parseTime } from '@/utils/index'
 
@@ -228,11 +282,16 @@ export default {
     isCarrier: {
       type: Boolean,
       default: false
+    },
+    listtype: {
+      type: String,
+      default: 'all'
     }
   },
   components: {
     SearchForm,
-    Pager
+    Pager,
+    AddReview
   },
   computed: {
 
@@ -242,9 +301,44 @@ export default {
     this.fetchAllOrder(this.otherinfo.orgid).then(res => {
       this.loading = false
     }) */
+    const isOwner = this.$route.path.indexOf('owner') !== -1
+    this.isOwner = isOwner
+    this.searchQuery.vo.releaseOrCarrier = isOwner ? '1' : '2'
+    switch (this.listtype) {
+      case 'all':
+        this.isall = true
+        this.searchQuery.vo.orderStatus = ''
+        break
+      case 'chengyun':
+        this.searchQuery.vo.orderStatus = 'AF03702'
+        break
+      case 'tihuo':
+        this.searchQuery.vo.orderStatus = 'AF03703'
+        break
+      case 'fahuo':
+        this.searchQuery.vo.orderStatus = 'AF03704'
+        break
+      case 'shouhuo':
+        this.searchQuery.vo.orderStatus = 'AF03705'
+        break
+      case 'pingjia':
+        this.searchQuery.vo.orderStatus = 'AF03706'
+        break
+      case 'wancheng':
+        this.searchQuery.vo.orderStatus = 'AF03707'
+        break
+      case 'quxiao':
+        this.searchQuery.vo.orderStatus = 'AF03708'
+        break
+    }
   },
   data() {
     return {
+      dialogVisible: false,
+      orderid: '',
+
+      isOwner: false,
+      isall: false,
       btnsize: 'mini',
       usersArr: [],
       total: 0,
@@ -268,7 +362,7 @@ export default {
           consignor: '', // 发货人
           consignorPhone: '', // 发货人手机
           userToken: '',
-          queryType: '1',
+          queryType: '1', // 1 为订单 2为货源
           releaseOrCarrier: '1', // 订单查询标志（1：我创建的订单；2：我承运的订单）
           wlName: ''
         }
@@ -276,9 +370,7 @@ export default {
     }
   },
   methods: {
-    viewDetail(row) {
-      // 查看详情
-    },
+
     confirmCarrier(row) {
       this.$confirm('确定要承运吗？', '提示', {
         confirmButtonText: '确定',
@@ -287,16 +379,41 @@ export default {
       }).then(() => {
         ReqApi.putConfirmCarrier(row.orderSerial).then(res => {
           this.$message({
-              type: 'success',
-              message: '操作成功!'
-            })
+            type: 'success',
+            message: '操作成功!'
+          })
           this.fetchData()
         }).catch(err => {
-            this.$message({
-              type: 'info',
-              message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
-            })
+          this.$message({
+            type: 'info',
+            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
           })
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
+      })
+    },
+    cancelOrder(row) {
+      this.$confirm('确定要取消订单吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        ReqApi.putCancelOrder(row.orderSerial).then(res => {
+          this.$message({
+            type: 'success',
+            message: '操作成功!'
+          })
+          this.fetchData()
+        }).catch(err => {
+          this.$message({
+            type: 'info',
+            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
+          })
+        })
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -312,16 +429,16 @@ export default {
       }).then(() => {
         ReqApi.putCancelCarrrier(row.orderSerial).then(res => {
           this.$message({
-              type: 'success',
-              message: '操作成功!'
-            })
+            type: 'success',
+            message: '操作成功!'
+          })
           this.fetchData()
         }).catch(err => {
-            this.$message({
-              type: 'info',
-              message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
-            })
+          this.$message({
+            type: 'info',
+            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
           })
+        })
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -337,16 +454,16 @@ export default {
       }).then(() => {
         ReqApi.putConfirmPickUp(row.orderSerial).then(res => {
           this.$message({
-              type: 'success',
-              message: '操作成功!'
-            })
+            type: 'success',
+            message: '操作成功!'
+          })
           this.fetchData()
         }).catch(err => {
-            this.$message({
-              type: 'info',
-              message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
-            })
+          this.$message({
+            type: 'info',
+            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
           })
+        })
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -362,16 +479,16 @@ export default {
       }).then(() => {
         ReqApi.putConfirmDelivery(row.orderSerial).then(res => {
           this.$message({
-              type: 'success',
-              message: '操作成功!'
-            })
+            type: 'success',
+            message: '操作成功!'
+          })
           this.fetchData()
         }).catch(err => {
-            this.$message({
-              type: 'info',
-              message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
-            })
+          this.$message({
+            type: 'info',
+            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
           })
+        })
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -387,22 +504,26 @@ export default {
       }).then(() => {
         ReqApi.putConfirmEvaluate(row.orderSerial).then(res => {
           this.$message({
-              type: 'success',
-              message: '操作成功!'
-            })
+            type: 'success',
+            message: '操作成功!'
+          })
           this.fetchData()
         }).catch(err => {
-            this.$message({
-              type: 'info',
-              message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
-            })
+          this.$message({
+            type: 'info',
+            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
           })
+        })
       }).catch(() => {
         this.$message({
           type: 'info',
           message: '已取消'
         })
       })
+    },
+    viewDetail(row) {
+      // 查看详情
+      this.$router.push('/order/detail?id=' + row.id + '&type=' + this.isOwner)
     },
     addComplain(row) {
       // 添加投诉
@@ -411,15 +532,24 @@ export default {
     },
     addReview(row) {
       // 添加评价
+      this.dialogVisible = true
+      this.orderid = row.orderSerial
     },
     viewReview(row) {
       // 查看评价
+      this.$router.push('/order/rateInfo?evaluationId=' + row.evaluationId)
     },
     viewComplain(row) {
       // 查看投诉
+      this.$router.push('/complaintsInfo/index?orderSerial=' + row.orderSerial)
     },
     replyComplain(row) {
       // 回复投诉
+      this.$router.push('/complaintsInfo/index?orderSerial=' + row.orderSerial)
+    },
+    // 再次下单
+    oneMoreTime() {
+      this.$router.push('/order/create')
     },
 
     fetchAllOrder() {

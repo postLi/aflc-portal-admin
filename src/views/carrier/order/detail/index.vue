@@ -1,7 +1,24 @@
 <template>
-  <div class="manage-orderdetail page-main">
+  <div class="manage-orderdetail page-main" v-loading="loading">
     <div class="tab-info-title">
       <h2><span>订单跟踪</span></h2>
+    </div>
+    <div class="rate-status-bar" v-if="!iscancel">
+        <ul class="status-flow">
+            <li v-for="(item, index) in flows" :key="index" :class="['step'+index,{'active':currentStatus === index}]">
+                <span class="status-line"></span>
+                <span class="status-info">
+                    <span class="status-txt">{{ item.done ? item.donetext :item.text }}</span>
+                    <span class="status-circle">{{ index+1 }}</span>
+                    <span class="status-time">{{ item.time }}</span>
+                </span>
+            </li>
+            <!-- <li class="step1 active">
+                <span class="status-txt">下单</span>
+                <span class="status-time"></span>
+            </li> -->
+
+        </ul>
     </div>
     <div class="rate_content rate_orderInfo">
       <h2>订单信息</h2>       
@@ -10,7 +27,7 @@
               <li>订单号：{{orderForm.orderSerial}}</li>
               <li>货品名称：{{orderForm.goodsName}}</li>
               <li>货品预估总体积（方）：{{orderForm.goodsVolume}}</li>
-              <li>出发地：{{orderForm.startAddress}}</li>
+              <li>出发地：{{orderForm.consignorAddress}}</li>
               <li>发货人：{{orderForm.consignor}}</li>
               <li>收货人：{{orderForm.consignee}}</li>
           </ul>
@@ -20,15 +37,15 @@
                   width="100%"
                   trigger="hover"
                   >
-                  <p style="margin:5px;">提货时间：{{orderForm.goodsNum}}</p>
-                  <p style="margin:5px;">发货时间：{{orderForm.goodsNum}}</p>
-                  <p style="margin:5px;">收货时间：{{orderForm.goodsNum}}</p>
+                  <p style="margin:5px;">提货时间：{{ orderForm.carrierTime | parseTime }}</p>
+                  <p style="margin:5px;">发货时间：{{ orderForm.deliveryTime | parseTime }}</p>
+                  <p style="margin:5px;">收货时间：{{ orderForm.receiveTime | parseTime }}</p>
                   <span slot="reference" class="reference" icon="el-icon-caret-bottom">更多<i icon="el-icon-caret-bottom"></i></span>
                   </el-popover>
               </li>
               <li>货品总数量（件）：{{orderForm.goodsNum}}</li>
-              <li>货物类型：{{orderForm.orderSerial}}</li>
-              <li>到达地：{{orderForm.endAddress}}</li>
+              <li>货物类型：{{orderForm.goodsTypeName}}</li>
+              <li>到达地：{{orderForm.consigneeAddress}}</li>
               <li>发货人手机：{{orderForm.consignorPhone}}</li>
               <li>收货人手机：{{orderForm.consigneePhone}}</li>
           </ul>
@@ -43,64 +60,134 @@
 </template>
 <script>
 import '@/styles/identification.scss'
-import { getDictionary,getDetailsByOrderSerial} from '@/api/common.js'
-import { carrierSerial,consignorSerial,updateRate } from '@/api/carrier/rate.js'
+import { getDictionary, getDetailsByOrderSerial } from '@/api/common.js'
+import { carrierSerial, consignorSerial, updateRate } from '@/api/carrier/rate.js'
 import { parseTime } from '@/utils/index.js'
+import * as ReqApi from '@/api/carrier/manage'
 
 export default {
-  components:{
-    },
-    data() {
-        return {
-            textsArr:['1分  非常不满','2分  不满意','3分  一般','4分  满意','5分  非常满意'],
-            retalength:200,//回复字数
-            replyDes:'',
-            UserInfo:{},
-            //货主对我的评价
-            carrierSerial:{
+  components: {
+  },
+  data() {
+    return {
+      currentStatus: 0,
+      flows: [{
+        done: true,
+        text: '下单',
+        donetext: '下单',
+        time: '2018-12-04 13:24:21',
+        type: ''
+      }, {
+        done: false,
+        text: '待承运',
+        donetext: '物流公司已承运',
+        time: '',
+        type: ''
+      }, {
+        done: false,
+        text: '待提货',
+        donetext: '物流公司已提货',
+        time: '',
+        type: ''
+      }, {
+        done: false,
+        text: '待发货',
+        donetext: '物流公司已发货',
+        time: '',
+        type: ''
+      }, {
+        done: false,
+        text: '待收货',
+        donetext: '货主已收货',
+        time: '',
+        type: ''
+      }, {
+        done: false,
+        text: '待评价',
+        donetext: '货主已评价',
+        time: '',
+        type: ''
+      }, {
+        done: false,
+        text: '订单结束',
+        donetext: '订单结束',
+        time: '',
+        type: ''
+      }],
+      textsArr: ['1分  非常不满', '2分  不满意', '3分  一般', '4分  满意', '5分  非常满意'],
+      retalength: 200, // 回复字数
+      replyDes: '',
+      UserInfo: {},
+      loading: true,
+            // 货主对我的评价
+      carrierSerial: {
 
-            },
-            //我对货主的评价
-            consignorSerial:{
+      },
+            // 我对货主的评价
+      consignorSerial: {
 
-            },
-            orderForm:{},
-            optionsReason:[],
-        };
-    },  
-    mounted(){
-        this.firstblood();
-    },  
-    methods: {
-        getValue(val){
-            console.log(val)
-        },
-        textsArray(){
-             
-        },
-        firstblood(){
-            let orderSerial = this.$route.query.orderSerial;
-            this.UserInfo = getUserInfo();
-            Promise.all([carrierSerial(orderSerial),consignorSerial(orderSerial),getDetailsByOrderSerial('AFTC201807271126115176970')]).then(resArr=> {
-                console.log('resArr',resArr)
-                this.carrierSerial = resArr[0].data || {};
-                this.consignorSerial = resArr[1].data || {};
-                this.orderForm = resArr[2].data || {};
-                this.orderForm.placeOrderTimne = parseTime(this.orderForm.useTime);
-            })            
-        },
-        submitForm() {
-            
-            let rata = Object.assign({},{id:this.carrierSerial.id,replyDes:this.replyDes,replyId:this.UserInfo.id,replyName:this.UserInfo.contactsName});
-            updateRate(rata).then(res => {
-                this.firstblood();
-            })
-        },
+      },
+      orderForm: {},
+      optionsReason: [],
+      iscancel: false
     }
+  },
+  mounted() {
+    this.firstblood()
+  },
+  methods: {
+    init() {
+        // 格式化数据
+      switch (this.orderForm.orderStatus) {
+        case 'AF03708':
+          this.iscancel = true
+        case 'AF03707':
+
+
+      }
+        // 加载相应的版块
+    },
+    getValue(val) {
+      console.log(val)
+    },
+    textsArray() {
+
+    },
+    firstblood() {
+      this.id = this.$route.query.id
+      ReqApi.getOrderInfo(this.id).then(data => {
+        this.orderForm = data
+        this.init()
+        this.loading = false
+      })
+    },
+    submitForm() {
+      const rata = Object.assign({}, { id: this.carrierSerial.id, replyDes: this.replyDes, replyId: this.UserInfo.id, replyName: this.UserInfo.contactsName })
+      updateRate(rata).then(res => {
+        this.firstblood()
+      })
+    }
+  }
 }
 </script>
 <style type="text/css" lang="scss">
 .manage-orderdetail{
+    .rate-status-bar{
+        padding: 20px 40px;
+        margin: 20px 0;
+        background: #fff;
+    }
+    .step0 .status-line{
+        display: none;
+    }
+  .status-flow{
+      display: flex;
+
+      li{
+          flex: 1;
+          text-align: center;
+      }
+  }
   .rate_content{
       padding-bottom: 30px;
       background: #fff;

@@ -53,8 +53,8 @@ export function getOrderList(user_token, data) {
 /**
  * 获取订单各个状态下的数量
  */
-export function getOrderListCount(user_token) {
-  return fetch.post('/aflcorderservice/order/fclOrder/v1/getOrderStatusGroupCountList?user_token=' + user_token).then(res => {
+export function getOrderListCount(user_token, data = {}) {
+  return fetch.post('/aflcorderservice/order/fclOrder/v1/getOrderStatusGroupCountList?user_token=' + user_token, data).then(res => {
     return res.data ? res.data[0] : {}
   })
 }
@@ -64,6 +64,13 @@ export function getOrderListCount(user_token) {
  */
 export function putCancelCarrrier(id) {
   return fetch.put('/aflcorderservice/order/fclOrder/v1/cancelCarrier/' + id)
+}
+/**
+ * 取消订单
+ * @param {*} id 运单id
+ */
+export function putCancelOrder(id) {
+  return fetch.put('/aflcorderservice/order/fclOrder/v1/cancelOrder/' + id)
 }
 /**
  * 确认承运
@@ -92,4 +99,28 @@ export function putConfirmEvaluate(id) {
  */
 export function putConfirmPickUp(id) {
   return fetch.put('/aflcorderservice/order/fclOrder/v1/confirmPickUpGoods/' + id)
+}
+
+export function getOrderInfo(id) {
+  return fetch.get('/aflcorderservice/order/fclOrder/v1/getDetails/' + id).then(res => {
+    return res.data || {}
+  })
+}
+/**
+ * 新增评论
+ * @param {*} data 评论数据
+{
+  "assessLevel": "string", // 评价等级
+  "evaluationDes": "string", // 评价描述
+  "evaluationId": "string", // 评价人ID
+  "evaluationName": "string", // 评价人姓名
+  "orderSerial": "string", // 订单流水号
+  "serverPriceStarLevel": "string", // 服务价格星级
+  "serverQualityStarLevel": "string", // 服务质量星级
+  "transportAgingStarLevel": "string", // 运输时效星级
+  "transportRangeId": "string" // 物流专线ID
+}
+ */
+export function postNewReview(data) {
+  return fetch.post('/aflcusercenterservice/usercenter/aflcTransportEvaluation/v1/add', data)
 }

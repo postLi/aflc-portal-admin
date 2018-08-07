@@ -119,7 +119,7 @@
           >
           </el-table-column>
           <el-table-column
-            prop="consigneePhone;"
+            prop="consigneePhone"
             label="收货人手机"
             
             width="120"
@@ -142,25 +142,31 @@
           </template>
           </el-table-column>
           <el-table-column
-            prop="pickUpGoodsTime"
             label="提货时间"
             
             width="110"
           >
+          <template slot-scope="scope">
+            {{ scope.row.pickUpGoodsTime | parseTime }}
+          </template>
           </el-table-column>
           <el-table-column
-            prop="deliveryTime"
             label="发货时间"
             
             width="100"
           >
+          <template slot-scope="scope">
+            {{ scope.row.deliveryTime | parseTime }}
+          </template>
           </el-table-column>
           <el-table-column
-            prop="receiveTime"
             label="收货时间"
             
             width="110"
           >
+          <template slot-scope="scope">
+            {{ scope.row.receiveTime | parseTime }}
+          </template>
           </el-table-column>
           <el-table-column
             label="操作"
@@ -264,66 +270,65 @@ export default {
     }
   },
   methods: {
-    viewDetail(row){
-      
+    viewDetail(row) {
+
     },
-    confirmCarrier(row){
+    confirmCarrier(row) {
       this.$confirm('确定要承运吗？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
         ReqApi.putConfirmCarrier(row.orderSerial).then(res => {
-            this.$message({
-                type: 'success',
-                message: '操作成功!'
-              })
-            this.fetchData()
-          }).catch(err => {
-            this.$message({
-                type: 'info',
-                message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
-              })
+          this.$message({
+            type: 'success',
+            message: '操作成功!'
           })
+          this.fetchData()
+        }).catch(err => {
+          this.$message({
+              type: 'info',
+              message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
+            })
+        })
       }).catch(() => {
         this.$message({
-            type: 'info',
-            message: '已取消'
-          })
+          type: 'info',
+          message: '已取消'
+        })
       })
     },
-    cancelCarrier(row){
+    cancelCarrier(row) {
 
     },
-    confirmPickUp(row){
+    confirmPickUp(row) {
 
     },
-    confirmDelivery(row){
+    confirmDelivery(row) {
 
     },
-    replyComplain(row){
+    replyComplain(row) {
 
     },
-    confirmEvaluate(row){
+    confirmEvaluate(row) {
 
     },
-    addComplain(row){
+    addComplain(row) {
 
     },
-    addReview(row){
+    addReview(row) {
 
     },
-    viewReview(row){
+    viewReview(row) {
 
     },
-    viewComplain(row){
+    viewComplain(row) {
 
     },
-
 
     fetchAllOrder() {
       this.loading = true
-      return ReqApi.getOrderList(this.otherinfo.userToken,this.searchQuery).then(data => {
+      return ReqApi.getOrderList(this.otherinfo.userToken, this.searchQuery).then(data => {
         this.usersArr = data.list
         this.total = data.totalCount
         this.loading = false

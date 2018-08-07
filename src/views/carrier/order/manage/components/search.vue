@@ -1,5 +1,5 @@
 <template>
-  <el-form label-width="140px" :inline="true" :size="btnsize" label-position="right" :rules="rules" :model="searchForm"  class="staff_searchinfo clearfix">
+  <el-form label-width="140px" :inline="true" :size="btnsize" label-position="right" :model="searchForm"  class="staff_searchinfo clearfix">
       <el-form-item label="订单号/商品名称：">
           <el-input v-model="searchForm.orderSerialOrGoodsName" maxlength="20" auto-complete="off"></el-input>
       </el-form-item>
@@ -57,8 +57,8 @@ export default {
       type: Boolean,
       dafault: false
     },
-    isall:{
-      type:Boolean,
+    isall: {
+      type: Boolean,
       default: false
     }
   },
@@ -85,8 +85,8 @@ export default {
   },
   methods: {
     onSubmit() {
-      const searchObj = Object.assign({},this.searchForm)
-      if(!this.isall){
+      const searchObj = Object.assign({}, this.searchForm)
+      if (!this.isall) {
         delete searchObj.orderStatus
       }
       this.$emit('change', searchObj)
