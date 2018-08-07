@@ -43,7 +43,7 @@ export default {
           path: '/order/detail', icon: 'QQ', name: '订单详情', component: _import('carrier/order/detail/index'), meta: { role: ['admin'], title: '订单详情', noCache: false }
         },
         {
-          path: '/order/create', icon: 'QQ', name: '创建订单', component: _import('carrier/order/create/index'), meta: { role: ['admin'], title: '创建订单/货源', noCache: false }
+          path: '/order/create', icon: 'QQ', name: '创建订单', component: _import('carrier/order/create/index'), meta: { role: ['admin'], title: '创建订单', noCache: false }
         },
         {
           path: '/order/rate', icon: 'QQ', name: '评价管理', component: _import('carrier/order/rate/index'), meta: { role: ['admin'], title: '评价管理', noCache: false }
@@ -85,9 +85,9 @@ export default {
     {
       path: '/carrier/cargoInfo', icon: 'QQ', name: '货源信息管理', component: _import('carrier/cargoInfo/index'), redirect: '/carrier/cargoInfo/manage', meta: { role: ['admin'], title: '货源信息管理', istab: true, noCache: false },
       children: [
-        /* {
-          path: '/cargoInfo/create', icon: 'QQ', name: '发布货源', component: _import('carrier/cargoInfo/create/index'), meta: { role: ['admin'], title: '发布货源', noCache: false }
-        }, */
+        {
+          path: '/cargoInfo/create', icon: 'QQ', name: '发布货源', component: _import('carrier/order/create/index'), meta: { role: ['admin'], title: '发布货源', noCache: false }
+        },
         {
           path: '/cargoInfo/manage', icon: 'QQ', name: '管理货源', component: _import('carrier/cargoInfo/manage/index'), meta: { role: ['admin'], title: '管理货源', noCache: false }
         }

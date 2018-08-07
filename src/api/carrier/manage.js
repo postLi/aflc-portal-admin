@@ -102,8 +102,25 @@ export function putConfirmPickUp(id) {
 }
 
 export function getOrderInfo(id) {
-  return fetch.get('/aflcorderservice/order/aflcOrder/v1/' + id).then(res =>
-  {
+  return fetch.get('/aflcorderservice/order/fclOrder/v1/getDetails/' + id).then(res => {
     return res.data || {}
   })
+}
+/**
+ * 新增评论
+ * @param {*} data 评论数据
+{
+  "assessLevel": "string", // 评价等级
+  "evaluationDes": "string", // 评价描述
+  "evaluationId": "string", // 评价人ID
+  "evaluationName": "string", // 评价人姓名
+  "orderSerial": "string", // 订单流水号
+  "serverPriceStarLevel": "string", // 服务价格星级
+  "serverQualityStarLevel": "string", // 服务质量星级
+  "transportAgingStarLevel": "string", // 运输时效星级
+  "transportRangeId": "string" // 物流专线ID
+}
+ */
+export function postNewReview(data) {
+  return fetch.post('/aflcusercenterservice/usercenter/aflcTransportEvaluation/v1/add', data)
 }

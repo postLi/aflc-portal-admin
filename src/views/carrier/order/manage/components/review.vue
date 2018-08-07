@@ -14,10 +14,10 @@
       <h3>物流公司需要您的建议哦！</h3>
       <el-form :model="form" :rules="rules" ref="ruleForm" :label-width="formLabelWidth" label-position="right" size="mini">
         <el-form-item label="" prop="carrierAddr">
-          <el-input v-model="form.evaluationDes" maxlength="50" auto-complete="off"></el-input>
+          <el-input v-model="form.evaluationDes" :maxlength="50" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item class="carrierRemarks" label="评价说明" prop="carrierRemarks">
-          <el-input :rows="10" type="textarea" maxlength="400" v-model="form.evaluationDes"></el-input>
+          <el-input :rows="10" type="textarea" :maxlength="400" v-model="form.evaluationDes"></el-input>
           <div class="last-input-num">还可输入<span>{{ 400 - form.carrierRemarks.length}}</span>字</div>
         </el-form-item>
       </el-form>
@@ -61,6 +61,16 @@ export default {
         'transportAgingStarLevel': '', // 运输时效星级
         'transportRangeId': '' // 物流专线ID
       },
+      // 1 2 3 4 5
+      // AF03601
+      totalRate: ['AF0360203', 'AF0360202', 'AF0360201'],
+      // AF03603
+      // AF0360301
+      priceRate: ['AF036030101', 'AF036030102', 'AF036030103', 'AF036030104', 'AF036030105'],
+      // AF0360302
+      serviceRate: ['AF036030201', 'AF036030202', 'AF036030203', 'AF036030204', 'AF036030205'],
+      // AF0360303
+      shipRate: ['AF036030301', 'AF036030302', 'AF036030303', 'AF036030304', 'AF036030305'],
       rules: {},
       formLabelWidth: '150px',
 
@@ -79,15 +89,6 @@ export default {
     submitFeeSetup() {
       this.$refs['ruleForm'].validate((valid) => {
         this.loading = true
-        OrderApi.putCargoSetting(this.feeData).then(res => {
-          this.loading = false
-          if (res.status === 200) {
-            this.$message.info('修改成功！')
-            this.close()
-          } else {
-
-          }
-        })
       })
     }
   }

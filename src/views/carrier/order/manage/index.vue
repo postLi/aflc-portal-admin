@@ -84,11 +84,6 @@ export default {
         type: 'AF03705',
         num: 0
       }, {
-        title: '待评价',
-        name: 'pingjia',
-        type: 'AF03706',
-        num: 0
-      }, {
         title: '已完成',
         name: 'wancheng',
         type: 'AF03707',
@@ -114,7 +109,7 @@ export default {
     float: left;
     height: 74px;
     line-height: 74px;
-    width: 12.5%;
+    width: 14.2%;
     text-align: center;
     cursor: pointer;
     border-bottom: 2px solid #fff;

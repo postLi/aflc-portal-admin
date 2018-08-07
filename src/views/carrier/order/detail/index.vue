@@ -1,9 +1,9 @@
 <template>
-  <div class="manage-orderdetail page-main">
+  <div class="manage-orderdetail page-main" v-loading="loading">
     <div class="tab-info-title">
       <h2><span>订单跟踪</span></h2>
     </div>
-    <div class="rate-status-bar">
+    <div class="rate-status-bar" v-if="!iscancel">
         <ul class="status-flow">
             <li v-for="(item, index) in flows" :key="index" :class="['step'+index,{'active':currentStatus === index}]">
                 <span class="status-line"></span>
@@ -118,6 +118,7 @@ export default {
       retalength: 200, // 回复字数
       replyDes: '',
       UserInfo: {},
+      loading: true,
             // 货主对我的评价
       carrierSerial: {
 
@@ -127,13 +128,25 @@ export default {
 
       },
       orderForm: {},
-      optionsReason: []
+      optionsReason: [],
+      iscancel: false
     }
   },
   mounted() {
     this.firstblood()
   },
   methods: {
+    init() {
+        // 格式化数据
+      switch (this.orderForm.orderStatus) {
+        case 'AF03708':
+          this.iscancel = true
+        case 'AF03707':
+
+
+      }
+        // 加载相应的版块
+    },
     getValue(val) {
       console.log(val)
     },
@@ -144,6 +157,8 @@ export default {
       this.id = this.$route.query.id
       ReqApi.getOrderInfo(this.id).then(data => {
         this.orderForm = data
+        this.init()
+        this.loading = false
       })
     },
     submitForm() {
