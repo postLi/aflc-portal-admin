@@ -225,7 +225,7 @@ export default {
         }
     },
     mounted(){
-        this.firstblood();
+        //this.firstblood();
     },  
     methods: {
         handlePageChange(obj) {

@@ -529,12 +529,18 @@ export default {
     addComplain(row) {
       // 添加投诉
       // /complaintsInfo/index?orderSerial=24c0f4218e1d4bf099d185b3c6964441
-      this.$router.push('/complaintsInfo/index?orderSerial=' + row.orderSerial)
+      this.$router.push({
+        path: '/complaintsInfo/index',
+        query: {
+          orderSerial: row.orderSerial
+
+        }
+      })
     },
     addReview(row) {
       // 添加评价
       this.orderSerial = row.orderSerial
-      this.transportRangeId = row.id
+      this.transportRangeId = row.wlId
       this.dialogVisible = true
     },
     viewReview(row) {
@@ -543,11 +549,11 @@ export default {
     },
     viewComplain(row) {
       // 查看投诉
-      this.$router.push('/complaintsInfo/index?orderSerial=' + row.orderSerial)
+      this.$router.push('/complaintsInfo/index?orderSerial=' + row.orderSerial + (!this.isOwner ? '&type=carrier' : ''))
     },
     replyComplain(row) {
       // 回复投诉
-      this.$router.push('/complaintsInfo/index?orderSerial=' + row.orderSerial)
+      this.$router.push('/complaintsInfo/index?orderSerial=' + row.orderSerial + (!this.isOwner ? '&type=carrier' : ''))
     },
     // 再次下单
     oneMoreTime() {

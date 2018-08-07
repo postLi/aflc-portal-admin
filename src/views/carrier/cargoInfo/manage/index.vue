@@ -172,7 +172,8 @@ export default {
         },
         //修改
         handleEdit(row) {
-            this.$router.push({name: '发布物流专线',params:{ data:row}});
+            this.$router.push('/cargoInfo/create?id='+row.id)
+            //this.$router.push({name: '发布物流专线',params:{ data:row}});
         },
         //删除网点
         handleDelete(row) {

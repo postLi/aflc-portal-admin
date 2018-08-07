@@ -310,6 +310,7 @@ import upload from '@/components/Upload/singleImage2'
 import tmsmap from '@/components/map/index'
 import { getSelectType } from '@/api/common'
 import * as ReqApi from '@/api/carrier/create'
+import * as ReqApiManage from '@/api/carrier/manage'
 
 export default {
   components: {
@@ -463,7 +464,19 @@ export default {
       this.ruleForm.memberType = this.otherinfo.rolesIdList[0]
     },
     initModify() {
+      ReqApiManage.getOrderInfo(this.id).then(data => {
 
+      }).catch(err => {
+        this.$confirm('查询出错：' + JSON.stringify(err), '提示', {
+          confirmButtonText: '重新创建',
+          cancelButtonText: '返回列表页',
+          type: 'warning'
+        }).then(() => {
+          this.initNew()
+        }).catch(() => {
+          this.goList()
+        })
+      })
     },
     initCargo() {
       return getSelectType('AF034').then(data => {
@@ -474,6 +487,13 @@ export default {
           return obj
         })
       })
+    },
+    goList(){
+      if(this.isCargo){
+        this.eventBus.$emit('replaceCurrentView', '/cargoInfo/manage')
+      } else {
+        this.eventBus.$emit('replaceCurrentView', '/order/manage')
+      }
     },
     selectTag(label) {
       label.ischeck = !label.ischeck
@@ -820,13 +840,7 @@ export default {
               confirmButtonText: '确定',
               callback: action => {
                 this.$emit('success')
-                if(this.isCargo){
-                  this.eventBus.$emit('replaceCurrentView', '/cargoInfo/manage')
-                } else {
-                  this.eventBus.$emit('replaceCurrentView', '/order/manage')
-                }
-                
-                
+                this.goList()
               }
             })
           }).catch(err => {
