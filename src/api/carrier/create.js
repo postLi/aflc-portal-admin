@@ -261,6 +261,7 @@ export function getTotalPrice(data) {
   startLatitude:'', // 出发地上传坐标纬度
   startLocation:'', // 出发地
   startLongitude:'' // 出发地上传坐标经度
+  pointIds: '' //用来回显 用英文逗号分隔
 }
  */
 export function getBestNet(cid, data) {

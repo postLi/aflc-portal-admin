@@ -60,7 +60,7 @@
         
       </div>
       <!-- 选择物流公司 -->
-      <div class="select-line tab-info-panel">
+      <div class="select-line tab-info-panel" v-if="!isCargo">
         <div class="tab-info-stitle"><strong>选择物流公司：</strong>（选择出发地跟到达地之后，为您精准匹配物流承运商）<span class="important">选择承运商，直接下单；不选择承运商，发布货源</span></div>
         <div class="select-line-list">
           <el-table
@@ -230,6 +230,7 @@
       
   
     </el-form>
+    <!-- 地图 -->
     <tmsmap @success="getInfo" pos="" name="" :popVisible.sync="popVisible" />
 
     <!-- 查看常用收发货人 -->
@@ -395,6 +396,7 @@ export default {
       popContactTitle: '添加',
       popContactList: [],
       popContactListSearch:'',
+      isCargo: false,
       popPointList: {
         startPoints: [],
         endPoints: []
@@ -445,6 +447,7 @@ export default {
   },
   mounted() {
     this.id = this.$route.query.id
+    this.isCargo = this.$route.path.indexOf('cargoInfo')!==-1
     this.initCargo()
     if (this.id) {
       this.initModify()
@@ -817,7 +820,13 @@ export default {
               confirmButtonText: '确定',
               callback: action => {
                 this.$emit('success')
-                this.eventBus.$emit('replaceCurrentView', '/carrier/order/manage')
+                if(this.isCargo){
+                  this.eventBus.$emit('replaceCurrentView', '/cargoInfo/manage')
+                } else {
+                  this.eventBus.$emit('replaceCurrentView', '/order/manage')
+                }
+                
+                
               }
             })
           }).catch(err => {

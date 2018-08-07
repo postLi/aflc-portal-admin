@@ -266,7 +266,7 @@
       </div>
       <div class="info_tab_footer">共计:{{ total }} <div class="show_pager"> <Pager :total="total" @change="handlePageChange" /></div> </div>    
     </div>
-    <AddReview :dialogVisible.sync="dialogVisible" :orderid="orderid" />
+    <AddReview :dialogVisible.sync="dialogVisible" :orderSerial="orderSerial" :transportRangeId="transportRangeId" />
   </div>
 </template>
 <script>
@@ -335,7 +335,8 @@ export default {
   data() {
     return {
       dialogVisible: false,
-      orderid: '',
+      orderSerial: '',
+      transportRangeId: '',
 
       isOwner: false,
       isall: false,
@@ -532,8 +533,9 @@ export default {
     },
     addReview(row) {
       // 添加评价
+      this.orderSerial = row.orderSerial
+      this.transportRangeId = row.id
       this.dialogVisible = true
-      this.orderid = row.orderSerial
     },
     viewReview(row) {
       // 查看评价
