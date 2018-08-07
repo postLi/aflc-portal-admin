@@ -85,11 +85,11 @@
                                 <p>{{complaintForm.complainTime}}</p>
                             </div>  
                         </div>
-                        <div class="complaint_content" v-if="stepname == 'step-tow'">
+                        <div class="complaint_content" v-if="origin == 'carrier'">
                             <h2> <i class="tishi"></i> 等待物流公司处理</h2>
                             <p style="text-align:center;">物流公司会尽快处理，请耐心等待！</p>
                         </div>
-                        <div class="complaint_content complaint_reply">
+                        <div class="complaint_content complaint_reply" v-else>
                             <h2>{{UserInfo.companyName}}物流公司回复</h2>
                             <div v-if="stepname == 'step-tow'" class="replyInfo">
                                 <div class="replyInfo">
@@ -144,6 +144,7 @@ export default {
             },
             optionsReason:[],
             reply:'',//回复内容
+            origin:'',//判断货主或者物流公司
         };
     },  
     mounted(){ 
@@ -152,6 +153,9 @@ export default {
     methods: {
         firstblood(){
             let orderSerial = this.$route.query.orderSerial;
+            if(this.$route.query.type){
+                this.origin = this.$route.query.type;
+            }
             getDetails(orderSerial).then(res => {
                 console.log('判断第几步',res)
                 if(res.status == 200){
