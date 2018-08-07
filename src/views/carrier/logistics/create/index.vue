@@ -92,11 +92,11 @@
                             立方
                         </li>
                         <li>
-                            <el-input v-model="form.primeryPrice" v-numberOnly></el-input>
+                            <el-input v-model="form.primeryPrice" v-number-only:point></el-input>
                             元/立方
                         </li>
                         <li>
-                            <el-input v-model="form.discountPrice" v-numberOnly></el-input>
+                            <el-input v-model="form.discountPrice" v-number-only:point></el-input>
                             元/立方
                         </li>
                          <span  @click="addItem('light',keys)" class="addItem" v-if="keys == ligthPriceForms.length-1 && form.endVolume!= ''">
@@ -108,7 +108,7 @@
             </el-form-item>
 
             <el-form-item label="最低一票价格：">
-                <el-input v-model="ruleForm.lowerPrice" placeholder="报价"></el-input> 元
+                <el-input v-model="ruleForm.lowerPrice" placeholder="报价" v-number-only:point></el-input> 元
             </el-form-item>
             <el-form-item label="专线类型：" prop="rangeType" v-if="ifShowRangeType == '1'">
                 <el-radio-group v-model="ruleForm.rangeType">
@@ -132,7 +132,7 @@
                 <p class="supplement">请对您的线路进行补充说明，尽量使用市场上或物流行业内的常用词。</p>
             </el-form-item>
             <el-form-item label="专线照片：" prop="rangeType">
-                <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" :limit="5" listtype="picture-card" :showFileList = 'true' v-model="ruleForm.rangeLogo"/>
+                <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" :limit="3" listtype="picture-card" :showFileList = 'true' v-model="ruleForm.rangeLogo"/>
             </el-form-item> 
         </div>
         <el-form-item class="fromfooter">
@@ -294,10 +294,10 @@ export default {
             console.log(pos, name, info)
             switch (this.current) {
                 case 'strartAddress':
-                this.ruleForm.startLocation = info.addressComponent.province+info.addressComponent.cit+info.addressComponent.district;
+                this.ruleForm.startLocation = info.addressComponent.province + info.addressComponent.city + info.addressComponent.district;
                 break;
                 case 'endAddress':
-                this.ruleForm.endLocation = info.addressComponent.province+info.addressComponent.cit+info.addressComponent.district;
+                this.ruleForm.endLocation = info.addressComponent.province + info.addressComponent.city + info.addressComponent.district;
                 break;
             }
         },

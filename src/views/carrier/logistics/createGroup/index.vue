@@ -21,11 +21,11 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item label="手机：" prop="mobile">
-                    <el-input v-model="logisticsForm.mobile" maxlength="11">
+                    <el-input v-model="logisticsForm.mobile" maxlength="11" v-numberOnly>
                     </el-input>
                 </el-form-item>
                 <el-form-item label="固话：">
-                     <el-input v-model="logisticsForm.telNum" maxlength="11">
+                     <el-input v-model="logisticsForm.telNum" maxlength="11" v-numberOnly>
                     </el-input>
                 </el-form-item>
                 <el-form-item label="QQ：" >
@@ -157,7 +157,7 @@ export default {
             this.logisticsForm.address = name ;
             this.logisticsForm.longitude = posArr[0];
             this.logisticsForm.latitude = posArr[1];
-            this.logisticsForm.belongCityName = info.addressComponent.province +'-'+info.addressComponent.city+'-'+info.addressComponent.district;
+            this.logisticsForm.belongCityName = info.addressComponent.province + info.addressComponent.city+ info.addressComponent.district;
         },
         showMap(name) {
             this.popVisible = true ;
