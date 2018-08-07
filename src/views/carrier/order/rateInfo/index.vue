@@ -213,16 +213,10 @@ export default {
         this.firstblood();
     },  
     methods: {
-        getValue(val){
-            console.log(val)
-        },
-        textsArray(){
-             
-        },
         firstblood(){
             let orderSerial = this.$route.query.orderSerial;
             this.UserInfo = getUserInfo();
-            Promise.all([carrierSerial(orderSerial),consignorSerial(orderSerial),getDetailsByOrderSerial('AFTC201807271126115176970')]).then(resArr=> {
+            Promise.all([carrierSerial(orderSerial),consignorSerial(orderSerial),getDetailsByOrderSerial(orderSerial)]).then(resArr=> {
                 console.log('resArr',resArr)
                 this.carrierSerial = resArr[0].data || {};
                 this.consignorSerial = resArr[1].data || {};

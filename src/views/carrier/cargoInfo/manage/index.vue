@@ -32,9 +32,8 @@
                     :data="tableData"
                     ref="multipleTable"
                     stripe
-                    height = "100%"
                     border
-                    style="width: 100%">
+                    style="width: 100% ;height:100%">
                         <el-table-column
                             fixed
                             label="序号"
@@ -91,11 +90,11 @@
                             width="250"
                             >
                                 <template slot-scope="scope">
-                                    <el-button-group>
+                                    <!-- <el-button-group> -->
                                          <el-button @click="handleEdit(scope.row)" type="primary" size="mini">修改</el-button>
                                         <!-- <el-button @click="handleDelete(scope.row)" type="primary" size="mini">删除</el-button> -->
                                         <el-button @click="handleStatus(scope.row)" :type="scope.row.isEnable == 0 ? 'primary' : 'info'" size="mini">{{scope.row.isEnable == 0 ? '启用' : '禁用'}}</el-button>
-                                    </el-button-group>
+                                    <!-- </el-button-group> -->
                                 </template>
                         </el-table-column>
                     </el-table>
@@ -164,6 +163,7 @@ export default {
         },
         //搜索
         handleSearch(){
+
             this.firstblood()
         },
         //新增网点
@@ -199,7 +199,6 @@ export default {
         //更改状态
         handleStatus(row) {
             let type = row.isEnable == '0' ? '1' : '0';
-            
             GoodsSourceStatus(row.id,type).then(res => {
                 this.firstblood();
             }).catch(err=>{
