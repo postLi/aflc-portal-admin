@@ -266,7 +266,7 @@
       </div>
       <div class="info_tab_footer">共计:{{ total }} <div class="show_pager"> <Pager :total="total" @change="handlePageChange" /></div> </div>    
     </div>
-    <AddReview :dialogVisible.sync="dialogVisible" :orderid="orderid" />
+    <AddReview :dialogVisible.sync="dialogVisible" :orderSerial="orderSerial" :transportRangeId="transportRangeId" />
   </div>
 </template>
 <script>
@@ -335,7 +335,8 @@ export default {
   data() {
     return {
       dialogVisible: false,
-      orderid: '',
+      orderSerial: '',
+      transportRangeId: '',
 
       isOwner: false,
       isall: false,
@@ -528,12 +529,19 @@ export default {
     addComplain(row) {
       // 添加投诉
       // /complaintsInfo/index?orderSerial=24c0f4218e1d4bf099d185b3c6964441
-      this.$router.push('/complaintsInfo/index?orderSerial=' + row.orderSerial)
+      this.$router.push({
+        path: '/complaintsInfo/index',
+        query: {
+          orderSerial: row.orderSerial
+
+        }
+      })
     },
     addReview(row) {
       // 添加评价
+      this.orderSerial = row.orderSerial
+      this.transportRangeId = row.wlId
       this.dialogVisible = true
-      this.orderid = row.orderSerial
     },
     viewReview(row) {
       // 查看评价
@@ -541,11 +549,11 @@ export default {
     },
     viewComplain(row) {
       // 查看投诉
-      this.$router.push('/complaintsInfo/index?orderSerial=' + row.orderSerial)
+      this.$router.push('/complaintsInfo/index?orderSerial=' + row.orderSerial + (!this.isOwner ? '&type=carrier' : ''))
     },
     replyComplain(row) {
       // 回复投诉
-      this.$router.push('/complaintsInfo/index?orderSerial=' + row.orderSerial)
+      this.$router.push('/complaintsInfo/index?orderSerial=' + row.orderSerial + (!this.isOwner ? '&type=carrier' : ''))
     },
     // 再次下单
     oneMoreTime() {

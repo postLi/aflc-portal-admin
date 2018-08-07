@@ -14,11 +14,34 @@
       <h3>物流公司需要您的建议哦！</h3>
       <el-form :model="form" :rules="rules" ref="ruleForm" :label-width="formLabelWidth" label-position="right" size="mini">
         <el-form-item label="" prop="carrierAddr">
-          <el-input v-model="form.evaluationDes" :maxlength="50" auto-complete="off"></el-input>
+          <el-form-item label-width="auto" label="服务价格：" >
+            <el-rate
+              show-text
+              v-model="priceRank"
+              :texts="texts"
+              :colors="rankColor">
+            </el-rate>
+          </el-form-item>
+          <el-form-item label-width="auto" label="服务价格：" >
+            <el-rate
+              show-text
+              :texts="texts"
+              v-model="serviceRank"
+              :colors="rankColor">
+            </el-rate>
+          </el-form-item>
+          <el-form-item label-width="auto" label="服务价格：" >
+            <el-rate
+              show-text
+              :texts="texts"
+              v-model="shipRank"
+              :colors="rankColor">
+            </el-rate>
+          </el-form-item>
         </el-form-item>
         <el-form-item class="carrierRemarks" label="评价说明" prop="carrierRemarks">
           <el-input :rows="10" type="textarea" :maxlength="400" v-model="form.evaluationDes"></el-input>
-          <div class="last-input-num">还可输入<span>{{ 400 - form.carrierRemarks.length}}</span>字</div>
+          <div class="last-input-num">还可输入<span>{{ 400 - form.evaluationDes.length}}</span>字</div>
         </el-form-item>
       </el-form>
     </div>
@@ -29,24 +52,22 @@
   </el-dialog>
 </template>
 <script>
-import { addReview } from '@/api/carrier/rate.js'
+import { postNewReview } from '@/api/carrier/manage'
 
 export default {
-  components: {
-
-  },
   props: {
     dialogVisible: {
       type: Boolean,
       default: false
     },
-    orderid: {
+    orderSerial: {
+      type: String,
+      default: ''
+    },
+    transportRangeId:{
       type: String,
       default: ''
     }
-  },
-  computed: {
-
   },
   data() {
     return {
@@ -72,12 +93,60 @@ export default {
       // AF0360303
       shipRate: ['AF036030301', 'AF036030302', 'AF036030303', 'AF036030304', 'AF036030305'],
       rules: {},
+      // 评分
+      rankColor:['#99A9BF', '#F7BA2A', '#FF9900'],
+      texts:['非常不满意','不满意','一般','满意','非常满意'],
+      priceRank: 5,
+      serviceRank: 5,
+      shipRank: 5,
       formLabelWidth: '150px',
 
       loading: false
     }
   },
+  watch:{
+    dialogVisible(newVal){
+      if(newVal){
+        this.reset()
+      }
+    },
+    priceRank:{
+      handler(newVal){
+        this.form.serverPriceStarLevel = this.priceRate[newVal - 1]
+        this.setTotalRank()
+      },
+      immediate: true
+    },
+    serviceRank:{
+      handler(newVal){
+        this.form.serverQualityStarLevel = this.serviceRate[newVal - 1]
+        this.setTotalRank()
+      },
+      immediate: true
+    },
+    shipRank:{
+      handler(newVal){
+        this.form.transportAgingStarLevel = this.shipRate[newVal - 1]
+        this.setTotalRank()
+      },
+      immediate: true
+    }
+  },
+  mounted(){
+
+  },
   methods: {
+    setTotalRank(){
+      let total = this.priceRank + this.serviceRank + this.shipRank
+      if(total < 7){
+        this.form.assessLevel = this.totalRate[0]
+      } else if(total < 10){
+        this.form.assessLevel = this.totalRate[1]
+      } else {
+        this.form.assessLevel = this.totalRate[2]
+      }
+      
+    },
     close(done) {
       this.$emit('update:dialogVisible', false)
       this.$emit('close')
@@ -85,10 +154,28 @@ export default {
         done()
       }
     },
-
+    reset(){
+      this.form = Object.assign({},this.$data.form)
+      this.form.evaluationId = this.otherinfo.id
+      this.form.evaluationName = this.otherinfo.contactsName
+      this.form.orderSerial = this.orderSerial
+      this.form.transportRangeId = this.transportRangeId
+      
+    },
     submitFeeSetup() {
       this.$refs['ruleForm'].validate((valid) => {
         this.loading = true
+        if(valid){
+          postNewReview(this.form).then(res=>{
+            this.$message.success("保存成功！")
+            this.loading = false
+            this.close()
+          }).catch(err => {
+            this.$message.error("保存失败：" + JSON.stringify(err))
+            this.loading = false
+          })
+        }
+        
       })
     }
   }
