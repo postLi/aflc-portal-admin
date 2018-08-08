@@ -123,11 +123,11 @@
                             width="250"
                             >
                                 <template slot-scope="scope">
-                                    <el-button-group>
+                                    <!-- <el-button-group> -->
                                         <el-button @click="handleEdit(scope.row)" type="primary" size="mini">修改</el-button>
                                         <el-button @click="handleDelete(scope.row)" type="danger" size="mini">删除</el-button>
                                         <el-button @click="handleStatus(scope.row)" :type="scope.row.rangeStatus == 0 ? 'primary' : 'info'" size="mini">{{scope.row.rangeStatus == 0 ? '启用' : '禁用'}}</el-button>
-                                    </el-button-group>
+                                    <!-- </el-button-group> -->
                                 </template>
                         </el-table-column>
                     </el-table>
