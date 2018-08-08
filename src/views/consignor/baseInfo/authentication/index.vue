@@ -25,13 +25,22 @@
                         </el-option>
                     </el-select>
                 </el-form-item> 
-                <el-form-item label="公司名称：" :prop=" logisticsForm.shipperType == 'AF0010101' ?  '': companyName">
-                     <el-input v-model="logisticsForm.companyName"  :disabled="ifDisable === false">
+                <el-form-item label="公司名称："  v-if="logisticsForm.shipperType == 'AF0010101'">
+                    <el-input v-model="logisticsForm.companyName"  :disabled="ifDisable === false">
                         <p slot="append">请填写企业在工商局注册的全称，完整的信息让客户更加信赖您</p>
                     </el-input>
                 </el-form-item>
-                <el-form-item label="法人/负责人：" prop="legalPerson"> 
-                     <el-input v-model="logisticsForm.legalPerson" :disabled="ifDisable === false">
+                <el-form-item label="公司名称：" prop="companyName" v-else>
+                    <el-input v-model="logisticsForm.companyName"  :disabled="ifDisable === false">
+                        <p slot="append">请填写企业在工商局注册的全称，完整的信息让客户更加信赖您</p>
+                    </el-input>
+                </el-form-item>
+                <el-form-item label="法人/负责人："  v-if="logisticsForm.shipperType == 'AF0010101'"> 
+                    <el-input v-model="logisticsForm.legalPerson" :disabled="ifDisable === false">
+                    </el-input>
+                </el-form-item>
+                <el-form-item label="法人/负责人：" prop="legalPerson" v-else> 
+                    <el-input v-model="logisticsForm.legalPerson" :disabled="ifDisable === false">
                     </el-input>
                 </el-form-item>
                  <el-form-item label="统一社会信用代码（营业执照）："  prop="creditCode">

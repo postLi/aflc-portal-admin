@@ -131,7 +131,6 @@
                         .el-input__inner{
                             height: 28px;
                             line-height: 28px;
-                            padding: 5px;
                             overflow:hidden;/*超出长度的文字隐藏*/
                             text-overflow:ellipsis;/*文字隐藏以后添加省略号*/
                             white-space:nowrap;/*强制不换行*/
@@ -155,7 +154,6 @@
                         width: 100%;
                         .el-input__inner{
                             padding-left:35px; 
-                            padding-top: 6px;
                         }
                         .el-input__icon{
                             line-height: 30px;

@@ -44,19 +44,19 @@
                 <h2>车主认证照片</h2>
                 <el-form-item    prop="drivingLicenceFile">
                     <p><span>*</span>上传驾驶证照片：</p>
-                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.drivingLicenceFile" v-if="ifDisable == 'false'"/>
+                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.drivingLicenceFile" v-if="ifDisable == true"/>
                     <img class="showPicture" :src="logisticsForm.drivingLicenceFile ? logisticsForm.drivingLicenceFile: defaultImg" alt="驾驶证照片"  v-else/>
                     <el-button  class="preview" type="primary" plain v-show="logisticsForm.drivingLicenceFile ? true : false" v-showPicture :imgurl="logisticsForm.drivingLicenceFile">点击预览</el-button>
                 </el-form-item>
                 <el-form-item    prop="idCardFile">
                     <p><span>*</span>上传车主身份证照片：</p>
-                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.idCardFile" v-if="ifDisable == 'false'"/>
+                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.idCardFile" v-if="ifDisable == true"/>
                     <img class="showPicture" :src="logisticsForm.idCardFile ? logisticsForm.idCardFile: defaultImg" alt="车主身份证照片" v-else/>
                     <el-button  class="preview" type="primary" plain v-show="logisticsForm.idCardFile ? true : false" v-showPicture :imgurl="logisticsForm.idCardFile">点击预览</el-button>
                 </el-form-item>
                 <el-form-item   prop="personalImageFile">
                     <p><span>*</span>上传车主个人形象照：</p>
-                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.personalImageFile" v-if="ifDisable == 'false'"/>
+                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.personalImageFile" v-if="ifDisable == true"/>
                     <img class="showPicture" :src="logisticsForm.personalImageFile ? logisticsForm.personalImageFile: defaultImg" alt="车主个人形象照" v-else/>
                     <el-button  class="preview" type="primary" plain v-show="logisticsForm.personalImageFile ? true : false" v-showPicture :imgurl="logisticsForm.personalImageFile">点击预览</el-button>
                 </el-form-item>
