@@ -34,7 +34,7 @@ export default {
       path: '/carrier/order', icon: 'QQ', name: '订单管理', component: _import('carrier/order/index'), redirect: '/order/manage', meta: { role: ['admin'], title: '订单管理', istab: true, noCache: false },
       children: [
         {
-          path: '/order/manage/owner', icon: 'QQ', name: '我创建的订单', component: _import('carrier/order/manage/index'), meta: { role: ['admin'], title: '我创建的订单', noCache: false }
+          path: '/order/manage', icon: 'QQ', name: '我创建的订单', component: _import('carrier/order/manage/index'), meta: { role: ['admin'], title: '我创建的订单', noCache: false }
         },
         {
           path: '/order/manage/carrier', icon: 'QQ', name: '我承运的订单', component: _import('carrier/order/manage/index'), meta: { role: ['admin'], title: '我承运的订单', noCache: false }

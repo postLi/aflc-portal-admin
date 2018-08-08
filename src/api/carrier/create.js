@@ -46,6 +46,12 @@ export function postCreateOrder(usertoken, data) {
   return fetch.post('/aflcorderservice/order/fclOrder/v1/createOrder?user_token=' + usertoken, data)
 }
 /**
+ * 修改订单/货源
+ */
+export function putChangeOrder(usertoken, data) {
+  return fetch.put('/aflcorderservice/order/fclOrder/v1/updateOrder?user_token=' + usertoken, data)
+}
+/**
  * 根据id获取信息
  * @param {*} id 订单id
  */
