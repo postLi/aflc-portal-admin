@@ -6,6 +6,11 @@
       </div> -->
       <!-- <SidebarMenuSearch :searchItem="sidebarRouters" /> -->
       <sidebar-item ref="sidebaritem" :routes='sidebarRouters'></sidebar-item>
+      <div class="nologin">
+        <el-button size="large" type="primary"><a href="http://192.168.1.157:9528/?nologin=1">TMS系统</a></el-button><br>
+        <el-button size="large" type="success"><a href="http://192.168.1.24:9526/?nologin=1">会员中心</a></el-button><br>
+        <el-button size="large" type="warning"><a href="http://192.168.1.170/member/content_list.php?channelid=1">CMS系统</a></el-button>
+      </div>
       <div @mouseover="showSubnav" @mouseout="hideSubnav" class="subNavWrapper"></div>
   </div>
   
@@ -45,7 +50,7 @@ export default {
 @import "src/styles/mixin.scss";
 
  .sidebar-menu{
-  height: 100%;
+ 
   overflow-y: auto;
   overflow-x: visible;
   width: 100%;
@@ -106,6 +111,13 @@ export default {
     left: 100%;
     max-height: 100%;
     overflow: auto;
+  }
+}
+.nologin{
+  margin-top: 10px;
+  text-align: center;
+  .el-button{
+    margin-bottom: 10px;
   }
 }
 

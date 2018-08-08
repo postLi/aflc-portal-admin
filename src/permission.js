@@ -3,6 +3,30 @@ import store from './store'
 import NProgress from 'nprogress' // Progress 进度条
 import 'nprogress/nprogress.css'// Progress 进度条样式
 import { getToken, removeToken, setToken } from '@/utils/auth' // 验权
+/* import fetch from '@/utils/fetch'
+
+function loginCms() {
+  const form = new FormData()
+  form.append('fmdo', 'login')
+  form.append('dopost', 'login')
+  form.append('gourl', 'http://192.168.1.170/member/content_list.php?channelid=1')
+
+  form.append('userType', 'aflc-5')
+  form.append('userid', '13088888881')
+  form.append('pwd', '123456')
+  form.append('vdcode', '99999')
+
+  return fetch.request({
+    url: 'http://192.168.1.170/member/index_do.php',
+    method: 'post',
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      'authorization': 'Basic d2ViQXBwOndlYkFwcA=='
+    },
+    data: form
+  })
+}
+loginCms() */
 
 const whiteList = ['/login']
 router.beforeEach((to, from, next) => {
@@ -16,6 +40,18 @@ router.beforeEach((to, from, next) => {
         path: to.fullPath.replace(/([&|?])(settoken=[^&]*&?)/, '$1').replace(/\?$/, '')
       })
       console.log('load Token:', getToken(), to.fullPath.replace(/([&|?])(settoken=[^&]*&?)/, '$1').replace(/\?$/, ''))
+    })
+  } else if (to.query.nologin) {
+    store.dispatch('Login', {
+      'accNum': 'aflc-5',
+      'username': '13088888886|aflc-5',
+      'password': '123456',
+      'memberType': 'AF00107',
+      'mobile': '13088888886'
+    }).then(() => {
+      next({
+        path: '/'
+      })
     })
   } else if (getToken()) {
     if (to.path === '/login') {
