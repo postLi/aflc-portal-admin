@@ -193,6 +193,7 @@
       <!-- 联系方式 -->
       <div class="select-contact tab-info-panel">
           <h3>联系方式</h3>
+          
           <ul class="concat-list clearfix">
             <li>
               <el-form-item required label="发货人：">
@@ -296,6 +297,7 @@
             </li>
           </ul>
         </div>
+        
         <div slot="footer" class="dialog-footer">
           <el-button @click="showPopNet = false">取 消</el-button>
           <el-button type="primary" @click="submitNetForm">确 定</el-button>
@@ -308,9 +310,11 @@
 import selectType from '@/components/selectType/index'
 import upload from '@/components/Upload/singleImage2'
 import tmsmap from '@/components/map/index'
+
 import { getSelectType } from '@/api/common'
 import * as ReqApi from '@/api/carrier/create'
 import * as ReqApiManage from '@/api/carrier/manage'
+
 
 export default {
   components: {
@@ -518,7 +522,7 @@ export default {
     getInfo(pos, name, info) {
       console.log('map info: ', info)
       const obj = info.addressComponent
-      const str = obj.province + '-' + obj.city + '-' + obj.district
+      const str = obj.province + '' + obj.city + '' + obj.district
       const str2 = obj.township + obj.street + obj.streetNumber + obj.building
       // info.name  info.pos
       switch (this.current) {

@@ -47,7 +47,7 @@
         </div>
         <div class="order-control-pannel">
             <div v-if="active === 1" class="order-step-1 order-control-info">
-                <div class="status-txt">
+                <div class="status-txt" >
                     订单状态：货主已下单，等待物流公司承运。
                 </div>
                 <!-- <div class="next-step">
@@ -56,32 +56,51 @@
                 <div class="order-id">
                     订单号：{{ orderForm.orderSerial }}
                 </div>
+                <div class="order-button" v-if="iscarrier">
+                    <el-button  type="primary" :size="btnsize"  plain @click="confirmCarrier(orderForm)">确定承运</el-button>
+                    <el-button type="primary" :size="btnsize"  plain @click="cancelOrder(orderForm)">取消订单</el-button>
+                </div>
             </div>
             <div v-if="active === 2" class="order-step-2 order-control-info">
-                <div class="status-txt">
+                <div class="status-txt" v-if="!iscarrier">
                     订单状态：物流公司已接单，等待提货。
+                </div>
+                <div class="status-txt" v-if="iscarrier">
+                    订单状态：货主已下单，等待物流公司尽快提货。
                 </div>
                 <!-- <div class="next-step">
                     物流：预计2018月12月06 日送达湖北省武汉市江夏区
                 </div> -->
                 <div class="order-id">
                     订单号：{{ orderForm.orderSerial }}
+                </div>
+                <div class="order-button" v-if="iscarrier">
+                    <el-button type="primary" :size="btnsize"  plain @click="confirmPickUp(orderForm)">确认提货</el-button>
                 </div>
             </div>
             <div v-if="active === 3" class="order-step-3 order-control-info">
-                <div class="status-txt">
+                <div class="status-txt" v-if="!iscarrier">
                     订单状态：物流公司已提货，等待发货网点派车前往目的地。
+                </div>
+                <div class="status-txt" v-if="iscarrier">
+                    订单状态：货物已提，等待发货前往目的地。
                 </div>
                 <!-- <div class="next-step">
                     物流：预计2018月12月06 日送达湖北省武汉市江夏区
                 </div> -->
                 <div class="order-id">
                     订单号：{{ orderForm.orderSerial }}
+                </div>
+                <div class="order-button" v-if="iscarrier">
+                    <el-button type="primary" :size="btnsize"  plain @click="confirmDelivery(orderForm)">确认发货</el-button>
                 </div>
             </div>
             <div v-if="active === 4" class="order-step-4 order-control-info">
-                <div class="status-txt">
+                <div class="status-txt" v-if="!iscarrier">
                     订单状态：物流公司已经发货，等待签收网点进行确认收货！
+                </div>
+                <div class="status-txt" v-if="iscarrier">
+                    订单状态：货主货物已经发出，等待收货！
                 </div>
                 <!-- <div class="next-step">
                     物流：预计2018月12月06 日送达湖北省武汉市江夏区
@@ -89,13 +108,35 @@
                 <div class="order-id">
                     订单号：{{ orderForm.orderSerial }}
                 </div>
+                <div class="order-button" v-if="iscarrier">
+                    <el-button type="primary" :size="btnsize"  plain v-if="orderForm.complainWorkSerial && !orderForm.complainId" @click="replyComplain(orderForm)">投诉回复</el-button>
+                    <el-button type="primary" :size="btnsize"  plain v-if="orderForm.complainWorkSerial && orderForm.complainId" @click="viewComplain(orderForm)">投诉详情</el-button>
+                    <el-button type="primary" :size="btnsize"  plain @click="confirmEvaluate(orderForm)">确认收货</el-button>
+                </div>
             </div>
             <div v-if="active === 6" class="order-step-5 order-control-info">
-                <div class="status-txt">
+                <div class="status-txt"  v-if="!iscarrier">
                     订单状态：货物已到达签收！
+                </div>
+                <div class="status-txt" v-if="iscarrier">
+                    订单状态：已评价！
                 </div>
                 <div class="next-step">
                     {{ orderForm.receiveTime }}货物已送达签收，感谢您使用安发平台，期待下次继续为您服务。
+                </div>
+                <div class="order-id">
+                    订单号：{{ orderForm.orderSerial }}
+                </div>
+                <div class="order-button" v-if="iscarrier">
+                    您可以 <el-button type="primary" :size="btnsize"  plain v-if="orderForm.complainWorkSerial && !orderForm.complainId" @click="replyComplain(orderForm)">投诉回复</el-button>
+                    <el-button type="primary" :size="btnsize"  plain v-if="orderForm.complainWorkSerial && orderForm.complainId" @click="viewComplain(orderForm)">投诉详情</el-button>
+                    <el-button type="primary" v-if="!orderForm.transportEvaluationId" :size="btnsize"  plain @click="addReview(orderForm)">评价</el-button>
+                    <el-button type="primary" v-if="orderForm.transportEvaluationId || orderForm.shipperEvaluationId" :size="btnsize"  plain @click="viewReview(orderForm)">评价详情</el-button>
+                </div>
+            </div>
+            <div v-if="active === 7" class="order-step-5 order-control-info">
+                <div class="status-txt">
+                    订单状态：订单已取消/物流公司取消订单
                 </div>
                 <div class="order-id">
                     订单号：{{ orderForm.orderSerial }}
@@ -173,11 +214,16 @@ export default {
       },
       orderForm: {},
       optionsReason: [],
-      iscancel: false
+      iscancel: false,
+      iscarrier: false,
+      isOwner: false
     }
   },
   mounted() {
     this.firstblood()
+    // 判断是否为承运商进来查看
+    this.iscarrier = this.$route.query.type === 'carrier'
+    this.isOwner = !this.iscarrier
   },
   methods: {
     init() {
@@ -186,6 +232,8 @@ export default {
       switch (this.orderForm.orderStatus) {
         case 'AF03708':
           this.iscancel = true
+          active = 7
+          break
         case 'AF03707':
           this.flows[5].done = true
           this.flows[5].time = ''
@@ -236,6 +284,173 @@ export default {
       updateRate(rata).then(res => {
         this.firstblood()
       })
+    },
+    confirmCarrier(row) {
+      this.$confirm('确定要承运吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        ReqApi.putConfirmCarrier(row.orderSerial).then(res => {
+          this.$message({
+            type: 'success',
+            message: '操作成功!'
+          })
+          this.fetchData()
+        }).catch(err => {
+          this.$message({
+            type: 'info',
+            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
+          })
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
+      })
+    },
+    cancelOrder(row) {
+      this.$confirm('确定要取消订单吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        ReqApi.putCancelOrder(row.orderSerial).then(res => {
+          this.$message({
+            type: 'success',
+            message: '操作成功!'
+          })
+          this.fetchData()
+        }).catch(err => {
+          this.$message({
+            type: 'info',
+            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
+          })
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
+      })
+    },
+    confirmPickUp(row) {
+      this.$confirm('确定要提货吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        ReqApi.putConfirmPickUp(row.orderSerial).then(res => {
+          this.$message({
+            type: 'success',
+            message: '操作成功!'
+          })
+          this.fetchData()
+        }).catch(err => {
+          this.$message({
+            type: 'info',
+            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
+          })
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
+      })
+    },
+    confirmDelivery(row) {
+      this.$confirm('确定要发货吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        ReqApi.putConfirmDelivery(row.orderSerial).then(res => {
+          this.$message({
+            type: 'success',
+            message: '操作成功!'
+          })
+          this.fetchData()
+        }).catch(err => {
+          this.$message({
+            type: 'info',
+            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
+          })
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
+      })
+    },
+    confirmEvaluate(row) {
+      this.$confirm('确定收货吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        ReqApi.putConfirmEvaluate(row.orderSerial).then(res => {
+          this.$message({
+            type: 'success',
+            message: '操作成功!'
+          })
+          this.fetchData()
+        }).catch(err => {
+          this.$message({
+            type: 'info',
+            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
+          })
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
+      })
+    },
+    addComplain(row) {
+      // 添加投诉
+      // /complaintsInfo/index?orderSerial=24c0f4218e1d4bf099d185b3c6964441
+      this.$router.push({
+        path: '/complaintsInfo/index',
+        query: {
+          orderSerial: row.orderSerial
+
+        }
+      })
+    },
+    addReview(row) {
+      // shipperEvaluationId 货主评价id 物流公司拿
+      // transportEvaluationId 物流公司评价id 货主拿
+      // complainId 为空回复投诉 不为空查看详情
+      // complainWorkSerial 有没有投诉
+      // 添加评价
+      this.orderSerial = row.orderSerial
+      this.transportRangeId = row.wlId
+      this.shipperId = row.shipperId
+      if(this.isOwner){
+        this.dialogVisible = true
+      } else{
+        this.dialogVisible2 = true
+      }
+    },
+    viewReview(row) {
+      // 查看评价
+      this.$router.push('/order/rateInfo?evaluationId=' + row.evaluationId + (!this.isOwner ? '&type=carrier' : ''))
+    },
+    viewComplain(row) {
+      // 查看投诉
+      this.$router.push('/complaintsInfo/index?orderSerial=' + row.orderSerial + (!this.isOwner ? '&type=carrier' : ''))
+    },
+    replyComplain(row) {
+      // 回复投诉
+      this.$router.push('/complaintsInfo/index?orderSerial=' + row.orderSerial + (!this.isOwner ? '&type=carrier' : ''))
+    },
+    // 再次下单
+    oneMoreTime() {
+      this.$router.push('/order/create')
     }
   }
 }

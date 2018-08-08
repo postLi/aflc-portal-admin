@@ -5,7 +5,7 @@
     </div>
     <div class="list-tab-content">
       <keep-alive>
-        <component :key="component" :listtype="component" :isCarrier="isCarrier" v-bind:is="component"></component>
+        <component :key="component" :listtype="component"  v-bind:is="component"></component>
       </keep-alive>
     </div>
   </div>
@@ -40,20 +40,11 @@ export default {
     quxiao
   },
   created() {
-    if (this.$route.path.indexOf('carrier/order/manage') !== -1) {
-      this.isCarrier = true
-    }
-    const isOwner = this.$route.path.indexOf('owner') !== -1
-    ReqApi.getOrderListCount(this.otherinfo.userToken, {
-      releaseOrCarrier: isOwner ? '1' : '2',
-      queryType: '1'
-    }).then(data => {
-      this.tabs.forEach(el => {
-        if (data[el.type]) {
-          el.num = data[el.type]
-          el.num = el.num > 99 ? '99+' : el.num
-        }
-      })
+    this.getCount()
+  },
+  mounted(){
+    this.eventBus.$on("updateListCount",()=>{
+      this.getCount()
     })
   },
   data() {
@@ -96,6 +87,25 @@ export default {
       }],
       component: 'all',
       isCarrier: false
+    }
+  },
+  methods:{
+    getCount(){
+      if (this.$route.path.indexOf('/order/manage/carrier') !== -1) {
+        this.isCarrier = true
+      }
+      const isOwner = !this.isCarrier
+      ReqApi.getOrderListCount(this.otherinfo.userToken, {
+        releaseOrCarrier: isOwner ? '1' : '2',
+        queryType: '1'
+      }).then(data => {
+        this.tabs.forEach(el => {
+          //if (data[el.type]) {
+            el.num = data[el.type]
+            el.num = el.num > 99 ? '99+' : el.num
+          //}
+        })
+      })
     }
   }
 }

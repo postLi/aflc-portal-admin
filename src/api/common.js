@@ -5,12 +5,9 @@ const baseUrl = 'aflccommonservice'
 /**
  * 获取城市数据
  */
-export function getCityInfo(name = '') {
-  return fetch.get('/api-order/order/region/v1/name', {
-    params: {
-      name: name || ''
-    }
-  }).then(res => {
+export function getCityInfo(code) {
+  code = code || ''
+  return fetch.get('/aflccommonservice/common/aflcCommonPCA/v1/findAflcCommonPCAByCode?code=' + code).then(res => {
     return res.data || []
   })
 }
@@ -102,14 +99,13 @@ export function getLogisticsCompanyInfoByMobile(phone) {
   })
 }
 
-//根据订单流水号获取详细信息
+// 根据订单流水号获取详细信息
 export function getDetailsByOrderSerial(OrderSerial) {
-    return fetch.axios({
-      url: '/aflcorderservice/order/fclOrder/v1/getDetailsByOrderSerial/' + OrderSerial,
-      method: 'get'
-    })
-  }
-
+  return fetch.axios({
+    url: '/aflcorderservice/order/fclOrder/v1/getDetailsByOrderSerial/' + OrderSerial,
+    method: 'get'
+  })
+}
 
 /**
  * 修改密码

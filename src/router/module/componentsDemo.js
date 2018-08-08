@@ -55,6 +55,11 @@ export default {
       path: '/components/querySelect',
       name: '下拉框查询',
       component: _import('componentsDemo/querySelect')
+    },
+    {
+      path: '/components/vregion',
+      name: '城市选择器2',
+      component: _import('componentsDemo/vregion')
     }
   ]
 }
