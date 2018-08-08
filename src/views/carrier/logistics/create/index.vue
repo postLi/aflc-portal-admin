@@ -126,12 +126,17 @@
                     </el-select>
                 </div>
             </el-form-item>
-            <el-form-item label="线路说明：" class="textarea" >
-                <el-input type="textarea" v-model="ruleForm.transportRemark" :maxlength="maxlength" placeholder="请填写备注0-30个字。提供原创说明有助于提升线路效果。"></el-input>
+            <el-form-item label="线路说明：" class="textarea" prop="transportRemark" >
+                <el-input type="textarea" 
+                    v-model="ruleForm.transportRemark" 
+                    :autosize="{ minRows: 3, maxRows: 10}"
+                    :maxlength="maxlength" 
+                    placeholder="请填写备注30-2000个字。提供原创说明有助于提升线路效果。">
+                </el-input>
                 <span>{{ruleForm.transportRemark.length}} / {{maxlength}}</span>
                 <p class="supplement">请对您的线路进行补充说明，尽量使用市场上或物流行业内的常用词。</p>
             </el-form-item>
-            <el-form-item label="专线照片：" prop="rangeType">
+            <el-form-item label="专线照片：">
                 <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" :limit="3" listtype="picture-card" :showFileList = 'true' v-model="ruleForm.rangeLogo"/>
             </el-form-item> 
         </div>
@@ -168,8 +173,7 @@ export default {
             }
         };
         var checkStartLocationContactsMobile  = (rule, value, callback) => {
-            
-            console.log(value)
+            // console.log(value)
             if (value === '') {
                 callback(new Error('请输入手机号码'));
             } else {
@@ -197,7 +201,7 @@ export default {
             dedicated:'AF033',
             depart:'AF026',
             totalNumber:0,//當前字數
-            maxlength:30,
+            maxlength:2000,
             ruleForm: {
                 startLocation:'',//出发地
                 startLocationContacts:'',//出发地联系人
@@ -262,6 +266,9 @@ export default {
                 rangeType: [
                     { required: true, message: '请选择专线类型', trigger: 'change' }
                 ],
+                transportRemark:[
+                    { min: 30, max: 2000, message: '专线说明请在30-2000字', trigger: 'blur' }
+                ]
             }
         }
     },
@@ -286,7 +293,7 @@ export default {
     },
     mounted(){
         this.getInformations();
-        this.getParams()
+        this.getParams();
     },
     methods:{
         getInfo(pos, name, info) {
@@ -311,7 +318,6 @@ export default {
                 let dataObj = this.$route.params.data;//接收数据
                 this.ligthPriceForms = dataObj.lightcargo;
                 this.weigthPriceForms = dataObj.weightcargo;
-            
                 TransportRangeInfo(dataObj.id).then(res=>{
                     this.ruleForm = res.data;
                 })

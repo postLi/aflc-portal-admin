@@ -25,7 +25,7 @@
                         </el-option>
                     </el-select>
                 </el-form-item> 
-                <el-form-item label="公司名称：" prop="companyName">
+                <el-form-item label="公司名称：" :prop=" logisticsForm.shipperType == 'AF0010101' ?  '': companyName">
                      <el-input v-model="logisticsForm.companyName"  :disabled="ifDisable === false">
                         <p slot="append">请填写企业在工商局注册的全称，完整的信息让客户更加信赖您</p>
                     </el-input>
@@ -54,21 +54,25 @@
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="企业LOGO：" prop="companyLogo" class="minHeight">
-                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.companyLogo" v-if="ifDisable == 'false'"/>
+                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.companyLogo" v-if="ifDisable == true"/>
                     <img class="showPicture" :src="logisticsForm.companyLogo" alt="LOGO" v-else>
                     <el-button  class="preview" type="primary" plain v-show="logisticsForm.companyLogo ? true : false" v-showPicture :imgurl="logisticsForm.companyLogo">点击预览</el-button>
                 </el-form-item>
                 <el-form-item label="公司简介："  class="textarea"  prop="driverDesc">
-                    <el-input
-                        type="textarea"
-                        :autosize="{ minRows: 5, maxRows: 10}"
-                        placeholder="请输入内容"
-                        :disabled="ifDisable === false"
-                        v-model="logisticsForm.driverDesc" :maxlength="maxlength">
-                    </el-input>
-                    <span>{{totalNumber}} / {{maxlength}}</span>
-                    <p>如果您是企业，必须填写完整细致的企业简介；</p>
-                    <p>如果您是个人，必须填写详细的个体经营范围，不得出现违法词语，字数不低于30字。</p>
+                    <div v-if="ifDisable == false">
+                        <p style="text-indent:2em;white-space:pre-wrap; word-wrap: break-word;word-break: break-all;font-size:14px;color:#333;">{{logisticsForm.driverDesc}}</p>
+                    </div>
+                    <div v-else>
+                        <el-input
+                            type="textarea"
+                            :autosize="{ minRows: 5, maxRows: 10}"
+                            placeholder="请输入内容"
+                            v-model="logisticsForm.driverDesc" :maxlength="maxlength">
+                        </el-input>
+                        <span>{{totalNumber}} / {{maxlength}}</span>
+                        <p>如果您是企业，必须填写完整细致的企业简介；</p>
+                        <p>如果您是个人，必须填写详细的个体经营范围，不得出现违法词语，字数不低于30字。</p>
+                    </div>
                 </el-form-item>
             </div>
             <!-- 联系方式 -->
@@ -98,24 +102,24 @@
                 </el-form-item>
             </div>
             
-                <!-- 物流公司认证照片 -->
+                <!-- 货主认证照片 -->
             <div class="picInformation information" v-if="logisticsForm.shipperType == 'AF0010202'"><!-- 企业货主code -->
-                <h2>物流公司认证照片</h2>
+                <h2>货主认证照片</h2>
                 <el-form-item  >
                     <p><span>*</span>上传营业执照照片：</p>
-                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.businessLicenceFile" v-if="ifDisable == 'false'"/>
+                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.businessLicenceFile" v-if="ifDisable == true"/>
                     <img class="showPicture" :src="logisticsForm.businessLicenceFile" alt="营业执照" v-else>
                     <el-button  class="preview" type="primary" plain v-show="logisticsForm.businessLicenceFile ? true : false" v-showPicture :imgurl="logisticsForm.businessLicenceFile">点击预览</el-button>
                 </el-form-item>
                 <el-form-item   prop="companyFacadeFile" >
                     <p><span>*</span>上传公司或者档口照片：</p>
-                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.companyFacadeFile" v-if="ifDisable == 'false'" />
+                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.companyFacadeFile" v-if="ifDisable == true" />
                     <img class="showPicture" :src="logisticsForm.companyFacadeFile" alt="公司或者档口照片" v-else>
                     <el-button  class="preview" type="primary" plain v-show="logisticsForm.companyFacadeFile ? true : false" v-showPicture :imgurl="logisticsForm.companyFacadeFile">点击预览</el-button>
                 </el-form-item>
                 <el-form-item  prop="shipperCardFile">
                     <p><span>*</span>上传发货人名片照片：</p>
-                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.shipperCardFile" v-if="ifDisable == 'false'"/>
+                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.shipperCardFile" v-if="ifDisable == true"/>
                     <img class="showPicture" :src="logisticsForm.shipperCardFile" alt="" v-else>
                     <el-button  class="preview" type="primary" plain v-show="logisticsForm.shipperCardFile ? true : false" v-showPicture :imgurl="logisticsForm.shipperCardFile">点击预览</el-button>
                 </el-form-item>
@@ -257,7 +261,7 @@ export default {
             ifDisable:true,
             driverPhone:'',//货主电话（账户）
             totalNumber:0,//當前字數
-            maxlength:200,
+            maxlength:2000,
             shipperType:'AF00101',//数据字典类型
             optionsShipperType:[],//货主类型
             logisticsForm: {

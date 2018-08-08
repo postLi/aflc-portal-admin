@@ -56,7 +56,7 @@
                             label="运输时效"
                             width="180">
                              <template slot-scope="scope">
-                               {{scope.row.transportAging}}天
+                               {{scope.row.transportAging}} {{scope.row.transportAgingUnit}}
                             </template>
                         </el-table-column>
                         <el-table-column

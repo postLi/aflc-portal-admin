@@ -177,8 +177,8 @@ export default {
             this.$refs[formName].validate((valid) => {  
                 if (valid) {
                     let userInfo = getUserInfo();
-                    this.logisticsForm.publishName = userInfo.companyName;
-                    this.logisticsForm.publishId = userInfo.id;
+                    this.logisticsForm.companyName = userInfo.companyName;
+                    this.logisticsForm.companyId = userInfo.id;
                     let commitFunction;
                     if(this.logisticsForm.id){
                         commitFunction = changePointNetwork(this.logisticsForm);
