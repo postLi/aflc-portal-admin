@@ -85,7 +85,7 @@
                             label="网点图片"
                             width="200">
                                 <template  slot-scope="scope"> 
-                                    <img  :src="scope.row.pointFile ? scope.row.pointFile : defaultImg" />
+                                    <img v-showPicture :src="scope.row.pointFile ? scope.row.pointFile : defaultImg" />
                                 </template>
                         </el-table-column>
                         <el-table-column 

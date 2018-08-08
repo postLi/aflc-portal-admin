@@ -333,5 +333,5 @@ export function getAllNet(cid, data) {
 }
  */
 export function getCompany(data) {
-  return fetch.post('/aflcusercenterservice/usercenter/aflcTransportRange/v1/getMemberAflcTransportRangeList', data)
+  return fetch.post('/aflcusercenterservice/usercenter/aflcTransportRange/v1/findRangesWithCreateOrder', data)
 }

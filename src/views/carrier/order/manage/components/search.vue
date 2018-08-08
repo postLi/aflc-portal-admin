@@ -5,7 +5,6 @@
       </el-form-item>
       <el-form-item v-if="isall" label="订单状态：">
         <select-type v-model="searchForm.orderStatus" type="AF037" >
-          <el-option slot="head" label="全部" value=""></el-option>
         </select-type>
         
       </el-form-item>
