@@ -1,9 +1,9 @@
 <template>
-  <div class="tab-content" v-loading="loading">
+  <div class="tab-content order-list" v-loading="loading">
     <SearchForm :isall="isall"  @change="getSearchParam" :btnsize="btnsize" />  
     <div class="tab_info">
       <div class="btns_box">
-          <el-button type="primary" :size="btnsize" icon="el-icon-circle-plus" plain @click="doAction('add')">创建订单</el-button>
+          <el-button type="primary" size="large" icon="el-icon-circle-plus" @click="doAction('add')">创建订单</el-button>
       </div>
       <div class="info_tab">
         <el-table
@@ -181,7 +181,7 @@
               <el-button type="primary" :size="btnsize"  plain @click="viewDetail(scope.row)">查看</el-button>
               <!-- 待承运 -->
               <div v-if="scope.row.orderStatus === 'AF03702'">
-                <el-button  type="primary" :size="btnsize"  plain @click="modifyOrder(scope.row)">修改</el-button>
+                <!-- <el-button  type="primary" :size="btnsize"  plain @click="modifyOrder(scope.row)">修改</el-button> -->
                 <el-button type="primary" :size="btnsize"  plain @click="cancelOrder(scope.row)">取消订单</el-button>
               </div>
               
@@ -342,7 +342,7 @@ export default {
 
       isOwner: false,
       isall: false,
-      btnsize: 'mini',
+      btnsize: 'small',
       usersArr: [],
       total: 0,
       // 加载状态
@@ -606,3 +606,10 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+  .order-list{
+    background: #fff;
+    padding: 20px 20px 200px;
+    margin-top: 20px;
+  }
+</style>

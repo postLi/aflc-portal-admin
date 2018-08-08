@@ -4,7 +4,7 @@
       mode="horizontal" 
       :default-active="current"
       :router="true">
-      <el-menu-item key="/dashboard" index="/dashboard">
+      <el-menu-item key="/" index="/">
         返回首页
       </el-menu-item>   
         <el-menu-item  index="" v-if="LoginInfo.memberType == 'AF00107'">
