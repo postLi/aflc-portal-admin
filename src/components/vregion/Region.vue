@@ -172,7 +172,12 @@
                 if(this.pauseWatch) return;
                 // 允许城市级别
                 if(this.city){
-                    this.fetchCity(value).then(data => {
+                    this.fetchCity(value).then(res => {
+                        // 如果不是当前选取的项，则不进行保存渲染
+                        if(res.code !== this.nowProvince){
+                            return
+                        }
+                        let data = res.data
                         if(this.listArea.length) this.listArea.splice(0, this.listArea.length);
                         this.listCity = data
 
@@ -223,7 +228,8 @@
                 }else this.listTown = [];
 
                 if(this.town) this.nowTown = '';
-
+                // 因为是异步请求，返回数据的可能有先后顺序，造成渲染错误
+                console.log("nowArea:",value,this.listArea)
                 this.itemArea = this.listArea.find(val=>val.key === value);
                 this.initSelected(4);
 
@@ -263,13 +269,29 @@
                 // 如果允许显示区，且没有获取到城市列表，则显示?
                 if(this.area || (!this.haveCity && this.province)){
                     if((this.haveCity && !this.nowCity) || (!this.haveCity && !this.nowProvince)){
+                        console.log("2222222222:",this.haveCity,this.nowProvince,this.nowCity)
                         this.listArea = [];
                     }else{
+                        
                         let thisCity = Number.parseInt(this.haveCity?this.nowCity:this.nowProvince);
-                        this.fetchCity(thisCity).then(data => {
+                        let haveCity = this.haveCity
+                        this.fetchCity(thisCity).then(res => {
+                            let data = res.data
+                            
+                            if(haveCity){
+                                if(this.nowCity!==res.code){
+                                    return
+                                }
+                            } else {
+                                if(this.nowProvince!==res.code){
+                                    return
+                                }
+                            }
                             // 返回了数据才进行渲染
+                            this.listArea = data
+                            console.log("333333333:",this.haveCity,this.nowProvince,this.nowCity,haveCity,res.code,data)
                             if(data.length){
-                                this.listArea = data
+                                this.list = this.getList(2);
                                 this.initSelected(3);
                             }
                             
@@ -373,6 +395,7 @@
                     case 2:
                         this.nowArea = item.key;
                         this.itemArea = item;
+                        
                         break;
                     case 3:
                         this.nowTown = item.key;
@@ -412,12 +435,13 @@
             },
             fetchCity(code=''){
                 return new Promise((resolve) => {
-                    return getCityInfo(code).then(data => {
-                        resolve(this.formatCity(data))
-                        return this.formatCity(data)
+                    return getCityInfo(code).then(res => {
+                        res.data = this.formatCity(res.data)
+                        resolve(res)
+                        return res
                     }).catch(err => {
                         // 如果后台没有返回数据，则隐藏
-                        resolve([])
+                        resolve({code,data:[]})
                     })
                 })
                 
@@ -435,8 +459,9 @@
         },
         mounted(){
             let that = this;
-            let srcProvince = this.fetchCity().then(data => {
+            let srcProvince = this.fetchCity().then(res => {
                 //sort by length and code
+                let data = res.data
                 this.listProvince = this.ui?data.concat().sort((a,b)=>{
                     let gap = a.value.length - b.value.length;
                     return gap === 0?Number(a.key)-Number(b.key):gap;
