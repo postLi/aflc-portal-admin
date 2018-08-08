@@ -8,7 +8,8 @@ const baseUrl = 'aflccommonservice'
 export function getCityInfo(code) {
   code = code || ''
   return fetch.get('/aflccommonservice/common/aflcCommonPCA/v1/findAflcCommonPCAByCode?code=' + code).then(res => {
-    return res.data || []
+    res.code = code
+    return res
   })
 }
 /**
