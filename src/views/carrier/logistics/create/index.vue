@@ -431,7 +431,6 @@ export default {
 </script>
 <style lang="scss">
     .page-main{
-        padding: 10px;
         height: 100%;
         .el-form{
             >.searchInformation{

@@ -6,7 +6,19 @@
       :router="true">
       <el-menu-item key="/dashboard" index="/dashboard">
         返回首页
-      </el-menu-item>
+      </el-menu-item>   
+        <el-menu-item  index="" v-if="LoginInfo.memberType == 'AF00107'">
+            <a href="http://www.56lines.cn//plus/list.php?tid=4" target="_blank">我的官网</a>
+        </el-menu-item>
+        <el-menu-item  index="" v-if="LoginInfo.memberType == 'AF00107' || LoginInfo.memberType == 'AF00101'">
+            <a href="http://www.56lines.cn//plus/list.php?tid=3" target="_blank">找车源</a>
+        </el-menu-item>
+        <el-menu-item key="4" index="" v-if="LoginInfo.memberType == 'AF00102'">
+            <a href="http://www.56lines.cn//plus/list.php?tid=2" target="_blank">找货源</a>
+        </el-menu-item>
+        <el-menu-item key="4" index="" v-if="LoginInfo.memberType == 'AF00107' || LoginInfo.memberType == 'AF00101'">
+            <a href="http://www.56lines.cn//plus/list.php?tid=2" target="_blank">找专线</a>
+        </el-menu-item>
       <!-- <template v-for="(menu, index) in permission_routers">
          <el-menu-item :key="index" :index="menu.path" v-if="!menu.hidden">
           <icon-svg v-if="menu.icon" :icon-class="menu.icon" /> {{menu.name}}
@@ -18,6 +30,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { getLogin } from '@/utils/auth.js'
+
 export default {
   name: 'TopNavMenu',
   computed: {
@@ -28,16 +42,20 @@ export default {
   data() {
     return {
       current: '',
-      prevPath: ''
+      prevPath: '',
+      LoginInfo:''
     }
   },
   watch: {
     $route() {
-      this.setNavHightlight()
+        this.setNavHightlight();
+        this.getLoginInfo()
+
     }
   },
   mounted() {
-    this.setNavHightlight()
+    this.setNavHightlight();
+    this.getLoginInfo()
   },
   methods: {
     /**
@@ -53,6 +71,10 @@ export default {
         this.prevPath = this.current
         //this.$store.dispatch('GenerateSidebarRoutes', current.name)
       }
+    },
+    getLoginInfo(){
+        this.LoginInfo = getLogin();
+        console.log(this.LoginInfo)
     }
   }
 }

@@ -51,8 +51,8 @@
                 </el-form-item>
                 <el-form-item label="代收货款：" prop="isCollection">
                     <el-radio-group v-model="logisticsForm.isCollection">
-                        <el-radio  :label="1" :disabled="ifDisable === false">是</el-radio>
-                        <el-radio  :label="0" :disabled="ifDisable === false">否</el-radio>
+                        <el-radio  label="1" :disabled="ifDisable === false">是</el-radio>
+                        <el-radio  label="0" :disabled="ifDisable === false">否</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="企业LOGO：" prop="companyFile">
@@ -384,7 +384,7 @@ export default {
                 this.optionsOtherService = resArr[2].data;
                 this.serverClassify = resArr[3].data;
                 this.logisticsForm =  resArr[4].data;
-                if(this.logisticsForm.authStatusName == '待认证'){
+                if(this.logisticsForm.authStatusName == '未认证' || this.logisticsForm.authStatusName == '认证不通过' ){
                     let text ='是一家业内领先的现代物流运输企业，我们致力于为国内的制造业客户和商贸流通业务提供专业且有价格竞争力的运输、仓储、包装、配送、代收代付等相关物流服务。我们目前处在迅猛发展阶段，以快速的增长速度在大力扩张货物运输业务范围，公司的专线运输范围基本覆盖华中，华东和华北三个大区的各省市县，承揽广州到湖南，湖北，上海，江苏，河南，北京，山东，天津全境的整车及零担业务，公司通过引入先进的供应链物流管理系统，已经建立起帮助客户贯穿生产、物流、仓储、代理商、销售商之间信息流、物流、商流、资金流的金色桥梁。\n\r        经过多年的发展，本公司目前拥有一支30多人的专业化的物流管理和从业人员队伍。公司管理层成员有大学专科以上学历、物流管理及相关专业本科及以上学历的优秀人才，公司全资拥有18辆斯堪尼亚、沃尔沃高端重卡，长期协议合作的干线和城配运输车辆超过890辆，车源丰富。公司自成立以来就一直秉承服务为先的宗旨，不断致力于物流运输网络的建设和社会资源的整合，现拥有广州至上海，河南，北京，湖北，山东，天津全境的往返成熟物流线路46条，单一线路基本可以实现一天发车2车以上，部分强势路线（比如广州-长沙，广州-北京等）可以一天发车4车以上。在专线运输时效和货物无损签收方面一直居于同业领先地位。\n\r        本公司在大力发展KA物流业务的同时，公司于陆续引入先进的28TMS物流管理系统、OA系统和CRM系统，运用多种物流智能硬件和现代物联网技术手段不断提升管理效率和降低运输成本。\n\r        随着公司的不断发展和长期积累的经验，公司优秀的物流服务深得广大客户的好评。本公司将以“高效快捷、客户至上、信誉第一”为经营理念，以“适价经营、质量保证”求发展以及经验丰富的管理人员和专业高素质的员工队伍，竭诚为客户持续提供优质满意的运输服务。\r\n\r\n        我们的承诺 ：给我们一份信任，还您百分百满意！';
                     this.logisticsForm.companyDes = res.companyName + text;
                     // this.logisticsForm.companyDes.replaceAll('','&nbsp;')
