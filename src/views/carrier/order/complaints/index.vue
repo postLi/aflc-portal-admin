@@ -59,7 +59,7 @@
                         <el-table-column
                             prop="complainTypeName"
                             label="投诉类型"
-                            width="180">
+                            >
                         </el-table-column>
                         <el-table-column
                             prop="complainTime"
@@ -75,11 +75,12 @@
                             fixed="right"
                             prop="address"
                             label="操作"
+                            width="120"
                             >
                                 <template slot-scope="scope">
                                     <el-button-group>
-                                        <el-button @click="handleComplain(scope.row,'step-three')" type="primary" size="mini" v-if="scope.row.complainStatus == 'AF04002'">投诉详情</el-button>
-                                        <el-button @click="handleComplain(scope.row,'step-tow')" type="primary" size="mini" v-else>投诉回复</el-button>
+                                        <el-button @click="handleComplain(scope.row)" type="primary" size="mini" v-if="scope.row.complainStatus == 'AF04002'">投诉详情</el-button>
+                                        <el-button @click="handleComplain(scope.row)" type="primary" size="mini" v-else>投诉回复</el-button>
                                     </el-button-group>
                                 </template>
                         </el-table-column>
@@ -160,9 +161,9 @@ export default {
             this.firstblood();
         },
         //投诉回复
-        handleComplain(row,type) {
-            console.log(row,type);
-            this.$router.push({name: '投诉详情',query:{ orderSerial:row.orderSerial,type:type}});
+        handleComplain(row) {
+            console.log(row);
+            this.$router.push({name: '投诉详情',query:{ orderSerial:row.orderSerial,type:'carrier'}});
         },
     },
   
