@@ -10,12 +10,8 @@
             <h2>基本信息</h2>
             <el-form-item label="出发地：" prop="startLocation">
                 <!-- <el-input @focus="()=>{showMap('strartAddress')}"  v-model="ruleForm.startLocation"></el-input> -->
-                <vregion :ui="true" @values="regionChange" class="form-control">
-                    <el-input v-model="btnText"></el-input>
-
-                    <!-- <button type="button" class="btn btn-default">
-                        {{btnText}} <i class="fa fa-fw fa-caret-down"></i>
-                    </button> -->
+                <vregion :ui="true" @values="regionChangeStart" class="form-control">
+                    <el-input v-model="ruleForm.startLocation" placeholder="请选择出发地"></el-input>
                 </vregion>
             </el-form-item>
             <el-form-item label="联系人：" prop="startLocationContacts" label-width="150px">
@@ -25,7 +21,10 @@
                 <el-input v-model="ruleForm.startLocationContactsMobile" maxlength="11"></el-input>
             </el-form-item><br>
             <el-form-item label="到达地：" prop="endLocation">
-                <el-input @focus="()=>{showMap('endAddress')}" v-model="ruleForm.endLocation"></el-input>
+                <!-- <el-input @focus="()=>{showMap('endAddress')}" v-model="ruleForm.endLocation"></el-input> -->
+                <vregion :ui="true" @values="regionChangeEnd" class="form-control">
+                    <el-input v-model="ruleForm.endLocation" placeholder="请选择到达地"></el-input>
+                </vregion>
             </el-form-item>
             <el-form-item label="联系人：" prop="endLocationContacts" label-width="150px">
                 <el-input v-model="ruleForm.endLocationContacts"></el-input>
@@ -304,14 +303,17 @@ export default {
         this.getParams();
     },
     methods:{
-        // regionChange(data){
-        //     console.log('data:',data)
-        // },
-        regionChange(d) {
-        this.btnText = (!d.province&&!d.city&&!d.area&&!d.town)?'please select': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+       
+        regionChangeStart(d) {
+            console.log('data:',d)
+            this.ruleForm.startLocation = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+        },
+        regionChangeEnd(d) {
+            console.log('data:',d)
+            this.ruleForm.endLocation = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
         },
         getValue(obj){
-        return obj?obj.value:'';
+        return obj ? obj.value:'';
         },
         getInfo(pos, name, info) {
             // info.name  info.pos
@@ -453,7 +455,20 @@ export default {
             >.searchInformation{
                 .el-form-item{
                     margin-bottom: 20px;
+                    .el-form-item__content{
+                        .v-region{
+                            width: 100%;
+                            .caller-container{
+                                width: 100%;
+                            }
+                            .v-dropdown-container{
+                                top: 35px !important;
+                                left: 0px !important;
+                            }
+                        }
+                    }
                 }
+                
             }
             .priceTime{
                 .el-input{

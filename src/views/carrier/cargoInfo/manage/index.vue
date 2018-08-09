@@ -33,7 +33,8 @@
                     ref="multipleTable"
                     stripe
                     border
-                    style="width: 100% ;height:100%">
+                    height="100%"
+                    style="width: 100% ;">
                         <el-table-column
                             fixed
                             label="序号"

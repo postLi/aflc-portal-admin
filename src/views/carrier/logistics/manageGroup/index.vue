@@ -36,7 +36,7 @@
                     </el-input>
                 </div>
             </div> -->
-            <div class="information" style="height:72%">
+            <div class="information" style="height:76%">
                 <div class="created">
                     <el-button type="primary" @click="handleNew">发布网点</el-button>  
                 </div>
@@ -46,7 +46,7 @@
                     ref="multipleTable"
                     stripe
                     border
-                    height="90%"
+                    height="100%"
                     style="width: 100%">
                         <el-table-column
                             fixed

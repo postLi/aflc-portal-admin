@@ -9,19 +9,12 @@
           选择城市 <i class="fa fa-fw fa-caret-down"></i>
       </button>
     </vregion>
-
     <blockquote>
       引用地址：
       @/components/vregion/Region.vue
     </blockquote>
     <h3>prop</h3>
     <p><a href="https://terryz.gitee.io/vue/#/region/demo" target="_blank">参考官方文档</a></p>
-     <vregion :ui="true" @values="regionChange" class="form-control">
-      <button type="button" class="btn btn-default">
-          选择城市 <i class="fa fa-fw fa-caret-down"></i>
-      </button>
-    </vregion>
-
   </div>
 </template>
 <script>

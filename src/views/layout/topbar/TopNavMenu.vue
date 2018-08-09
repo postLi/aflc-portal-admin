@@ -8,16 +8,16 @@
         返回首页
       </el-menu-item>   
         <el-menu-item  index="" v-if="LoginInfo.memberType == 'AF00107'">
-            <a href="http://www.56lines.cn//plus/list.php?tid=4" target="_blank">我的官网</a>
+            <a :href="carrierHref" target="_blank">我的官网</a>
         </el-menu-item>
         <el-menu-item  index="" v-if="LoginInfo.memberType == 'AF00107' || LoginInfo.memberType == 'AF00101'">
-            <a href="http://www.56lines.cn//plus/list.php?tid=3" target="_blank">找车源</a>
+            <a href="http://192.168.1.170/plus/list.php?tid=3" target="_blank">找车源</a>
         </el-menu-item>
         <el-menu-item key="4" index="" v-if="LoginInfo.memberType == 'AF00102'">
-            <a href="http://www.56lines.cn//plus/list.php?tid=2" target="_blank">找货源</a>
+            <a href="http://192.168.1.170/plus/list.php?tid=2" target="_blank">找货源</a>
         </el-menu-item>
         <el-menu-item key="4" index="" v-if="LoginInfo.memberType == 'AF00107' || LoginInfo.memberType == 'AF00101'">
-            <a href="http://www.56lines.cn//plus/list.php?tid=2" target="_blank">找专线</a>
+            <a href="http://192.168.1.170/plus/list.php?tid=2" target="_blank">找专线</a>
         </el-menu-item>
       <!-- <template v-for="(menu, index) in permission_routers">
          <el-menu-item :key="index" :index="menu.path" v-if="!menu.hidden">
@@ -43,7 +43,8 @@ export default {
     return {
       current: '',
       prevPath: '',
-      LoginInfo:''
+      LoginInfo:'',
+      carrierHref:''
     }
   },
   watch: {
@@ -74,6 +75,7 @@ export default {
     },
     getLoginInfo(){
         this.LoginInfo = getLogin();
+        this.carrierHref = 'http://192.168.1.170/member/index.php?uid='+ this.LoginInfo.mobile;
         console.log(this.LoginInfo)
     }
   }
