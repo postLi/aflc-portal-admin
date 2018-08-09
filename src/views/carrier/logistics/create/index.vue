@@ -9,7 +9,14 @@
         <div class="searchInformation information">
             <h2>基本信息</h2>
             <el-form-item label="出发地：" prop="startLocation">
-                <el-input @focus="()=>{showMap('strartAddress')}"  v-model="ruleForm.startLocation"></el-input>
+                <!-- <el-input @focus="()=>{showMap('strartAddress')}"  v-model="ruleForm.startLocation"></el-input> -->
+                <vregion :ui="true" @values="regionChange" class="form-control">
+                    <el-input v-model="btnText"></el-input>
+
+                    <!-- <button type="button" class="btn btn-default">
+                        {{btnText}} <i class="fa fa-fw fa-caret-down"></i>
+                    </button> -->
+                </vregion>
             </el-form-item>
             <el-form-item label="联系人：" prop="startLocationContacts" label-width="150px">
                 <el-input v-model="ruleForm.startLocationContacts"></el-input>
@@ -156,11 +163,12 @@ import { getUserInfo } from '@/utils/auth.js'
 import { REGEX } from '@/utils/validate.js'
 import upload from '@/components/Upload/singleImage2'
 import tmsmap from '@/components/map/index'
-
+import vregion from '@/components/vregion/Region.vue'
 export default {
     components:{
         upload,
-        tmsmap
+        tmsmap,
+        vregion
     },
     data() {
         var checkaa  = (rule, value, callback) => {
@@ -194,6 +202,7 @@ export default {
             }
         };
         return {
+            btnText: '请选择',
             current:'',
             popVisible:false,
             listtype:'picture-card',
@@ -289,13 +298,21 @@ export default {
             },
             deep:true
         }
-
     },
     mounted(){
         this.getInformations();
         this.getParams();
     },
     methods:{
+        // regionChange(data){
+        //     console.log('data:',data)
+        // },
+        regionChange(d) {
+        this.btnText = (!d.province&&!d.city&&!d.area&&!d.town)?'please select': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+        },
+        getValue(obj){
+        return obj?obj.value:'';
+        },
         getInfo(pos, name, info) {
             // info.name  info.pos
             console.log(pos, name, info)
