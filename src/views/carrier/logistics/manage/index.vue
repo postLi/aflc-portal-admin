@@ -74,9 +74,9 @@
                                     <span class="interview">面谈</span>
                                 </p>
                                 <p class="cargo" v-for="(item,idx) in scope.row.weightcargo" :key="item.id" v-else>
-                                    <span v-if="idx == 0">{{item.endVolume}}公斤以下,{{item.primeryPrice}}元/公斤</span>
-                                    <span v-else-if="idx == scope.row.weightcargo.length-1">{{item.endVolume}}公斤以上,{{item.primeryPrice}}元/公斤</span>
-                                    <span v-else>{{item.startVolume}}-{{item.endVolume}}公斤,{{item.primeryPrice}}元/公斤</span>
+                                    <span v-if="idx == 0">{{item.endVolume}}公斤以下,{{item.discountPrice ? item.discountPrice :item.primeryPrice}}元/公斤</span>
+                                    <span v-else-if="idx == scope.row.weightcargo.length-1">{{item.endVolume}}公斤以上,{{item.discountPrice ? item.discountPrice :item.primeryPrice}}元/公斤</span>
+                                    <span v-else>{{item.startVolume}}-{{item.endVolume}}公斤,{{item.discountPrice ? item.discountPrice :item.primeryPrice}}元/公斤</span>
                                 </p>
                             </template>
                         </el-table-column>
@@ -88,9 +88,9 @@
                                     <span class="interview">面谈</span>
                                 </p>
                                 <p class="cargo" v-for="(item,idx) in scope.row.lightcargo" :key="idx"  v-else>
-                                    <span v-if="idx == 0">{{item.endVolume}}立方以下,{{item.primeryPrice}}元/立方</span>
-                                    <span v-else-if="idx == scope.row.lightcargo.length-1">{{item.endVolume}}立方以上,{{item.primeryPrice}}元/立方</span>
-                                    <span v-else>{{item.startVolume}}-{{item.endVolume}}立方,{{item.primeryPrice}}元/立方</span>
+                                    <span v-if="idx == 0">{{item.endVolume}}立方以下,{{item.discountPrice ? item.discountPrice :item.primeryPrice}}元/立方</span>
+                                    <span v-else-if="idx == scope.row.lightcargo.length-1">{{item.endVolume}}立方以上,{{item.discountPrice ? item.discountPrice :item.primeryPrice}}元/立方</span>
+                                    <span v-else>{{item.startVolume}}-{{item.endVolume}}立方,{{item.discountPrice ? item.discountPrice :item.primeryPrice}}元/立方</span>
                                 </p>
                             </template>
                         </el-table-column>

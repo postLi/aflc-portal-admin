@@ -88,7 +88,7 @@
 <div class="car-picinfo">
       <div class="tab-info-stitle"><strong>车主认证照片：</strong><span class="important">（上传的图片不超过5M，并且为JPG/PNG/JPEG中的一种格式）</span></div>
       <el-form-item required  >
-        <span class="info-require">上传车辆45°招聘</span>
+        <span class="info-require">上传车辆45°照片</span>
         <upload :limit="5" listtype="picture-card" :title="'身份证'" :showFileList="true" v-model="ruleForm.carFile" />
       </el-form-item>
 </div>

@@ -36,7 +36,8 @@
                         :disabled="ifDisable === false"
                         v-model="logisticsForm.driverDesc" :maxlength="maxlength">
                     </el-input>
-                    <p>{{totalNumber}} / {{maxlength}}</p>
+                    <span>{{totalNumber}} / {{maxlength}}</span>
+                    <p>请输入30-2000字，建议您详细介绍您的服务信息</p>
                 </el-form-item>
             </div>
             <!-- 物流公司认证照片 -->
@@ -128,7 +129,7 @@ export default {
             defaultImg:'/static/default.png',//默认加载失败图片
             ifDisable:false,
             totalNumber:0,//当前字数
-            maxlength:200,
+            maxlength:2000,
             logisticsForm: {
                 driverName: '',//车主名称
                 driverCardid: '',//生份证号
@@ -211,10 +212,9 @@ export default {
             }
         }
         
-        .carownerIdentification .el-form .information .textarea .el-form-item__content p {
-            position: absolute;
+        .carownerIdentification .el-form .information .textarea .el-form-item__content span {
             right: 18px;
-            bottom: -5px;
+            bottom:22px;
         }
         
       
