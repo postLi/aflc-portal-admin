@@ -30,7 +30,7 @@ export const constantRouterMap = [
   { path: '/404', component: _import('404'), hidden: true },
   {
     path: '/',
-    redirect: '/changePassword',
+    redirect: '/order/manage',
     noDropdown: true,
     icon: 'shouye',
     name: '首页',

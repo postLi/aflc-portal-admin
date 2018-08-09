@@ -29,6 +29,9 @@ export default {
         }
       ]
     },
+    {
+      path: '/order/manage', icon: 'QQ', name: '车源信息管理', component: _import('carowner/carinfo/index'), redirect: '/carowner/carinfo/manage', meta: { role: ['admin'], title: '车源信息管理', istab: true, noCache: false }
+    },
     // 车源信息管理
     {
       path: '/carowner/carinfo', icon: 'QQ', name: '车源信息管理', component: _import('carowner/carinfo/index'), redirect: '/carowner/carinfo/create', meta: { role: ['admin'], title: '车源信息管理', istab: true, noCache: false },

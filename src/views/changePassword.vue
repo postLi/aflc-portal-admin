@@ -1,11 +1,9 @@
 <template>
-    <div class="ChangePassword identification">
+    <div class="ChangePassword page-main">
         <el-form :rules="rules" :model="logisticsForm" ref="ruleForm" label-width="200px" class="demo-ruleForm">
-            <div class="carrierTitle">
-                <div class="realname">
-                    <h2>修改登录密码</h2>
-                </div>
-            </div>
+          <div class="tab-info-title">
+            <h2><span>修改登录密码</span></h2>
+          </div>
             <div class="searchInformation information">
                 <div class="current-name">
                     <span>您的会员登录名是：</span>{{ otherinfo.contactsName }}
@@ -111,22 +109,23 @@ export default {
     }
 .el-form .carrierTitle{
     margin-bottom: 0;
+    
 }
 .el-form  .information{
     margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+    background: #fff;
+    padding-right: 40%;
+    .el-form-item:last-child{
+      margin-bottom: 0;
+    }
 }
 .button-area{
     background: #fff;
-    text-align: center;
-    padding: 0 0 20px;
-    &::before{
-        width: 80%;
-        height: 1px;
-        background: #ccc;
-        margin: 0 auto 20px;
-        content: ' ';
-        display: block;
-    }
+    padding: 30px 0 20px;
+    padding-left: 330px;
+
 }
 }
 </style>
