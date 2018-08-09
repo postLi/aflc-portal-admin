@@ -217,7 +217,7 @@
                 if(value && this.town){
                     let towns = null, tmpArr = [];
                     try{
-                        towns = require(`./town/${value}.json`);
+                        //towns = require(`./town/${value}.json`);
                     }catch (e) {}
                     if(towns && Object.keys(towns).length){
                         for(let d in towns){
