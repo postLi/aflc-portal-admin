@@ -44,10 +44,10 @@ router.beforeEach((to, from, next) => {
   } else if (to.query.nologin) {
     store.dispatch('Login', {
       'accNum': 'aflc-5',
-      'username': '13088888886|aflc-5',
+      'username': '13416233760|aflc-5',
       'password': '123456',
       'memberType': 'AF00107',
-      'mobile': '13088888886'
+      'mobile': '13416233760'
     }).then(() => {
       next({
         path: '/'
