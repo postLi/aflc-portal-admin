@@ -31,7 +31,6 @@
                     ref="multipleTable"
                     stripe
                     border
-                    height="91%"
                     style="width: 100%">
                         <el-table-column
                             fixed
@@ -262,7 +261,7 @@ export default {
     .TransportRange{
         .el-form{
             .syStyle{
-                height: 72%;
+                height: 76%;
             }
             .tableStyle{
                 .cargo{

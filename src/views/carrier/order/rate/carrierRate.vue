@@ -24,14 +24,14 @@
                     <el-button type="primary" @click="clearSearch">清空</el-button>
                 </el-form-item>
             </div>
-            <div class="information" style="height:100%">
-                <div style="height:100%">
+            <div class="information" style="height:84%">
                     <el-table
                     :data="tableData"
                     ref="multipleTable"
+                    height="100%"
                     stripe
                     border
-                    style="width: 100%;">
+                    style="width: 100%;height:100%;">
                         <el-table-column
                             fixed
                             label="序号"
@@ -141,7 +141,6 @@
                                 </template>
                         </el-table-column>
                     </el-table>
-                </div>
             </div>  
             <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>    
         </el-form>

@@ -19,19 +19,19 @@
                                 <li>收货人：{{orderForm.consignee}}</li>
                             </ul>
                             <ul>
-                                <li>下单时间：{{orderForm.placeOrderTimne}} 
+                                <li>下单时间：{{parseTimeFunctions(orderForm.useTime)}} 
                                     <el-popover
                                     width="100%"
                                     trigger="hover"
                                     >
-                                    <p style="margin:5px;">提货时间：{{orderForm.goodsNum}}</p>
-                                    <p style="margin:5px;">发货时间：{{orderForm.goodsNum}}</p>
-                                    <p style="margin:5px;">收货时间：{{orderForm.goodsNum}}</p>
+                                    <p style="margin:5px;">提货时间：{{parseTimeFunctions(orderForm.pickUpGoodsTime)}}</p>
+                                    <p style="margin:5px;">发货时间：{{parseTimeFunctions(orderForm.deliveryTime)}}</p>
+                                    <p style="margin:5px;">收货时间：{{parseTimeFunctions(orderForm.receiveTime)}}</p>
                                     <span slot="reference" class="reference" icon="el-icon-caret-bottom">更多<i icon="el-icon-caret-bottom"></i></span>
                                     </el-popover>
                                 </li>
                                 <li>货品总数量（件）：{{orderForm.goodsNum}}</li>
-                                <li>货物类型：{{orderForm.orderSerial}}</li>
+                                <li>货物类型：{{orderForm.goodsTypeName}}</li>
                                 <li>到达地：{{orderForm.endAddress}}</li>
                                 <li>发货人手机：{{orderForm.consignorPhone}}</li>
                                 <li>收货人手机：{{orderForm.consigneePhone}}</li>
@@ -209,6 +209,8 @@ export default {
             },
             orderForm:{},
             optionsReason:[],
+            parseTimeFunctions:null,
+
         };
     },  
     mounted(){
@@ -224,7 +226,9 @@ export default {
         firstblood(){
             let orderSerial = this.$route.query.orderSerial;
             this.UserInfo = getUserInfo();
-            Promise.all([carrierSerial(orderSerial),consignorSerial(orderSerial),getDetailsByOrderSerial('AFTC201807271126115176970')]).then(resArr=> {
+            this.parseTimeFunctions = parseTime;
+
+            Promise.all([carrierSerial(orderSerial),consignorSerial(orderSerial),getDetailsByOrderSerial(orderSerial)]).then(resArr=> {
                 console.log('resArr',resArr)
                 this.carrierSerial = resArr[0].data || {};
                 this.consignorSerial = resArr[1].data || {};

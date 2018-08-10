@@ -61,6 +61,7 @@
                                             <el-rate
                                             v-model="transportForm.serverPriceStarLevelScore"
                                             show-score
+                                            disabled
                                             text-color="#ed001d"
                                             >   
                                             </el-rate>
@@ -71,6 +72,7 @@
                                             <el-rate
                                             v-model="transportForm.serverQualityStarLevelScore"
                                             show-score
+                                            disabled
                                             text-color="#ed001d"
                                             >
                                             </el-rate>
@@ -82,6 +84,7 @@
                                             v-model="transportForm.transportAgingStarLevelScore"
                                             show-score
                                             text-color="#ed001d"
+                                            disabled
                                             >
                                             </el-rate>
                                             <span class="des">{{transportForm.transportAgingStarLevelDes}}</span>

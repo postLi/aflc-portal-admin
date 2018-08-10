@@ -46,7 +46,6 @@
                     ref="multipleTable"
                     stripe
                     border
-                    height="100%"
                     style="width: 100%">
                         <el-table-column
                             fixed

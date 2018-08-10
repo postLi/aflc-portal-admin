@@ -1,5 +1,5 @@
 <template>
-    <div class="orderRate identification">
+    <div class="orderRate identification" style="height:100%">
         <el-form :model="logisticsForm" ref="ruleForm" label-width="110px" class="demo-ruleForm">
             <div class="searchInformation information">
                 <el-form-item label="订单号：" prop="orderSerial">
@@ -24,14 +24,14 @@
                     <el-button type="primary" @click="clearSearch">清空</el-button>
                 </el-form-item>
             </div>
-            <div class="information" style="height:100%">
-                <div style="height:100%">
+            <div class="information" style="height:84%">
                     <el-table
                     :data="tableData"
                     ref="multipleTable"
                     stripe
+                    height="100%"
                     border
-                    style="width: 100%;height:100%;">
+                    style="width: 100%;">
                         <el-table-column
                             fixed
                             label="序号"
@@ -53,9 +53,9 @@
                             label="来自游客的信用评级"
                             width="250">
                                  <template slot-scope="scope">
-                                        <p>货物包装：{{scope.row.goodsStarLevel}}</p>
-                                        <p>付款及时：{{scope.row.PayStarLevel}}</p>
-                                        <p>装卸安排：{{scope.row.DockStarLevel}}</p>
+                                        <p>服务价格：{{scope.row.serverPriceStarLevel}}</p>
+                                        <p>服务质量：{{scope.row.serverQualityStarLevel}}</p>
+                                        <p>运输时效：{{scope.row.transportAgingStarLevel}}</p>
                                 </template>
                             </el-table-column>
                             <el-table-column
@@ -90,13 +90,12 @@
                             >
                                 <template slot-scope="scope">
                                     <!-- <el-button-group> -->
-                                        <el-button @click="handleEdit(scope.row)" v-if="scope.row.replyName" type="primary" size="mini">评价回复</el-button>
+                                        <el-button @click="handleEdit(scope.row)" v-if="scope.row.replyName == ''" type="primary" size="mini">评价回复</el-button>
                                         <el-button @click="handleEdit(scope.row)" v-else type="primary" size="mini">评价详情</el-button>
                                     <!-- </el-button-group> -->
                                 </template>
                         </el-table-column>
                     </el-table>
-                </div>
             </div>  
             <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>    
         </el-form>

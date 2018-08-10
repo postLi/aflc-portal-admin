@@ -21,19 +21,19 @@
                                 <li>收货人：{{orderForm.consignee}}</li>
                             </ul>
                             <ul>
-                                <li>下单时间：{{orderForm.orderSerial}} 
+                                <li>下单时间：{{parseTimeFunctions(orderForm.useTime)}} 
                                     <el-popover
                                     width="100%"
                                     trigger="hover"
                                     >
-                                    <p style="margin:5px;">提货时间：{{orderForm.goodsNum}}</p>
-                                    <p style="margin:5px;">发货时间：{{orderForm.goodsNum}}</p>
-                                    <p style="margin:5px;">收货时间：{{orderForm.goodsNum}}</p>
+                                    <p style="margin:5px;">提货时间：{{parseTimeFunctions(orderForm.pickUpGoodsTime)}}</p>
+                                    <p style="margin:5px;">发货时间：{{parseTimeFunctions(orderForm.deliveryTime)}}</p>
+                                    <p style="margin:5px;">收货时间：{{parseTimeFunctions(orderForm.receiveTime)}}</p>
                                     <span slot="reference" class="reference" icon="el-icon-caret-bottom">更多<i icon="el-icon-caret-bottom"></i></span>
                                     </el-popover>
                                 </li>
                                 <li>货品总数量（件）：{{orderForm.goodsNum}}</li>
-                                <li>货物类型：{{orderForm.orderSerial}}</li>
+                                <li>货物类型：{{orderForm.goodsTypeName}}</li>
                                 <li>到达地：{{orderForm.endAddress}}</li>
                                 <li>发货人手机：{{orderForm.consignorPhone}}</li>
                                 <li>收货人手机：{{orderForm.consigneePhone}}</li>
@@ -119,6 +119,7 @@ import './complaint.scss'
 import { getUserInfo } from '@/utils/auth.js'
 import { addOrderComplain,getDetails,changeOrderComplain } from '@/api/carrier/Complaint.js'
 import { getDictionary,getDetailsByOrderSerial } from '@/api/common.js'
+import { parseTime } from '@/utils/index.js'
  
 export default {
     components:{
@@ -145,6 +146,8 @@ export default {
             optionsReason:[],
             reply:'',//回复内容
             origin:'',//判断货主或者物流公司
+            parseTimeFunctions:null,
+
         };
     },  
     mounted(){ 
@@ -153,6 +156,8 @@ export default {
     methods: {
         firstblood(){
             let orderSerial = this.$route.query.orderSerial;
+            this.parseTimeFunctions = parseTime;
+
             if(this.$route.query.type){
                 this.origin = this.$route.query.type;
             }

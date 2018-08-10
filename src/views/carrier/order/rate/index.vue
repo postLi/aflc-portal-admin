@@ -1,13 +1,10 @@
 <template>
   <div class="rate identification">
     <el-tabs v-model="rateName"  @tab-click="handleClick" >
-        <!-- 全部 -->
             <el-tab-pane label="订单评价" name="orderRate">
                 <carrierRate :isvisible="rateName === 'orderRate'"></carrierRate>
             </el-tab-pane>
-        <!-- </el-badge> -->
         
-        <!-- 未认证 -->
             <el-tab-pane label="专线评价" name="consignorRate">
                 <consignorRate :isvisible="rateName === 'consignorRate'"></consignorRate>
             </el-tab-pane>
