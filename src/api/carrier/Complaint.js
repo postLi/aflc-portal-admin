@@ -46,7 +46,7 @@ export function getDetails(orderSerial) {
     export function changeOrderComplain(data) {
         return fetch.axios({
           url:'/'+baseUrl+'/order/aflcOrderComplain/v1/update',
-          method: 'post',
+          method: 'put',
           data:data
         })
       }
