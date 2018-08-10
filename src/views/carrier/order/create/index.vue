@@ -1,13 +1,13 @@
 <template>
   <div class="create-orderinfo page-main">
     <div class="tab-info-title">
-      <h2><span>创建订单</span></h2>
+      <h2><span>{{ title }}</span></h2>
     </div>
 
     <el-form :model="ruleForm" :rules="rules" size="mini" ref="ruleForm" label-width="150px" class="demo-ruleForm">
       <!-- 线路信息 -->
       <div class="order-base-info tab-info-panel clearfix">
-        <div class="tab-info-stitle"><strong>线路信息</strong><span class="important">提示：带*为必填项</span></div>
+        <div class="tab-info-stitle"><strong>线路信息</strong>(<span class="important">提示：带*为必填项</span>)</div>
         <el-form-item required :rules="[{required: true, message: '请选择出发地'}]" label="出发地：">
           <el-input   @focus="()=>{showMap('strartAddress')}" v-model="aflcOrderAddressWebDtoList[0].provinceCityArea"></el-input>
         </el-form-item>
@@ -53,7 +53,7 @@
               </el-form-item>
               <el-form-item  class="cargo-button">
                 <el-button size="mini" type="primary" v-if="index === (cargoList.length-1)" @click="resetCargo">重置</el-button>
-                <el-button size="mini" type="primary" v-if="index === (cargoList.length-1) && cargoList.length < maxCargoLength" @click="addCargo(index)">+</el-button>
+                <el-button size="mini" type="primary" v-if="index === (cargoList.length-1) && cargoList.length < maxCargoLength" @click="addCargo(index)">＋</el-button>
                 <el-button size="mini" type="danger" v-if="index > 0 " @click="removeCargo(index)">-</el-button>
               </el-form-item>
            </li>
@@ -62,7 +62,7 @@
       </div>
       <!-- 选择物流公司 -->
       <div class="select-line tab-info-panel" v-if="!isCargo">
-        <div class="tab-info-stitle"><strong>选择物流公司：</strong>（选择出发地跟到达地之后，为您精准匹配物流承运商）</div>
+        <div class="tab-info-stitle"><strong>选择物流公司：</strong>（<span class="important">选择出发地跟到达地之后，为您精准匹配物流承运商</span>）</div>
         <div class="select-line-list">
           <el-table
             ref="multipleTable"
@@ -120,7 +120,7 @@
                   trigger="hover"
                   >
                   <div class="showjieti-info">
-                    <div class="jieti-title">最低一票价格：{{findLowestPrice(scope.row.rangePrices,'1')}}元</div>
+                    <div class="jieti-title">最低一票价格：{{scope.row.lowerPrice}}元</div>
                     <ul>
                       <li :key="index" v-if="item.type==='1'" v-for="(item, index) in scope.row.rangePrices">
                         <span class="jietiv">{{ item.startVolume }}公斤~{{ item.endVolume }}公斤</span>
@@ -147,7 +147,7 @@
                   trigger="hover"
                   >
                   <div class="showjieti-info">
-                    <div class="jieti-title">最低一票价格：{{findLowestPrice(scope.row.rangePrices,'0')}}元</div>
+                    <div class="jieti-title">最低一票价格：{{scope.row.lowerPrice}}元</div>
                     <ul>
                       <li :key="index" v-if="item.type==='0'" v-for="(item, index) in scope.row.rangePrices">
                         <span class="jietiv">{{ item.startVolume }}立方~{{ item.endVolume }}立方</span>
@@ -335,6 +335,7 @@ export default {
     }
 
     return {
+      title: '创建订单',
       maxCargoLength: 5,
       cargoInfo: {
         'goodsName': '', // 货物名称
@@ -467,17 +468,43 @@ export default {
     }
   },
   mounted() {
-    this.id = this.$route.query.id
+    this.id = this.$route.query.cid
+    this.cid = this.$route.query.id
     this.isCargo = this.$route.path.indexOf('cargoInfo')!==-1
+    if(this.isCargo){
+      this.title = '发布货源'
+    } else {
+      this.title = '创建订单'
+    }
     this.initCargo()
     if (this.id) {
       this.initModify()
+    } else if(this.cid){
+      // 如果是从专线过来
+      this.initZX()
     } else {
       this.initNew()
     }
     //this.getCompany()
   },
   methods: {
+    initZX(){
+      let query = this.$route.query
+      // 获取网点相关的信息
+      this.getCompany({
+        id: this.cid
+      })
+      this.cargoList = [Object.assign({isget: false}, this.cargoInfo)]
+      this.ruleForm.shipperId = this.otherinfo.id
+      this.ruleForm.memberType = this.otherinfo.rolesIdList[0]
+      // 设置各个参数
+      this.aflcOrderAddressWebDtoList[0].provinceCityArea = query.start
+      this.aflcOrderAddressWebDtoList[1].provinceCityArea = query.end
+      this.aflcOrderAddressWebDtoList[0].contacts = query.startLocationContacts
+      this.aflcOrderAddressWebDtoList[0].contactsPhone = query.startLocationContacts
+      this.aflcOrderAddressWebDtoList[1].contacts = query.endLocationContacts
+      this.aflcOrderAddressWebDtoList[1].contactsPhone = query.endLocationContactsMobile
+    },
     initNew() {
       this.cargoList = [Object.assign({isget: false}, this.cargoInfo)]
       this.ruleForm.shipperId = this.otherinfo.id
@@ -540,6 +567,18 @@ export default {
       const obj = info.addressComponent
       const str = obj.province + '' + obj.city + '' + obj.district
       const str2 = obj.township + obj.street + obj.streetNumber + obj.building
+      // 如果是从专线过来创建的，需要判断是否选择到当前城市位置
+      if(this.cid){
+        if(str.indexOf(this.aflcOrderAddressWebDtoList[0].provinceCityArea) === -1 && this.current === 'strartAddress'){
+          this.$message.info('需要选择当前专线所在位置~')
+          return false
+        }
+        if(str.indexOf(this.aflcOrderAddressWebDtoList[1].provinceCityArea) === -1 && this.current === 'endAddress'){
+          this.$message.info('需要选择当前专线所在位置~')
+          return false
+        }
+      }
+
       // info.name  info.pos
       switch (this.current) {
         case 'contactAddress':
@@ -586,6 +625,7 @@ export default {
     },
     /** ***  选择物流公司   */
     findLowestPrice(list, type) {
+      list = list || []
       const find = list.filter(el => el.type === type)[0]
       return !find ? 0 : find.discountPrice
     },
@@ -607,7 +647,11 @@ export default {
         }
         console.log('find data:', data)
         this.netQuery = data
-        this.getCompany()
+        // 如果不是从专线页面过来，则请求相关专线信息
+        if(!this.cid){
+          this.getCompany()
+        }
+        
       }
     },
     // 计算总价
@@ -685,14 +729,15 @@ export default {
         
       }
     },
-    getCompany() {
+    getCompany(vo) {
+      vo = vo ||  {
+        'startLocation': this.netQuery.startLocation,
+        'endLocation': this.netQuery.endLocation
+      }
       ReqApi.getCompany({
         currentPage: 1,
         'pageSize': 100,
-        vo: {
-          'startLocation': this.netQuery.startLocation,
-          'endLocation': this.netQuery.endLocation
-        }
+        vo
       }).then(res => {
         //this.usersArr = res.data.list || []
         // 每次搜索出专线列表，重置部分参数
@@ -719,11 +764,13 @@ export default {
     getNet(id, index) {
       console.log("getNet:", id, index)
       // 重新搜索后，要重置部分参数
-      if(!this.wlbestlistObj[index]){
+      if(!this.wlbestlistObj[index] && this.netQuery.startLongitude){
         ReqApi.getBestNet(id, this.netQuery).then(res => {
           this.$set(this.wlbestlist, index, res.data)
           this.wlbestlistObj[index] = true
         })
+      } else {
+        this.$message.warning('请先选择具体的出发地跟目的地信息~')
       }
     },
     getAllNet(id) {
@@ -883,7 +930,7 @@ export default {
              this.$message.error('请选择到达地~')
             return false
           }
-          if(data.aflcFCLOrderGoodsDtoList.filter(el => (el.goodsName&&el.goodsWeight&&el.goodsVolume)).length === 0){
+          if(data.aflcFCLOrderGoodsDtoList.filter(el => (el.goodsName&&(el.goodsWeight || el.goodsVolume))).length === 0){
             this.$message.error('请填写有效的货物信息~')
             return false
           }

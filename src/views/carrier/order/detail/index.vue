@@ -115,8 +115,8 @@
                     订单号：{{ orderForm.orderSerial }}
                 </div>
                 <div class="order-button" v-if="iscarrier">
-                    <el-button type="warning" :size="btnsize"  plain v-if="orderForm.complainWorkSerial && !orderForm.complainId" @click="replyComplain(orderForm)">投诉回复</el-button>
-                    <el-button type="warning" :size="btnsize"  plain v-if="orderForm.complainWorkSerial && orderForm.complainId" @click="viewComplain(orderForm)">投诉详情</el-button>
+                    <el-button type="warning" :size="btnsize"  plain v-if="orderForm.complainWorkSerial && !orderForm.reply" @click="replyComplain(orderForm)">投诉回复</el-button>
+                    <el-button type="warning" :size="btnsize"  plain v-if="orderForm.complainWorkSerial && orderForm.reply" @click="viewComplain(orderForm)">投诉详情</el-button>
                     <el-button type="primary" :size="btnsize"  plain @click="confirmEvaluate(orderForm)">确认收货</el-button>
                 </div>
                 <div class="order-button" v-if="!iscarrier">
@@ -144,8 +144,8 @@
                     <el-button type="primary" v-if="orderForm.shipperEvaluationId" :size="btnsize"  plain @click="viewReview(orderForm)">评价详情</el-button>
                 </div>
                 <div class="order-button" v-if="iscarrier">
-                    您可以 <el-button type="warning" :size="btnsize"  plain v-if="orderForm.complainWorkSerial && !orderForm.complainId" @click="replyComplain(orderForm)">投诉回复</el-button>
-                    <el-button type="warning" :size="btnsize"  plain v-if="orderForm.complainWorkSerial && orderForm.complainId" @click="viewComplain(orderForm)">投诉详情</el-button>
+                    您可以 <el-button type="warning" :size="btnsize"  plain v-if="orderForm.complainWorkSerial && !orderForm.reply" @click="replyComplain(orderForm)">投诉回复</el-button>
+                    <el-button type="warning" :size="btnsize"  plain v-if="orderForm.complainWorkSerial && orderForm.reply" @click="viewComplain(orderForm)">投诉详情</el-button>
                     <el-button type="primary" v-if="!orderForm.transportEvaluationId" :size="btnsize"  plain @click="addReview(orderForm)">评价</el-button>
                     <el-button type="primary" v-if="orderForm.transportEvaluationId || orderForm.shipperEvaluationId" :size="btnsize"  plain @click="viewReview(orderForm)">评价详情</el-button>
                 </div>
