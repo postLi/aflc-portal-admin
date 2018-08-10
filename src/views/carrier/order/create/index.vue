@@ -61,7 +61,7 @@
       </div>
       <!-- 选择物流公司 -->
       <div class="select-line tab-info-panel" v-if="!isCargo">
-        <div class="tab-info-stitle"><strong>选择物流公司：</strong>（选择出发地跟到达地之后，为您精准匹配物流承运商）<span class="important">选择承运商，直接下单；不选择承运商，发布货源</span></div>
+        <div class="tab-info-stitle"><strong>选择物流公司：</strong>（选择出发地跟到达地之后，为您精准匹配物流承运商）</div>
         <div class="select-line-list">
           <el-table
             ref="multipleTable"
@@ -181,7 +181,7 @@
         </div>
       </div>
       <!-- 货源类型 -->
-      <div class="cargo-class tab-info-panel">
+      <div class="cargo-class tab-info-panel" v-if="isCargo">
         <h3>货源类型</h3>
         <el-form-item >
           <el-radio-group v-model="ruleForm.orderClass">
