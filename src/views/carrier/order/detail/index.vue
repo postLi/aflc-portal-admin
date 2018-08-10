@@ -438,7 +438,7 @@ export default {
     },
     viewReview(row) {
       // 查看评价
-      this.$router.push('/order/rateInfo?evaluationId=' + row.evaluationId + (!this.isOwner ? '&type=carrier' : ''))
+      this.$router.push('/order/rateInfo?orderSerial=' + row.orderSerial + (!this.isOwner ? '&type=carrier' : ''))
     },
     viewComplain(row) {
       // 查看投诉
