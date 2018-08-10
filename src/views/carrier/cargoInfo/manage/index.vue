@@ -75,8 +75,8 @@
                             width="150">
                         </el-table-column>
                         <el-table-column
-                            prop="createrName"
-                            label="发布人" 
+                            prop="consignor"
+                            label="发货人" 
                             width="180">
                         </el-table-column>
                         <el-table-column
@@ -88,7 +88,7 @@
                             fixed="right"
                             prop="address"
                             label="操作" 
-                            width="250"
+                            width="200"
                             >
                                 <template slot-scope="scope">
                                     <!-- <el-button-group> -->

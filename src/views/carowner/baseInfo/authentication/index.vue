@@ -97,7 +97,6 @@ export default {
             handler(val, oldVal){
             //    console.log(val.length)
                 if(val){
-
                     this.totalNumber = val.length;
                 }
             },
@@ -171,16 +170,15 @@ export default {
     },  
     methods: {
         getMoreInformation(){
-           let res = getUserInfo() ;
+            let res = getUserInfo() ;
         //    console.log(res)
-           getDriverInfoByMobile(res.mobile).then(res=>{
+            getDriverInfoByMobile(res.mobile).then(res=>{
             //    console.log(res)
                this.logisticsForm = res.data;
-           })
+            })
 
         },
         submitForm(formName) {
-
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     // this.logisticsForm.
