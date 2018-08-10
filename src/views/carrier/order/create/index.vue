@@ -8,7 +8,7 @@
       <!-- 线路信息 -->
       <div class="order-base-info tab-info-panel clearfix">
         <div class="tab-info-stitle"><strong>线路信息</strong><span class="important">提示：带*为必填项</span></div>
-        <el-form-item required  label="出发地：">
+        <el-form-item required :rules="[{required: true, message: '请选择出发地'}]" label="出发地：">
           <el-input   @focus="()=>{showMap('strartAddress')}" v-model="aflcOrderAddressWebDtoList[0].provinceCityArea"></el-input>
         </el-form-item>
         <el-form-item required label="街道/门牌号：">
@@ -32,23 +32,24 @@
                   :visible-arrow="false"
                   placement="bottom"
                   width="400"
-                  trigger="focus"
+                  v-model="item.isget"
+                  trigger="manual"
                   >
                   <ul class="preCaogoList clearfix">
-                    <li @click="setCargoName(index, item.name)" :key="inx" v-for="(item, inx) in cargoListPre">{{ item.name }}</li>
+                    <li @click="setCargoName(index, item.name,item)" :key="inx" v-for="(item, inx) in cargoListPre">{{ item.name }}</li>
                   </ul>
-                  <el-input  @blur="calcTotalFee" slot="reference" v-model="item.goodsName"></el-input>
+                  <el-input @focus="item.isget = true"  @blur="calcTotalFee(item)" slot="reference" v-model="item.goodsName"></el-input>
                 </el-popover>
                 
               </el-form-item>
               <el-form-item label="总件数：">
-                <el-input v-model="item.goodsNum"><template slot="append">件</template></el-input>
+                <el-input v-numberOnly v-model="item.goodsNum"><template slot="append">件</template></el-input>
               </el-form-item>
               <el-form-item required label="预估重量：">
-                <el-input  @blur="calcTotalFee" v-model="item.goodsWeight"><template slot="append">公斤</template></el-input>
+                <el-input v-numberOnly  @blur="calcTotalFee" v-model="item.goodsWeight"><template slot="append">公斤</template></el-input>
               </el-form-item>
               <el-form-item required label="预估体积：">
-                <el-input @blur="calcTotalFee" v-model="item.goodsVolume"><template slot="append">立方米</template></el-input>
+                <el-input v-numberOnly @blur="calcTotalFee" v-model="item.goodsVolume"><template slot="append">立方米</template></el-input>
               </el-form-item>
               <el-form-item  class="cargo-button">
                 <el-button size="mini" type="primary" v-if="index === (cargoList.length-1)" @click="resetCargo">重置</el-button>
@@ -177,7 +178,7 @@
           </el-table>
         </div>
         <div class="prePrice">
-          预估运费总金额：{{theTotalPrice}}元
+          预估运费总金额：{{theTotalPrice}}
         </div>
       </div>
       <!-- 货源类型 -->
@@ -323,13 +324,23 @@ export default {
     tmsmap
   },
   data() {
+    var validatePass2 = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请再次输入密码'))
+      } else if (value !== this.logisticsForm.newPassword) {
+        callback(new Error('两次输入密码不一致!'))
+      } else {
+        callback()
+      }
+    }
+
     return {
       maxCargoLength: 5,
       cargoInfo: {
         'goodsName': '', // 货物名称
-        'goodsNum': 0, // 总件数
-        'goodsVolume': '0', // 货物体积（方）
-        'goodsWeight': '0' // 货物重量（吨）
+        'goodsNum': '', // 总件数
+        'goodsVolume': '', // 货物体积（方）
+        'goodsWeight': '' // 货物重量（吨）
         // "title": "string" // 标题
       },
       // 常用地址、收发货人信息
@@ -363,7 +374,12 @@ export default {
       ifDisable: false,
       popVisible: false,
       cargoListPre: [],
-      rules: {},
+      rules: {
+        startP:[
+          { required: true, message: '请输入原密码', trigger: 'blur' },
+          { validator: validatePass2, trigger: 'blur' }
+        ]
+      },
       current: '',
       currentShowNetIndex: 0,
       // 选中的是第几个物流商
@@ -431,7 +447,7 @@ export default {
   },
   computed:{
     theTotalPrice(){
-      return this.ruleForm.forecastPrice === '' ? '面议' : this.ruleForm.forecastPrice
+      return this.ruleForm.forecastPrice === '' ? '面议' : this.ruleForm.forecastPrice + '元'
     },
     noCanSubmit(){
       // 判断是否能提交
@@ -463,7 +479,7 @@ export default {
   },
   methods: {
     initNew() {
-      this.cargoList = [Object.assign({}, this.cargoInfo)]
+      this.cargoList = [Object.assign({isget: false}, this.cargoInfo)]
       this.ruleForm.shipperId = this.otherinfo.id
       this.ruleForm.memberType = this.otherinfo.rolesIdList[0]
     },
@@ -558,12 +574,14 @@ export default {
       this.cargoList.splice(index, 1)
     },
     addCargo(index) {
-      this.cargoList.push(Object.assign({}, this.cargoInfo))
+      this.cargoList.push(Object.assign({isget:false}, this.cargoInfo))
     },
-    setCargoName(index, name) {
+    setCargoName(index, name,item) {
+      
       this.$set(this.cargoList, index, Object.assign(this.cargoList[index], {
         goodsName: name
       }))
+      item.isget =false
       // this.cargoList[index]
     },
     /** ***  选择物流公司   */
@@ -593,7 +611,10 @@ export default {
       }
     },
     // 计算总价
-    calcTotalFee() {
+    calcTotalFee(item) {
+      if(item && typeof item.goodsName!=='undefined'){
+        item.isget = false
+      }
       // 必须要有货物信息跟物流公司信息
       // 重量跟体积必须要有一个值
       let transportRangeId = this.wlindex
@@ -633,15 +654,18 @@ export default {
         let amount = cargolist.reduce((pre,item)=>{
           return pre + parseFloat(item.goodsNum,10)
         }, 0)
+        weight = weight || 0
+        volume = volume || 0
         console.log("get Total price:",transportRangeId,weight,volume,cargolist)
         if(weight>0 || volume > 0){
+          this.ruleForm.wlId = transportRangeId
           ReqApi.getTotalPrice({
             transportRangeId,// 物流公司专线id
             weight,// 货物重量
             volume// 货物体积
           }).then(res => {
             let data = res.data
-            this.ruleForm.wlId = data.transportRangeId
+            
             if(data){
               this.ruleForm.forecastPrice = data.forecastPrice
               this.ruleForm.goodsType = data.goodsType
@@ -652,7 +676,10 @@ export default {
               this.ruleForm.totalAmount = ''
             }
           }).catch(err => {
-            this.$message.error('获取价格失败： ' + JSON.stringify(err))
+            this.ruleForm.forecastPrice = ''
+            this.ruleForm.goodsType = ''
+            this.ruleForm.totalAmount = ''
+            //this.$message.error('获取价格失败： ' + JSON.stringify(err))
           })
         }
         
@@ -846,6 +873,33 @@ export default {
           const data = Object.assign({}, this.ruleForm)
           data.aflcOrderAddressWebDtoList = this.aflcOrderAddressWebDtoList
           data.aflcFCLOrderGoodsDtoList = this.cargoList
+
+          //做提交判断
+          if(data.aflcOrderAddressWebDtoList[0].provinceCityArea === ''){
+             this.$message.error('请选择出发地~')
+            return false
+          }
+          if(data.aflcOrderAddressWebDtoList[1].provinceCityArea === ''){
+             this.$message.error('请选择到达地~')
+            return false
+          }
+          if(data.aflcFCLOrderGoodsDtoList.filter(el => (el.goodsName&&el.goodsWeight&&el.goodsVolume)).length === 0){
+            this.$message.error('请填写有效的货物信息~')
+            return false
+          }
+          if(data.wlId === '' && !this.isCargo){
+             this.$message.error('需要选择物流公司~')
+            return false
+          }
+          if(data.aflcOrderAddressWebDtoList[0].contacts === ''){
+             this.$message.error('请填写发货人~')
+            return false
+          }
+          if(data.aflcOrderAddressWebDtoList[0].contactsPhone === ''){
+             this.$message.error('请填写发货人手机~')
+            return false
+          }
+          
           
           let promiseObj
           // 判断操作，调用对应的函数

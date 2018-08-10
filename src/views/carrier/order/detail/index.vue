@@ -5,7 +5,7 @@
     </div>
     <div class="rate-status-bar" v-if="!iscancel">
         <el-steps v-if="inited" :active="active" finish-status="success">
-            <el-step v-for="(item, index) in flows" :key="index" :title="item.done ? item.donetext :item.text " :description="item.time"></el-step>
+            <el-step v-for="(item, index) in flows" :key="index" :title="item.done ? item.donetext :item.text " :description="item.time | parseTime"></el-step>
         </el-steps>
     </div>
     <div class="order-info-wrapper">
@@ -21,7 +21,7 @@
                     <li>收货人：{{orderForm.consignee}}</li>
                 </ul>
                 <ul>
-                    <li>下单时间：{{orderForm.placeOrderTimne}} 
+                    <li>下单时间：{{orderForm.createTime}} 
                         <el-popover
                         width="100%"
                         trigger="hover"
@@ -45,6 +45,9 @@
                 </ul>
             </div>
         </div>
+        
+    </div>
+    <div class="order-info-wrapper">
         <div class="order-control-pannel">
             <div v-if="active === 1" class="order-step-1 order-control-info">
                 <div class="status-txt" >
@@ -58,7 +61,10 @@
                 </div>
                 <div class="order-button" v-if="iscarrier">
                     <el-button  type="primary" :size="btnsize"  plain @click="confirmCarrier(orderForm)">确定承运</el-button>
-                    <el-button type="primary" :size="btnsize"  plain @click="cancelOrder(orderForm)">取消订单</el-button>
+                    <el-button type="danger" :size="btnsize"  plain @click="cancelOrder(orderForm)">取消订单</el-button>
+                </div>
+                <div class="order-button" v-if="!iscarrier">
+                    <el-button type="danger" :size="btnsize"  plain @click="cancelOrder(orderForm)">取消订单</el-button>
                 </div>
             </div>
             <div v-if="active === 2" class="order-step-2 order-control-info">
@@ -109,9 +115,13 @@
                     订单号：{{ orderForm.orderSerial }}
                 </div>
                 <div class="order-button" v-if="iscarrier">
-                    <el-button type="primary" :size="btnsize"  plain v-if="orderForm.complainWorkSerial && !orderForm.complainId" @click="replyComplain(orderForm)">投诉回复</el-button>
-                    <el-button type="primary" :size="btnsize"  plain v-if="orderForm.complainWorkSerial && orderForm.complainId" @click="viewComplain(orderForm)">投诉详情</el-button>
+                    <el-button type="warning" :size="btnsize"  plain v-if="orderForm.complainWorkSerial && !orderForm.complainId" @click="replyComplain(orderForm)">投诉回复</el-button>
+                    <el-button type="warning" :size="btnsize"  plain v-if="orderForm.complainWorkSerial && orderForm.complainId" @click="viewComplain(orderForm)">投诉详情</el-button>
                     <el-button type="primary" :size="btnsize"  plain @click="confirmEvaluate(orderForm)">确认收货</el-button>
+                </div>
+                <div class="order-button" v-if="!iscarrier">
+                    <el-button type="warning" :size="btnsize"   v-if="orderForm.complainWorkSerial" @click="viewComplain(orderForm)">投诉详情</el-button>
+                    <el-button type="warning" :size="btnsize"  v-if="!orderForm.complainWorkSerial"  @click="addComplain(orderForm)">投诉</el-button>
                 </div>
             </div>
             <div v-if="active === 6" class="order-step-5 order-control-info">
@@ -127,16 +137,25 @@
                 <div class="order-id">
                     订单号：{{ orderForm.orderSerial }}
                 </div>
+                <div class="order-button" v-if="!iscarrier">
+                    您可以 <el-button type="warning" :size="btnsize"  v-if="!orderForm.complainWorkSerial"  @click="addComplain(orderForm)">投诉</el-button>
+                    <el-button type="warning" v-if="orderForm.complainWorkSerial" :size="btnsize"   @click="viewComplain(orderForm)">投诉详情</el-button>
+                    <el-button type="primary" v-if="!orderForm.shipperEvaluationId" :size="btnsize"  plain @click="addReview(orderForm)">评价</el-button>
+                    <el-button type="primary" v-if="orderForm.shipperEvaluationId" :size="btnsize"  plain @click="viewReview(orderForm)">评价详情</el-button>
+                </div>
                 <div class="order-button" v-if="iscarrier">
-                    您可以 <el-button type="primary" :size="btnsize"  plain v-if="orderForm.complainWorkSerial && !orderForm.complainId" @click="replyComplain(orderForm)">投诉回复</el-button>
-                    <el-button type="primary" :size="btnsize"  plain v-if="orderForm.complainWorkSerial && orderForm.complainId" @click="viewComplain(orderForm)">投诉详情</el-button>
+                    您可以 <el-button type="warning" :size="btnsize"  plain v-if="orderForm.complainWorkSerial && !orderForm.complainId" @click="replyComplain(orderForm)">投诉回复</el-button>
+                    <el-button type="warning" :size="btnsize"  plain v-if="orderForm.complainWorkSerial && orderForm.complainId" @click="viewComplain(orderForm)">投诉详情</el-button>
                     <el-button type="primary" v-if="!orderForm.transportEvaluationId" :size="btnsize"  plain @click="addReview(orderForm)">评价</el-button>
                     <el-button type="primary" v-if="orderForm.transportEvaluationId || orderForm.shipperEvaluationId" :size="btnsize"  plain @click="viewReview(orderForm)">评价详情</el-button>
                 </div>
             </div>
             <div v-if="active === 7" class="order-step-5 order-control-info">
-                <div class="status-txt">
-                    订单状态：订单已取消/物流公司取消订单
+                <div class="status-txt" v-if="iscarrier">
+                    订单状态：订单已取消
+                </div>
+                <div class="status-txt" v-if="!iscarrier">
+                    订单状态：物流公司已取消订单
                 </div>
                 <div class="order-id">
                     订单号：{{ orderForm.orderSerial }}
@@ -144,7 +163,8 @@
             </div>
         </div>
     </div>
-    
+    <AddReview :dialogVisible.sync="dialogVisible" :orderSerial="orderSerial" :transportRangeId="transportRangeId" />
+    <AddReview2 :dialogVisible.sync="dialogVisible2" :orderSerial="orderSerial" :shipperId="shipperId" />
   </div>
 </template>
 <script>
@@ -153,12 +173,17 @@ import { getDictionary, getDetailsByOrderSerial } from '@/api/common.js'
 import { carrierSerial, consignorSerial, updateRate } from '@/api/carrier/rate.js'
 import { parseTime } from '@/utils/index.js'
 import * as ReqApi from '@/api/carrier/manage'
+import AddReview from '@/views/carrier/order/manage/components/review'
+import AddReview2 from '@/views/carrier/order/manage/components/reviewCarrier'
 
 export default {
   components: {
+    AddReview,
+    AddReview2
   },
   data() {
     return {
+        btnsize: "small",
         active: 1,
         inited: false,
       currentStatus: 0,
@@ -216,7 +241,13 @@ export default {
       optionsReason: [],
       iscancel: false,
       iscarrier: false,
-      isOwner: false
+      isOwner: false,
+
+      dialogVisible: false,
+      dialogVisible2: false,
+      orderSerial: '',
+      transportRangeId: '',
+      shipperId: ''
     }
   },
   mounted() {
@@ -278,6 +309,9 @@ export default {
         this.init()
         this.loading = false
       })
+    },
+    fetchData(){
+        this.firstblood()
     },
     submitForm() {
       const rata = Object.assign({}, { id: this.carrierSerial.id, replyDes: this.replyDes, replyId: this.UserInfo.id, replyName: this.UserInfo.contactsName })
@@ -576,15 +610,28 @@ export default {
   }
   .order-info-wrapper{
       background: #fff;
+      padding:0 20px;
       display: flex;
+      margin-bottom: 20px;
       .rate_content{
-          flex: 7;
+
       }
       .order-control-pannel{
-          flex: 4;
+          padding: 20px 0;
+          .status-txt{
+              font-size: 16px;
+              color: #333;
+          }
+          .order-id{
+              margin-top: 20px;
+              margin-bottom: 20px;
+              color: #ef0000;
+              font-size: 14px;
+          }
       }
   }
   .rate_orderInfo{
+      flex:1;
             h2{
                 border-bottom: 1px solid #ccc;
                 text-align: left;
@@ -592,9 +639,9 @@ export default {
             }
             .orderInfo{
                 display: flex;
-                justify-content:space-between;
                 padding: 20px 50px 60px;
                 ul{
+                    flex:1;
                     li{
                         font-size: 14px;
                         line-height: 20px;

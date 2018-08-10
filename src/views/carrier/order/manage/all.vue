@@ -29,9 +29,11 @@
           <el-table-column
             fixed
             
-            prop="orderSerial"
             label="订单号"
             width="130">
+            <template slot-scope="scope">
+              <span @click="viewDetail(scope.row)" class="table-link">{{ scope.row.orderSerial }}</span>
+            </template>
           </el-table-column>
           <el-table-column
             prop="orderStatusName"
@@ -178,11 +180,11 @@
           <template slot-scope="scope">
             <!-- 承运商 -->
             <div v-if="isOwner">
-              <el-button type="primary" :size="btnsize"  plain @click="viewDetail(scope.row)">查看</el-button>
+              <el-button type="primary" :size="btnsize" @click="viewDetail(scope.row)">查看</el-button>
               <!-- 待承运 -->
               <div v-if="scope.row.orderStatus === 'AF03702'">
                 <!-- <el-button  type="primary" :size="btnsize"  plain @click="modifyOrder(scope.row)">修改</el-button> -->
-                <el-button type="primary" :size="btnsize"  plain @click="cancelOrder(scope.row)">取消订单</el-button>
+                <el-button type="danger" :size="btnsize"  plain @click="cancelOrder(scope.row)">取消订单</el-button>
               </div>
               
               <!-- 待提货 -->
@@ -193,22 +195,22 @@
               </div>
               <!-- 待收货 -->
               <div v-if="scope.row.orderStatus === 'AF03705'">
-                <el-button type="primary" :size="btnsize"  plain v-if="scope.row.complainWorkSerial" @click="viewComplain(scope.row)">投诉详情</el-button>
-                <el-button type="primary" :size="btnsize"  v-if="!scope.row.complainWorkSerial" plain @click="addComplain(scope.row)">投诉</el-button>
+                <el-button type="warning" :size="btnsize"   v-if="scope.row.complainWorkSerial" @click="viewComplain(scope.row)">投诉详情</el-button>
+                <el-button type="warning" :size="btnsize"  v-if="!scope.row.complainWorkSerial"  @click="addComplain(scope.row)">投诉</el-button>
               </div>
               <!-- 待评价 -->
               
               <div v-if="scope.row.orderStatus === 'AF03706'">
-                <el-button type="primary" :size="btnsize"  v-if="!scope.row.complainWorkSerial" plain @click="addComplain(scope.row)">投诉</el-button>
-              <el-button type="primary" :size="btnsize"  plain v-if="scope.row.complainWorkSerial" @click="viewComplain(scope.row)">投诉详情</el-button>
+                <el-button type="warning" :size="btnsize"  v-if="!scope.row.complainWorkSerial"  @click="addComplain(scope.row)">投诉</el-button>
+              <el-button type="warning" :size="btnsize"   v-if="scope.row.complainWorkSerial" @click="viewComplain(scope.row)">投诉详情</el-button>
 
                 <el-button type="primary" v-if="!scope.row.evaluationId" :size="btnsize"  plain @click="addReview(scope.row)">评价</el-button>
                 <el-button type="primary" v-if="scope.row.evaluationId" :size="btnsize"  plain @click="viewReview(scope.row)">评价详情</el-button>
               </div>
               <!-- 已完成 -->
               <div v-if="scope.row.orderStatus === 'AF03707'">
-                <el-button type="primary" :size="btnsize"  v-if="!scope.row.complainWorkSerial" plain @click="addComplain(scope.row)">投诉</el-button>
-                <el-button type="primary" v-if="scope.row.complainWorkSerial" :size="btnsize"  plain @click="viewComplain(scope.row)">投诉详情</el-button>
+                <el-button type="warning" :size="btnsize"  v-if="!scope.row.complainWorkSerial"  @click="addComplain(scope.row)">投诉</el-button>
+                <el-button type="warning" v-if="scope.row.complainWorkSerial" :size="btnsize"   @click="viewComplain(scope.row)">投诉详情</el-button>
                 <el-button type="primary" v-if="!scope.row.shipperEvaluationId" :size="btnsize"  plain @click="addReview(scope.row)">评价</el-button>
                 <el-button type="primary" v-if="scope.row.shipperEvaluationId" :size="btnsize"  plain @click="viewReview(scope.row)">评价详情</el-button>
 
@@ -221,11 +223,11 @@
 
             <!-- 物流商 -->
             <div v-if="!isOwner">
-              <el-button type="primary" :size="btnsize"  plain @click="viewDetail(scope.row)">查看</el-button>
+              <el-button type="primary" :size="btnsize"  @click="viewDetail(scope.row)">查看</el-button>
               <!-- 待承运 -->
               <div v-if="scope.row.orderStatus === 'AF03702'">
                 <el-button  type="primary" :size="btnsize"  plain @click="confirmCarrier(scope.row)">确定承运</el-button>
-                <el-button type="primary" :size="btnsize"  plain @click="cancelOrder(scope.row)">取消订单</el-button>
+                <el-button type="danger" :size="btnsize"  plain @click="cancelOrder(scope.row)">取消订单</el-button>
               </div>
               
               <!-- 待提货 -->
@@ -239,8 +241,8 @@
               </div>
               <!-- 待收货 -->
               <div v-if="scope.row.orderStatus === 'AF03705'">
-                <el-button type="primary" :size="btnsize"  plain v-if="scope.row.complainWorkSerial && !scope.row.complainId" @click="replyComplain(scope.row)">投诉回复</el-button>
-                <el-button type="primary" :size="btnsize"  plain v-if="scope.row.complainWorkSerial && scope.row.complainId" @click="viewComplain(scope.row)">投诉详情</el-button>
+                <el-button type="warning" :size="btnsize"   v-if="scope.row.complainWorkSerial && !scope.row.complainId" @click="replyComplain(scope.row)">投诉回复</el-button>
+                <el-button type="warning" :size="btnsize"   v-if="scope.row.complainWorkSerial && scope.row.complainId" @click="viewComplain(scope.row)">投诉详情</el-button>
                 <el-button type="primary" :size="btnsize"  plain @click="confirmEvaluate(scope.row)">确认收货</el-button>
 
               </div>
@@ -251,8 +253,8 @@
               </div>
               <!-- 已完成 -->
               <div v-if="scope.row.orderStatus === 'AF03707'">
-                <el-button type="primary" :size="btnsize"  plain v-if="scope.row.complainWorkSerial && !scope.row.complainId" @click="replyComplain(scope.row)">投诉回复</el-button>
-                <el-button type="primary" :size="btnsize"  plain v-if="scope.row.complainWorkSerial && scope.row.complainId" @click="viewComplain(scope.row)">投诉详情</el-button>
+                <el-button type="warning" :size="btnsize"  v-if="scope.row.complainWorkSerial && !scope.row.complainId" @click="replyComplain(scope.row)">投诉回复</el-button>
+                <el-button type="warning" :size="btnsize"  v-if="scope.row.complainWorkSerial && scope.row.complainId" @click="viewComplain(scope.row)">投诉详情</el-button>
                 <el-button type="primary" v-if="!scope.row.transportEvaluationId" :size="btnsize"  plain @click="addReview(scope.row)">评价</el-button>
                 <el-button type="primary" v-if="scope.row.transportEvaluationId || scope.row.shipperEvaluationId" :size="btnsize"  plain @click="viewReview(scope.row)">评价详情</el-button>
 
@@ -595,7 +597,7 @@ export default {
       this.fetchData()
     },
     doAction(type) {
-      this.$router.push({ path: '/carrier/order/create' })
+      this.$router.push({ path: '/order/create' })
     },
     clickDetails(row, event, column) {
       this.$refs.multipleTable.toggleRowSelection(row)
@@ -611,5 +613,17 @@ export default {
     background: #fff;
     padding: 20px 20px 200px;
     margin-top: 20px;
+    .table-link{
+      color: blue;
+      cursor: pointer;
+    }
+    .cell{
+      .el-button{
+        margin: 0;
+        margin-bottom: 5px;
+        width: 80px;
+        display: block;
+      }
+    }
   }
 </style>
