@@ -392,8 +392,11 @@ export default {
                 this.serviceTypeArr = JSON.parse(this.logisticsForm.serviceType) || [];
                 this.productServiceCodeArr = JSON.parse(this.logisticsForm.productServiceCode)  || [];
                 this.otherServiceCodeArr = JSON.parse(this.logisticsForm.otherServiceCode)  || [];
-            }).catch(err => {
-               
+            }).catch(err=>{
+                this.$message({
+                    type: 'info',
+                    message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                })
             })
         },
         //完善信息
@@ -451,7 +454,12 @@ export default {
                         console.log(res)
                         this.getMoreInformation();
                         this.clear();
+                    }).catch(err=>{
+                    this.$message({
+                        type: 'info',
+                        message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
                     })
+                })
                 } else {
                     console.log('error submit!!');
                     return false;

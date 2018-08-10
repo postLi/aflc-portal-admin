@@ -174,6 +174,11 @@ export default {
                         this.optionsReason = resArr[1].data;
                         this.orderForm.complainType = this.optionsReason[0].code; 
                         this.UserInfo = getUserInfo();
+                    }).catch(err=>{
+                        this.$message({
+                            type: 'info',
+                            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                        })
                     })
                 }
             })
@@ -196,6 +201,11 @@ export default {
                             console.log(res)
                             this.stepname = 'step-tow';
                             this.firstblood();
+                        }).catch(err=>{
+                            this.$message({
+                                type: 'info',
+                                message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                            })
                         })
                         
                     }).catch(() => {

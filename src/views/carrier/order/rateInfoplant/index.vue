@@ -151,16 +151,12 @@ export default {
         this.firstblood();
     },  
     methods: {
-        getValue(val){
-            console.log(val)
-        },
         firstblood(){
             let transportRangeId = this.$route.query.transportRangeId;
             let evaluationId = this.$route.query.evaluationId;
             TransportInfo(transportRangeId).then(res => {
                 // console.log(res)
                 this.rangeForm = res.data;
-                
                 this.rangeForm.weightcargo =[];
                 this.rangeForm.lightcargo = [];
                 this.rangeForm.rangePrices.forEach(item => {
@@ -180,13 +176,11 @@ export default {
                 this.rangeForm.weightcargo.sort(function(a,b){  
                     return a.startVolume - b.startVolume;  
                 })  
-                
-                console.log('this.rangeForm',this.rangeForm)
+                // console.log('this.rangeForm',this.rangeForm)
             })
 
             TransportEvaluation(evaluationId).then(res=>{
-                console.log('evaluationId',res)
-            
+                // console.log('evaluationId',res)
                 this.transportForm = res.data;
             })
 

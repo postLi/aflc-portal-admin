@@ -274,7 +274,8 @@ export default {
             shipperType:'AF00101',//数据字典类型
             optionsShipperType:[],//货主类型
             logisticsForm: {
-                shipperType: "AF0010101",//货主名称
+                shipperType: "AF0010202",//货主名称
+                shipperTypeName:'企业货主',
                 companyName: '',//公司名称
                 legalPerson: '',//法人
                 legalPersonIdno: '',//身份证号
@@ -346,23 +347,13 @@ export default {
             let res = getUserInfo() ;
             Promise.all([getDictionary(this.shipperType),getShipperInfoByMobile(res.mobile)]).then(resArr => {
                 // this.loading = false
-                console.log(resArr)
                 this.optionsShipperType = resArr[0].data;
-                this.logisticsForm = Object.assign({},resArr[1].data);
-                console.log(this.logisticsForm)
+                this.logisticsForm = Object.assign({},resArr[1].data,{'shipperType': "AF0010202",'shipperTypeName':'企业货主'});
             }).catch(err => {
-                
+                this.$message.error('操作失败：' + JSON.stringify(err.text))
             })
-
-        },
-        limitNum(val){
-
-            if(val.length>25){
-
-            }
         },
         submitForm(formName) {
-
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     let form = Object.assign({},this.logisticsForm,{'shipperStatus':"AF0010402"})
@@ -370,6 +361,11 @@ export default {
                     identifyShipper(form).then(res=>{
                         console.log(res)
                         this.getMoreInformation();
+                    }).catch(err=>{
+                        this.$message({
+                            type: 'info',
+                            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                        })
                     })
                 } else {
                     console.log('error submit!!');

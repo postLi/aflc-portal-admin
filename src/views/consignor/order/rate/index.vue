@@ -228,7 +228,12 @@ export default {
                 console.log(res)
                 this.tableData = res.data.list;
                 this.totalCount = res.data.totalCount;
-            })
+            }).catch(err=>{
+                    this.$message({
+                        type: 'info',
+                        message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                    })
+                })
         },
         clearSearch(){
             this.logisticsForm.startTime = '';

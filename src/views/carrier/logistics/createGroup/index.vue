@@ -201,7 +201,10 @@ export default {
                             })
                         }
                     }).catch(err=>{
-                        // console.log('err',err)
+                        this.$message({
+                            type: 'info',
+                            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                        })
                     })
                 } else {
                     console.log('error submit!!');

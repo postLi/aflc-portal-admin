@@ -226,7 +226,6 @@ export default {
             })            
         },
         submitForm() {
-            
             let rata = Object.assign({},{id:this.carrierSerial.id,replyDes:this.replyDes,replyId:this.UserInfo.id,replyName:this.UserInfo.contactsName});
             updateRate(rata).then(res => {
                 this.firstblood();

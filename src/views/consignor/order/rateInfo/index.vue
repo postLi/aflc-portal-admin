@@ -217,19 +217,13 @@ export default {
         this.firstblood();
     },  
     methods: {
-        getValue(val){
-            console.log(val)
-        },
-        textsArray(){
-             
-        },
         firstblood(){
             let orderSerial = this.$route.query.orderSerial;
             this.UserInfo = getUserInfo();
             this.parseTimeFunctions = parseTime;
 
             Promise.all([carrierSerial(orderSerial),consignorSerial(orderSerial),getDetailsByOrderSerial(orderSerial)]).then(resArr=> {
-                console.log('resArr',resArr)
+                // console.log('resArr',resArr)
                 this.carrierSerial = resArr[0].data || {};
                 this.consignorSerial = resArr[1].data || {};
                 this.orderForm = resArr[2].data || {};
@@ -241,7 +235,12 @@ export default {
             let rata = Object.assign({},{id:this.consignorSerial.id,replyDes:this.replyDes,replyId:this.UserInfo.id,replyName:this.UserInfo.contactsName});
             updateShipperRate(rata).then(res => {
                 this.firstblood();
-            })
+            }).catch(err=>{
+                    this.$message({
+                        type: 'info',
+                        message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                    })
+                })
         },
     },
   
