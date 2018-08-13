@@ -1,14 +1,14 @@
 <template>
   <div class="create-orderinfo page-main">
     <div class="tab-info-title">
-      <h2><span>创建订单</span></h2>
+      <h2><span>{{ title }}</span></h2>
     </div>
 
     <el-form :model="ruleForm" :rules="rules" size="mini" ref="ruleForm" label-width="150px" class="demo-ruleForm">
       <!-- 线路信息 -->
       <div class="order-base-info tab-info-panel clearfix">
-        <div class="tab-info-stitle"><strong>线路信息</strong><span class="important">提示：带*为必填项</span></div>
-        <el-form-item required  label="出发地：">
+        <div class="tab-info-stitle"><strong>线路信息</strong>(<span class="important">提示：带*为必填项</span>)</div>
+        <el-form-item required :rules="[{required: true, message: '请选择出发地'}]" label="出发地：">
           <el-input   @focus="()=>{showMap('strartAddress')}" v-model="aflcOrderAddressWebDtoList[0].provinceCityArea"></el-input>
         </el-form-item>
         <el-form-item required label="街道/门牌号：">
@@ -32,27 +32,28 @@
                   :visible-arrow="false"
                   placement="bottom"
                   width="400"
-                  trigger="focus"
+                  v-model="item.isget"
+                  trigger="manual"
                   >
                   <ul class="preCaogoList clearfix">
-                    <li @click="setCargoName(index, item.name)" :key="inx" v-for="(item, inx) in cargoListPre">{{ item.name }}</li>
+                    <li @click="setCargoName(index, item.name,item)" :key="inx" v-for="(item, inx) in cargoListPre">{{ item.name }}</li>
                   </ul>
-                  <el-input  @blur="calcTotalFee" slot="reference" v-model="item.goodsName"></el-input>
+                  <el-input @focus="item.isget = true"  @blur="calcTotalFee(item)" slot="reference" v-model="item.goodsName"></el-input>
                 </el-popover>
                 
               </el-form-item>
               <el-form-item label="总件数：">
-                <el-input v-model="item.goodsNum"><template slot="append">件</template></el-input>
+                <el-input v-numberOnly v-model="item.goodsNum"><template slot="append">件</template></el-input>
               </el-form-item>
               <el-form-item required label="预估重量：">
-                <el-input  @blur="calcTotalFee" v-model="item.goodsWeight"><template slot="append">公斤</template></el-input>
+                <el-input v-numberOnly  @blur="calcTotalFee" v-model="item.goodsWeight"><template slot="append">公斤</template></el-input>
               </el-form-item>
               <el-form-item required label="预估体积：">
-                <el-input @blur="calcTotalFee" v-model="item.goodsVolume"><template slot="append">立方米</template></el-input>
+                <el-input v-numberOnly @blur="calcTotalFee" v-model="item.goodsVolume"><template slot="append">立方米</template></el-input>
               </el-form-item>
               <el-form-item  class="cargo-button">
                 <el-button size="mini" type="primary" v-if="index === (cargoList.length-1)" @click="resetCargo">重置</el-button>
-                <el-button size="mini" type="primary" v-if="index === (cargoList.length-1) && cargoList.length < maxCargoLength" @click="addCargo(index)">+</el-button>
+                <el-button size="mini" type="primary" v-if="index === (cargoList.length-1) && cargoList.length < maxCargoLength" @click="addCargo(index)">＋</el-button>
                 <el-button size="mini" type="danger" v-if="index > 0 " @click="removeCargo(index)">-</el-button>
               </el-form-item>
            </li>
@@ -61,7 +62,7 @@
       </div>
       <!-- 选择物流公司 -->
       <div class="select-line tab-info-panel" v-if="!isCargo">
-        <div class="tab-info-stitle"><strong>选择物流公司：</strong>（选择出发地跟到达地之后，为您精准匹配物流承运商）</div>
+        <div class="tab-info-stitle"><strong>选择物流公司：</strong>（<span class="important">选择出发地跟到达地之后，为您精准匹配物流承运商</span>）</div>
         <div class="select-line-list">
           <el-table
             ref="multipleTable"
@@ -119,7 +120,7 @@
                   trigger="hover"
                   >
                   <div class="showjieti-info">
-                    <div class="jieti-title">最低一票价格：{{findLowestPrice(scope.row.rangePrices,'1')}}元</div>
+                    <div class="jieti-title">最低一票价格：{{scope.row.lowerPrice}}元</div>
                     <ul>
                       <li :key="index" v-if="item.type==='1'" v-for="(item, index) in scope.row.rangePrices">
                         <span class="jietiv">{{ item.startVolume }}公斤~{{ item.endVolume }}公斤</span>
@@ -146,7 +147,7 @@
                   trigger="hover"
                   >
                   <div class="showjieti-info">
-                    <div class="jieti-title">最低一票价格：{{findLowestPrice(scope.row.rangePrices,'0')}}元</div>
+                    <div class="jieti-title">最低一票价格：{{scope.row.lowerPrice}}元</div>
                     <ul>
                       <li :key="index" v-if="item.type==='0'" v-for="(item, index) in scope.row.rangePrices">
                         <span class="jietiv">{{ item.startVolume }}立方~{{ item.endVolume }}立方</span>
@@ -177,7 +178,7 @@
           </el-table>
         </div>
         <div class="prePrice">
-          预估运费总金额：{{theTotalPrice}}元
+          预估运费总金额：{{theTotalPrice}}
         </div>
       </div>
       <!-- 货源类型 -->
@@ -323,13 +324,24 @@ export default {
     tmsmap
   },
   data() {
+    var validatePass2 = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请再次输入密码'))
+      } else if (value !== this.logisticsForm.newPassword) {
+        callback(new Error('两次输入密码不一致!'))
+      } else {
+        callback()
+      }
+    }
+
     return {
+      title: '创建订单',
       maxCargoLength: 5,
       cargoInfo: {
         'goodsName': '', // 货物名称
-        'goodsNum': 0, // 总件数
-        'goodsVolume': '0', // 货物体积（方）
-        'goodsWeight': '0' // 货物重量（吨）
+        'goodsNum': '', // 总件数
+        'goodsVolume': '', // 货物体积（方）
+        'goodsWeight': '' // 货物重量（吨）
         // "title": "string" // 标题
       },
       // 常用地址、收发货人信息
@@ -363,7 +375,12 @@ export default {
       ifDisable: false,
       popVisible: false,
       cargoListPre: [],
-      rules: {},
+      rules: {
+        startP:[
+          { required: true, message: '请输入原密码', trigger: 'blur' },
+          { validator: validatePass2, trigger: 'blur' }
+        ]
+      },
       current: '',
       currentShowNetIndex: 0,
       // 选中的是第几个物流商
@@ -431,7 +448,7 @@ export default {
   },
   computed:{
     theTotalPrice(){
-      return this.ruleForm.forecastPrice === '' ? '面议' : this.ruleForm.forecastPrice
+      return this.ruleForm.forecastPrice === '' ? '面议' : this.ruleForm.forecastPrice + '元'
     },
     noCanSubmit(){
       // 判断是否能提交
@@ -451,19 +468,45 @@ export default {
     }
   },
   mounted() {
-    this.id = this.$route.query.id
+    this.id = this.$route.query.cid
+    this.cid = this.$route.query.id
     this.isCargo = this.$route.path.indexOf('cargoInfo')!==-1
+    if(this.isCargo){
+      this.title = '发布货源'
+    } else {
+      this.title = '创建订单'
+    }
     this.initCargo()
     if (this.id) {
       this.initModify()
+    } else if(this.cid){
+      // 如果是从专线过来
+      this.initZX()
     } else {
       this.initNew()
     }
     //this.getCompany()
   },
   methods: {
+    initZX(){
+      let query = this.$route.query
+      // 获取网点相关的信息
+      this.getCompany({
+        id: this.cid
+      })
+      this.cargoList = [Object.assign({isget: false}, this.cargoInfo)]
+      this.ruleForm.shipperId = this.otherinfo.id
+      this.ruleForm.memberType = this.otherinfo.rolesIdList[0]
+      // 设置各个参数
+      this.aflcOrderAddressWebDtoList[0].provinceCityArea = query.start
+      this.aflcOrderAddressWebDtoList[1].provinceCityArea = query.end
+      this.aflcOrderAddressWebDtoList[0].contacts = query.startLocationContacts
+      this.aflcOrderAddressWebDtoList[0].contactsPhone = query.startLocationContacts
+      this.aflcOrderAddressWebDtoList[1].contacts = query.endLocationContacts
+      this.aflcOrderAddressWebDtoList[1].contactsPhone = query.endLocationContactsMobile
+    },
     initNew() {
-      this.cargoList = [Object.assign({}, this.cargoInfo)]
+      this.cargoList = [Object.assign({isget: false}, this.cargoInfo)]
       this.ruleForm.shipperId = this.otherinfo.id
       this.ruleForm.memberType = this.otherinfo.rolesIdList[0]
     },
@@ -524,6 +567,18 @@ export default {
       const obj = info.addressComponent
       const str = obj.province + '' + obj.city + '' + obj.district
       const str2 = obj.township + obj.street + obj.streetNumber + obj.building
+      // 如果是从专线过来创建的，需要判断是否选择到当前城市位置
+      if(this.cid){
+        if(str.indexOf(this.aflcOrderAddressWebDtoList[0].provinceCityArea) === -1 && this.current === 'strartAddress'){
+          this.$message.info('需要选择当前专线所在位置~')
+          return false
+        }
+        if(str.indexOf(this.aflcOrderAddressWebDtoList[1].provinceCityArea) === -1 && this.current === 'endAddress'){
+          this.$message.info('需要选择当前专线所在位置~')
+          return false
+        }
+      }
+
       // info.name  info.pos
       switch (this.current) {
         case 'contactAddress':
@@ -558,16 +613,19 @@ export default {
       this.cargoList.splice(index, 1)
     },
     addCargo(index) {
-      this.cargoList.push(Object.assign({}, this.cargoInfo))
+      this.cargoList.push(Object.assign({isget:false}, this.cargoInfo))
     },
-    setCargoName(index, name) {
+    setCargoName(index, name,item) {
+      
       this.$set(this.cargoList, index, Object.assign(this.cargoList[index], {
         goodsName: name
       }))
+      item.isget =false
       // this.cargoList[index]
     },
     /** ***  选择物流公司   */
     findLowestPrice(list, type) {
+      list = list || []
       const find = list.filter(el => el.type === type)[0]
       return !find ? 0 : find.discountPrice
     },
@@ -589,11 +647,18 @@ export default {
         }
         console.log('find data:', data)
         this.netQuery = data
-        this.getCompany()
+        // 如果不是从专线页面过来，则请求相关专线信息
+        if(!this.cid){
+          this.getCompany()
+        }
+        
       }
     },
     // 计算总价
-    calcTotalFee() {
+    calcTotalFee(item) {
+      if(item && typeof item.goodsName!=='undefined'){
+        item.isget = false
+      }
       // 必须要有货物信息跟物流公司信息
       // 重量跟体积必须要有一个值
       let transportRangeId = this.wlindex
@@ -633,15 +698,18 @@ export default {
         let amount = cargolist.reduce((pre,item)=>{
           return pre + parseFloat(item.goodsNum,10)
         }, 0)
+        weight = weight || 0
+        volume = volume || 0
         console.log("get Total price:",transportRangeId,weight,volume,cargolist)
         if(weight>0 || volume > 0){
+          this.ruleForm.wlId = transportRangeId
           ReqApi.getTotalPrice({
             transportRangeId,// 物流公司专线id
             weight,// 货物重量
             volume// 货物体积
           }).then(res => {
             let data = res.data
-            this.ruleForm.wlId = data.transportRangeId
+            
             if(data){
               this.ruleForm.forecastPrice = data.forecastPrice
               this.ruleForm.goodsType = data.goodsType
@@ -652,20 +720,24 @@ export default {
               this.ruleForm.totalAmount = ''
             }
           }).catch(err => {
-            this.$message.error('获取价格失败： ' + JSON.stringify(err))
+            this.ruleForm.forecastPrice = ''
+            this.ruleForm.goodsType = ''
+            this.ruleForm.totalAmount = ''
+            //this.$message.error('获取价格失败： ' + JSON.stringify(err))
           })
         }
         
       }
     },
-    getCompany() {
+    getCompany(vo) {
+      vo = vo ||  {
+        'startLocation': this.netQuery.startLocation,
+        'endLocation': this.netQuery.endLocation
+      }
       ReqApi.getCompany({
         currentPage: 1,
         'pageSize': 100,
-        vo: {
-          'startLocation': this.netQuery.startLocation,
-          'endLocation': this.netQuery.endLocation
-        }
+        vo
       }).then(res => {
         //this.usersArr = res.data.list || []
         // 每次搜索出专线列表，重置部分参数
@@ -692,11 +764,13 @@ export default {
     getNet(id, index) {
       console.log("getNet:", id, index)
       // 重新搜索后，要重置部分参数
-      if(!this.wlbestlistObj[index]){
+      if(!this.wlbestlistObj[index] && this.netQuery.startLongitude){
         ReqApi.getBestNet(id, this.netQuery).then(res => {
           this.$set(this.wlbestlist, index, res.data)
           this.wlbestlistObj[index] = true
         })
+      } else {
+        this.$message.warning('请先选择具体的出发地跟目的地信息~')
       }
     },
     getAllNet(id) {
@@ -846,6 +920,33 @@ export default {
           const data = Object.assign({}, this.ruleForm)
           data.aflcOrderAddressWebDtoList = this.aflcOrderAddressWebDtoList
           data.aflcFCLOrderGoodsDtoList = this.cargoList
+
+          //做提交判断
+          if(data.aflcOrderAddressWebDtoList[0].provinceCityArea === ''){
+             this.$message.error('请选择出发地~')
+            return false
+          }
+          if(data.aflcOrderAddressWebDtoList[1].provinceCityArea === ''){
+             this.$message.error('请选择到达地~')
+            return false
+          }
+          if(data.aflcFCLOrderGoodsDtoList.filter(el => (el.goodsName&&(el.goodsWeight || el.goodsVolume))).length === 0){
+            this.$message.error('请填写有效的货物信息~')
+            return false
+          }
+          if(data.wlId === '' && !this.isCargo){
+             this.$message.error('需要选择物流公司~')
+            return false
+          }
+          if(data.aflcOrderAddressWebDtoList[0].contacts === ''){
+             this.$message.error('请填写发货人~')
+            return false
+          }
+          if(data.aflcOrderAddressWebDtoList[0].contactsPhone === ''){
+             this.$message.error('请填写发货人手机~')
+            return false
+          }
+          
           
           let promiseObj
           // 判断操作，调用对应的函数

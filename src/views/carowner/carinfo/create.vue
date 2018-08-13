@@ -21,16 +21,22 @@
       </el-form-item>
 
       <el-form-item required label="车辆载重">
-        <el-input v-model="ruleForm.carLoad"></el-input>（吨）
+        <el-input v-model="ruleForm.carLoad">
+           <template slot="append">（吨）</template>
+        </el-input>
       </el-form-item>
       <el-form-item required label="车辆体积">
-        <el-input disabled v-model="ruleForm.carVolume"></el-input>（立方米）
+        <el-input disabled v-model="ruleForm.carVolume">
+          <template slot="append">（立方米）</template>  
+        </el-input>
       </el-form-item>
       <el-form-item label="车辆规格">
         <selectType v-model="ruleForm.carSpec" type="AF009" clearable size="mini"></selectType>
       </el-form-item>
       <el-form-item required label="车辆常驻地">
-        <el-input  @focus="()=>{showMap('usualPlace')}" v-model="ruleForm.usualPlace" ></el-input>
+         <vregion :ui="true" @values="regionChangeUsual" class="form-control">
+          <el-input v-model="ruleForm.usualPlace" placeholder="车辆常驻地"></el-input>
+        </vregion>
       </el-form-item>
       <el-form-item label="车源类型">
         <el-radio-group v-model="ruleForm.carSourceType">
@@ -39,10 +45,14 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item required label="出发地">
-        <el-input @focus="()=>{showMap('strartAddress')}" v-model="ruleForm.strartAddress"></el-input>
+        <vregion :ui="true" @values="regionChangeStart" class="form-control">
+          <el-input v-model="ruleForm.strartAddress" placeholder="出发地"></el-input>
+        </vregion>
       </el-form-item>
       <el-form-item required label="到达地">
-        <el-input @focus="()=>{showMap('endAddress')}" v-model="ruleForm.endAddress"></el-input>
+        <vregion :ui="true" @values="regionChangeEnd" class="form-control">
+          <el-input v-model="ruleForm.endAddress" placeholder="到达地"></el-input>
+        </vregion>
       </el-form-item>
       <el-form-item label="途径点">
         <el-input v-model="ruleForm.viaAddress"></el-input>
@@ -96,7 +106,6 @@
         <!-- <el-button @click="resetForm('ruleForm')">重置</el-button> -->
   
     </el-form>
-    <tmsmap @success="getInfo" pos="" name="" :popVisible.sync="popVisible" />
   </div>
 </template>
 <script>
@@ -105,12 +114,13 @@ import upload from '@/components/Upload/singleImage2'
 import tmsmap from '@/components/map/index'
 import { getSelectType } from '@/api/common'
 import * as ReqApi from '@/api/carowner/index'
+import vregion from '@/components/vregion/Region'
 
 export default {
   components: {
     selectType,
     upload,
-    tmsmap
+    vregion
   },
   mounted() {
     this.id = this.$route.query.id
@@ -194,6 +204,18 @@ export default {
     }
   },
   methods: {
+    getValue(obj){
+      return obj ? obj.value:'';
+    },
+    regionChangeUsual(d){
+      this.ruleForm.usualPlace = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+    },
+    regionChangeStart(d) {
+        this.ruleForm.strartAddress = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+    },
+    regionChangeEnd(d) {
+        this.ruleForm.endAddress = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+    },
     initModify() {
       ReqApi.getCarInfo(this.id).then(res => {
         const data = res.data
@@ -296,15 +318,25 @@ export default {
 </script>
 <style lang="scss">
 .create-carinfo{
-  padding:20px;
+
   height: 100%;
   .car-base-info{
     .el-form-item{
       float: left;
       width: 50%;
     }
+    .el-form-item__content{
+      .caller-container,.v-region{
+        width: 100%;
+      }
+      .v-dropdown-container{
+        top: 42px !important;
+        left: 0 !important;
+      }
+    }
     .el-input{
-      width: 80%;
+      width: 100%;
+      
     }
   }
   .carvinfo{

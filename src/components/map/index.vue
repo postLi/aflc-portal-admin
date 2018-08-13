@@ -75,6 +75,7 @@ export default {
     exit() {
       if (this.map && this.map.destroy) {
         this.map.destroy()
+        this.map = {}
       }
       this.thepos = ''
       this.thename = ''
@@ -91,7 +92,7 @@ export default {
         this.loadMap()
       } else {
       // 隐藏时，摧毁地图对象
-        this.exit()
+        // this.exit()
       }
     },
     loadMap() {
@@ -106,6 +107,7 @@ export default {
       }
     },
     close(done) {
+      this.exit()
       this.$emit('update:popVisible', false)
       if (typeof done === 'function') {
         done()
