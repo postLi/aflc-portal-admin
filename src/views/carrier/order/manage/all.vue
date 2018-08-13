@@ -255,7 +255,7 @@
                 <el-button type="warning" :size="btnsize"  v-if="scope.row.complainWorkSerial && !scope.row.reply" @click="replyComplain(scope.row)">投诉回复</el-button>
                 <el-button type="warning" :size="btnsize"  v-if="scope.row.complainWorkSerial && scope.row.reply" @click="viewComplain(scope.row)">投诉详情</el-button>
                 <el-button type="primary" v-if="!scope.row.transportEvaluationId" :size="btnsize"  plain @click="addReview(scope.row)">评价</el-button>
-                <el-button type="primary" v-if="scope.row.transportEvaluationId || scope.row.shipperEvaluationId" :size="btnsize"  plain @click="viewReview(scope.row)">评价详情</el-button>
+                <el-button type="primary" v-if="scope.row.transportEvaluationId" :size="btnsize"  plain @click="viewReview(scope.row)">评价详情</el-button>
 
               </div>
               <!-- 已取消 -->
@@ -527,7 +527,7 @@ export default {
     },
     viewDetail(row) {
       // 查看详情
-      this.$router.push('/order/detail?id=' + row.id +  (!this.isOwner ? '&type=carrier' : ''))
+      this.$router.push('/order/detail?id=' + row.id + (!this.isOwner ? '&type=carrier' : ''))
     },
     addComplain(row) {
       // 添加投诉
@@ -549,9 +549,9 @@ export default {
       this.orderSerial = row.orderSerial
       this.transportRangeId = row.wlId
       this.shipperId = row.shipperId
-      if(this.isOwner){
+      if (this.isOwner) {
         this.dialogVisible = true
-      } else{
+      } else {
         this.dialogVisible2 = true
       }
     },
@@ -623,6 +623,25 @@ export default {
         width: 80px;
         display: block;
       }
+    }
+    .info_tab_footer{
+        padding-left: 20px;
+        background: #eee;
+        height: 40px;
+        line-height: 40px;
+        box-shadow: 0 -2px 2px rgba(0,0,0,.1);
+        position: relative;
+        z-index: 10;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+    }
+
+    .show_pager{
+        float: right;
+        line-height: 40px;
+        height: 40px;
+        overflow: hidden;
     }
   }
 </style>

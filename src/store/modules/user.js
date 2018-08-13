@@ -56,12 +56,37 @@ const user = {
       })
     },
 
-    // 前端设置token信息
-    FeLogin({ commit }, token) {
+    /**
+     * 前端设置token信息
+     * @param {*} param0 vue对象
+     * @param {*} tokenObject
+     * {
+      login_type: to.query.login_type,
+      access_token: to.query.access_token,
+      login_mobile: to.query.login_mobile
+    }
+     */
+    FeLogin({ commit }, tokenObject) {
       return new Promise((resolve, reject) => {
-        console.log('feLogin:', token)
-        commit('SET_TOKEN', token)
-        setToken(token)
+        console.log('feLogin:', tokenObject)
+        const mapObj = {
+          'aflc-1': 'AF00102',
+          'aflc-2': 'AF00101',
+          'aflc-5': 'AF00107'
+        }
+        const userInfo = {
+          'accNum': tokenObject.login_type,
+          'username': tokenObject.login_mobile + '|' + tokenObject.login_type,
+          'password': '',
+          'memberType': mapObj[tokenObject.login_type] || '',
+          'mobile': tokenObject.login_mobile
+        }
+        setToken(tokenObject.access_token)
+        setUsername(tokenObject.login_mobile)
+        setOrgId(tokenObject.login_type)
+        setLogin(userInfo)
+        commit('SET_TOKEN', tokenObject.access_token)
+        commit('SET_USERNAME', userInfo.username)
         resolve()
       })
     },

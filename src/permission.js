@@ -34,12 +34,16 @@ router.beforeEach((to, from, next) => {
   NProgress.start()
   // 如果链接带有token信息，则将其保存
   // 会覆盖原有的token
-  if (to.query.settoken) {
-    store.dispatch('FeLogin', to.query.settoken).then(() => {
+  if (to.query.access_token && to.query.login_type) {
+    store.dispatch('FeLogin', {
+      login_type: to.query.login_type,
+      access_token: to.query.access_token,
+      login_mobile: to.query.login_mobile
+    }).then(() => {
       next({
-        path: to.fullPath.replace(/([&|?])(settoken=[^&]*&?)/, '$1').replace(/\?$/, '')
+        path: to.fullPath.replace(/([&|?])(login_type=[^&]*&?)/g, '$1').replace(/([&|?])(access_token=[^&]*&?)/g, '$1').replace(/([&|?])(login_mobile=[^&]*&?)/g, '$1').replace(/\?$/, '')
       })
-      console.log('load Token:', getToken(), to.fullPath.replace(/([&|?])(settoken=[^&]*&?)/, '$1').replace(/\?$/, ''))
+      // console.log('load Token:', getToken(), to.fullPath.replace(/([&|?])(tmstoken=[^&]*&?)/, '$1').replace(/\?$/, ''))
     })
   } else if (to.query.nologin) {
     store.dispatch('Login', {
