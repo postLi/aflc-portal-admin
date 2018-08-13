@@ -18,7 +18,6 @@
           style="width: 100%;">
           <el-table-column
             fixed
-            
             prop="customerId"
             label="序号"
             width="80">
