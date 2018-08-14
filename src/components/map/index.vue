@@ -10,7 +10,7 @@
         </tr>
         <tr>
             <td>
-                <input id="tipinput"/>
+                <input ref="tipinput" id="tipinput"/>
             </td>
         </tr>
     </table>
@@ -53,7 +53,7 @@ export default {
   },
   mounted() {
     // this.dialogTableVisible = this.popVisible
-    
+
   },
   created() {
 
@@ -73,7 +73,7 @@ export default {
   },
   methods: {
     exit() {
-      if (this.map && this.map.destroy) {
+      if (this.map && this.map.destroy && typeof this.map.destroy === 'function') {
         this.map.destroy()
         this.map = {}
       }
@@ -127,11 +127,17 @@ export default {
         input: 'tipinput'
       }
       var auto = new AMap.Autocomplete(autoOptions)
+      // 初始化搜索框信息
       var placeSearch = new AMap.PlaceSearch({
         map: map,
         extensions: 'base' // all base
         // type: '商务住宅|生活服务|公司企业|地名地址信息'
       })
+      if (this.name) {
+        this.$refs['tipinput'].value = this.name
+        placeSearch.search(this.name)
+      }
+
       /* AMapUI.loadUI(['misc/PositionPicker'], function(PositionPicker) {
         var map = new AMap.Map('container', {
           zoom: 16

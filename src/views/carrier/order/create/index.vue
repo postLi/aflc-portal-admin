@@ -233,7 +233,7 @@
   
     </el-form>
     <!-- 地图 -->
-    <tmsmap @success="getInfo" pos="" name="" :popVisible.sync="popVisible" />
+    <tmsmap @success="getInfo" :pos="thepos" :name="thename" :popVisible.sync="popVisible" />
 
     <!-- 查看常用收发货人 -->
     <el-dialog :title="contactTitle" custom-class="ususalContactList" :visible.sync="contactPopVisible">
@@ -316,7 +316,6 @@ import { getSelectType } from '@/api/common'
 import * as ReqApi from '@/api/carrier/create'
 import * as ReqApiManage from '@/api/carrier/manage'
 
-
 export default {
   components: {
     selectType,
@@ -335,6 +334,10 @@ export default {
     }
 
     return {
+      // 用来初始化地图位置信息
+      thepos: '',
+      thename: '',
+
       title: '创建订单',
       maxCargoLength: 5,
       cargoInfo: {
@@ -376,7 +379,7 @@ export default {
       popVisible: false,
       cargoListPre: [],
       rules: {
-        startP:[
+        startP: [
           { required: true, message: '请输入原密码', trigger: 'blur' },
           { validator: validatePass2, trigger: 'blur' }
         ]
@@ -404,7 +407,7 @@ export default {
         'wlId': '', // 专线id
         'wlName': '', // 物流公司名称
         'orderFrom': 'AF0040002', // 订单来源(APP端:AF0040001;WEB端:AF0040002;微信公众号:AF0040003;小程序:AF004004)
-         startPointId: '', // 最佳出发网点
+        startPointId: '', // 最佳出发网点
         endPointId: '', // 最佳结束网点
         goodsType: 0, // 价格状态
         forecastPrice: 0 // 获取到总价格
@@ -417,7 +420,7 @@ export default {
       contactTitle: '常用发货人',
       popContactTitle: '添加',
       popContactList: [],
-      popContactListSearch:'',
+      popContactListSearch: '',
       isCargo: false,
       popPointList: {
         startPoints: [],
@@ -446,23 +449,23 @@ export default {
 
     }
   },
-  computed:{
-    theTotalPrice(){
+  computed: {
+    theTotalPrice() {
       return this.ruleForm.forecastPrice === '' ? '面议' : this.ruleForm.forecastPrice + '元'
     },
-    noCanSubmit(){
+    noCanSubmit() {
       // 判断是否能提交
       return false
     },
-    searchPopContactList(){
+    searchPopContactList() {
       return this.popContactList.filter(el => {
         return el.contacts.indexOf(this.popContactListSearch) !== -1 || el.contactsPhone.indexOf(this.popContactListSearch) !== -1 || el.address.indexOf(this.popContactListSearch) !== -1
       })
     }
   },
-  watch:{
-    wlindex(newVal){
-      if(newVal){
+  watch: {
+    wlindex(newVal) {
+      if (newVal) {
         this.calcTotalFee()
       }
     }
@@ -470,8 +473,8 @@ export default {
   mounted() {
     this.id = this.$route.query.cid
     this.cid = this.$route.query.id
-    this.isCargo = this.$route.path.indexOf('cargoInfo')!==-1
-    if(this.isCargo){
+    this.isCargo = this.$route.path.indexOf('cargoInfo') !== -1
+    if (this.isCargo) {
       this.title = '发布货源'
     } else {
       this.title = '创建订单'
@@ -479,57 +482,85 @@ export default {
     this.initCargo()
     if (this.id) {
       this.initModify()
-    } else if(this.cid){
+    } else if (this.cid) {
       // 如果是从专线过来
       this.initZX()
+    } else if (this.$route.query.start) {
+      this.initSY()
     } else {
       this.initNew()
     }
-    //this.getCompany()
+    // this.getCompany()
   },
   methods: {
-    initZX(){
-      let query = this.$route.query
+    // 从专线页面下单
+    initZX() {
+      const query = this.$route.query
       // 获取网点相关的信息
       this.getCompany({
         id: this.cid
       })
-      this.cargoList = [Object.assign({isget: false}, this.cargoInfo)]
+      this.cargoList = [Object.assign({ isget: false }, this.cargoInfo)]
       this.ruleForm.shipperId = this.otherinfo.id
       this.ruleForm.memberType = this.otherinfo.rolesIdList[0]
       // 设置各个参数
       this.aflcOrderAddressWebDtoList[0].provinceCityArea = query.start
       this.aflcOrderAddressWebDtoList[1].provinceCityArea = query.end
       this.aflcOrderAddressWebDtoList[0].contacts = query.startLocationContacts
-      this.aflcOrderAddressWebDtoList[0].contactsPhone = query.startLocationContacts
+      this.aflcOrderAddressWebDtoList[0].contactsPhone = query.startLocationContactsMobile
       this.aflcOrderAddressWebDtoList[1].contacts = query.endLocationContacts
       this.aflcOrderAddressWebDtoList[1].contactsPhone = query.endLocationContactsMobile
     },
+    // 从首页下单
+    initSY() {
+      const query = this.$route.query
+      this.cargoList = [Object.assign({ isget: false }, this.cargoInfo)]
+      this.ruleForm.shipperId = this.otherinfo.id
+      this.ruleForm.memberType = this.otherinfo.rolesIdList[0]
+      // 设置各个参数
+      this.aflcOrderAddressWebDtoList[0].provinceCityArea = query.start
+      this.aflcOrderAddressWebDtoList[1].provinceCityArea = query.end
+      this.aflcOrderAddressWebDtoList[0].viaAddress = query.startstreet
+      this.aflcOrderAddressWebDtoList[1].viaAddress = query.endstreet
+
+      this.aflcOrderAddressWebDtoList[0].viaAddressCoordinate = query.startj + ',' + query.startw
+      this.aflcOrderAddressWebDtoList[1].viaAddressCoordinate = query.endj + ',' + query.endw
+
+      this.netQuery = {
+        endLatitude: query.endw,
+        endLocation: query.end,
+        endLongitude: query.endj,
+        startLatitude: query.startw,
+        startLocation: query.start,
+        startLongitude: query.startj
+      }
+
+      this.getCompany()
+    },
     initNew() {
-      this.cargoList = [Object.assign({isget: false}, this.cargoInfo)]
+      this.cargoList = [Object.assign({ isget: false }, this.cargoInfo)]
       this.ruleForm.shipperId = this.otherinfo.id
       this.ruleForm.memberType = this.otherinfo.rolesIdList[0]
     },
     initModify() {
       ReqApiManage.getOrderDesc(this.id).then(data => {
-        if(data.aflcOrderAddressWebDtoList){
-          this.aflcOrderAddressWebDtoList = this.aflcOrderAddressWebDtoList.map((el,index) => {
-            let type = el.type
+        if (data.aflcOrderAddressWebDtoList) {
+          this.aflcOrderAddressWebDtoList = this.aflcOrderAddressWebDtoList.map((el, index) => {
+            const type = el.type
             el = data.aflcOrderAddressWebDtoList[index]
             el.type = type
             el.isSave = !!el.isSave
             return el
           })
         }
-        if(data.aflcFCLOrderGoodsDtoList){
+        if (data.aflcFCLOrderGoodsDtoList) {
           this.cargoList = data.aflcFCLOrderGoodsDtoList
         }
-        for(let i in this.ruleForm){
+        for (const i in this.ruleForm) {
           this.ruleForm[i] = data[i]
         }
         this.ruleForm.id = data.id
         this.isModify = true
-
       }).catch(err => {
         this.$confirm('查询出错：' + JSON.stringify(err), '提示', {
           confirmButtonText: '重新创建',
@@ -552,8 +583,8 @@ export default {
         })
       })
     },
-    goList(){
-      if(this.isCargo){
+    goList() {
+      if (this.isCargo) {
         this.eventBus.$emit('replaceCurrentView', '/cargoInfo/manage')
       } else {
         this.eventBus.$emit('replaceCurrentView', '/order/manage')
@@ -568,12 +599,12 @@ export default {
       const str = obj.province + '' + obj.city + '' + obj.district
       const str2 = obj.township + obj.street + obj.streetNumber + obj.building
       // 如果是从专线过来创建的，需要判断是否选择到当前城市位置
-      if(this.cid){
-        if(str.indexOf(this.aflcOrderAddressWebDtoList[0].provinceCityArea) === -1 && this.current === 'strartAddress'){
+      if (this.cid) {
+        if (str.indexOf(this.aflcOrderAddressWebDtoList[0].provinceCityArea) === -1 && this.current === 'strartAddress') {
           this.$message.info('需要选择当前专线所在位置~')
           return false
         }
-        if(str.indexOf(this.aflcOrderAddressWebDtoList[1].provinceCityArea) === -1 && this.current === 'endAddress'){
+        if (str.indexOf(this.aflcOrderAddressWebDtoList[1].provinceCityArea) === -1 && this.current === 'endAddress') {
           this.$message.info('需要选择当前专线所在位置~')
           return false
         }
@@ -602,6 +633,22 @@ export default {
       }
     },
     showMap(name) {
+      switch (name) {
+        case 'contactAddress':
+          this.thename = this.contactform.address || ''
+          this.thepos = this.contactform.coordinate || ''
+
+        case 'strartAddress':
+          this.thename = (this.aflcOrderAddressWebDtoList[0].provinceCityArea || '') + (this.aflcOrderAddressWebDtoList[0].viaAddress || '') || ''
+          this.thepos = this.aflcOrderAddressWebDtoList[0].viaAddressCoordinate || ''
+
+          break
+        case 'endAddress':
+          this.thename = (this.aflcOrderAddressWebDtoList[1].provinceCityArea || '') + (this.aflcOrderAddressWebDtoList[1].viaAddress || '') || ''
+          this.thepos = this.aflcOrderAddressWebDtoList[1].viaAddressCoordinate || ''
+          break
+      }
+
       this.popVisible = true
       this.current = name
     },
@@ -613,14 +660,13 @@ export default {
       this.cargoList.splice(index, 1)
     },
     addCargo(index) {
-      this.cargoList.push(Object.assign({isget:false}, this.cargoInfo))
+      this.cargoList.push(Object.assign({ isget: false }, this.cargoInfo))
     },
-    setCargoName(index, name,item) {
-      
+    setCargoName(index, name, item) {
       this.$set(this.cargoList, index, Object.assign(this.cargoList[index], {
         goodsName: name
       }))
-      item.isget =false
+      item.isget = false
       // this.cargoList[index]
     },
     /** ***  选择物流公司   */
@@ -648,32 +694,31 @@ export default {
         console.log('find data:', data)
         this.netQuery = data
         // 如果不是从专线页面过来，则请求相关专线信息
-        if(!this.cid){
+        if (!this.cid) {
           this.getCompany()
         }
-        
       }
     },
     // 计算总价
     calcTotalFee(item) {
-      if(item && typeof item.goodsName!=='undefined'){
+      if (item && typeof item.goodsName !== 'undefined') {
         item.isget = false
       }
       // 必须要有货物信息跟物流公司信息
       // 重量跟体积必须要有一个值
-      let transportRangeId = this.wlindex
+      const transportRangeId = this.wlindex
       // 必须要有名称的才能参与计算
-      let cargolist = this.cargoList.filter(el => el.goodsName)
+      const cargolist = this.cargoList.filter(el => el.goodsName)
 
       // 获取价格前初始化下数据
       this.ruleForm.wlId = ''
       this.ruleForm.forecastPrice = 0
       this.ruleForm.goodsType = ''
       this.ruleForm.totalAmount = 0
-      if(transportRangeId){
+      if (transportRangeId) {
         let $index = 0
-        let obj = this.usersArr.filter((el,index)=>{
-          if(el.id === transportRangeId){
+        const obj = this.usersArr.filter((el, index) => {
+          if (el.id === transportRangeId) {
             $index = index
             return true
           } else {
@@ -681,36 +726,35 @@ export default {
           }
         })
         this.ruleForm.wlName = obj.publishName
-        let data = this.wlbestlist[$index]
+        const data = this.wlbestlist[$index]
         this.ruleForm.startPointId = data[0] ? data[0].id : ''
         this.ruleForm.endPointId = data[1] ? data[1].id : ''
       }
-      
-      
-      console.log("get Total price:",transportRangeId,cargolist)
-      if(cargolist.length && transportRangeId){
-        let weight = cargolist.reduce((pre,item)=>{
-          return pre + parseFloat(item.goodsWeight,10)
+
+      console.log('get Total price:', transportRangeId, cargolist)
+      if (cargolist.length && transportRangeId) {
+        let weight = cargolist.reduce((pre, item) => {
+          return pre + parseFloat(item.goodsWeight, 10)
         }, 0)
-        let volume = cargolist.reduce((pre,item)=>{
-          return pre + parseFloat(item.goodsVolume,10)
+        let volume = cargolist.reduce((pre, item) => {
+          return pre + parseFloat(item.goodsVolume, 10)
         }, 0)
-        let amount = cargolist.reduce((pre,item)=>{
-          return pre + parseFloat(item.goodsNum,10)
+        const amount = cargolist.reduce((pre, item) => {
+          return pre + parseFloat(item.goodsNum, 10)
         }, 0)
         weight = weight || 0
         volume = volume || 0
-        console.log("get Total price:",transportRangeId,weight,volume,cargolist)
-        if(weight>0 || volume > 0){
+        console.log('get Total price:', transportRangeId, weight, volume, cargolist)
+        if (weight > 0 || volume > 0) {
           this.ruleForm.wlId = transportRangeId
           ReqApi.getTotalPrice({
-            transportRangeId,// 物流公司专线id
-            weight,// 货物重量
+            transportRangeId, // 物流公司专线id
+            weight, // 货物重量
             volume// 货物体积
           }).then(res => {
-            let data = res.data
-            
-            if(data){
+            const data = res.data
+
+            if (data) {
               this.ruleForm.forecastPrice = data.forecastPrice
               this.ruleForm.goodsType = data.goodsType
               this.ruleForm.totalAmount = data.forecastPrice
@@ -723,14 +767,13 @@ export default {
             this.ruleForm.forecastPrice = ''
             this.ruleForm.goodsType = ''
             this.ruleForm.totalAmount = ''
-            //this.$message.error('获取价格失败： ' + JSON.stringify(err))
+            // this.$message.error('获取价格失败： ' + JSON.stringify(err))
           })
         }
-        
       }
     },
     getCompany(vo) {
-      vo = vo ||  {
+      vo = vo || {
         'startLocation': this.netQuery.startLocation,
         'endLocation': this.netQuery.endLocation
       }
@@ -739,19 +782,21 @@ export default {
         'pageSize': 100,
         vo
       }).then(res => {
-        //this.usersArr = res.data.list || []
+        // this.usersArr = res.data.list || []
         // 每次搜索出专线列表，重置部分参数
         this.wlbestlistObj = {}
         this.wlindex = ''
-        this.startSelectIndex = ""
-        this.endSelectIndex = ""
+        this.startSelectIndex = ''
+        this.endSelectIndex = ''
         this.startSelect = ''
         this.endSelect = ''
         this.currentShowNetIndex = 0
         this.wlbestlist = []
 
-
         this.usersArr = res.data.list || []
+        if (!this.usersArr.length) {
+          this.$message.info('查不到相关专线~')
+        }
         /* this.usersArr = res.data.list ? res.data.list.concat(res.data.list.map(el=>{
           let ell = Object.assign({},el)
           ell.companyId = '1234243'
@@ -762,15 +807,15 @@ export default {
       })
     },
     getNet(id, index) {
-      console.log("getNet:", id, index)
+      console.log('getNet:', id, index, this.wlbestlistObj[index], this.netQuery)
       // 重新搜索后，要重置部分参数
-      if(!this.wlbestlistObj[index] && this.netQuery.startLongitude){
+      if (!this.wlbestlistObj[index] && this.netQuery.startLongitude) {
         ReqApi.getBestNet(id, this.netQuery).then(res => {
           this.$set(this.wlbestlist, index, res.data)
           this.wlbestlistObj[index] = true
         })
       } else {
-        this.$message.warning('请先选择具体的出发地跟目的地信息~')
+        // this.$message.warning('请先选择具体的出发地跟目的地信息~')
       }
     },
     getAllNet(id) {
@@ -788,20 +833,20 @@ export default {
           return ell
         })) */
 
-        this.startSelectIndex = ""
-        this.endSelectIndex = ""
-        let obj = this.wlbestlist[this.currentShowNetIndex]
+        this.startSelectIndex = ''
+        this.endSelectIndex = ''
+        const obj = this.wlbestlist[this.currentShowNetIndex]
 
-        this.popPointList.startPoints = res.data.startPoints.map(el=>{
+        this.popPointList.startPoints = res.data.startPoints.map(el => {
           el.ischecked = false
-          if(el.id === obj[0].id){
+          if (el.id === obj[0].id) {
             this.startSelectIndex = obj[0].id
           }
           return el
         })
-        this.popPointList.endPoints = res.data.endPoints.map(el=>{
+        this.popPointList.endPoints = res.data.endPoints.map(el => {
           el.ischecked = false
-          if(el.id === obj[1].id){
+          if (el.id === obj[1].id) {
             this.endSelectIndex = obj[1].id
           }
           return el
@@ -809,13 +854,13 @@ export default {
       })
     },
     /** 重新选择网点 */
-    showSlectNet(id,index) {
+    showSlectNet(id, index) {
       this.showPopNet = true
       this.currentShowNetIndex = index
       this.getAllNet(id)
     },
     selectNet(item, isStart) {
-      if(isStart){
+      if (isStart) {
         this.startSelectIndex = item.id
         this.startSelect = item.pointName
       } else {
@@ -826,33 +871,32 @@ export default {
     submitNetForm() {
       // 判断是否有选择网点
       let ischeck = true
-      if(this.popPointList.startPoints.length){
-        if(!this.startSelectIndex){
+      if (this.popPointList.startPoints.length) {
+        if (!this.startSelectIndex) {
           ischeck = false
         }
       }
-      if(this.popPointList.endPoints.length){
-        if(!this.endSelectIndex){
+      if (this.popPointList.endPoints.length) {
+        if (!this.endSelectIndex) {
           ischeck = false
         }
       }
-      if(ischeck){
+      if (ischeck) {
         this.showPopNet = false
         // 返回给最佳网点那里显示
-        if(this.startSelectIndex){
-          this.$set(this.wlbestlist[this.currentShowNetIndex], 0 , this.popPointList.startPoints.filter(el => {
+        if (this.startSelectIndex) {
+          this.$set(this.wlbestlist[this.currentShowNetIndex], 0, this.popPointList.startPoints.filter(el => {
             return el.id === this.startSelectIndex
           })[0])
         }
-        if(this.endSelectIndex){
-          this.$set(this.wlbestlist[this.currentShowNetIndex], 1 , this.popPointList.endPoints.filter(el => {
+        if (this.endSelectIndex) {
+          this.$set(this.wlbestlist[this.currentShowNetIndex], 1, this.popPointList.endPoints.filter(el => {
             return el.id === this.endSelectIndex
           })[0])
         }
-      } else{
-        this.$message.info("请选择一个网点~")
+      } else {
+        this.$message.info('请选择一个网点~')
       }
-      
     },
     // 收发货人
     showContactPop(type) {
@@ -921,39 +965,38 @@ export default {
           data.aflcOrderAddressWebDtoList = this.aflcOrderAddressWebDtoList
           data.aflcFCLOrderGoodsDtoList = this.cargoList
 
-          //做提交判断
-          if(data.aflcOrderAddressWebDtoList[0].provinceCityArea === ''){
-             this.$message.error('请选择出发地~')
+          // 做提交判断
+          if (data.aflcOrderAddressWebDtoList[0].provinceCityArea === '') {
+            this.$message.error('请选择出发地~')
             return false
           }
-          if(data.aflcOrderAddressWebDtoList[1].provinceCityArea === ''){
-             this.$message.error('请选择到达地~')
+          if (data.aflcOrderAddressWebDtoList[1].provinceCityArea === '') {
+            this.$message.error('请选择到达地~')
             return false
           }
-          if(data.aflcFCLOrderGoodsDtoList.filter(el => (el.goodsName&&(el.goodsWeight || el.goodsVolume))).length === 0){
+          if (data.aflcFCLOrderGoodsDtoList.filter(el => (el.goodsName && (el.goodsWeight || el.goodsVolume))).length === 0) {
             this.$message.error('请填写有效的货物信息~')
             return false
           }
-          if(data.wlId === '' && !this.isCargo){
-             this.$message.error('需要选择物流公司~')
+          if (data.wlId === '' && !this.isCargo) {
+            this.$message.error('需要选择物流公司~')
             return false
           }
-          if(data.aflcOrderAddressWebDtoList[0].contacts === ''){
-             this.$message.error('请填写发货人~')
+          if (data.aflcOrderAddressWebDtoList[0].contacts === '') {
+            this.$message.error('请填写发货人~')
             return false
           }
-          if(data.aflcOrderAddressWebDtoList[0].contactsPhone === ''){
-             this.$message.error('请填写发货人手机~')
+          if (data.aflcOrderAddressWebDtoList[0].contactsPhone === '') {
+            this.$message.error('请填写发货人手机~')
             return false
           }
-          
-          
+
           let promiseObj
           // 判断操作，调用对应的函数
           if (this.isModify) {
-            promiseObj = ReqApi.putChangeOrder(this.otherinfo.userToken ,data)
+            promiseObj = ReqApi.putChangeOrder(this.otherinfo.userToken, data)
           } else {
-            promiseObj = ReqApi.postCreateOrder(this.otherinfo.userToken ,data)
+            promiseObj = ReqApi.postCreateOrder(this.otherinfo.userToken, data)
           }
 
           promiseObj.then(res => {

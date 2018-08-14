@@ -138,16 +138,19 @@
                     订单号：{{ orderForm.orderSerial }}
                 </div>
                 <div class="order-button" v-if="!iscarrier">
-                    您可以 <el-button type="warning" :size="btnsize"  v-if="!orderForm.complainWorkSerial"  @click="addComplain(orderForm)">投诉</el-button>
+                    {{ orderForm.complainWorkSerial && orderForm.shipperEvaluationId ? '' : '您可以' }}
+                    <el-button type="warning" :size="btnsize"  v-if="!orderForm.complainWorkSerial"  @click="addComplain(orderForm)">投诉</el-button>
                     <el-button type="warning" v-if="orderForm.complainWorkSerial" :size="btnsize"   @click="viewComplain(orderForm)">投诉详情</el-button>
                     <el-button type="primary" v-if="!orderForm.shipperEvaluationId" :size="btnsize"  plain @click="addReview(orderForm)">评价</el-button>
                     <el-button type="primary" v-if="orderForm.shipperEvaluationId" :size="btnsize"  plain @click="viewReview(orderForm)">评价详情</el-button>
                 </div>
                 <div class="order-button" v-if="iscarrier">
-                    您可以 <el-button type="warning" :size="btnsize"  plain v-if="orderForm.complainWorkSerial && !orderForm.reply" @click="replyComplain(orderForm)">投诉回复</el-button>
+                    {{ (orderForm.complainWorkSerial ? orderForm.reply : true) && orderForm.transportEvaluationId ? '' : '您可以' }}
+                     <el-button type="warning" :size="btnsize"  plain v-if="orderForm.complainWorkSerial && !orderForm.reply" @click="replyComplain(orderForm)">投诉回复</el-button>
                     <el-button type="warning" :size="btnsize"  plain v-if="orderForm.complainWorkSerial && orderForm.reply" @click="viewComplain(orderForm)">投诉详情</el-button>
                     <el-button type="primary" v-if="!orderForm.transportEvaluationId" :size="btnsize"  plain @click="addReview(orderForm)">评价</el-button>
-                    <el-button type="primary" v-if="orderForm.transportEvaluationId || orderForm.shipperEvaluationId" :size="btnsize"  plain @click="viewReview(orderForm)">评价详情</el-button>
+                    <!-- <el-button type="primary" v-if="orderForm.transportEvaluationId || orderForm.shipperEvaluationId" :size="btnsize"  plain @click="viewReview(orderForm)">评价详情</el-button> -->
+                    <el-button type="primary" v-if="orderForm.transportEvaluationId" :size="btnsize"  plain @click="viewReview(orderForm)">评价详情</el-button>
                 </div>
             </div>
             <div v-if="active === 7" class="order-step-5 order-control-info">
@@ -183,9 +186,9 @@ export default {
   },
   data() {
     return {
-        btnsize: "small",
-        active: 1,
-        inited: false,
+      btnsize: 'small',
+      active: 1,
+      inited: false,
       currentStatus: 0,
       flows: [{
         done: true,
@@ -258,7 +261,7 @@ export default {
   },
   methods: {
     init() {
-        let active = 0
+      let active = 0
         // 格式化数据
       switch (this.orderForm.orderStatus) {
         case 'AF03708':
@@ -276,7 +279,7 @@ export default {
           this.flows[3].time = this.orderForm.deliveryTime
           active = active || 4
         case 'AF03704':
-           this.flows[2].done = true
+          this.flows[2].done = true
           this.flows[2].time = this.orderForm.pickUpGoodsTime
           active = active || 3
         case 'AF03703':
@@ -288,13 +291,13 @@ export default {
           this.flows[0].time = this.orderForm.createTime
           active = active || 1
         case 'AF03701':
-          
+
           active = active || 0
 
       }
         // 加载相应的版块
-        this.active = active
-        this.inited = true
+      this.active = active
+      this.inited = true
     },
     getValue(val) {
       console.log(val)
@@ -310,8 +313,8 @@ export default {
         this.loading = false
       })
     },
-    fetchData(){
-        this.firstblood()
+    fetchData() {
+      this.firstblood()
     },
     submitForm() {
       const rata = Object.assign({}, { id: this.carrierSerial.id, replyDes: this.replyDes, replyId: this.UserInfo.id, replyName: this.UserInfo.contactsName })
@@ -464,9 +467,9 @@ export default {
       this.orderSerial = row.orderSerial
       this.transportRangeId = row.wlId
       this.shipperId = row.shipperId
-      if(this.isOwner){
+      if (this.isOwner) {
         this.dialogVisible = true
-      } else{
+      } else {
         this.dialogVisible2 = true
       }
     },

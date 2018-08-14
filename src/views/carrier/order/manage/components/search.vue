@@ -121,7 +121,7 @@ export default {
 
   }
 
-  .el-form--inline .el-form-item{
+  .el-form-item{
     margin-right: 0;
     margin-bottom: 10px;
   }
