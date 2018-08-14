@@ -98,7 +98,7 @@
                                         </p>
                                     </div>
                                     <div class="rateReply_info" v-else>
-                                        <p>等待物流公司回复</p>
+                                        <p>货主暂未回复</p>
                                     </div>
                                 </div>
                             </div>
