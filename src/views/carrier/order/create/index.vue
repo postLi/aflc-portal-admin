@@ -532,7 +532,13 @@ export default {
         endLongitude: query.endj,
         startLatitude: query.startw,
         startLocation: query.start,
-        startLongitude: query.startj
+        startLongitude: query.startj,
+        startProvince: query.startp,
+        startCity: query.startc,
+        startArea: query.starta,
+        endProvince: query.endp,
+        endCity: query.endc,
+        endArea: query.enda
       }
 
       this.getCompany()
@@ -541,6 +547,8 @@ export default {
       this.cargoList = [Object.assign({ isget: false }, this.cargoInfo)]
       this.ruleForm.shipperId = this.otherinfo.id
       this.ruleForm.memberType = this.otherinfo.rolesIdList[0]
+      this.aflcOrderAddressWebDtoList[0].contacts = this.otherinfo.contactsName
+      this.aflcOrderAddressWebDtoList[0].contactsPhone = this.otherinfo.mobile
     },
     initModify() {
       ReqApiManage.getOrderDesc(this.id).then(data => {
@@ -622,12 +630,18 @@ export default {
           this.aflcOrderAddressWebDtoList[0].provinceCityArea = str
           this.aflcOrderAddressWebDtoList[0].viaAddress = str2
           this.aflcOrderAddressWebDtoList[0].viaAddressCoordinate = pos
+          this.aflcOrderAddressWebDtoList[0].province = obj.province
+          this.aflcOrderAddressWebDtoList[0].city = obj.city
+          this.aflcOrderAddressWebDtoList[0].area = obj.district
           this.findNetList()
           break
         case 'endAddress':
           this.aflcOrderAddressWebDtoList[1].provinceCityArea = str
           this.aflcOrderAddressWebDtoList[1].viaAddress = str2
           this.aflcOrderAddressWebDtoList[1].viaAddressCoordinate = pos
+          this.aflcOrderAddressWebDtoList[1].province = obj.province
+          this.aflcOrderAddressWebDtoList[1].city = obj.city
+          this.aflcOrderAddressWebDtoList[1].area = obj.district
           this.findNetList()
           break
       }
@@ -654,7 +668,9 @@ export default {
     },
     // 货物信息
     resetCargo() {
-      this.cargoList = [{}]
+      const index = this.cargoList.length
+      this.$set(this.cargoList, index - 1, {})
+      // this.cargoList = [{}]
     },
     removeCargo(index) {
       this.cargoList.splice(index, 1)
@@ -689,7 +705,13 @@ export default {
           endLongitude: pos1[0], // 到达地上传坐标经度
           startLatitude: pos0[1], // 出发地上传坐标纬度
           startLocation: obj[0].provinceCityArea, // 出发地
-          startLongitude: pos0[0] // 出发地上传坐标经度
+          startLongitude: pos0[0], // 出发地上传坐标经度
+          startProvince: obj[0].province,
+          startCity: obj[0].city,
+          startArea: obj[0].area,
+          endProvince: obj[1].province,
+          endCity: obj[1].city,
+          endArea: obj[1].area
         }
         console.log('find data:', data)
         this.netQuery = data
@@ -775,7 +797,13 @@ export default {
     getCompany(vo) {
       vo = vo || {
         'startLocation': this.netQuery.startLocation,
-        'endLocation': this.netQuery.endLocation
+        'endLocation': this.netQuery.endLocation,
+        startProvince: this.netQuery.startProvince,
+        startCity: this.netQuery.startCity,
+        startArea: this.netQuery.startArea,
+        endProvince: this.netQuery.endProvince,
+        endCity: this.netQuery.endCity,
+        endArea: this.netQuery.endArea
       }
       ReqApi.getCompany({
         currentPage: 1,
@@ -1299,6 +1327,9 @@ export default {
     .el-form-item{
       width: 33%;
       float: left;
+    }
+    li{
+      clear: both;
     }
   }
   .tab-info-panel{

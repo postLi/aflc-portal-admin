@@ -18,7 +18,7 @@ export default {
   children: [
     // 基本信息
     {
-      path: '/consignor/baseInfo', icon: 'QQ', name: '基本信息管理', component: _import('consignor/baseInfo/index'), redirect: '/consignor/baseInfo/index', meta: { role: ['admin'], title: '基本信息管理', istab: true, noCache: false },
+      path: '/consignor/baseInfo', icon: 'QQ', name: '账号管理', component: _import('consignor/baseInfo/index'), redirect: '/consignor/baseInfo/index', meta: { role: ['admin'], title: '账号管理', istab: true, noCache: false },
       children: [
         {
           path: '/baseInfo/authentication', icon: 'QQ', name: '完善实名认证', component: _import('consignor/baseInfo/authentication/index'), meta: { role: ['admin'], title: '完善实名认证', noCache: false }
@@ -59,7 +59,7 @@ export default {
     },
     // 货源信息管理
     {
-      path: '/consignor/cargoInfo', icon: 'QQ', name: '货源信息管理', component: _import('consignor/cargoInfo/index'), redirect: '/cargoInfo/manage', meta: { role: ['admin'], title: '货源信息管理', istab: true, noCache: false },
+      path: '/consignor/cargoInfo', icon: 'QQ', name: '货源管理', component: _import('consignor/cargoInfo/index'), redirect: '/cargoInfo/manage', meta: { role: ['admin'], title: '货源管理', istab: true, noCache: false },
       children: [
         {
           path: '/cargoInfo/create', icon: 'QQ', name: '发布货源', component: _import('carrier/order/create/index'), meta: { role: ['admin'], title: '发布货源信息', noCache: false }
