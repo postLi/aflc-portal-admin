@@ -14,16 +14,16 @@
             <div class="companyInformation information">
                 <h2>基本信息</h2>
                 <el-form-item label="货主类型：" prop="shipperType">
-                    <el-input v-model="logisticsForm.shipperTypeName" disabled  v-if="ifDisable === false">
+                    <el-input v-model="logisticsForm.shipperTypeName" disabled >
                     </el-input>
-                    <el-select v-model="logisticsForm.shipperType" placeholder="请选择" v-else>
+                    <!-- <el-select v-model="logisticsForm.shipperType" placeholder="请选择" v-if="ifDisable === false"v-else>
                         <el-option
                         v-for="item in optionsShipperType"
                         :key="item.id"
                         :label="item.name"
                         :value="item.code">
                         </el-option>
-                    </el-select>
+                    </el-select> -->
                 </el-form-item> 
                 <el-form-item label="公司名称："  v-if="logisticsForm.shipperType == 'AF0010101'">
                     <el-input v-model="logisticsForm.companyName"  :disabled="ifDisable === false">
@@ -79,8 +79,8 @@
                             v-model="logisticsForm.driverDesc" :maxlength="maxlength">
                         </el-input>
                         <span>{{totalNumber}} / {{maxlength}}</span>
-                        <p>如果您是企业，必须填写完整细致的企业简介；</p>
-                        <p>如果您是个人，必须填写详细的个体经营范围，不得出现违法词语，字数不低于30字。</p>
+                        <!-- <p>如果您是企业，必须填写完整细致的企业简介；</p> -->
+                        <p>必须填写完整细致的企业简介，不得出现违法词语，字数不低于30字</p>
                     </div>
                 </el-form-item>
             </div>
@@ -110,7 +110,6 @@
                     </el-input>
                 </el-form-item>
             </div>
-            
                 <!-- 货主认证照片 -->
             <div class="picInformation information" v-if="logisticsForm.shipperType == 'AF0010202'"><!-- 企业货主code -->
                 <h2>货主认证照片</h2>
@@ -389,7 +388,7 @@ export default {
             }
         }
         .consignorIdentification .el-form .information .textarea .el-form-item__content span {
-            bottom: 50px;
+            bottom: 22px;
         }
 
 </style>
