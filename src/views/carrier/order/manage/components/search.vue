@@ -29,8 +29,8 @@
         </el-form-item>
       </div>
       <el-form-item class="staff_searchinfo--btn">
-        <el-button size="mini" icon="el-icon-search" type="primary" @click="onSubmit">查询</el-button>
-        <el-button size="mini" icon="el-icon-close" type="info" @click="clearForm" plain>清空</el-button>
+        <el-button size="mini" icon="el-icon-search" type="primary" @click="onSubmit">搜索</el-button>
+        <el-button size="mini" icon="el-icon-close" type="info" @click="clearForm" plain>重置</el-button>
       </el-form-item>
   </el-form>
 </template>
