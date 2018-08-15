@@ -795,6 +795,9 @@ export default {
       }
     },
     getCompany(vo) {
+      if (this.isCargo) {
+        return false
+      }
       vo = vo || {
         'startLocation': this.netQuery.startLocation,
         'endLocation': this.netQuery.endLocation,

@@ -6,7 +6,7 @@
 
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
       <div class="car-baseinfo-wrapper">
-      <div class="tab-info-stitle"><strong>基本信息：</strong>(打<span class="important">*</span>为必填项)</div>
+      <div class="tab-info-stitle"><strong>基本信息：</strong>(<span class="important">带*为必填项</span>)</div>
       <div class="car-base-info clearfix">
       <el-form-item required  label="车牌号">
         <el-input maxlength="15" v-model="ruleForm.carNum"></el-input>
@@ -204,17 +204,17 @@ export default {
     }
   },
   methods: {
-    getValue(obj){
-      return obj ? obj.value:'';
+    getValue(obj) {
+      return obj ? obj.value : ''
     },
-    regionChangeUsual(d){
-      this.ruleForm.usualPlace = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+    regionChangeUsual(d) {
+      this.ruleForm.usualPlace = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
     },
     regionChangeStart(d) {
-        this.ruleForm.strartAddress = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+      this.ruleForm.strartAddress = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
     },
     regionChangeEnd(d) {
-        this.ruleForm.endAddress = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+      this.ruleForm.endAddress = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
     },
     initModify() {
       ReqApi.getCarInfo(this.id).then(res => {
