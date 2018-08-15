@@ -45,6 +45,14 @@ export default {
         callback()
       }
     }
+    var validatePass = (rule, value, callback) => {
+      if (this.isCheck === 'false') {
+        callback(new Error('请输入正确的密码！'))
+        this.isCheck = ''
+      } else {
+        callback()
+      }
+    }
     return {
       defaultImg: '/static/default.png', // 默认加载失败图片
       totalCount: 0,
@@ -58,7 +66,10 @@ export default {
       },
       rules: {
         oldPassword: [
-          { required: true, message: '请输入原密码', trigger: 'blur' }
+          { required: true, message: '请输入原密码', trigger: 'blur' },
+          {
+            validator: validatePass, message: '请输入正确的密码'
+          }
         ],
         newPassword: [
           { required: true, message: '请输入新密码', trigger: 'blur' }
@@ -84,7 +95,10 @@ export default {
             this.$message.success('修改成功！')
             this.$refs['ruleForm'].resetFields()
           }).catch(err => {
-            this.$message.error('修改失败: ' + JSON.stringify(err))
+            // this.$message.error('修改失败: ' + JSON.stringify(err))
+            this.isCheck = 'false'
+            this.$refs['ruleForm'].validate()
+            this.$message.error('修改失败: ' + err.errorInfo)
           })
         }
       })

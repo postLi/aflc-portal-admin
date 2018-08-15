@@ -42,8 +42,8 @@ export default {
   created() {
     this.getCount()
   },
-  mounted(){
-    this.eventBus.$on("updateListCount",()=>{
+  mounted() {
+    this.eventBus.$on('updateListCount', () => {
       this.getCount()
     })
   },
@@ -89,8 +89,8 @@ export default {
       isCarrier: false
     }
   },
-  methods:{
-    getCount(){
+  methods: {
+    getCount() {
       if (this.$route.path.indexOf('/order/manage/carrier') !== -1) {
         this.isCarrier = true
       }
@@ -100,10 +100,10 @@ export default {
         queryType: '1'
       }).then(data => {
         this.tabs.forEach(el => {
-          //if (data[el.type]) {
-            el.num = data[el.type]
-            el.num = el.num > 99 ? '99+' : el.num
-          //}
+          // if (data[el.type]) {
+          el.num = data[el.type] || 0
+          el.num = el.num > 99 ? '99+' : el.num
+          // }
         })
       })
     }
