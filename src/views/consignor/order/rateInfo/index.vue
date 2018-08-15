@@ -54,34 +54,37 @@
                                             服务价格：
                                             <el-rate
                                             v-model="carrierSerial.serverPriceStarLevelScore"
-                                            show-score
+                                            show-text
+                                            :texts = "textsArr"
                                             text-color="#ed001d"
                                             disabled
                                             >   
                                             </el-rate>
-                                            <span class="des">{{carrierSerial.serverPriceStarLevelDes}}</span>
+                                            <!-- <span class="des">{{carrierSerial.serverPriceStarLevelDes}}</span> -->
                                         </p>
                                         <p>
                                             服务质量：
                                             <el-rate
                                             v-model="carrierSerial.serverQualityStarLevelScore"
                                             text-color="#ed001d"
-                                            show-score
+                                            show-text
+                                            :texts = "textsArr"
                                             disabled
                                             >
                                             </el-rate>
-                                            <span class="des">{{carrierSerial.serverQualityStarLevelDes}}</span>
+                                            <!-- <span class="des">{{carrierSerial.serverQualityStarLevelDes}}</span> -->
                                         </p>
                                         <p>
                                             运输时效：
                                             <el-rate
                                             v-model="carrierSerial.transportAgingStarLevelScore"
                                             text-color="#ed001d"
-                                            show-score
+                                            show-text
+                                            :texts = "textsArr"
                                             disabled
                                             >
                                             </el-rate>
-                                            <span class="des">{{carrierSerial.transportAgingStarLevelDes}}</span>
+                                            <!-- <span class="des">{{carrierSerial.transportAgingStarLevelDes}}</span> -->
                                         </p>
                                         <p v-if="carrierSerial.evaluationDes">
                                             评价说明：<span>{{carrierSerial.evaluationDes}}</span>
@@ -114,35 +117,38 @@
                                             货物包装：
                                             <el-rate
                                             v-model="consignorSerial.goodsStarLevelScore"
-                                            show-score
+                                            show-text
+                                            :texts = "textsArr"
                                             disabled
                                             text-color="#ed001d"
 
                                             >   
                                             </el-rate>
-                                            <span class="des">{{consignorSerial.goodsStarLevelDes}}</span>
+                                            <!-- <span class="des">{{consignorSerial.goodsStarLevelDes}}</span> -->
                                         </p>
                                         <p>
                                             付款及时：
                                             <el-rate
                                             v-model="consignorSerial.payStarLevelScore"
-                                            show-score
+                                            show-text
+                                            :texts = "textsArr"
                                             text-color="#ed001d"
                                             disabled
                                             >
                                             </el-rate>
-                                            <span class="des">{{consignorSerial.payStarLevelDes}}</span>
+                                            <!-- <span class="des">{{consignorSerial.payStarLevelDes}}</span> -->
                                         </p>
                                         <p>
                                             装卸安排：
                                             <el-rate
                                             v-model="consignorSerial.dockStarLevelScore"
                                             text-color="#ed001d"
-                                            show-score
+                                            show-text
+                                            :texts = "textsArr"
                                             disabled
                                             >
                                             </el-rate>
-                                            <span class="des">{{consignorSerial.dockStarLevelDes}}</span>
+                                            <!-- <span class="des">{{consignorSerial.dockStarLevelDes}}</span> -->
 
                                         </p>
                                         <p>

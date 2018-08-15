@@ -212,9 +212,15 @@ export default {
             maxlength:2000,
             ruleForm: {
                 startLocation:'',//出发地
+                startProvince:'',
+                startCity:'',
+                startArea:'',
                 startLocationContacts:'',//出发地联系人
                 startLocationContactsMobile:'',//出发地联系人电话
                 endLocation:'',//到达地
+                endProvince:'',
+                endCity:'',
+                endArea:'',
                 endLocationContacts:'',//到达地联系人
                 endLocationContactsMobile:'',//到达地联系人电话
                 transportAging:'',//运输时效
@@ -306,11 +312,19 @@ export default {
        
         regionChangeStart(d) {
             console.log('data:',d)
+
             this.ruleForm.startLocation = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+            this.ruleForm.startProvince = d.province || '';
+            this.ruleForm.startCity = d.city || '';
+            this.ruleForm.startArea = d.area || '';
+
         },
         regionChangeEnd(d) {
             console.log('data:',d)
             this.ruleForm.endLocation = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+            this.ruleForm.endProvince = d.province || '';
+            this.ruleForm.endCity = d.city || '';
+            this.ruleForm.endArea = d.area || '';
         },
         getValue(obj){
         return obj ? obj.value:'';

@@ -60,34 +60,37 @@
                                             服务价格：
                                             <el-rate
                                             v-model="transportForm.serverPriceStarLevelScore"
-                                            show-score
+                                             show-text
+                                            :texts = "textsArr"
                                             disabled
                                             text-color="#ed001d"
                                             >   
                                             </el-rate>
-                                            <span class="des">{{transportForm.serverPriceStarLevelDes}}</span>
+                                            <!-- <span class="des">{{transportForm.serverPriceStarLevelDes}}</span> -->
                                         </p>
                                         <p>
                                             服务质量：
                                             <el-rate
                                             v-model="transportForm.serverQualityStarLevelScore"
-                                            show-score
+                                            show-text
+                                            :texts = "textsArr"
                                             disabled
                                             text-color="#ed001d"
                                             >
                                             </el-rate>
-                                            <span class="des">{{transportForm.serverQualityStarLevelDes}}</span>
+                                            <!-- <span class="des">{{transportForm.serverQualityStarLevelDes}}</span> -->
                                         </p>
                                         <p>
                                             运输时效：
                                             <el-rate
                                             v-model="transportForm.transportAgingStarLevelScore"
-                                            show-score
+                                             show-text
+                                            :texts = "textsArr"
                                             text-color="#ed001d"
                                             disabled
                                             >
                                             </el-rate>
-                                            <span class="des">{{transportForm.transportAgingStarLevelDes}}</span>
+                                            <!-- <span class="des">{{transportForm.transportAgingStarLevelDes}}</span> -->
                                         </p>
                                         <p>
                                             评价说明：<span> {{transportForm.evaluationDes}}</span>
@@ -137,6 +140,7 @@ export default {
     },
     data() {
         return {
+            textsArr:['1分  非常不满','2分  不满意','3分  一般','4分  满意','5分  非常满意'],
             retalength:100,//回复字数
             UserInfo:{},
             rangeForm:{

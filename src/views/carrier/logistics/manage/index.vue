@@ -17,7 +17,7 @@
                 </el-form-item>
                 <el-form-item class="btnChoose" style="margin-left:20px;">
                     <el-button type="primary" @click="handleSearch">搜索</el-button>
-                    <el-button type="primary" @click="clearSearch">清空</el-button>
+                    <el-button type="primary" @click="clearSearch">重置</el-button>
                 </el-form-item>
             </div>
           
