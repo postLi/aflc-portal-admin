@@ -15,7 +15,6 @@ service.interceptors.request.use(config => {
     // 让每个请求携带自定义token 请根据实际情况自行修改
     config.headers['access_token'] = getToken()
 
-
     // 暂时放到链接中
     if (!config.params) {
       config.params = {}
@@ -36,12 +35,8 @@ service.interceptors.request.use(config => {
        * 测试环境修改这里，不要修改上面那句代码
        */
       // 统一加上/api 前缀，方便后台转发接口
-      config.url = '/api' + config.url
-      // config.url = '/localapi' + config.url
-      // config.url = '/wukunzhi' + config.url
-      // config.url = '/huangyuwen' + config.url
-      // config.url = '/dingfei' + config.url
-      // config.url = '/ceshi' + config.url
+      // config.url = '/api' + config.url
+      config.url = '/ceshi' + config.url
     }
   }
 

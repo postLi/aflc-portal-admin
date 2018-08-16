@@ -1,5 +1,5 @@
 <template>
-  <div class="topNav-search" ref="topNavSearch">
+  <div class="topNav-search" v-if="!isCarowner" ref="topNavSearch">
     <div class="topNavSearch-trigger" @click="showmini">
       <i class="el-icon-search"></i>
     </div>
@@ -7,7 +7,7 @@
       ref="topNavSearchComplete"
       class="my-topNav-search-input"
       popper-class="my-topNav-search"
-      placeholder="快速查单"
+      placeholder="查询订单号"
       v-model="topSearch"
       :maxlength="30"
       :visible-arrow="false"
@@ -33,92 +33,92 @@
   </div>
 </template>
 <script>
+import { getAllOrder } from '@/api/carrier/manage'
+
 export default {
-  data () {
+  data() {
     return {
       topSearch: '',
       searchListArr: [],
+      isCarowner: false,
       searchList: [
         {
-          name: '运单号',
+          name: '我创建的',
           key: 'shipSn',
           value: ''
         },
         {
-          name: '发货人手机',
+          name: '我承运的',
           key: 'senderCustomerMobile',
           value: ''
-        },
-        {
-          name: '收货人手机',
-          key: 'receiverCustomerMobile',
-          value: ''
-        },
-        {
-          name: '发货人',
-          key: 'senderCustomerName',
-          value: ''
-        },
-        {
-          name: '收货人',
-          key: 'receiverCustomerName',
-          value: ''
-        },
-        {
-          name: '货物名称',
-          key: 'cargoName',
-          value: ''
-        },
-        {
-          name: '货号',
-          key: 'shipGoodsSn',
-          value: ''
-        },
+        }
       ]
+    }
+  },
+  mounted() {
+    this.isCarrier = this.otherinfo.rolesIdList[0] === 'AF00107'
+    this.isCarowner = this.otherinfo.rolesIdList[0] === 'AF00102'
+    if (!this.isCarrier) {
+      this.searchList = [{
+        name: '我创建的',
+        key: 'shipSn',
+        value: ''
+      }]
     }
   },
   methods: {
     // 显示小搜素框
-    showmini () {
+    showmini() {
       this.$refs['topNavSearch'].classList.toggle('showMiniSearchBox')
     },
-    addLong () {
+    addLong() {
       this.$refs['topNavSearch'].classList.add('longSearchBox')
     },
-    setShort () {
+    setShort() {
       this.$refs['topNavSearch'].classList.remove('longSearchBox')
       // this.$refs['topNavSearch'].classList.remove('showMiniSearchBox')
     },
-    querySearch (query, cb) {
-      let data = this.searchListArr
+    querySearch(query, cb) {
+      const data = this.searchListArr
       cb(data)
     },
-    handleEnter(){
+    handleEnter() {
       this.handleSelect({
         key: 'shipSn',
         value: this.topSearch
       })
       // this.$refs.topNavSearchComplete.blur()
     },
-    handleSelect (index) {
-      console.log('Top nav search List:', index)
-      this.$router.push({path: '/operation/order/orderManage', query: {
-        key: index.key,
-        value: index.value
+    handleSelect(index) {
+      let url = '/order/manage/carrier'
+      if (index.key === 'shipSn') {
+        url = '/order/manage/'
+      }
+      this.$router.push({ path: url, query: {
+        orderSerial: index.value
       }})
+
+      // const isCarrier = index.shipperId !== this.otherinfo.id
+      // this.$router.push({ path: '/order/detail', query: {
+      //   id: index.id,
+      //   type: isCarrier ? 'carrier' : ''
+      // }})
+      if (this.$refs['topNavSearchComplete'].$refs['input'] && this.$refs['topNavSearchComplete'].$refs['input'].blur) {
+        this.$refs['topNavSearchComplete'].$refs['input'].blur()
+      }
     },
-    clearinput () {
+    clearinput() {
       this.topSearch = ''
       // 调用组件内部方法
       // 清除数据
-      if(typeof this.$refs['topNavSearchComplete'].handleChange === 'function'){
+      if (typeof this.$refs['topNavSearchComplete'].handleChange === 'function') {
         typeof this.$refs['topNavSearchComplete'].handleChange('')
       }
     }
   },
   watch: {
-    topSearch(newVal){
-      if(newVal.trim()!==''){
+    topSearch(newVal) {
+      if (newVal.trim() !== '') {
         this.searchListArr = this.searchList.map(el => {
           el.value = newVal
           return el
@@ -126,7 +126,6 @@ export default {
       } else {
         this.searchListArr = []
       }
-      
     }
   }
 }

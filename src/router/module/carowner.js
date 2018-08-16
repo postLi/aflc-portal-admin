@@ -19,10 +19,10 @@ export default {
   children: [
     // 基本信息
     {
-      path: '/carowner/baseInfo', icon: 'QQ', name: '账号管理', component: _import('carowner/baseInfo/index'), redirect: '/carowner/baseInfo/index', meta: { role: ['admin'], title: '账号管理', istab: true, noCache: false },
+      path: '/carowner/baseInfo', icon: 'QQ', name: '账号管理', component: _import('carowner/baseInfo/index'), redirect: '/baseInfo/authentication', meta: { role: ['admin'], title: '账号管理', istab: true, noCache: false },
       children: [
         {
-          path: '/carowner/baseInfo/authentication', icon: 'QQ', name: '完善实名认证', component: _import('carowner/baseInfo/authentication/index'), meta: { role: ['admin'], title: '完善实名认证', noCache: false }
+          path: '/baseInfo/authentication', icon: 'QQ', name: '完善实名认证', component: _import('carowner/baseInfo/authentication/index'), meta: { role: ['admin'], title: '完善实名认证', noCache: false }
         },
         {
           path: '/changePassword', icon: 'QQ', name: '修改登录密码', component: _import('changePassword'), meta: { role: ['admin'], title: '修改登录密码', noCache: false }
@@ -30,17 +30,17 @@ export default {
       ]
     },
     {
-      path: '/order/manage', icon: 'QQ', hidden: true, name: '车源信息管理', component: _import('carowner/carinfo/index'), redirect: '/carowner/carinfo/manage', meta: { role: ['admin'], title: '车源信息管理', istab: true, noCache: false }
+      path: '/order/manage', icon: 'QQ', hidden: true, name: '车源信息管理', component: _import('carowner/carinfo/index'), redirect: '/carinfo/manage', meta: { role: ['admin'], title: '车源信息管理', istab: true, noCache: false }
     },
     // 车源信息管理
     {
-      path: '/carowner/carinfo', icon: 'QQ', name: '车源管理', component: _import('carowner/carinfo/index'), redirect: '/carowner/carinfo/create', meta: { role: ['admin'], title: '车源管理', istab: true, noCache: false },
+      path: '/carowner/carinfo', icon: 'QQ', name: '车源管理', component: _import('carowner/carinfo/index'), redirect: '/carinfo/create', meta: { role: ['admin'], title: '车源管理', istab: true, noCache: false },
       children: [
         {
-          path: '/carowner/carinfo/create', icon: 'QQ', name: '发布车源', component: _import('carowner/carinfo/create'), meta: { role: ['admin'], title: '发布车源信息', noCache: false }
+          path: '/carinfo/create', icon: 'QQ', name: '发布车源', component: _import('carowner/carinfo/create'), meta: { role: ['admin'], title: '发布车源信息', noCache: false }
         },
         {
-          path: '/carowner/carinfo/manage', icon: 'QQ', name: '管理车源', component: _import('carowner/carinfo/manage'), meta: { role: ['admin'], title: '管理车源信息', noCache: false }
+          path: '/carinfo/manage', icon: 'QQ', name: '管理车源', component: _import('carowner/carinfo/manage'), meta: { role: ['admin'], title: '管理车源信息', noCache: false }
         }
       ]
     }

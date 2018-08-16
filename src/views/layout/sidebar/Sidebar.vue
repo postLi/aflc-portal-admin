@@ -5,7 +5,52 @@
         <span>{{ name }}</span><br><span>{{ company }}</span>
       </div> -->
       <!-- <SidebarMenuSearch :searchItem="sidebarRouters" /> -->
-      <sidebar-item ref="sidebaritem" :routes='sidebarRouters'></sidebar-item>
+      <!-- <sidebar-item ref="sidebaritem" :routes='sidebarRouters'></sidebar-item> -->
+      <el-menu
+        class="el-menu-vertical-demo"
+        @open="handleOpen"
+        @close="handleClose"
+        unique-opened
+        background-color="#545c64"
+        text-color="#fff"
+        active-text-color="#ffd04b">
+        <template v-for="item in sidebarRouters">
+          <el-menu-item v-if="!item.children" :index="item.path">
+            <i class="el-icon-menu"></i>
+            <span slot="title">{{item.meta.title}}</span>
+          </el-menu-item>
+        </template>
+        <el-submenu index="1">
+          <template slot="title">
+            <i class="el-icon-location"></i>
+            <span>导航一</span>
+          </template>
+          <el-menu-item index="1-3">选项3</el-menu-item>
+          <el-submenu index="1-4">
+            <template slot="title">选项4</template>
+            <el-menu-item index="1-4-1">选项1</el-menu-item>
+          </el-submenu>
+        </el-submenu>
+        <el-submenu index="4">
+          <template slot="title">
+            <i class="el-icon-location"></i>
+            <span>导航222</span>
+          </template>
+          <el-menu-item index="1-3">选项3</el-menu-item>
+          <el-submenu index="1-4">
+            <template slot="title">选项4</template>
+            <el-menu-item index="1-4-1">选项1</el-menu-item>
+          </el-submenu>
+        </el-submenu>
+        <el-menu-item index="2">
+          <i class="el-icon-menu"></i>
+          <span slot="title">导航二</span>
+        </el-menu-item>
+        <el-menu-item index="4">
+          <i class="el-icon-setting"></i>
+          <span slot="title">导航四</span>
+        </el-menu-item>
+      </el-menu>
       <div class="nologin">
         <a href="http://192.168.1.157:9528/?nologin=1">
         <el-button size="large" type="primary">TMS系统</el-button></a><br>
@@ -32,6 +77,9 @@ export default {
       'sidebarRouters',
       'permission_routers'
     ])
+  },
+  mounted() {
+    console.log('1111111:', this.sidebarRouters)
   },
   methods: {
     toggleSideBar() {

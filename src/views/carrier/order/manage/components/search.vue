@@ -82,6 +82,9 @@ export default {
     }
   },
   mounted() {
+    if (this.$route.query.orderSerial) {
+      this.searchForm.orderSerialOrGoodsName = this.$route.query.orderSerial
+    }
     this.onSubmit()
   },
   methods: {
@@ -90,6 +93,7 @@ export default {
       if (!this.isall) {
         delete searchObj.orderStatus
       }
+      console.log('this.searchForm2:', this.searchForm, JSON.stringify(searchObj))
       this.$emit('change', searchObj)
     },
     clearForm() {

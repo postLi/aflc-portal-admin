@@ -597,8 +597,10 @@ export default {
       this.fetchData()
     },
     getSearchParam(obj) {
+      console.log('obj::', JSON.stringify(obj), this.searchQuery.vo)
       this.searchQuery.vo = Object.assign(this.searchQuery.vo, obj)
       this.loading = false
+
       this.fetchData()
     },
     doAction(type) {

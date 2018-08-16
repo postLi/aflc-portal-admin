@@ -152,3 +152,55 @@ export function getOrderDesc(id) {
     return res.data || {}
   })
 }
+/**
+ * 根据条件获取零担订单信息列表(总后台)
+ * @param {*} data data
+ {
+  "currentPage": 0,
+  "pageSize": 0,
+  "vo": {
+    "authStatus": "string",
+    "consignee": "string",
+    "consigneePhone": "string",
+    "consignor": "string",
+    "consignorPhone": "string",
+    "createTime": "string",
+    "endAddress": "string",
+    "goodsName": "string",
+    "goodsVolume": "string",
+    "goodsVolumeLower": "string",
+    "goodsVolumeUpper": "string",
+    "goodsWeight": "string",
+    "goodsWeightLower": "string",
+    "goodsWeightUpper": "string",
+    "id": "string",
+    "idNotInList": [
+      "string"
+    ],
+    "idStrList": "string",
+    "isVip": "string",
+    "memberType": "string",
+    "orderClass": "string",
+    "orderSerial": "string",
+    "orderSerialOrGoodsName": "string",
+    "orderStatus": "string",
+    "orderType": "string",
+    "otherOrderSource": "string",
+    "queryOrderType": "string",
+    "queryType": "string",
+    "releaseOrCarrier": "string",
+    "shipperId": "string",
+    "shipperName": "string",
+    "startAddress": "string",
+    "title": "string",
+    "totalAmount": 0,
+    "usedCarType": "string",
+    "wlName": "string"
+  }
+}
+ */
+export function getAllOrder(data) {
+  return fetch.post('/aflcorderservice/order/fclOrder/v1/findOderCarrierList', data).then(res => {
+    return res.data || { list: [], total: 0 }
+  })
+}

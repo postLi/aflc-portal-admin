@@ -44,7 +44,7 @@ export default {
   },
   mounted() {
     this.eventBus.$on('updateListCount', () => {
-      this.getCount()
+     // this.getCount()
     })
   },
   data() {
