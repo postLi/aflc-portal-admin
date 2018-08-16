@@ -1,5 +1,5 @@
 <template>
-    <div class="PointNetwork identification">
+    <div class="PointNetwork identification"  v-loading="loading">
         <el-form :model="logisticsForm" ref="ruleForm" label-width="110px" class="demo-ruleForm">
             <div class="carrierTitle">
                 <div class="realname">
@@ -121,6 +121,7 @@ export default {
     data() {
        
         return {
+            loading:true,
             totalCount:0,
             page:1,
             pagesize:20,
@@ -147,9 +148,10 @@ export default {
         },
         firstblood(){
             getPointNetwork(this.page,this.pagesize,this.logisticsForm).then(res=>{
-                console.log(res)
+                // console.log(res)
                 this.tableData = res.data.list;
                 this.totalCount = res.data.totalCount;
+                this.loading = false;
             })
         },
         clearSearch(){

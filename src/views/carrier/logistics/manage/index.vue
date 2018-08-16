@@ -1,9 +1,9 @@
 <template>
-    <div class="TransportRange identification">
+    <div class="TransportRange identification"  v-loading="loading">
         <el-form :model="logisticsForm" ref="ruleForm" label-width="110px" class="demo-ruleForm">
             <div class="carrierTitle">
                 <div class="realname">
-                    <h2>管理我的专线</h2>
+                    <h2>管理我的专线</h2>                                                                                                                      
                 </div>
             </div>
             <div class="searchInformation information">
@@ -74,7 +74,7 @@
                                 </p>
                                 <p class="cargo" v-for="(item,idx) in scope.row.weightcargo" :key="item.id" v-else>
                                     <span v-if="idx == 0">{{item.endVolume}}公斤以下,{{item.discountPrice ? item.discountPrice :item.primeryPrice}}元/公斤</span>
-                                    <span v-else-if="idx == scope.row.weightcargo.length-1">{{item.endVolume}}公斤以上,{{item.discountPrice ? item.discountPrice :item.primeryPrice}}元/公斤</span>
+                                    <span v-else-if="idx == scope.row.weightcargo.length-1 &&  item.endVolume == ''">{{item.startVolume}}公斤以上,{{item.discountPrice ? item.discountPrice :item.primeryPrice}}元/公斤</span>
                                     <span v-else>{{item.startVolume}}-{{item.endVolume}}公斤,{{item.discountPrice ? item.discountPrice :item.primeryPrice}}元/公斤</span>
                                 </p>
                             </template>
@@ -88,7 +88,7 @@
                                 </p>
                                 <p class="cargo" v-for="(item,idx) in scope.row.lightcargo" :key="idx"  v-else>
                                     <span v-if="idx == 0">{{item.endVolume}}立方以下,{{item.discountPrice ? item.discountPrice :item.primeryPrice}}元/立方</span>
-                                    <span v-else-if="idx == scope.row.lightcargo.length-1">{{item.endVolume}}立方以上,{{item.discountPrice ? item.discountPrice :item.primeryPrice}}元/立方</span>
+                                    <span v-else-if="idx == scope.row.lightcargo.length-1 && item.endVolume == ''">{{item.startVolume}}立方以上,{{item.discountPrice ? item.discountPrice :item.primeryPrice}}元/立方</span>
                                     <span v-else>{{item.startVolume}}-{{item.endVolume}}立方,{{item.discountPrice ? item.discountPrice :item.primeryPrice}}元/立方</span>
                                 </p>
                             </template>
@@ -152,6 +152,7 @@ export default {
     data() {
        
         return {
+            loading:true,
             defaultImg:'/static/default.png',//默认加载失败图片
             totalCount:0,
             page:1,
@@ -195,7 +196,7 @@ export default {
                         return a.startVolume - b.startVolume;  
                     })  
                 })
-                
+                this.loading = false;
                 console.log(this.tableData)
             })
         },

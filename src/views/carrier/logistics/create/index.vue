@@ -5,6 +5,9 @@
             <div class="realname">
                 <h2>发布专线</h2>
             </div>
+            <div class="prompt">
+                <p><span class="tishi"><i class="el-icon-warning"></i>小提示： </span>(打<span class="star">*</span>号为必填项)</p>
+            </div>
         </div>
         <div class="searchInformation information">
             <h2>基本信息</h2>
@@ -18,19 +21,19 @@
                 <el-input v-model="ruleForm.startLocationContacts"></el-input>
             </el-form-item>
             <el-form-item label="联系电话：" prop="startLocationContactsMobile" label-width="150px">
-                <el-input v-model="ruleForm.startLocationContactsMobile" maxlength="11"></el-input>
+                <el-input v-model="ruleForm.startLocationContactsMobile" v-numberOnly maxlength="11"></el-input>
             </el-form-item><br>
             <el-form-item label="到达地：" prop="endLocation">
                 <!-- <el-input @focus="()=>{showMap('endAddress')}" v-model="ruleForm.endLocation"></el-input> -->
                 <vregion :ui="true" @values="regionChangeEnd" class="form-control">
-                    <el-input v-model="ruleForm.endLocation" placeholder="请选择到达地"></el-input>
+                    <el-input v-model="ruleForm.endLocation"  placeholder="请选择到达地"></el-input>
                 </vregion>
             </el-form-item>
             <el-form-item label="联系人：" prop="endLocationContacts" label-width="150px">
                 <el-input v-model="ruleForm.endLocationContacts"></el-input>
             </el-form-item>
             <el-form-item label="联系电话：" prop="endLocationContactsMobile" label-width="150px">
-                <el-input v-model="ruleForm.endLocationContactsMobile" maxlength="11"></el-input>
+                <el-input v-model="ruleForm.endLocationContactsMobile" v-numberOnly maxlength="11"></el-input>
             </el-form-item>
         </div>
         <div class="information priceTime">
@@ -54,6 +57,7 @@
                 </el-input>
             </el-form-item>
             <el-form-item label="重货价格：">
+                <p>(阶梯价格最大值不填，代表无穷大，例如：500-，代表500公斤以上)</p>
                 <div class="goodsPriceChoose">
                     <p>
                         <span>运量</span>
@@ -64,7 +68,7 @@
                         <li>
                             <el-input v-model="form.startVolume" v-numberOnly placeholder="包含" :disabled="keys != 0"></el-input>
                             <span>----</span>
-                            <el-input v-model="form.endVolume" v-numberOnly placeholder="不包含"></el-input>
+                            <el-input v-model="form.endVolume" v-numberOnly placeholder="不包含" @change="ifWrong(weigthPriceForms,keys)"></el-input>
                             公斤
                         </li>
                         <li>
@@ -75,15 +79,18 @@
                             <el-input v-model="form.discountPrice"  v-number-only:point></el-input>
                             元/公斤
                         </li>
-                        <span  @click="addItem('weight',keys)" class="addItem" v-if="keys == weigthPriceForms.length-1 && form.endVolume!= ''">
-                        </span>
-                        <span  @click="reduceItem(keys,'weight')" class="reduceItem" v-if="keys == weigthPriceForms.length-1 && weigthPriceForms.length !=1 " >
-                        </span>
+                        <li>
+                            <span  @click="addItem('weight',keys)" class="addItem" v-if="keys == weigthPriceForms.length-1 && form.endVolume!= ''">
+                            </span>
+                            <span  @click="reduceItem(keys,'weight')" class="reduceItem" v-if="keys == weigthPriceForms.length-1 && weigthPriceForms.length !=1 " >
+                            </span>
+                        </li>
                     </ul>
                 </div>
             </el-form-item>
 
             <el-form-item label="轻货价格：">
+                <p>(阶梯价格最大值不填，代表无穷大，例如：500-，代表500公斤以上)</p>
                 <div class="goodsPriceChoose">
                     <p>
                         <span>运量</span>
@@ -94,7 +101,7 @@
                         <li>
                             <el-input v-model="form.startVolume" v-numberOnly placeholder="包含" :disabled="keys != 0"></el-input>
                             <span>----</span>
-                            <el-input v-model="form.endVolume" v-numberOnly placeholder="不包含"></el-input>
+                            <el-input v-model="form.endVolume" v-numberOnly placeholder="不包含"  @change="ifWrong(weigthPriceForms,keys)"></el-input>
                             立方
                         </li>
                         <li>
@@ -105,10 +112,12 @@
                             <el-input v-model="form.discountPrice" v-number-only:point></el-input>
                             元/立方
                         </li>
-                         <span  @click="addItem('light',keys)" class="addItem" v-if="keys == ligthPriceForms.length-1 && form.endVolume!= ''">
-                        </span>
-                        <span  @click="reduceItem(keys,'light')" class="reduceItem" v-if="keys == ligthPriceForms.length-1 && ligthPriceForms.length !=1">
-                        </span>
+                        <li>
+                            <span  @click="addItem('light',keys)" class="addItem" v-if="keys == ligthPriceForms.length-1 && form.endVolume!= ''">
+                            </span>
+                            <span  @click="reduceItem(keys,'light')" class="reduceItem" v-if="keys == ligthPriceForms.length-1 && ligthPriceForms.length !=1">
+                            </span>
+                        </li>
                     </ul>
                 </div>
             </el-form-item>
@@ -170,15 +179,6 @@ export default {
         vregion
     },
     data() {
-        var checkaa  = (rule, value, callback) => {
-            if (value === '') {
-            console.log(value)
-            console.log(this.ruleForm.startLocation)
-                callback(new Error('请输入手机号码'));
-            }else{
-                 callback();
-            }
-        };
         var checkStartLocationContactsMobile  = (rule, value, callback) => {
             // console.log(value)
             if (value === '') {
@@ -260,16 +260,16 @@ export default {
             ],
             rules: {
                 startLocation:[
-                    { required: true, validator: checkaa, trigger: 'change' },
+                    { required: true, message: '请输入出发地', trigger: 'blur' },
                 ],
                 endLocation: [
-                    { required: true, message: '请输入到达地', trigger: 'change' },
+                    { required: true, message: '请输入到达地', trigger: 'blur' },
                 ],
                 startLocationContacts: [
-                    { required: true, message: '请输入联系人信息', trigger: 'blur' }
+                    { required: true, message: '请输入出发地联系人信息', trigger: 'blur' }
                 ],
                 endLocationContacts: [
-                    { required: true, message: '请输入联系人信息', trigger: 'blur' }
+                    { required: true, message: '请输入到达地联系人信息', trigger: 'blur' }
                 ],
                 startLocationContactsMobile: [
                     { required: true, validator: checkStartLocationContactsMobile, trigger: 'change' }
@@ -302,17 +302,38 @@ export default {
                 }
             },
             deep:true
-        }
+        },
     },
     mounted(){
         this.getInformations();
         this.getParams();
     },
     methods:{
-       
+        ifWrong(item,idx){
+            console.log('ifwrong',item,idx)
+            if(item.length > (idx+1)){
+                console.log(item[idx].endVolume,item[idx+1].startVolume)
+                item[idx+1].startVolume = item[idx].endVolume ;
+                if(item[idx+1].endVolume){
+                    if(item[idx+1].endVolume < item[idx+1].startVolume){
+                        this.$message({
+                            type: 'info',
+                            message: '终止运量应不小于起始运量' 
+                        })
+                        return item[idx+1].endVolume = ''
+                    }
+                }
+            }
+            if(item[idx].endVolume < item[idx].startVolume){
+                this.$message({
+                    type: 'info',
+                    message: '终止运量应不小于起始运量' 
+                })
+                return item[idx].endVolume = ''
+            }
+        },
         regionChangeStart(d) {
             console.log('data:',d)
-
             this.ruleForm.startLocation = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
             this.ruleForm.startProvince = d.province || '';
             this.ruleForm.startCity = d.city || '';
@@ -383,7 +404,7 @@ export default {
         },
         //添加子节点新增
         addItem(type,idx){
-            console.log(type)
+            // console.log(type)
             switch(type){
                 case 'weight':
                     this.weigthPriceForms.push({
@@ -531,11 +552,15 @@ export default {
                 .el-form-item:nth-child(4),.el-form-item:nth-child(5){
                     .el-form-item__content{
                         width: 1165px;
-                        border: 1px solid #ccc;
                         .el-input{
                             width: 50px;
                         }
+                        p{
+                            font-size: 12px;
+                            color:red;
+                        }
                         .goodsPriceChoose{  
+                            border: 1px solid #ccc;
                             p{
                                 padding: 6px 50px;                     
                                 background: #eaefff;
@@ -554,7 +579,11 @@ export default {
                             }
                             ul{
                                 padding: 8px 110px 8px 50px;
-                                display: flex;
+                                display: -webkit-box;  /* 老版本语法: Safari, iOS, Android browser, older WebKit browsers. */
+                                display: -moz-box;     /* 老版本语法: Firefox (buggy) */
+                                display: -ms-flexbox;  /* 混合版本语法: IE 10 */
+                                display: -webkit-flex; /* 新版本语法: Chrome 21+ */
+                                display: flex;         /* 新版本语法: Opera 12.1, Firefox 22+ */
                                 justify-content:space-around;
                                 font-size: 12px;
                                 position: relative;

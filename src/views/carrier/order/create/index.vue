@@ -1,13 +1,21 @@
 <template>
-  <div class="create-orderinfo page-main">
-    <div class="tab-info-title">
+  <div class="create-orderinfo identification page-main">
+    <!-- <div class="tab-info-title">
       <h2><span>{{ title }}</span></h2>
+    </div> -->
+    <div class="carrierTitle">
+        <div class="realname">
+            <h2>{{ title }}</h2>
+        </div>
+        <div class="prompt">
+            <p><span class="tishi"><i class="el-icon-warning"></i>小提示： </span>(打<span class="star">*</span>号为必填项)</p>
+        </div>
     </div>
-
     <el-form :model="ruleForm" :rules="rules" size="mini" ref="ruleForm" label-width="150px" class="demo-ruleForm">
       <!-- 线路信息 -->
       <div class="order-base-info tab-info-panel clearfix">
-        <div class="tab-info-stitle"><strong>线路信息</strong>(<span class="important">提示：带*为必填项</span>)</div>
+        <div class="tab-info-stitle"><strong>线路信息</strong></div>
+        <!-- (<span class="important">提示：带*为必填项</span>) -->
         <el-form-item required :rules="[{required: true, message: '请选择出发地'}]" label="出发地：">
           <el-input   @focus="()=>{showMap('strartAddress')}" v-model="aflcOrderAddressWebDtoList[0].provinceCityArea"></el-input>
         </el-form-item>

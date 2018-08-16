@@ -1,9 +1,14 @@
 <template>
-    <div class="ChangePassword page-main">
+    <div class="ChangePassword identification page-main">
         <el-form :rules="rules" :model="logisticsForm" ref="ruleForm" label-width="200px" class="demo-ruleForm">
-          <div class="tab-info-title">
-            <h2><span>修改登录密码</span></h2>
-          </div>
+           <div class="carrierTitle">
+                <div class="realname">
+                    <h2>修改登录密码</h2>
+                </div>
+                <div class="prompt">
+                    <p><span class="tishi"><i class="el-icon-warning"></i>小提示： </span>(打<span class="star">*</span>号为必填项)</p>
+                </div>
+            </div>
             <div class="searchInformation information">
                 <div class="current-name">
                     <span>您的会员登录名是：</span>{{ otherinfo.contactsName }}

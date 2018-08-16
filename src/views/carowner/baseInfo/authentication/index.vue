@@ -1,6 +1,6 @@
 <template>
     <div class="carownerIdentification identification">
-        <el-form :model="logisticsForm" :rules="rules" ref="ruleForm" label-width="250px" class="demo-ruleForm">
+        <el-form :model="logisticsForm" :rules="rules" ref="ruleForm" label-width="250px" class="demo-ruleForm"  v-loading="loading">
             <div class="carrierTitle">
                 <div class="realname">
                     <h2>完善实名认证 <span  :class="{certified:logisticsForm.driverStatusName == '待认证' ,certify:logisticsForm.driverStatusName == '认证成功'}">( {{logisticsForm.driverStatusName}} )</span> </h2>
@@ -125,6 +125,7 @@ export default {
             }
         };
         return {
+            loading:true,
             defaultImg:'/static/default.png',//默认加载失败图片
             ifDisable:false,
             totalNumber:0,//当前字数
@@ -171,20 +172,35 @@ export default {
     methods: {
         getMoreInformation(){
             let res = getUserInfo() ;
-        //    console.log(res)
             getDriverInfoByMobile(res.mobile).then(res=>{
             //    console.log(res)
                this.logisticsForm = res.data;
+               this.loading = false;
             })
 
         },
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    // this.logisticsForm.
                     let form = Object.assign({},this.logisticsForm,{driverStatus:'AF0010402'})
-                    identifyOwner(this.logisticsForm).then(res=>{
-                        console.log(res)
+                    identifyOwner(form).then(res=>{
+                        // console.log(res)
+                        this.$alert('操作成功', '提示', {
+                            confirmButtonText: '确定',
+                            callback: action => {
+                                this.getMoreInformation();
+                            }
+                        }).catch(() => {
+                            this.$message({
+                                type: 'info',
+                                message: '已取消'
+                            })
+                        })
+                    }).catch(err => {
+                        this.$message({
+                            type: 'info',
+                            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                        })
                     })
                 } else {
                     console.log('error submit!!');

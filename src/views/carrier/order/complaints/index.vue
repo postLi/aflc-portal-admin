@@ -15,10 +15,20 @@
                     <el-input v-model="logisticsForm.workSerial">
                     </el-input>
                 </el-form-item>
-                <el-form-item label="投诉类型：" maxlength="18"  prop="complainType">
+                <!-- <el-form-item label="投诉类型：" maxlength="18"  prop="complainType">
                     <el-select v-model="logisticsForm.complainType" clearable placeholder="请选择">
                         <el-option
                         v-for="item in OptionsComplainType"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.code">
+                        </el-option>
+                    </el-select>
+                </el-form-item> -->
+                <el-form-item label="投诉状态：" maxlength="18"  prop="complainStatus">
+                    <el-select v-model="logisticsForm.complainStatus" clearable placeholder="请选择">
+                        <el-option
+                        v-for="item in  OptionscomplainStatus"
                         :key="item.id"
                         :label="item.name"
                         :value="item.code">
@@ -109,7 +119,8 @@ export default {
     data() {
         return {
             complainType:"AF041",
-            OptionsComplainType:[
+            complainStatus:'AF040',
+            OptionscomplainStatus:[
                 {
                     code:'',
                     name:'全部'
@@ -121,7 +132,8 @@ export default {
             logisticsForm: {
                 orderSerial: '',//定单号
                 workSerial: '',//投诉编号
-                complainType: '',//投诉类型：
+                // complainType: '',//投诉类型：
+                complainStatus:'',//投诉状态
                 platformOrderType:'1',
             },
             tableData: [],
@@ -145,10 +157,10 @@ export default {
                 this.totalCount = res.data.totalCount;
             })
 
-            getDictionary(this.complainType).then(res => {
+            getDictionary(this.complainStatus).then(res => {
                 console.log(res)
                 res.data.forEach(el => {
-                    this.OptionsComplainType.push(el)
+                    this.OptionscomplainStatus.push(el)
                 })
             })
         },

@@ -5,6 +5,9 @@
                 <div class="realname">
                     <h2>发布我的网点</h2>
                 </div>
+                <div class="prompt">
+                    <p><span class="tishi"><i class="el-icon-warning"></i>小提示： </span>(打<span class="star">*</span>号为必填项)</p>
+                </div>
             </div>
             <div class="companyInformation information">
                 <h2>基本信息</h2>

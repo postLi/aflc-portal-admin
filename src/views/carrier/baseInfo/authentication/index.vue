@@ -1,5 +1,5 @@
 <template>
-    <div class="carrierIdentification identification">
+    <div class="carrierIdentification identification"  v-loading="loading">
         <el-form :model="logisticsForm" :rules="rules" ref="ruleForm" label-width="250px" class="demo-ruleForm">
             <div class="carrierTitle">
                 <div class="realname">
@@ -195,6 +195,7 @@ export default {
             }
         };
         return {
+            loading:true,
             popVisible:false,
             defaultImg:'/static/default.png',//默认加载失败图片
             ifDisable:false,
@@ -392,6 +393,8 @@ export default {
                 this.serviceTypeArr = JSON.parse(this.logisticsForm.serviceType) || [];
                 this.productServiceCodeArr = JSON.parse(this.logisticsForm.productServiceCode)  || [];
                 this.otherServiceCodeArr = JSON.parse(this.logisticsForm.otherServiceCode)  || [];
+                this.loading = false;
+
             }).catch(err=>{
                 this.$message({
                     type: 'info',
