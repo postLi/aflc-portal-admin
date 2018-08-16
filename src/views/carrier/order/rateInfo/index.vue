@@ -322,7 +322,6 @@ export default {
                                         color: #999999;
                                     }
                                 }
-
                                 .rateReply_input{
                                     position: relative;
                                     .el-textarea__inner{
@@ -350,7 +349,7 @@ export default {
                                     vertical-align: middle
                                 }
 
-                                span{
+                                &>span{
                                     font-size: 16px;
                                     color: #ccc;
                                     vertical-align: middle

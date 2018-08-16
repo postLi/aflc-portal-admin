@@ -202,185 +202,12 @@ export default {
 
 <style type="text/css" lang="scss">
     .rateplant{
-        // .rateInfomation{
-        //         margin:0 20px;
-        //     .rate_content{
-        //         padding-bottom: 30px;
-        //         background: #fff;
-        //         margin-bottom: 40px;
-        //         h2{
-        //             text-align: center;
-        //             font-size: 16px;
-        //             color: #333333;
-        //             line-height: 22px;
-        //             padding: 21px 0;
-        //         }
-                
-        //     }
-        //     .rate_info{
-        //         min-height: 430px;
-        //         h2{
-        //             border-bottom: 2px solid #ccc;
-        //             text-align: left;
-        //             text-indent: 67px;
-        //         }
-        //         .rate_info_content{
-        //             padding: 16px 67px;
-        //             .rate_info_order{
-        //                 box-sizing: border-box;
-        //                 h4{
-        //                     font-size: 16px;
-        //                     line-height: 20px;
-        //                     margin-bottom: 10px;
-        //                 }
-        //                 .rateStar{
-        //                     font-size: 14px;
-        //                     color: #666666;
-        //                     padding-left: 20px;
-        //                     p{
-        //                         margin:10px 0;
-        //                         .des{
-        //                             display: inline-block;
-        //                             margin-left: 10px;
-        //                             color: #ed001d;
-        //                         }
-        //                     }
-        //                     .el-rate{
-        //                         display: inline-block;
-        //                         .el-rate__text{
-        //                             margin-left: 10px;
-        //                         }
-        //                     }
-        //                     p:last-child{
-        //                         margin-top: 20px;
-        //                         font-weight: bold;
-        //                         span{
-        //                             font-weight: normal;
-        //                         }
-        //                     }
-        //                 }
-        //                 .rateReply{
-        //                     margin-top: 40px;
-        //                     .rateReply_info{
-        //                         p{
-        //                             padding-left: 20px;
-        //                             font-size: 14px;
-        //                             line-height: 20px;
-        //                             color: #333333;
-        //                             span{
-        //                                 display: inline-block;
-        //                                 margin-top: 10px;
-        //                                 font-size: 12px;
-        //                                 color: #999999;
-        //                             }
-        //                         }
-
-        //                         .rateReply_input{
-        //                             position: relative;
-        //                             .el-textarea__inner{
-        //                                 padding-bottom: 18px;
-        //                                 font-size: 12px;
-        //                             }
-        //                             p{
-        //                                 font-size: 12px;
-        //                                 color: #999999;
-        //                                 position: absolute;
-        //                                 right: 15px;
-        //                                 bottom: 2px;
-        //                                 span{
-        //                                     color: #ed001d;
-        //                                 }
-        //                             }
-        //                         }
-        //                         .el-button{
-        //                             display: block;
-        //                             margin: 0 auto;
-        //                             margin-top: 40px;
-        //                             padding: 12px 40px;
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //     }
-        //     .rate_orderInfo{
-        //         font-size: 14px;
-        //         color: #333333;
-        //         line-height: 20px;
-        //         h2{
-        //             border-bottom: 1px solid #ccc;
-        //             text-align: left;
-        //             text-indent: 67px;
-        //         }
-        //         .carrierInfo{
-        //             padding: 30px 66px;
-        //             table{
-        //                 border: 1px solid #dcdfe5;
-        //                 width: 100%;
-        //                 border-collapse: collapse;/*边框会合并为一个单一的边框*/
-        //                 margin-bottom: 10px;
-        //                 th,td{
-        //                     border: 1px solid #dcdfe5;
-        //                     text-align: center;
-        //                     padding: 1em 2em;
-        //                 }
-        //                 th{
-        //                     background: #f5f5f5;
-        //                 }
-        //                 td{
-        //                     p{
-        //                         display: inline-block;
-        //                     }
-        //                     del,span{
-        //                         color: #ed001d
-        //                     }
-        //                     white-space : nowrap ;
-        //                     .cargo{
-        //                         margin: 10px 0;
-        //                         p{
-        //                             text-align: left;
-        //                         }
-        //                         p:first-child{
-        //                             width: 30%;
-        //                         }
-        //                         p:nth-child(2){
-        //                             width: 35%;
-        //                         }
-        //                         p:last-child{
-        //                             width: 35%;
-        //                         }
-        //                     }
-        //                     .cargo:first-child{
-        //                         margin: 0 0 10px 0;
-        //                     }
-        //                     .cargo:last-child{
-        //                         margin: 10px 0 0  0;
-        //                     }
-        //                 }
-        //             }
-
-        //             h4{
-        //                 span{
-        //                     font-weight: normal;
-        //                 }
-        //                 span:first-child{
-        //                 color: #ed001d;
-        //                 font-weight: bold;
-        //                 }
-        //                 span:nth-child(2){
-        //                     margin: 0 30px;
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
-
-                .rateInfomation{
-            margin:0 20px;
+        .rateInfomation{
+                margin:0 20px;
             .rate_content{
                 padding-bottom: 30px;
                 background: #fff;
-                margin-bottom: 5px;
+                margin-bottom: 20px;
                 h2{
                     text-align: center;
                     font-size: 16px;
@@ -391,7 +218,6 @@ export default {
                 
             }
             .rate_info{
-                width:49.9%;
                 min-height: 430px;
                 h2{
                     border-bottom: 2px solid #ccc;
@@ -399,7 +225,7 @@ export default {
                     text-indent: 67px;
                 }
                 .rate_info_content{
-                    padding: 16px 8% 16px 10%;
+                    padding: 16px 67px;
                     .rate_info_order{
                         box-sizing: border-box;
                         h4{
@@ -423,7 +249,6 @@ export default {
                                 display: inline-block;
                                 .el-rate__text{
                                     margin-left: 10px;
-                                    color: #ed001d !important;
                                 }
                             }
                             p:last-child{
@@ -435,10 +260,10 @@ export default {
                             }
                         }
                         .rateReply{
-                            margin-top: 20px;
+                            margin-top: 40px;
                             .rateReply_info{
-                                padding-left: 20px;
                                 p{
+                                    padding-left: 20px;
                                     font-size: 14px;
                                     line-height: 20px;
                                     color: #333333;
@@ -471,66 +296,79 @@ export default {
                                     display: block;
                                     margin: 0 auto;
                                     margin-top: 40px;
-                                }
-
-                                img{
-                                    vertical-align: middle
-                                }
-
-                                span{
-                                    font-size: 16px;
-                                    color: #ccc;
-                                    vertical-align: middle
+                                    padding: 12px 40px;
                                 }
                             }
                         }
                     }
                 }
-                .noReply{
-                    padding: 110px 0 0 155px;
-                    img{
-                        display: inline-block;
-                        vertical-align: middle;
-                        width: 140px;
-                        height: 150px;
-                    }
-                    span{
-                        display: inline-block;
-                        vertical-align: middle;
-                        margin-left: 10px;
-                        font-size: 16px;
-                        color: #ccc;
-                    
-                    }
-                }
             }
             .rate_orderInfo{
+                font-size: 14px;
+                color: #333333;
+                line-height: 20px;
                 h2{
                     border-bottom: 1px solid #ccc;
                     text-align: left;
                     text-indent: 67px;
                 }
-                .orderInfo{
-                    display: flex;
-                    justify-content:space-between;
-                    padding: 20px 234px 60px;
-                    ul{
-                        li{
-                            font-size: 14px;
-                            line-height: 20px;
-                            color: #333333;
-                            margin-bottom: 10px;
-                            .reference{
-                                margin-left: 22px;
-                                color:#0e91e9;
-                                i{
-                                    margin-left: 3px;
-                                    display: inline-block;
-                                    width: 9px;
-                                    height: 9px;
-                                    background: url('../../../../assets/png/arrar.png') no-repeat center;
+                .carrierInfo{
+                    padding: 30px 66px;
+                    table{
+                        border: 1px solid #dcdfe5;
+                        width: 100%;
+                        border-collapse: collapse;/*边框会合并为一个单一的边框*/
+                        margin-bottom: 10px;
+                        th,td{
+                            border: 1px solid #dcdfe5;
+                            text-align: center;
+                            padding: 1em 2em;
+                        }
+                        th{
+                            background: #f5f5f5;
+                        }
+                        td{
+                            p{
+                                display: inline-block;
+                            }
+                            del,span{
+                                color: #ed001d
+                            }
+                            white-space : nowrap ;
+                            .cargo{
+                                margin: 10px 0;
+                                p{
+                                    text-align: left;
+                                }
+                                p:first-child{
+                                    width: 30%;
+                                }
+                                p:nth-child(2){
+                                    width: 35%;
+                                }
+                                p:last-child{
+                                    width: 35%;
                                 }
                             }
+                            .cargo:first-child{
+                                margin: 0 0 10px 0;
+                            }
+                            .cargo:last-child{
+                                margin: 10px 0 0  0;
+                            }
+                        }
+                    }
+
+                    h4{
+                        span{
+                            font-weight: normal;
+                        }
+                        span:first-child{
+                        color: #ed001d;
+                        font-weight: bold;
+                        }
+                        span:nth-child(2){
+                            margin: 0 30px;
                         }
                     }
                 }
