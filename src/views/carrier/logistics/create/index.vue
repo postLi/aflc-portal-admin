@@ -79,7 +79,7 @@
                             <el-input v-model="form.discountPrice"  v-number-only:point></el-input>
                             元/公斤
                         </li>
-                        <li>
+                        <li class="buttons">
                             <span  @click="addItem('weight',keys)" class="addItem" v-if="keys == weigthPriceForms.length-1 && form.endVolume!= ''">
                             </span>
                             <span  @click="reduceItem(keys,'weight')" class="reduceItem" v-if="keys == weigthPriceForms.length-1 && weigthPriceForms.length !=1 " >
@@ -101,7 +101,7 @@
                         <li>
                             <el-input v-model="form.startVolume" v-numberOnly placeholder="包含" :disabled="keys != 0"></el-input>
                             <span>----</span>
-                            <el-input v-model="form.endVolume" v-numberOnly placeholder="不包含"  @change="ifWrong(weigthPriceForms,keys)"></el-input>
+                            <el-input v-model="form.endVolume" v-numberOnly placeholder="不包含"  @change="ifWrong(ligthPriceForms,keys)"></el-input>
                             立方
                         </li>
                         <li>
@@ -112,7 +112,7 @@
                             <el-input v-model="form.discountPrice" v-number-only:point></el-input>
                             元/立方
                         </li>
-                        <li>
+                        <li class="buttons">
                             <span  @click="addItem('light',keys)" class="addItem" v-if="keys == ligthPriceForms.length-1 && form.endVolume!= ''">
                             </span>
                             <span  @click="reduceItem(keys,'light')" class="reduceItem" v-if="keys == ligthPriceForms.length-1 && ligthPriceForms.length !=1">
@@ -325,6 +325,7 @@ export default {
                 }
             }
             if(item[idx].endVolume < item[idx].startVolume){
+                console.log('```````````````')
                 this.$message({
                     type: 'info',
                     message: '终止运量应不小于起始运量' 
@@ -579,18 +580,34 @@ export default {
                             }
                             ul{
                                 padding: 8px 110px 8px 50px;
-                                display: -webkit-box;  /* 老版本语法: Safari, iOS, Android browser, older WebKit browsers. */
-                                display: -moz-box;     /* 老版本语法: Firefox (buggy) */
-                                display: -ms-flexbox;  /* 混合版本语法: IE 10 */
-                                display: -webkit-flex; /* 新版本语法: Chrome 21+ */
-                                display: flex;         /* 新版本语法: Opera 12.1, Firefox 22+ */
-                                justify-content:space-around;
+                                // display: -webkit-box;  /* 老版本语法: Safari, iOS, Android browser, older WebKit browsers. */
+                                // display: -moz-box;     /* 老版本语法: Firefox (buggy) */
+                                // display: -ms-flexbox;  /* 混合版本语法: IE 10 */
+                                // display: -webkit-flex; /* 新版本语法: Chrome 21+ */
+                                // display: flex;         /* 新版本语法: Opera 12.1, Firefox 22+ */
+                                // justify-content:space-around;
                                 font-size: 12px;
                                 position: relative;
+                                overflow: hidden;
                                 li{
                                     .el-input{
                                         width: 80px;
                                     }
+                                    float: left;
+                                }
+                                li:first-child{
+                                    margin-left: 8%;
+                                }
+                                li:nth-child(2){
+                                    margin-left: 19%;
+                                }
+                                li:nth-child(3){
+                                    margin-left: 19%; 
+                                }
+                                .buttons{
+                                    position: absolute;
+                                    right: 0;
+                                    top: 0;
                                 }
                                 .addItem{
                                     display:inline-block;
