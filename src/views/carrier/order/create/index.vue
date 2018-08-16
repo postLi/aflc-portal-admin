@@ -51,13 +51,13 @@
                 
               </el-form-item>
               <el-form-item label="总件数：">
-                <el-input v-numberOnly v-model="item.goodsNum"><template slot="append">件</template></el-input>
+                <el-input :maxlength="7" v-numberOnly v-model="item.goodsNum"><template slot="append">件</template></el-input>
               </el-form-item>
               <el-form-item required label="预估重量：">
-                <el-input v-numberOnly  @blur="calcTotalFee" v-model="item.goodsWeight"><template slot="append">公斤</template></el-input>
+                <el-input :maxlength="7" v-numberOnly  @blur="calcTotalFee" v-model="item.goodsWeight"><template slot="append">公斤</template></el-input>
               </el-form-item>
               <el-form-item required label="预估体积：">
-                <el-input v-numberOnly @blur="calcTotalFee" v-model="item.goodsVolume"><template slot="append">立方米</template></el-input>
+                <el-input :maxlength="7" v-numberOnly @blur="calcTotalFee" v-model="item.goodsVolume"><template slot="append">立方米</template></el-input>
               </el-form-item>
               <el-form-item  class="cargo-button">
                 <el-button size="mini" type="primary" v-if="index === (cargoList.length-1)" @click="resetCargo">重置</el-button>

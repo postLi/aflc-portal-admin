@@ -23,6 +23,7 @@
                 <ul>
                     <li>下单时间：{{orderForm.createTime}} 
                         <el-popover
+                        v-if="!iscancel"
                         width="100%"
                         trigger="hover"
                         >
