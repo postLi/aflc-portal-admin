@@ -1034,10 +1034,13 @@ export default {
             this.$message.error('请选择到达地~')
             return false
           }
-          if (data.aflcFCLOrderGoodsDtoList.filter(el => (el.goodsName && (el.goodsWeight || el.goodsVolume))).length === 0) {
+          const errorCargo = data.aflcFCLOrderGoodsDtoList.filter(el => (el.goodsName && (!el.goodsWeight || !el.goodsVolume)))
+          if (errorCargo.length > 0) {
             this.$message.error('请填写有效的货物信息~')
             return false
           }
+          // 只提交填写了名称的货物信息
+          data.aflcFCLOrderGoodsDtoList = data.aflcFCLOrderGoodsDtoList.filter(el => el.goodsName)
           if (data.wlId === '' && !this.isCargo) {
             this.$message.error('需要选择物流公司~')
             return false
