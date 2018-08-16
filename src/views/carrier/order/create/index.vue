@@ -11,12 +11,12 @@
             <p><span class="tishi"><i class="el-icon-warning"></i>小提示： </span>(打<span class="star">*</span>号为必填项)</p>
         </div>
     </div>
+
     <el-form :model="ruleForm" :rules="rules" size="mini" ref="ruleForm" label-width="150px" class="demo-ruleForm">
       <!-- 线路信息 -->
       <div class="order-base-info tab-info-panel clearfix">
         <div class="tab-info-stitle"><strong>线路信息</strong></div>
-        <!-- (<span class="important">提示：带*为必填项</span>) -->
-        <el-form-item required :rules="[{required: true, message: '请选择出发地'}]" label="出发地：">
+        <el-form-item required :rules="[{required: true,validator: validateIsEmpty(aflcOrderAddressWebDtoList[0].provinceCityArea), message: '请选择出发地'}]" label="出发地：">
           <el-input   @focus="()=>{showMap('strartAddress')}" v-model="aflcOrderAddressWebDtoList[0].provinceCityArea"></el-input>
         </el-form-item>
         <el-form-item required label="街道/门牌号：">
@@ -501,6 +501,28 @@ export default {
     // this.getCompany()
   },
   methods: {
+    // 公用工具类
+    validateIsEmpty(prop, checkrule) {
+      return (rule, value, callback) => {
+        const msg = rule.message
+        console.log('check', rule, value)
+        if (checkrule) {
+          if (checkrule.test(value)) {
+            callback()
+          } else {
+            callback(new Error(msg))
+          }
+        } else if (!value) {
+          // this.showMessage(msg)
+          callback(new Error(msg))
+        } else {
+          callback()
+        }
+      }
+    },
+    showMessage(msg) {
+      this.$message.error(msg)
+    },
     // 从专线页面下单
     initZX() {
       const query = this.$route.query
