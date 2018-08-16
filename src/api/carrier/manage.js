@@ -55,7 +55,7 @@ export function getOrderList(user_token, data) {
  */
 export function getOrderListCount(user_token, data = {}) {
   return fetch.post('/aflcorderservice/order/fclOrder/v1/getOrderStatusGroupCountList?user_token=' + user_token, data).then(res => {
-    return res.data ? res.data[0] : {}
+    return res.data ? (res.data[0] || {}) : {}
   })
 }
 /**
