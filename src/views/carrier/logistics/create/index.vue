@@ -66,17 +66,17 @@
                     </p>
                     <ul v-for="(form,keys) in weigthPriceForms" :key="keys">
                         <li>
-                            <el-input v-model="form.startVolume" v-numberOnly placeholder="包含" :disabled="keys != 0"></el-input>
+                            <el-input v-model="form.startVolume" v-numberOnly placeholder="包含" maxlength="7" :disabled="keys != 0"></el-input>
                             <span>----</span>
-                            <el-input v-model="form.endVolume"  placeholder="不包含" @change="ifWrong(weigthPriceForms,keys)"></el-input>
+                            <el-input v-model="form.endVolume"  placeholder="不包含" maxlength="7" @change="ifWrong(weigthPriceForms,keys)"></el-input>
                             公斤
                         </li>
                         <li>
-                            <el-input v-model="form.primeryPrice" v-number-only:point></el-input>
+                            <el-input v-model="form.primeryPrice" v-number-only:point maxlength="7"></el-input>
                             元/公斤
                         </li>
                         <li>
-                            <el-input v-model="form.discountPrice"  v-number-only:point></el-input>
+                            <el-input v-model="form.discountPrice"  v-number-only:point maxlength="7"></el-input>
                             元/公斤
                         </li>
                         <li class="buttons">
@@ -99,17 +99,17 @@
                     </p>
                     <ul v-for="(form,keys) in ligthPriceForms" :key="keys">
                         <li>
-                            <el-input v-model="form.startVolume" v-numberOnly placeholder="包含" :disabled="keys != 0"></el-input>
+                            <el-input v-model="form.startVolume" v-numberOnly placeholder="包含" maxlength="7" :disabled="keys != 0"></el-input>
                             <span>----</span>
-                            <el-input v-model="form.endVolume" v-numberOnly placeholder="不包含"  @change="ifWrong(ligthPriceForms,keys)"></el-input>
+                            <el-input v-model="form.endVolume" v-numberOnly placeholder="不包含"  maxlength="7" @change="ifWrong(ligthPriceForms,keys)"></el-input>
                             立方
                         </li>
                         <li>
-                            <el-input v-model="form.primeryPrice" v-number-only:point></el-input>
+                            <el-input v-model="form.primeryPrice" v-number-only:point maxlength="7"></el-input>
                             元/立方
                         </li>
                         <li>
-                            <el-input v-model="form.discountPrice" v-number-only:point></el-input>
+                            <el-input v-model="form.discountPrice" v-number-only:point maxlength="7"></el-input>
                             元/立方
                         </li>
                         <li class="buttons">
@@ -125,7 +125,7 @@
             <el-form-item label="最低一票价格：">
                 <el-input v-model="ruleForm.lowerPrice" placeholder="报价" v-number-only:point></el-input> 元
             </el-form-item>
-            <el-form-item label="专线类型：" prop="rangeType" v-if="ifShowRangeType == '1'">
+            <el-form-item label="专线类型：" prop="rangeType" v-if="ifShowRangeType != '0'">
                 <el-radio-group v-model="ruleForm.rangeType">
                      <el-radio v-for="range in rangeTypeClassfy" :label="range.code" :key="range.id">{{range.name}}</el-radio>
                 </el-radio-group>
@@ -155,7 +155,7 @@
                 <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" :limit="3" listtype="picture-card" :showFileList = 'true' v-model="ruleForm.rangeLogo"/>
             </el-form-item> 
         </div>
-        <el-form-item class="fromfooter">
+        <el-form-item class="fromfooter" v-show="ifShowRangeType != 2">
             <el-button type="primary" @click="submitForm('ruleForm')" v-if="ifShowRangeType == '1'">修改</el-button>
             <el-button type="primary" @click="submitForm('ruleForm')" v-else>确认提交</el-button>
         </el-form-item>
@@ -287,22 +287,27 @@ export default {
         }
     },
     watch:{
-        'ruleForm.rangeType':{
-            handler(val, oldVal){
-                if(val){
-                    this.ruleForm.rangeTypeName = this.rangeTypeClassfy.find(item => item.code === val)['name'];
-                }
-            },
-            deep:true
-        },
-        'ruleForm.departureTimeCode':{
-            handler(val, oldVal){
-                if(val){
-                    this.ruleForm.departureTime = this.departClassfy.find(item => item.code === val)['name'];
-                }
-            },
-            deep:true
-        },
+        // 'ruleForm.rangeType':{
+        //     handler(val, oldVal){
+        //         console.log('`````rangeType`````')
+        //         console.log(val)
+        //         if(val && this.ifShowRangeType != '2'){
+        //             this.ruleForm.rangeTypeName = this.rangeTypeClassfy.find(item => item.code == val)['name'];
+        //         }
+        //         console.log(this.ruleForm.rangeTypeName)
+        //     },
+        //     deep:true
+        // },
+        // 'ruleForm.departureTimeCode':{
+        //     handler(val, oldVal){
+        //         console.log('`````departureTimeCode`````')
+        //         console.log(val)
+        //         // if(val && this.ifShowRangeType != '2'){
+        //         //     this.ruleForm.departureTime = this.departClassfy.find(item => item.code == val)['name'];
+        //         // }
+        //     },
+        //     deep:true
+        // },
     },
     mounted(){
         this.getInformations();
@@ -357,26 +362,26 @@ export default {
         getValue(obj){
             return obj ? obj.value:'';
         },
-        getInfo(pos, name, info) {
-            // info.name  info.pos
-            console.log(pos, name, info)
-            switch (this.current) {
-                case 'strartAddress':
-                this.ruleForm.startLocation = info.addressComponent.province + info.addressComponent.city + info.addressComponent.district;
-                break;
-                case 'endAddress':
-                this.ruleForm.endLocation = info.addressComponent.province + info.addressComponent.city + info.addressComponent.district;
-                break;
-            }
-        },
-        showMap(name) {
-            this.popVisible = true ;
-            this.current = name;
-        },
+        // getInfo(pos, name, info) {
+        //     // info.name  info.pos
+        //     console.log(pos, name, info)
+        //     switch (this.current) {
+        //         case 'strartAddress':
+        //         this.ruleForm.startLocation = info.addressComponent.province + info.addressComponent.city + info.addressComponent.district;
+        //         break;
+        //         case 'endAddress':
+        //         this.ruleForm.endLocation = info.addressComponent.province + info.addressComponent.city + info.addressComponent.district;
+        //         break;
+        //     }
+        // },
+        // showMap(name) {
+        //     this.popVisible = true ;
+        //     this.current = name;
+        // },
         getParams(){
-            if(this.$route.params.data){
-                this.ifShowRangeType = this.$route.params.ifrevise;
-                let dataObj = this.$route.params.data;//接收数据
+            if(this.$route.query.data){
+                this.ifShowRangeType = this.$route.query.ifrevise;
+                let dataObj = this.$route.query.data;//接收数据
                 this.ligthPriceForms = dataObj.lightcargo;
                 this.weigthPriceForms = dataObj.weightcargo;
                 TransportRangeInfo(dataObj.id).then(res=>{
@@ -455,6 +460,15 @@ export default {
             this.weigthPriceForms.forEach(item => {
                 this.ruleForm.rangePrices.push(item) 
             })
+            
+            if(this.ruleForm.rangeType){
+                this.ruleForm.rangeTypeName = this.rangeTypeClassfy.find(item => item.code == this.ruleForm.rangeType)['name'];
+            }
+
+            if(this.ruleForm.departureTimeCode){
+                this.ruleForm.departureTime = this.departClassfy.find(item => item.code == this.ruleForm.departureTimeCode)['name'];
+            }
+
         },
         //提交按钮
         submitForm(formName) {
@@ -471,7 +485,7 @@ export default {
                 commitFunction.then(res => {
                     console.log('res',res)
                     if(res.status == 200){
-                        this.$router.push({name:'管理我的专线'})
+                        this.$router.push({name:'管理物流专线'})
                     }else{
                         this.$message({
                             type: 'info',
@@ -668,16 +682,6 @@ export default {
                         span{
                             bottom: 22px;
                         }
-                        // .countNum{
-                        //     position: absolute;
-                        //     right: 0;
-                        //     bottom: 0;
-                        //     font-size: 12px;
-                        //     color: #ccc;
-                        //     span{
-
-                        //     }
-                        // }
                     }
                 }
             }

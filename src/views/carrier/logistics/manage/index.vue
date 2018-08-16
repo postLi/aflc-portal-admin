@@ -43,7 +43,7 @@
                             label="出发地"
                             width="180">
                             <template slot-scope="scope">
-                               <span>{{scope.row.startLocation}}</span>
+                               <span class="moreInfo" @click="handleInfo(scope.row)">{{scope.row.startLocation}}</span>
                             </template>
                         </el-table-column>
                         <el-table-column
@@ -212,13 +212,17 @@ export default {
         handleSearch(){
             this.firstblood()
         },
+        //查看详情
+        handleInfo(row){
+            this.$router.push({name: '发布物流专线',query:{data:row,ifrevise:'2'}});
+        },
         //新增网点
         handleNew(){
             this.$router.push({name: '发布物流专线'});
         },
         //修改
         handleEdit(row) {
-            this.$router.push({name: '发布物流专线',params:{data:row,ifrevise:'1'}});
+            this.$router.push({name: '发布物流专线',query:{data:row,ifrevise:'1'}});
         },
         //删除网点
         handleDelete(row) {
@@ -280,6 +284,11 @@ export default {
                     border-radius: 5px;
                     background: #eb0a0a;
                     color: #fff;
+                }
+                .moreInfo{
+                    cursor: pointer;
+                    display: inline-block;
+                    color: #169BD5;
                 }
             }
           
