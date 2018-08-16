@@ -66,7 +66,7 @@
                     </p>
                     <ul v-for="(form,keys) in weigthPriceForms" :key="keys">
                         <li>
-                            <el-input v-model="form.startVolume" v-numberOnly placeholder="包含" maxlength="7" :disabled="keys != 0"></el-input>
+                            <el-input v-model="form.startVolume" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
                             <span>----</span>
                             <el-input v-model="form.endVolume"  placeholder="不包含" maxlength="7" @change="ifWrong(weigthPriceForms,keys)"></el-input>
                             公斤
@@ -80,7 +80,7 @@
                             元/公斤
                         </li>
                         <li class="buttons">
-                            <span  @click="addItem('weight',keys)" class="addItem" v-if="keys == weigthPriceForms.length-1 && form.endVolume!= ''">
+                            <span  @click="addItem('weight',keys,form)" class="addItem" v-if="keys == weigthPriceForms.length-1 && form.endVolume!= '' && keys != 4">
                             </span>
                             <span  @click="reduceItem(keys,'weight')" class="reduceItem" v-if="keys == weigthPriceForms.length-1 && weigthPriceForms.length !=1 " >
                             </span>
@@ -90,7 +90,7 @@
             </el-form-item>
 
             <el-form-item label="轻货价格：">
-                <p>(阶梯价格最大值不填，代表无穷大，例如：500-，代表500立方以上)</p>
+                <p>(阶梯价格最大值不填，代表无穷大，例如：10-，代表10立方以上)</p>
                 <div class="goodsPriceChoose">
                     <p>
                         <span>运量</span>
@@ -99,7 +99,7 @@
                     </p>
                     <ul v-for="(form,keys) in ligthPriceForms" :key="keys">
                         <li>
-                            <el-input v-model="form.startVolume" v-numberOnly placeholder="包含" maxlength="7" :disabled="keys != 0"></el-input>
+                            <el-input v-model="form.startVolume" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
                             <span>----</span>
                             <el-input v-model="form.endVolume" v-numberOnly placeholder="不包含"  maxlength="7" @change="ifWrong(ligthPriceForms,keys)"></el-input>
                             立方
@@ -113,7 +113,7 @@
                             元/立方
                         </li>
                         <li class="buttons">
-                            <span  @click="addItem('light',keys)" class="addItem" v-if="keys == ligthPriceForms.length-1 && form.endVolume!= ''">
+                            <span  @click="addItem('light',keys,form)" class="addItem" v-if="keys == ligthPriceForms.length-1 && form.endVolume!= '' && keys != 4">
                             </span>
                             <span  @click="reduceItem(keys,'light')" class="reduceItem" v-if="keys == ligthPriceForms.length-1 && ligthPriceForms.length !=1">
                             </span>
@@ -346,18 +346,18 @@ export default {
         },
         regionChangeStart(d) {
             console.log('data:',d)
-            this.ruleForm.startProvince = d.province || '';
-            this.ruleForm.startCity = d.city || '';
-            this.ruleForm.startArea = d.area || '';
+            this.ruleForm.startProvince = d.province.name || '';
+            this.ruleForm.startCity = d.city.name || '';
+            this.ruleForm.startArea = d.area.name || '';
             this.ruleForm.startLocation = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
             console.log(this.ruleForm.startLocation)
         },
         regionChangeEnd(d) {
             console.log('data:',d)
             this.ruleForm.endLocation = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-            this.ruleForm.endProvince = d.province || '';
-            this.ruleForm.endCity = d.city || '';
-            this.ruleForm.endArea = d.area || '';
+            this.ruleForm.endProvince = d.province.name || '';
+            this.ruleForm.endCity = d.city.name || '';
+            this.ruleForm.endArea = d.area.name || '';
         },
         getValue(obj){
             return obj ? obj.value:'';
@@ -415,26 +415,41 @@ export default {
             this.ruleForm.publishId = userInfo.id;
         },
         //添加子节点新增
-        addItem(type,idx){
+        addItem(type,idx,item){
             // console.log(type)
             switch(type){
                 case 'weight':
-                    this.weigthPriceForms.push({
-                        startVolume:this.weigthPriceForms[idx].endVolume,
-                        endVolume:'',
-                        primeryPrice:'',//标准价
-                        discountPrice:'',//折后价
-                        type:'1'
-                    }); 
+                console.log(item.primeryPrice)
+                    if(item.primeryPrice == ''){
+                        return this.$message({
+                            type: 'info',
+                            message: '请补充重货原报价' 
+                        })
+                    }else{
+                        this.weigthPriceForms.push({
+                            startVolume:this.weigthPriceForms[idx].endVolume,
+                            endVolume:'',
+                            primeryPrice:'',//标准价
+                            discountPrice:'',//折后价
+                            type:'1'
+                        }); 
+                    }
                     break;
                 case 'light':
-                    this.ligthPriceForms.push({
-                        startVolume:this.ligthPriceForms[idx].endVolume,
-                        endVolume:'',
-                        primeryPrice:'',//标准价
-                        discountPrice:'',//折后价
-                        type:'0'
-                    }); 
+                    if(item.primeryPrice == ''){
+                         return this.$message({
+                            type: 'info',
+                            message: '请补充轻货原报价' 
+                        })
+                    }else{
+                        this.ligthPriceForms.push({
+                            startVolume:this.ligthPriceForms[idx].endVolume,
+                            endVolume:'',
+                            primeryPrice:'',//标准价
+                            discountPrice:'',//折后价
+                            type:'0'
+                        }); 
+                    }
                     break;
             }
         },
