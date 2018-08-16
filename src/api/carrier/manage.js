@@ -141,7 +141,7 @@ export function postNewReview(data) {
 }
  */
 export function postNewCarrierReview(data) {
-  return fetch.post('/aflcusercenterservice/usercenter/aflcTransportEvaluation/v1/add', data)
+  return fetch.post('/aflcusercenterservice/usercenter/aflcShipperEvaluation/v1/add', data)
 }
 /**
  * 根据id获取回传信息

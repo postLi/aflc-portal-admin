@@ -22,7 +22,7 @@
               :colors="rankColor">
             </el-rate>
           </el-form-item>
-          <el-form-item label-width="auto" label="服务价格：" >
+          <el-form-item label-width="auto" label="服务质量：" >
             <el-rate
               show-text
               :texts="texts"
@@ -30,7 +30,7 @@
               :colors="rankColor">
             </el-rate>
           </el-form-item>
-          <el-form-item label-width="auto" label="服务价格：" >
+          <el-form-item label-width="auto" label="运输时效：" >
             <el-rate
               show-text
               :texts="texts"
@@ -64,7 +64,7 @@ export default {
       type: String,
       default: ''
     },
-    transportRangeId:{
+    transportRangeId: {
       type: String,
       default: ''
     }
@@ -94,8 +94,8 @@ export default {
       shipRate: ['AF036030301', 'AF036030302', 'AF036030303', 'AF036030304', 'AF036030305'],
       rules: {},
       // 评分
-      rankColor:['#99A9BF', '#F7BA2A', '#FF9900'],
-      texts:['非常不满意','不满意','一般','满意','非常满意'],
+      rankColor: ['#99A9BF', '#F7BA2A', '#FF9900'],
+      texts: ['非常不满意', '不满意', '一般', '满意', '非常满意'],
       priceRank: 5,
       serviceRank: 5,
       shipRank: 5,
@@ -104,48 +104,47 @@ export default {
       loading: false
     }
   },
-  watch:{
-    dialogVisible(newVal){
-      if(newVal){
+  watch: {
+    dialogVisible(newVal) {
+      if (newVal) {
         this.reset()
       }
     },
-    priceRank:{
-      handler(newVal){
+    priceRank: {
+      handler(newVal) {
         this.form.serverPriceStarLevel = this.priceRate[newVal - 1]
         this.setTotalRank()
       },
       immediate: true
     },
-    serviceRank:{
-      handler(newVal){
+    serviceRank: {
+      handler(newVal) {
         this.form.serverQualityStarLevel = this.serviceRate[newVal - 1]
         this.setTotalRank()
       },
       immediate: true
     },
-    shipRank:{
-      handler(newVal){
+    shipRank: {
+      handler(newVal) {
         this.form.transportAgingStarLevel = this.shipRate[newVal - 1]
         this.setTotalRank()
       },
       immediate: true
     }
   },
-  mounted(){
+  mounted() {
 
   },
   methods: {
-    setTotalRank(){
-      let total = this.priceRank + this.serviceRank + this.shipRank
-      if(total < 7){
+    setTotalRank() {
+      const total = this.priceRank + this.serviceRank + this.shipRank
+      if (total < 7) {
         this.form.assessLevel = this.totalRate[0]
-      } else if(total < 10){
+      } else if (total < 10) {
         this.form.assessLevel = this.totalRate[1]
       } else {
         this.form.assessLevel = this.totalRate[2]
       }
-      
     },
     close(done) {
       this.$emit('update:dialogVisible', false)
@@ -154,28 +153,26 @@ export default {
         done()
       }
     },
-    reset(){
-      this.form = Object.assign({},this.$data.form)
+    reset() {
+      this.form = Object.assign({}, this.$data.form)
       this.form.evaluationId = this.otherinfo.id
       this.form.evaluationName = this.otherinfo.contactsName
       this.form.orderSerial = this.orderSerial
       this.form.transportRangeId = this.transportRangeId
-      
     },
     submitFeeSetup() {
       this.$refs['ruleForm'].validate((valid) => {
         this.loading = true
-        if(valid){
-          postNewReview(this.form).then(res=>{
-            this.$message.success("保存成功！")
+        if (valid) {
+          postNewReview(this.form).then(res => {
+            this.$message.success('保存成功！')
             this.loading = false
             this.close()
           }).catch(err => {
-            this.$message.error("保存失败：" + JSON.stringify(err))
+            this.$message.error('保存失败：' + JSON.stringify(err))
             this.loading = false
           })
         }
-        
       })
     }
   }
