@@ -46,23 +46,24 @@ export default {
         },
 
         {
+          path: '/order/track', redirect: '/order/manage', icon: 'QQ', name: '订单跟踪', component: _import('carrier/order/index'), meta: { role: ['admin'], title: '订单跟踪', noCache: false, istab: true },
+          children: [
+            {
+              path: '/order/manage', icon: 'QQ', name: '我创建的订单', component: _import('carrier/order/manage/index'), meta: { role: ['admin'], title: '我创建的订单', noCache: false }
+            },
+            {
+              path: '/order/manage/carrier', icon: 'QQ', name: '我承运的订单', component: _import('carrier/order/manage/index'), meta: { role: ['admin'], title: '我承运的订单', noCache: false }
+            }
+          ]
+        },
+
+        {
           path: '/order/rateInfoplant', hidden: true, icon: 'QQ', name: '平台评价', component: _import('carrier/order/rateInfoplant/index'), meta: { role: ['admin'], title: '平台评价', noCache: false }
         },
 
         {
 
           path: '/complaintsInfo/index', hidden: true, icon: 'QQ', name: '投诉详情', component: _import('complaintsInfo/index'), meta: { role: ['admin'], title: '投诉详情', istab: true, noCache: false }
-        }
-      ]
-    },
-    {
-      path: '/order/track', redirect: '/order/manage', icon: 'QQ', name: '订单跟踪', component: _import('carrier/order/index'), meta: { role: ['admin'], title: '订单跟踪', noCache: false, istab: true },
-      children: [
-        {
-          path: '/order/manage', icon: 'QQ', name: '我创建的订单', component: _import('carrier/order/manage/index'), meta: { role: ['admin'], title: '我创建的订单', noCache: false }
-        },
-        {
-          path: '/order/manage/carrier', icon: 'QQ', name: '我承运的订单', component: _import('carrier/order/manage/index'), meta: { role: ['admin'], title: '我承运的订单', noCache: false }
         }
       ]
     },

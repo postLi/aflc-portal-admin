@@ -10,46 +10,34 @@
         class="el-menu-vertical-demo"
         @open="handleOpen"
         @close="handleClose"
+        router
         unique-opened
         background-color="#545c64"
         text-color="#fff"
         active-text-color="#ffd04b">
-        <template v-for="item in sidebarRouters">
-          <el-menu-item v-if="!item.children" :index="item.path">
-            <i class="el-icon-menu"></i>
+        <template v-if="!item.hidden" v-for="(item,index) in sidebarRouters">
+          <el-menu-item :key="index" v-if="!item.children" :index="item.path">
+            <icon-svg v-if='item.icon' :icon-class="item.icon" /> 
             <span slot="title">{{item.meta.title}}</span>
           </el-menu-item>
+          <el-submenu v-else :key="index" :index="item.path">
+            <template slot="title">
+              <icon-svg v-if='item.icon' :icon-class="item.icon" /> 
+              <span>{{item.meta.title}}</span>
+            </template>
+            <template v-if="!item2.hidden" v-for="(item2,index2) in item.children">
+              <el-menu-item :key="index2" v-if="!item2.children" :index="item2.path">
+                <icon-svg v-if='item2.icon' :icon-class="item2.icon" /> 
+                <span slot="title">{{item2.meta.title}}</span>
+              </el-menu-item>
+              <el-submenu v-else :key="index2" :index="item2.path">
+                <template slot="title">{{item2.meta.title}}</template>
+                <el-menu-item v-if="!item3.hidden" v-for="(item3,index3) in item2.children" :key="index3" :index="item3.path"><span slot="title">{{item3.meta.title}}</span></el-menu-item>
+              </el-submenu>
+            </template>
+          </el-submenu>
+
         </template>
-        <el-submenu index="1">
-          <template slot="title">
-            <i class="el-icon-location"></i>
-            <span>导航一</span>
-          </template>
-          <el-menu-item index="1-3">选项3</el-menu-item>
-          <el-submenu index="1-4">
-            <template slot="title">选项4</template>
-            <el-menu-item index="1-4-1">选项1</el-menu-item>
-          </el-submenu>
-        </el-submenu>
-        <el-submenu index="4">
-          <template slot="title">
-            <i class="el-icon-location"></i>
-            <span>导航222</span>
-          </template>
-          <el-menu-item index="1-3">选项3</el-menu-item>
-          <el-submenu index="1-4">
-            <template slot="title">选项4</template>
-            <el-menu-item index="1-4-1">选项1</el-menu-item>
-          </el-submenu>
-        </el-submenu>
-        <el-menu-item index="2">
-          <i class="el-icon-menu"></i>
-          <span slot="title">导航二</span>
-        </el-menu-item>
-        <el-menu-item index="4">
-          <i class="el-icon-setting"></i>
-          <span slot="title">导航四</span>
-        </el-menu-item>
       </el-menu>
       <div class="nologin">
         <a href="http://192.168.1.157:9528/?nologin=1">
@@ -123,6 +111,10 @@ export default {
   .el-menu{
     border-right: 0;
     background: #333744;
+  }
+
+  .el-submenu .el-menu-item{
+    min-width: 100%;
   }
 
   .sidebar-userinfo{
