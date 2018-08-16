@@ -44,7 +44,7 @@
                         </div>
                     </div>
                    
-                    <div class="rate_content rate_info fl" style="margin-right:6%;">
+                    <div class="rate_content rate_info fl" style="margin-right:0.2%;">
                         <h2>我对物流公司的评价</h2>
                         <div class="clearfix rate_info_content" v-if="carrierSerial.serverPriceStarLevelScore">
                              <div class="clearfix rate_info_order ">
@@ -124,7 +124,6 @@
                                             :texts = "textsArr"
                                             disabled
                                             text-color="#ed001d"
-
                                             >   
                                             </el-rate>
                                             <!-- <span class="des">{{consignorSerial.goodsStarLevelDes}}</span> -->
