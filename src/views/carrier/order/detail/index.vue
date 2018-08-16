@@ -1,6 +1,6 @@
 <template>
   <div class="manage-orderdetail page-main" v-loading="loading">
-    <div class="tab-info-title">
+    <div class="tab-info-title" v-if="!iscancel">
       <h2><span>订单跟踪</span></h2>
     </div>
     <div class="rate-status-bar" v-if="!iscancel">
@@ -141,16 +141,16 @@
                     {{ orderForm.complainWorkSerial && orderForm.shipperEvaluationId ? '' : '您可以' }}
                     <el-button type="warning" :size="btnsize"  v-if="!orderForm.complainWorkSerial"  @click="addComplain(orderForm)">投诉</el-button>
                     <el-button type="warning" v-if="orderForm.complainWorkSerial" :size="btnsize"   @click="viewComplain(orderForm)">投诉详情</el-button>
-                    <el-button type="primary" v-if="!orderForm.shipperEvaluationId" :size="btnsize"  plain @click="addReview(orderForm)">评价</el-button>
-                    <el-button type="primary" v-if="orderForm.shipperEvaluationId" :size="btnsize"  plain @click="viewReview(orderForm)">评价详情</el-button>
+                    <el-button type="primary" v-if="!orderForm.transportEvaluationId" :size="btnsize"  plain @click="addReview(orderForm)">评价</el-button>
+                    <el-button type="primary" v-if="orderForm.transportEvaluationId" :size="btnsize"  plain @click="viewReview(orderForm)">评价详情</el-button>
                 </div>
                 <div class="order-button" v-if="iscarrier">
                     {{ (orderForm.complainWorkSerial ? orderForm.reply : true) && orderForm.transportEvaluationId ? '' : '您可以' }}
                      <el-button type="warning" :size="btnsize"  plain v-if="orderForm.complainWorkSerial && !orderForm.reply" @click="replyComplain(orderForm)">投诉回复</el-button>
                     <el-button type="warning" :size="btnsize"  plain v-if="orderForm.complainWorkSerial && orderForm.reply" @click="viewComplain(orderForm)">投诉详情</el-button>
-                    <el-button type="primary" v-if="!orderForm.transportEvaluationId" :size="btnsize"  plain @click="addReview(orderForm)">评价</el-button>
-                    <!-- <el-button type="primary" v-if="orderForm.transportEvaluationId || orderForm.shipperEvaluationId" :size="btnsize"  plain @click="viewReview(orderForm)">评价详情</el-button> -->
-                    <el-button type="primary" v-if="orderForm.transportEvaluationId" :size="btnsize"  plain @click="viewReview(orderForm)">评价详情</el-button>
+                    <el-button type="primary" v-if="!orderForm.shipperEvaluationId" :size="btnsize"  plain @click="addReview(orderForm)">评价</el-button>
+                    <!-- <el-button type="primary" v-if="orderForm.shipperEvaluationId || orderForm.shipperEvaluationId" :size="btnsize"  plain @click="viewReview(orderForm)">评价详情</el-button> -->
+                    <el-button type="primary" v-if="orderForm.shipperEvaluationId" :size="btnsize"  plain @click="viewReview(orderForm)">评价详情</el-button>
                 </div>
             </div>
             <div v-if="active === 7" class="order-step-5 order-control-info">

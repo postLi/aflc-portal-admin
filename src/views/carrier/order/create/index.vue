@@ -131,7 +131,7 @@
                     <div class="jieti-title">最低一票价格：{{scope.row.lowerPrice}}元</div>
                     <ul>
                       <li :key="index" v-if="item.type==='1'" v-for="(item, index) in scope.row.rangePrices">
-                        <span class="jietiv">{{ item.startVolume }}公斤~{{ item.endVolume }}公斤</span>
+                        <span class="jietiv">{{ item.startVolume }}公斤{{ item.endVolume ? '~'+item.endVolume+'公斤' : '以上' }}</span>
                         <span class="jietih">{{ item.primeryPrice }}元/公斤</span>
                         <span class="jietid">折后价{{ item.discountPrice }}元/公斤</span>
                       </li>
@@ -158,7 +158,7 @@
                     <div class="jieti-title">最低一票价格：{{scope.row.lowerPrice}}元</div>
                     <ul>
                       <li :key="index" v-if="item.type==='0'" v-for="(item, index) in scope.row.rangePrices">
-                        <span class="jietiv">{{ item.startVolume }}立方~{{ item.endVolume }}立方</span>
+                        <span class="jietiv">{{ item.startVolume }}立方{{ item.endVolume ? '~'+item.endVolume+'立方' : '以上' }}</span>
                         <span class="jietih">{{ item.primeryPrice }}元/立方</span>
                         <span class="jietid">折后价{{ item.discountPrice }}元/立方</span>
                       </li>
@@ -742,6 +742,7 @@ export default {
 
       // 获取价格前初始化下数据
       this.ruleForm.wlId = ''
+      this.ruleForm.wlName = ''
       this.ruleForm.forecastPrice = 0
       this.ruleForm.goodsType = ''
       this.ruleForm.totalAmount = 0
@@ -755,13 +756,12 @@ export default {
             return false
           }
         })
-        this.ruleForm.wlName = obj.publishName
+        this.ruleForm.wlName = obj[0] ? obj[0].publishName : ''
         const data = this.wlbestlist[$index]
         this.ruleForm.startPointId = data[0] ? data[0].id : ''
         this.ruleForm.endPointId = data[1] ? data[1].id : ''
       }
 
-      console.log('get Total price:', transportRangeId, cargolist)
       if (cargolist.length && transportRangeId) {
         let weight = cargolist.reduce((pre, item) => {
           return pre + parseFloat(item.goodsWeight, 10)
@@ -774,7 +774,6 @@ export default {
         }, 0)
         weight = weight || 0
         volume = volume || 0
-        console.log('get Total price:', transportRangeId, weight, volume, cargolist)
         if (weight > 0 || volume > 0) {
           this.ruleForm.wlId = transportRangeId
           ReqApi.getTotalPrice({
