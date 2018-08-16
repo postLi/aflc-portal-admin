@@ -68,7 +68,7 @@
                         <li>
                             <el-input v-model="form.startVolume" v-numberOnly placeholder="包含" :disabled="keys != 0"></el-input>
                             <span>----</span>
-                            <el-input v-model="form.endVolume" v-numberOnly placeholder="不包含" @change="ifWrong(weigthPriceForms,keys)"></el-input>
+                            <el-input v-model="form.endVolume"  placeholder="不包含" @change="ifWrong(weigthPriceForms,keys)"></el-input>
                             公斤
                         </li>
                         <li>
@@ -90,7 +90,7 @@
             </el-form-item>
 
             <el-form-item label="轻货价格：">
-                <p>(阶梯价格最大值不填，代表无穷大，例如：500-，代表500公斤以上)</p>
+                <p>(阶梯价格最大值不填，代表无穷大，例如：500-，代表500立方以上)</p>
                 <div class="goodsPriceChoose">
                     <p>
                         <span>运量</span>
@@ -160,7 +160,7 @@
             <el-button type="primary" @click="submitForm('ruleForm')" v-else>确认提交</el-button>
         </el-form-item>
     </el-form>
-    <tmsmap @success="getInfo" pos="" name="" :popVisible.sync="popVisible" />
+    <!-- <tmsmap @success="getInfo" pos="" name="" :popVisible.sync="popVisible" /> -->
 
   </div>
 </template>
@@ -170,12 +170,12 @@ import { newTransportRangeList,TransportRangeInfo,changeTransportRange } from '@
 import { getUserInfo } from '@/utils/auth.js'
 import { REGEX } from '@/utils/validate.js'
 import upload from '@/components/Upload/singleImage2'
-import tmsmap from '@/components/map/index'
+// import tmsmap from '@/components/map/index'
 import vregion from '@/components/vregion/Region.vue'
 export default {
     components:{
         upload,
-        tmsmap,
+        // tmsmap,
         vregion
     },
     data() {
@@ -260,10 +260,10 @@ export default {
             ],
             rules: {
                 startLocation:[
-                    { required: true, message: '请输入出发地', trigger: 'blur' },
+                    { required: true, message: '请输入出发地', trigger: 'change' },
                 ],
                 endLocation: [
-                    { required: true, message: '请输入到达地', trigger: 'blur' },
+                    { required: true, message: '请输入到达地', trigger: 'change' },
                 ],
                 startLocationContacts: [
                     { required: true, message: '请输入出发地联系人信息', trigger: 'blur' }
@@ -312,7 +312,7 @@ export default {
         ifWrong(item,idx){
             console.log('ifwrong',item,idx)
             if(item.length > (idx+1)){
-                console.log(item[idx].endVolume,item[idx+1].startVolume)
+                // console.log(item[idx].endVolume,item[idx+1].startVolume)
                 item[idx+1].startVolume = item[idx].endVolume ;
                 if(item[idx+1].endVolume){
                     if(item[idx+1].endVolume < item[idx+1].startVolume){
@@ -323,23 +323,29 @@ export default {
                         return item[idx+1].endVolume = ''
                     }
                 }
-            }
-            if(item[idx].endVolume < item[idx].startVolume){
-                console.log('```````````````')
-                this.$message({
-                    type: 'info',
-                    message: '终止运量应不小于起始运量' 
-                })
-                return item[idx].endVolume = ''
+            }else{
+                console.log(item[idx].endVolume,item[idx].startVolume)
+                let flag = item[idx].endVolume < item[idx].startVolume ? true : false;
+                if(flag){
+                    console.log(flag)
+                    console.log(this.weigthPriceForms[idx].endVolume,this.weigthPriceForms[idx].startVolume)
+                    console.log(item[idx].endVolume,item[idx].startVolume)
+                    console.log('```````````````')
+                    this.$message({
+                        type: 'info',
+                        message: '终止运量应不小于起始运量' 
+                    })
+                    return item[idx].endVolume = ''
+                }
             }
         },
         regionChangeStart(d) {
             console.log('data:',d)
-            this.ruleForm.startLocation = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
             this.ruleForm.startProvince = d.province || '';
             this.ruleForm.startCity = d.city || '';
             this.ruleForm.startArea = d.area || '';
-
+            this.ruleForm.startLocation = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+            console.log(this.ruleForm.startLocation)
         },
         regionChangeEnd(d) {
             console.log('data:',d)
@@ -349,7 +355,7 @@ export default {
             this.ruleForm.endArea = d.area || '';
         },
         getValue(obj){
-        return obj ? obj.value:'';
+            return obj ? obj.value:'';
         },
         getInfo(pos, name, info) {
             // info.name  info.pos

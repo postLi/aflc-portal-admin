@@ -19,14 +19,14 @@
                                 <li>收货人：{{orderForm.consignee}}</li>
                             </ul>
                             <ul>
-                                <li>下单时间：{{parseTimeFunctions(orderForm.useTime)}} 
+                                <li>下单时间：{{orderForm.useTime | parseTime}} 
                                     <el-popover
                                     width="100%"
                                     trigger="hover"
                                     >
-                                    <p style="margin:5px;">提货时间：{{parseTimeFunctions(orderForm.pickUpGoodsTime)}}</p>
-                                    <p style="margin:5px;">发货时间：{{parseTimeFunctions(orderForm.deliveryTime)}}</p>
-                                    <p style="margin:5px;">收货时间：{{parseTimeFunctions(orderForm.receiveTime)}}</p>
+                                    <p style="margin:5px;">提货时间：{{orderForm.pickUpGoodsTime | parseTime}}</p>
+                                    <p style="margin:5px;">发货时间：{{orderForm.deliveryTime | parseTime}}</p>
+                                    <p style="margin:5px;">收货时间：{{orderForm.receiveTime | parseTime}}</p>
                                     <span slot="reference" class="reference" icon="el-icon-caret-bottom">更多<i icon="el-icon-caret-bottom"></i></span>
                                     </el-popover>
                                 </li>
@@ -43,9 +43,9 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="rate_content rate_info fl" style="margin-right:6%;">
+                    <div class="rate_content rate_info fl" style="margin-right:0.2%;">
                         <h2>我对货主的评价</h2>
-                        <div class="clearfix rate_info_content">
+                        <div class="clearfix rate_info_content" v-if="consignorSerial.goodsStarLevelScore">
                             <div class="clearfix rate_info_order ">
                                 <div>
                                     <div class="rateStar">
@@ -85,12 +85,12 @@
                                             </el-rate>
                                             <!-- <span class="des">{{consignorSerial.dockStarLevelDes}}</span> -->
                                         </p>
-                                        <p>
+                                        <p v-if="consignorSerial.evaluationDes">
                                             评价说明：<span>{{consignorSerial.evaluationDes}}</span>
                                         </p>
                                     </div>
                                 </div>
-                                <div class="rateReply" v-if="consignorSerial.replyDes">
+                                <div class="rateReply">
                                     <h4>货主对我的回复</h4>
                                     <div class="rateReply_info" v-if="consignorSerial.replyDes">
                                         <p>
@@ -99,16 +99,20 @@
                                         </p>
                                     </div>
                                     <div class="rateReply_info" v-else>
-                                        <p>货主暂未回复</p>
+                                         <img :src="defaultIMG" alt="">
+                                        <span>货主还未来得及回复哦，请您耐心等待！</span>
                                     </div>
                                 </div>
                             </div>
                              
                         </div>     
+                        <div v-else class="noReply">
+                            <img :src="defaultIMG" alt="">
+                        </div>
                     </div>
-                    <div class="rate_content rate_info fl">
+                    <div class="rate_content rate_info fl" >
                         <h2>货主对我的评价</h2>
-                        <div class="clearfix rate_info_content">
+                        <div class="clearfix rate_info_content" v-if="carrierSerial.serverPriceStarLevelScore">
                              <div class="clearfix rate_info_order ">
                                 <div>
                                     <div class="rateStar">
@@ -176,8 +180,11 @@
                                     </div>
                                 </div>
                             </div>
-                             
-                        </div>     
+                        </div>    
+                        <div class="noReply" v-else>
+                                <img :src="defaultIMG" alt="">
+                                <span>货主还未来得及对您评价哦！</span>
+                        </div> 
                     </div>
                 </div>
             </div>
@@ -205,13 +212,13 @@ export default {
             carrierSerial:{
 
             },
-            //我对货主的评价
+            //我对货主的评价s
             consignorSerial:{
 
             },
             orderForm:{},
             optionsReason:[],
-            parseTimeFunctions:null,
+            defaultIMG:'/static/null.png',
         };
     },  
     mounted(){
@@ -221,7 +228,6 @@ export default {
         firstblood(){
             let orderSerial = this.$route.query.orderSerial;
             this.UserInfo = getUserInfo();
-            this.parseTimeFunctions = parseTime;
             Promise.all([carrierSerial(orderSerial),consignorSerial(orderSerial),getDetailsByOrderSerial(orderSerial)]).then(resArr=> {
                 console.log('resArr',resArr)
                 this.carrierSerial = resArr[0].data || {};
@@ -243,138 +249,165 @@ export default {
 <style type="text/css" lang="scss">
     .rate{
         .rateInfomation{
-        margin:0 20px;
-        .rate_content{
-            padding-bottom: 30px;
-            background: #fff;
-            margin-bottom: 40px;
-            h2{
-                text-align: center;
-                font-size: 16px;
-                color: #333333;
-                line-height: 22px;
-                padding: 21px 0;
+            margin:0 20px;
+            .rate_content{
+                padding-bottom: 30px;
+                background: #fff;
+                margin-bottom: 5px;
+                h2{
+                    text-align: center;
+                    font-size: 16px;
+                    color: #333333;
+                    line-height: 22px;
+                    padding: 21px 0;
+                }
+                
             }
-            
-        }
-        .rate_info{
-            width:47%;
-            min-height: 430px;
-            h2{
-                border-bottom: 2px solid #ccc;
-                text-align: left;
-                text-indent: 67px;
-            }
-            .rate_info_content{
-                padding: 16px 67px;
-                .rate_info_order{
-                    box-sizing: border-box;
-                    h4{
-                        font-size: 16px;
-                        line-height: 20px;
-                        margin-bottom: 10px;
-                    }
-                    .rateStar{
-                        font-size: 14px;
-                        color: #666666;
-                        padding-left: 20px;
-                        p{
-                            margin:10px 0;
-                            .des{
-                                display: inline-block;
-                                margin-left: 10px;
-                                color: #ed001d;
-                            }
+            .rate_info{
+                width:49.9%;
+                min-height: 430px;
+                h2{
+                    border-bottom: 2px solid #ccc;
+                    text-align: left;
+                    text-indent: 67px;
+                }
+                .rate_info_content{
+                    padding: 16px 8% 16px 10%;
+                    .rate_info_order{
+                        box-sizing: border-box;
+                        h4{
+                            font-size: 16px;
+                            line-height: 20px;
+                            margin-bottom: 10px;
                         }
-                        .el-rate{
-                            display: inline-block;
-                            .el-rate__text{
-                                margin-left: 10px;
-                                color: #ed001d !important;
-                            }
-                        }
-                        p:last-child{
-                            margin-top: 20px;
-                            font-weight: bold;
-                            span{
-                                font-weight: normal;
-                            }
-                        }
-                    }
-                    .rateReply{
-                        margin-top: 20px;
-                        .rateReply_info{
+                        .rateStar{
+                            font-size: 14px;
+                            color: #666666;
                             padding-left: 20px;
                             p{
-                                font-size: 14px;
-                                line-height: 20px;
-                                color: #333333;
-                                span{
+                                margin:10px 0;
+                                .des{
                                     display: inline-block;
-                                    margin-top: 10px;
-                                    font-size: 12px;
-                                    color: #999999;
+                                    margin-left: 10px;
+                                    color: #ed001d;
                                 }
                             }
-
-                            .rateReply_input{
-                                position: relative;
-                                .el-textarea__inner{
-                                    padding-bottom: 18px;
-                                    font-size: 12px;
+                            .el-rate{
+                                display: inline-block;
+                                .el-rate__text{
+                                    margin-left: 10px;
+                                    color: #ed001d !important;
                                 }
+                            }
+                            p:last-child{
+                                margin-top: 20px;
+                                font-weight: bold;
+                                span{
+                                    font-weight: normal;
+                                }
+                            }
+                        }
+                        .rateReply{
+                            margin-top: 20px;
+                            .rateReply_info{
+                                padding-left: 20px;
                                 p{
-                                    font-size: 12px;
-                                    color: #999999;
-                                    position: absolute;
-                                    right: 15px;
-                                    bottom: 2px;
+                                    font-size: 14px;
+                                    line-height: 20px;
+                                    color: #333333;
                                     span{
-                                        color: #ed001d;
+                                        display: inline-block;
+                                        margin-top: 10px;
+                                        font-size: 12px;
+                                        color: #999999;
                                     }
                                 }
+
+                                .rateReply_input{
+                                    position: relative;
+                                    .el-textarea__inner{
+                                        padding-bottom: 18px;
+                                        font-size: 12px;
+                                    }
+                                    p{
+                                        font-size: 12px;
+                                        color: #999999;
+                                        position: absolute;
+                                        right: 15px;
+                                        bottom: 2px;
+                                        span{
+                                            color: #ed001d;
+                                        }
+                                    }
+                                }
+                                .el-button{
+                                    display: block;
+                                    margin: 0 auto;
+                                    margin-top: 40px;
+                                }
+
+                                img{
+                                    vertical-align: middle
+                                }
+
+                                span{
+                                    font-size: 16px;
+                                    color: #ccc;
+                                    vertical-align: middle
+                                }
                             }
-                            .el-button{
-                                display: block;
-                                margin: 0 auto;
-                                margin-top: 40px;
+                        }
+                    }
+                }
+                .noReply{
+                    padding: 110px 0 0 155px;
+                    img{
+                        display: inline-block;
+                        vertical-align: middle;
+                        width: 140px;
+                        height: 150px;
+                    }
+                    span{
+                        display: inline-block;
+                        vertical-align: middle;
+                        margin-left: 10px;
+                        font-size: 16px;
+                        color: #ccc;
+                    
+                    }
+                }
+            }
+            .rate_orderInfo{
+                h2{
+                    border-bottom: 1px solid #ccc;
+                    text-align: left;
+                    text-indent: 67px;
+                }
+                .orderInfo{
+                    display: flex;
+                    justify-content:space-between;
+                    padding: 20px 234px 60px;
+                    ul{
+                        li{
+                            font-size: 14px;
+                            line-height: 20px;
+                            color: #333333;
+                            margin-bottom: 10px;
+                            .reference{
+                                margin-left: 22px;
+                                color:#0e91e9;
+                                i{
+                                    margin-left: 3px;
+                                    display: inline-block;
+                                    width: 9px;
+                                    height: 9px;
+                                    background: url('../../../../assets/png/arrar.png') no-repeat center;
+                                }
                             }
                         }
                     }
                 }
             }
         }
-        .rate_orderInfo{
-            h2{
-                border-bottom: 1px solid #ccc;
-                text-align: left;
-                text-indent: 67px;
-            }
-            .orderInfo{
-                display: flex;
-                justify-content:space-between;
-                padding: 20px 234px 60px;
-                ul{
-                    li{
-                        font-size: 14px;
-                        line-height: 20px;
-                        color: #333333;
-                        margin-bottom: 10px;
-                        .reference{
-                            margin-left: 22px;
-                            color:#0e91e9;
-                            i{
-                                margin-left: 3px;
-                                display: inline-block;
-                                width: 9px;
-                                height: 9px;
-                                background: url('../../../../assets/png/arrar.png') no-repeat center;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
     }
 </style>

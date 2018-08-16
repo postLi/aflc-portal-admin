@@ -21,14 +21,14 @@
                                 <li>收货人：{{orderForm.consignee}}</li>
                             </ul>
                             <ul>
-                                <li>下单时间：{{parseTimeFunctions(orderForm.useTime)}} 
+                                <li>下单时间：{{orderForm.useTime | parseTime}} 
                                     <el-popover
                                     width="100%"
                                     trigger="hover"
                                     >
-                                    <p style="margin:5px;">提货时间：{{parseTimeFunctions(orderForm.pickUpGoodsTime)}}</p>
-                                    <p style="margin:5px;">发货时间：{{parseTimeFunctions(orderForm.deliveryTime)}}</p>
-                                    <p style="margin:5px;">收货时间：{{parseTimeFunctions(orderForm.receiveTime)}}</p>
+                                    <p style="margin:5px;">提货时间：{{orderForm.pickUpGoodsTime | parseTime}}</p>
+                                    <p style="margin:5px;">发货时间：{{orderForm.deliveryTime | parseTime}}</p>
+                                    <p style="margin:5px;">收货时间：{{orderForm.receiveTime | parseTime}}</p>
                                     <span slot="reference" class="reference" icon="el-icon-caret-bottom">更多<i icon="el-icon-caret-bottom"></i></span>
                                     </el-popover>
                                 </li>
@@ -151,8 +151,6 @@ export default {
             optionsReason:[],
             reply:'',//回复内容
             origin:'',//判断货主或者物流公司
-            parseTimeFunctions:null,
-
         };
     },  
     mounted(){ 
@@ -161,8 +159,6 @@ export default {
     methods: {
         firstblood(){
             let orderSerial = this.$route.query.orderSerial;
-            this.parseTimeFunctions = parseTime;
-
             if(this.$route.query.type){
                 this.origin = this.$route.query.type;
             }
