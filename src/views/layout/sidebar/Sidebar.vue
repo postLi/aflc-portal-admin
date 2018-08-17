@@ -8,13 +8,10 @@
       <!-- <sidebar-item ref="sidebaritem" :routes='sidebarRouters'></sidebar-item> -->
       <el-menu
         class="el-menu-vertical-demo"
-        @open="handleOpen"
-        @close="handleClose"
+        :default-active="$route.path"
         router
         unique-opened
-        background-color="#545c64"
-        text-color="#fff"
-        active-text-color="#ffd04b">
+        text-color="#fff">
         <template v-if="!item.hidden" v-for="(item,index) in sidebarRouters">
           <el-menu-item :key="index" v-if="!item.children" :index="item.path">
             <icon-svg v-if='item.icon' :icon-class="item.icon" /> 
@@ -115,6 +112,14 @@ export default {
 
   .el-submenu .el-menu-item{
     min-width: 100%;
+  }
+
+  .is-active,.el-menu-item:focus, .el-menu-item:hover,.el-submenu__title:hover{
+    background: #00c1de;
+    color: #fff;
+  }
+  .el-submenu.is-active{
+    background: transparent;
   }
 
   .sidebar-userinfo{
