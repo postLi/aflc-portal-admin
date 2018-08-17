@@ -130,6 +130,10 @@ export default {
     margin-bottom: 0;
     
 }
+.el-form-item{
+  display: block !important;
+  margin-bottom: 15px !important;
+}
 .el-form  .information{
     margin-bottom: 0;
     margin-left: 0;

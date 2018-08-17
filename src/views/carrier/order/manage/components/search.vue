@@ -2,7 +2,7 @@
   <el-form label-width="140px" :inline="true" :size="btnsize" label-position="right" :model="searchForm"  class="orderlist-search staff_searchinfo clearfix">
      <div class="search_warrper">
         <el-form-item label="订单号/商品名称：">
-            <el-input v-model="searchForm.orderSerialOrGoodsName" maxlength="20" auto-complete="off"></el-input>
+            <el-input v-model="searchForm.orderSerialOrGoodsName" :maxlength="50" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item v-if="isall" label="订单状态：">
           <select-type v-model="searchForm.orderStatus" type="AF037" >
@@ -10,22 +10,22 @@
           
         </el-form-item>
         <el-form-item label="出发地：">
-            <el-input v-model="searchForm.startAddress" maxlength="20" auto-complete="off"></el-input>
+            <el-input v-model="searchForm.startAddress" :maxlength="50" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="到达地：">
-            <el-input v-model="searchForm.endAddress" maxlength="20" auto-complete="off"></el-input>
+            <el-input v-model="searchForm.endAddress" :maxlength="50" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="发货人：">
-            <el-input v-model="searchForm.consignee" maxlength="20" auto-complete="off"></el-input>
+            <el-input v-model="searchForm.consignee" :maxlength="50" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="发货人手机：">
-            <el-input v-model="searchForm.consigneePhone" maxlength="20" auto-complete="off"></el-input>
+            <el-input v-model="searchForm.consigneePhone" :maxlength="50" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="收货人：">
-            <el-input v-model="searchForm.consignor" maxlength="20" auto-complete="off"></el-input>
+            <el-input v-model="searchForm.consignor" :maxlength="50" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="收货人手机：">
-            <el-input v-model="searchForm.shiconsignorPhonepSn" maxlength="20" auto-complete="off"></el-input>
+            <el-input v-model="searchForm.shiconsignorPhonepSn" :maxlength="50" auto-complete="off"></el-input>
         </el-form-item>
       </div>
       <el-form-item class="staff_searchinfo--btn">

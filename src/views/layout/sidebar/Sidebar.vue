@@ -10,6 +10,9 @@
         class="el-menu-vertical-demo"
         :default-active="$route.path"
         router
+        ref="sidebarmenu"
+        @open="setLastPath"
+        @select="getCurrentPath"
         unique-opened
         text-color="#fff">
         <template v-if="!item.hidden" v-for="(item,index) in sidebarRouters">
@@ -63,10 +66,26 @@ export default {
       'permission_routers'
     ])
   },
+  watch: {
+    '$route.path'(newVal, oldVal) {
+
+    }
+  },
   mounted() {
-    console.log('1111111:', this.sidebarRouters)
+
   },
   methods: {
+    setLastPath(index) {
+      console.log('setLastPath:', index)
+    },
+    getCurrentPath(index, path) {
+      if (this.lastindex) {
+         // 关闭前一个展开的
+        this.$refs['sidebarmenu'].close(this.lastindex)
+      }
+      this.lastindex = path[0]
+      console.log('getCurrentPath:', index, path)
+    },
     toggleSideBar() {
       this.$store.dispatch('ToggleSideBar')
     },
@@ -161,6 +180,12 @@ export default {
   }
 }
 .nologin{
+  position: fixed;
+  width: 190px;
+  height: 150px;
+  background: #42485B;
+  left: 0;
+  bottom: 0;
   margin-top: 10px;
   text-align: center;
   .el-button{
