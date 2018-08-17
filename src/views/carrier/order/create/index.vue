@@ -525,7 +525,6 @@ export default {
     },
     // 从专线页面下单
     initZX() {
-      const query = this.$route.query
       // 获取网点相关的信息
       this.getCompany({
         id: this.cid
@@ -533,13 +532,17 @@ export default {
       this.cargoList = [Object.assign({ isget: false }, this.cargoInfo)]
       this.ruleForm.shipperId = this.otherinfo.id
       this.ruleForm.memberType = this.otherinfo.rolesIdList[0]
-      // 设置各个参数
-      this.aflcOrderAddressWebDtoList[0].provinceCityArea = query.start
-      this.aflcOrderAddressWebDtoList[1].provinceCityArea = query.end
-      this.aflcOrderAddressWebDtoList[0].contacts = query.startLocationContacts
-      this.aflcOrderAddressWebDtoList[0].contactsPhone = query.startLocationContactsMobile
-      this.aflcOrderAddressWebDtoList[1].contacts = query.endLocationContacts
-      this.aflcOrderAddressWebDtoList[1].contactsPhone = query.endLocationContactsMobile
+      ReqApiManage.getLineInfo(this.cid).then(data => {
+        // 设置各个参数
+        this.aflcOrderAddressWebDtoList[0].provinceCityArea = data.startLocation
+        this.aflcOrderAddressWebDtoList[1].provinceCityArea = data.endLocation
+        this.aflcOrderAddressWebDtoList[0].contacts = data.startLocationContacts
+        this.aflcOrderAddressWebDtoList[0].contactsPhone = data.startLocationContactsMobile
+        this.aflcOrderAddressWebDtoList[1].contacts = data.endLocationContacts
+        this.aflcOrderAddressWebDtoList[1].contactsPhone = data.endLocationContactsMobile
+      }).then(err => {
+        this.$message.error('查询出错：' + (err.errorInfo || err.text || '未知错误'))
+      })
     },
     // 从首页下单
     initSY() {

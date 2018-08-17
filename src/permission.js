@@ -71,10 +71,12 @@ router.beforeEach((to, from, next) => {
           })
         }).catch(() => {
           removeToken()
-          next({ path: '/login', query: {
+          // 跳转到登录页
+          location.href = 'http://192.168.1.170/member/index_do.php?fmdo=login&dopost=exit&nexturl=../member/login.php'
+          /* next({ path: '/login', query: {
             // 删除settoken，避免重复循环
             tourl: to.fullPath.replace(/([&|?])(settoken=[^&]*&?)/, '$1')
-          }})
+          }}) */
         })
       } else {
         const title = to.meta.title || to.name || ''

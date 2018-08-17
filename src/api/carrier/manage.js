@@ -204,3 +204,12 @@ export function getAllOrder(data) {
     return res.data || { list: [], total: 0 }
   })
 }
+/**
+ * 根据Id获取物流专线
+ * @param {*} id 专线id
+ */
+export function getLineInfo(id) {
+  return fetch.get('/aflcusercenterservice/usercenter/aflcTransportRange/v1/findMemberAflcTransportRange/' + id).then(res => {
+    return res.data || {}
+  })
+}
