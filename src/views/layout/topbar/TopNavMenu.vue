@@ -43,19 +43,18 @@ export default {
     return {
       current: '',
       prevPath: '',
-      LoginInfo:'',
-      carrierHref:''
+      LoginInfo: '',
+      carrierHref: ''
     }
   },
   watch: {
     $route() {
-        this.setNavHightlight();
+      this.setNavHightlight()
         this.getLoginInfo()
-
     }
   },
   mounted() {
-    this.setNavHightlight();
+    this.setNavHightlight()
     this.getLoginInfo()
   },
   methods: {
@@ -70,12 +69,12 @@ export default {
       this.current = current.path
       if (this.prevPath !== this.current) {
         this.prevPath = this.current
-        //this.$store.dispatch('GenerateSidebarRoutes', current.name)
+        // this.$store.dispatch('GenerateSidebarRoutes', current.name)
       }
     },
-    getLoginInfo(){
-        this.LoginInfo = getLogin();
-        this.carrierHref = 'http://192.168.1.170/member/index.php?uid='+ this.LoginInfo.mobile;
+    getLoginInfo() {
+      this.LoginInfo = getLogin()
+        this.carrierHref = 'http://192.168.1.170/member/index.php?uid=' + this.LoginInfo.mobile
         console.log(this.LoginInfo)
     }
   }
@@ -90,7 +89,7 @@ export default {
       border-bottom: none;
     }
     .el-menu{
-      background: #373d41;
+      background: rgb(0,32,57);
     }
   }
  .page-top-nav .el-menu-item{

@@ -7,14 +7,14 @@
       <!-- <SidebarMenuSearch :searchItem="sidebarRouters" /> -->
       <!-- <sidebar-item ref="sidebaritem" :routes='sidebarRouters'></sidebar-item> -->
       <el-menu
-        class="el-menu-vertical-demo"
+        class="el-menu-vertical-sidebar"
         :default-active="$route.path"
         router
         ref="sidebarmenu"
         @open="setLastPath"
         @select="getCurrentPath"
         unique-opened
-        text-color="#fff">
+        text-color="rgba(255,255,255,0.65)">
         <template v-if="!item.hidden" v-for="(item,index) in sidebarRouters">
           <el-menu-item :key="index" v-if="!item.children" :index="item.path">
             <icon-svg v-if='item.icon' :icon-class="item.icon" /> 
@@ -27,7 +27,7 @@
             </template>
             <template v-if="!item2.hidden" v-for="(item2,index2) in item.children">
               <el-menu-item :key="index2" v-if="!item2.children" :index="item2.path">
-                <icon-svg v-if='item2.icon' :icon-class="item2.icon" /> 
+                <!-- <icon-svg v-if='item2.icon' :icon-class="item2.icon" />  -->
                 <span slot="title">{{item2.meta.title}}</span>
               </el-menu-item>
               <el-submenu v-else :key="index2" :index="item2.path">
@@ -120,21 +120,34 @@ export default {
 .sidebar-container{
   min-height: 100%;
   padding-top: 0px;
-  background: #42485B;
+  background: rgb(0,32,57);
   border-radius: 0;
   padding-bottom: 146px;
 
   .el-menu{
     border-right: 0;
-    background: #333744;
+    background: rgb(0,32,57);
   }
 
   .el-submenu .el-menu-item{
     min-width: 100%;
   }
 
+  .el-submenu .el-menu{
+    background: #00152a;
+  }
+
+  .el-submenu.is-opened .el-submenu__title{
+    box-shadow: 0px 4px 4px 0px 
+		rgba(0, 0, 0, 0.5);
+
+    span{
+      color: #fff;
+    }
+  }
+
   .is-active,.el-menu-item:focus, .el-menu-item:hover,.el-submenu__title:hover{
-    background: #00c1de;
+    background: #000b17;
     color: #fff;
   }
   .el-submenu.is-active{
@@ -183,14 +196,28 @@ export default {
   position: fixed;
   width: 190px;
   height: 150px;
-  background: #42485B;
+  background: rgb(0,32,57);
   left: 0;
   bottom: 0;
   margin-top: 10px;
   text-align: center;
   .el-button{
-    width: 150px;
-    margin-bottom: 10px;
+    width: 190px;
+    height: 50px;
+    background-color: rgb(0,32,56);
+    border: 4px solid #000;
+    border-top-color: rgb(5,55,93);
+    border-right-color: rgb(5,55,93);
+    border-left-color: rgb(5,21,39);
+    border-bottom-color: rgb(5,21,39);
+    opacity: 0.65;
+    border-radius: 0;
+    font-size: 16px;
+    color: rgba(255,255,255,.65);
+
+    &:hover{
+      opacity: 1;
+    }
   }
 }
 

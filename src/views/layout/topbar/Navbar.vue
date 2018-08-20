@@ -35,7 +35,7 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
 @import "src/styles/variate.scss";
     .navbar {
-        background: #373d41;
+        background: rgb(0,32,57);
         border-radius: 0;
         min-width: 1200px;
         width: 100%;
