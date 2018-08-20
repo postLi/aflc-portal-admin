@@ -22,7 +22,7 @@
           </el-menu-item>
           <el-submenu v-else :key="index" :index="item.path">
             <template slot="title">
-              <icon-svg v-if='item.icon' :icon-class="item.icon" /> 
+              <icon-svg v-if='item.icon' :icon-class="item.icon" />
               <span>{{item.meta.title}}</span>
             </template>
             <template v-if="!item2.hidden" v-for="(item2,index2) in item.children">

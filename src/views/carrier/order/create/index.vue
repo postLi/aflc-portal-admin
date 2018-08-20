@@ -412,6 +412,7 @@ export default {
         'orderClass': '', // 货源类型(0单次急发货源1长期稳定货源)
         'title': '', // 标题
         'totalAmount': 0, // 总价格
+        transportRangePublishId: '',
         'wlId': '', // 专线id
         'wlName': '', // 物流公司名称
         'orderFrom': 'AF0040002', // 订单来源(APP端:AF0040001;WEB端:AF0040002;微信公众号:AF0040003;小程序:AF004004)
@@ -767,6 +768,7 @@ export default {
 
       // 获取价格前初始化下数据
       this.ruleForm.wlId = ''
+      this.ruleForm.transportRangePublishId = ''
       this.ruleForm.wlName = ''
       this.ruleForm.forecastPrice = 0
       this.ruleForm.goodsType = ''
@@ -785,6 +787,7 @@ export default {
         const data = this.wlbestlist[$index]
         this.ruleForm.startPointId = data[0] ? data[0].id : ''
         this.ruleForm.endPointId = data[1] ? data[1].id : ''
+        this.ruleForm.transportRangePublishId = obj[0] ? obj[0].companyId : ''
       }
 
       if (cargolist.length && transportRangeId) {
