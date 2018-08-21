@@ -533,14 +533,16 @@ export default {
       this.cargoList = [Object.assign({ isget: false }, this.cargoInfo)]
       this.ruleForm.shipperId = this.otherinfo.id
       this.ruleForm.memberType = this.otherinfo.rolesIdList[0]
+      this.aflcOrderAddressWebDtoList[0].contacts = this.otherinfo.contactsName
+      this.aflcOrderAddressWebDtoList[0].contactsPhone = this.otherinfo.mobile
       ReqApiManage.getLineInfo(this.cid).then(data => {
         // 设置各个参数
         this.aflcOrderAddressWebDtoList[0].provinceCityArea = data.startLocation
         this.aflcOrderAddressWebDtoList[1].provinceCityArea = data.endLocation
-        this.aflcOrderAddressWebDtoList[0].contacts = data.startLocationContacts
+        /* this.aflcOrderAddressWebDtoList[0].contacts = data.startLocationContacts
         this.aflcOrderAddressWebDtoList[0].contactsPhone = data.startLocationContactsMobile
         this.aflcOrderAddressWebDtoList[1].contacts = data.endLocationContacts
-        this.aflcOrderAddressWebDtoList[1].contactsPhone = data.endLocationContactsMobile
+        this.aflcOrderAddressWebDtoList[1].contactsPhone = data.endLocationContactsMobile */
       }).then(err => {
         this.$message.error('查询出错：' + (err.errorInfo || err.text || '未知错误'))
       })
