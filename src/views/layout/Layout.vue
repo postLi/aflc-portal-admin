@@ -176,7 +176,7 @@ export default {
             height: $topNavHeight;
             line-height: $topNavHeight;
             border-radius: 0px !important;
-            background: #373d41;
+            background: rgb(0,32,57);
             min-width: 1200px;
         }
     }
