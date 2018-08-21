@@ -13,34 +13,38 @@
             <h2>基本信息</h2>
             <el-form-item label="出发地：" prop="startLocation">
                 <!-- <el-input @focus="()=>{showMap('strartAddress')}"  v-model="ruleForm.startLocation"></el-input> -->
-                <vregion :ui="true" @values="regionChangeStart" class="form-control">
+                <el-input v-model="ruleForm.startLocation" v-if="unable" :disabled="unable"></el-input>
+
+                <vregion :ui="true" @values="regionChangeStart" class="form-control" v-else>
                     <el-input v-model="ruleForm.startLocation" placeholder="请选择出发地"></el-input>
                 </vregion>
             </el-form-item>
             <el-form-item label="联系人：" prop="startLocationContacts" label-width="150px">
-                <el-input v-model="ruleForm.startLocationContacts"></el-input>
+                <el-input v-model="ruleForm.startLocationContacts" :disabled="unable"></el-input>
             </el-form-item>
             <el-form-item label="联系电话：" prop="startLocationContactsMobile" label-width="150px">
-                <el-input v-model="ruleForm.startLocationContactsMobile" v-numberOnly maxlength="11"></el-input>
+                <el-input v-model="ruleForm.startLocationContactsMobile" :disabled="unable" v-numberOnly maxlength="11"></el-input>
             </el-form-item><br>
             <el-form-item label="到达地：" prop="endLocation">
                 <!-- <el-input @focus="()=>{showMap('endAddress')}" v-model="ruleForm.endLocation"></el-input> -->
-                <vregion :ui="true" @values="regionChangeEnd" class="form-control">
+                <el-input v-model="ruleForm.endLocation" v-if="unable" :disabled="unable"></el-input>
+
+                <vregion :ui="true" @values="regionChangeEnd" class="form-control" v-else>
                     <el-input v-model="ruleForm.endLocation"  placeholder="请选择到达地"></el-input>
                 </vregion>
             </el-form-item>
             <el-form-item label="联系人：" prop="endLocationContacts" label-width="150px">
-                <el-input v-model="ruleForm.endLocationContacts"></el-input>
+                <el-input v-model="ruleForm.endLocationContacts" :disabled="unable"></el-input>
             </el-form-item>
             <el-form-item label="联系电话：" prop="endLocationContactsMobile" label-width="150px">
-                <el-input v-model="ruleForm.endLocationContactsMobile" v-numberOnly maxlength="11"></el-input>
+                <el-input v-model="ruleForm.endLocationContactsMobile" :disabled="unable" v-numberOnly maxlength="11"></el-input>
             </el-form-item>
         </div>
         <div class="information priceTime">
             <h2>价格时效</h2>
             <el-form-item label="运输时效：">
-                <el-input v-model="ruleForm.transportAging" @keyup.native='handlerChoose' ></el-input>
-                <el-radio-group v-model="ruleForm.transportAgingUnit">
+                <el-input v-model="ruleForm.transportAging" :disabled="unable" @keyup.native='handlerChoose' ></el-input>
+                <el-radio-group v-model="ruleForm.transportAgingUnit" :disabled="unable">
                     <el-radio label="天"></el-radio>
                     <el-radio label="小时"></el-radio>
                     <el-radio label="多天"></el-radio>
@@ -49,14 +53,14 @@
             </el-form-item>
 
             <el-form-item label="发车频率：">
-                <el-input placeholder="请输入内容" v-model="ruleForm.departureHzData">
+                <el-input placeholder="请输入" v-numberOnly v-model="ruleForm.departureHzData" :disabled="unable">
                     <template slot="append">天</template>
                 </el-input>
-                <el-input placeholder="请输入内容" v-model="ruleForm.departureHzTime">
+                <el-input placeholder="请输入" v-numberOnly v-model="ruleForm.departureHzTime" :disabled="unable">
                     <template slot="append">次</template>
                 </el-input>
             </el-form-item>
-            <el-form-item label="重货价格：">
+            <el-form-item label="重货价格：" prop="weigthPriceForms">
                 <p>(阶梯价格最大值不填，代表无穷大，例如：500-，代表500公斤以上)</p>
                 <div class="goodsPriceChoose">
                     <p>
@@ -66,17 +70,17 @@
                     </p>
                     <ul v-for="(form,keys) in weigthPriceForms" :key="keys">
                         <li>
-                            <el-input v-model="form.startVolume" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
+                            <el-input v-model.number="form.startVolume" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
                             <span>----</span>
-                            <el-input v-model="form.endVolume"  placeholder="不包含" maxlength="7" @change="ifWrong(weigthPriceForms,keys)"></el-input>
+                            <el-input v-model.number="form.endVolume" :disabled="unable" placeholder="不包含" maxlength="7" @change="ifWrong(weigthPriceForms,keys)"></el-input>
                             公斤
                         </li>
                         <li>
-                            <el-input v-model="form.primeryPrice" v-number-only:point maxlength="7"></el-input>
+                            <el-input v-model="form.primeryPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input>
                             元/公斤
                         </li>
                         <li>
-                            <el-input v-model="form.discountPrice"  v-number-only:point maxlength="7"></el-input>
+                            <el-input v-model="form.discountPrice" :disabled="unable"  v-number-only:point maxlength="7"></el-input>
                             元/公斤
                         </li>
                         <li class="buttons">
@@ -99,17 +103,17 @@
                     </p>
                     <ul v-for="(form,keys) in ligthPriceForms" :key="keys">
                         <li>
-                            <el-input v-model="form.startVolume" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
+                            <el-input v-model.number="form.startVolume" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
                             <span>----</span>
-                            <el-input v-model="form.endVolume" v-numberOnly placeholder="不包含"  maxlength="7" @change="ifWrong(ligthPriceForms,keys)"></el-input>
+                            <el-input v-model.number="form.endVolume" :disabled="unable" v-numberOnly placeholder="不包含"  maxlength="7" @change="ifWrong(ligthPriceForms,keys)"></el-input>
                             立方
                         </li>
                         <li>
-                            <el-input v-model="form.primeryPrice" v-number-only:point maxlength="7"></el-input>
+                            <el-input v-model="form.primeryPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input>
                             元/立方
                         </li>
                         <li>
-                            <el-input v-model="form.discountPrice" v-number-only:point maxlength="7"></el-input>
+                            <el-input v-model="form.discountPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input>
                             元/立方
                         </li>
                         <li class="buttons">
@@ -123,16 +127,16 @@
             </el-form-item>
 
             <el-form-item label="最低一票价格：">
-                <el-input v-model="ruleForm.lowerPrice" placeholder="报价" v-number-only:point></el-input> 元
+                <el-input v-model="ruleForm.lowerPrice" placeholder="报价" :disabled="unable" v-number-only:point></el-input> 元
             </el-form-item>
             <el-form-item label="专线类型：" prop="rangeType" v-if="ifShowRangeType != '0'">
-                <el-radio-group v-model="ruleForm.rangeType">
+                <el-radio-group v-model="ruleForm.rangeType" :disabled="unable">
                      <el-radio v-for="range in rangeTypeClassfy" :label="range.code" :key="range.id">{{range.name}}</el-radio>
                 </el-radio-group>
             </el-form-item> 
             <el-form-item label="发车时间："  class="departureTime">
                 <div>
-                    <el-select v-model="ruleForm.departureTimeCode" clearable placeholder="请选择发车时间">
+                    <el-select v-model="ruleForm.departureTimeCode" :disabled="unable" clearable placeholder="请选择发车时间">
                         <el-option v-for="time in departClassfy" 
                         :key="time.id"
                         :label="time.name"
@@ -143,6 +147,7 @@
             </el-form-item>
             <el-form-item label="线路说明：" class="textarea" prop="transportRemark" >
                 <el-input type="textarea" 
+                    :disabled="unable"
                     v-model="ruleForm.transportRemark" 
                     :autosize="{ minRows: 3, maxRows: 10}"
                     :maxlength="maxlength" 
@@ -152,7 +157,10 @@
                 <p class="supplement">请对您的线路进行补充说明，尽量使用市场上或物流行业内的常用词。</p>
             </el-form-item>
             <el-form-item label="专线照片：">
-                <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" :limit="3" listtype="picture-card" :showFileList = 'true' v-model="ruleForm.rangeLogo"/>
+                <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" :disabled="unable" :limit="3" listtype="picture-card" :showFileList = 'true' v-model="ruleForm.rangeLogo"/>
+                <!-- <div v-for="">
+
+                </div> -->
             </el-form-item> 
         </div>
         <el-form-item class="fromfooter" v-show="ifShowRangeType != 2">
@@ -200,7 +208,22 @@ export default {
                 callback();
             }
         };
+
+        var checkWeigthPriceForms = (rule,value,callback) => {
+            this.weigthPriceForms.forEach(el => {
+                if(el.endVolume === ''){
+                    callback(new Error('请补充重货运量'));
+                }else if(el.primeryPrice === ''){
+                    console.log('123')
+                    callback(new Error('请补充重货价格区间'));
+                }
+                else{
+                    callback();
+                }
+            })
+        }
         return {
+            unable:false,
             btnText: '请选择',
             current:'',
             popVisible:false,
@@ -282,32 +305,15 @@ export default {
                 ],
                 transportRemark:[
                     { min: 30, max: 2000, message: '专线说明请在30-2000字', trigger: 'blur' }
+                ],
+                weigthPriceForms:[
+                    { required:true,validator: checkWeigthPriceForms, trigger: 'blur'},
                 ]
             }
         }
     },
     watch:{
-        // 'ruleForm.rangeType':{
-        //     handler(val, oldVal){
-        //         console.log('`````rangeType`````')
-        //         console.log(val)
-        //         if(val && this.ifShowRangeType != '2'){
-        //             this.ruleForm.rangeTypeName = this.rangeTypeClassfy.find(item => item.code == val)['name'];
-        //         }
-        //         console.log(this.ruleForm.rangeTypeName)
-        //     },
-        //     deep:true
-        // },
-        // 'ruleForm.departureTimeCode':{
-        //     handler(val, oldVal){
-        //         console.log('`````departureTimeCode`````')
-        //         console.log(val)
-        //         // if(val && this.ifShowRangeType != '2'){
-        //         //     this.ruleForm.departureTime = this.departClassfy.find(item => item.code == val)['name'];
-        //         // }
-        //     },
-        //     deep:true
-        // },
+       
     },
     mounted(){
         this.getInformations();
@@ -315,8 +321,17 @@ export default {
     },
     methods:{
         ifWrong(item,idx){
-            console.log('ifwrong',item,idx)
-            if(item.length > (idx+1)){
+            // console.log('ifwrong',item,idx)
+            let flag = item[idx].endVolume < item[idx].startVolume ? true : false;
+            if(flag){
+                this.$message({
+                    type: 'info',
+                    message: '终止运量应不小于起始运量' 
+                })
+                return item[idx].endVolume = ''
+            }
+            else if(item.length > (idx+1)){
+                // console.log('````')
                 // console.log(item[idx].endVolume,item[idx+1].startVolume)
                 item[idx+1].startVolume = item[idx].endVolume ;
                 if(item[idx+1].endVolume){
@@ -325,22 +340,8 @@ export default {
                             type: 'info',
                             message: '终止运量应不小于起始运量' 
                         })
-                        return item[idx+1].endVolume = ''
+                        return item.splice(idx+1);
                     }
-                }
-            }else{
-                console.log(item[idx].endVolume,item[idx].startVolume)
-                let flag = item[idx].endVolume < item[idx].startVolume ? true : false;
-                if(flag){
-                    console.log(flag)
-                    console.log(this.weigthPriceForms[idx].endVolume,this.weigthPriceForms[idx].startVolume)
-                    console.log(item[idx].endVolume,item[idx].startVolume)
-                    console.log('```````````````')
-                    this.$message({
-                        type: 'info',
-                        message: '终止运量应不小于起始运量' 
-                    })
-                    return item[idx].endVolume = ''
                 }
             }
         },
@@ -380,16 +381,20 @@ export default {
         // },
         getParams(){
             if(this.$route.query.data){
-                this.ifShowRangeType = this.$route.query.ifrevise;
+                this.ifShowRangeType = this.$route.query.ifrevise;//1是修改，2是详情
+                if(this.ifShowRangeType == 2){
+                    this.unable = true;
+                }
+                
                 let dataObj = this.$route.query.data;//接收数据
                 this.ligthPriceForms = dataObj.lightcargo;
                 this.weigthPriceForms = dataObj.weightcargo;
                 TransportRangeInfo(dataObj.id).then(res=>{
                     this.ruleForm = res.data;
                 })
-
             }
         },
+        //判断和限制
         handlerChoose(){
             let type = this.ruleForm.transportAgingUnit;
             let transportAging = this.ruleForm.transportAging;
@@ -398,7 +403,7 @@ export default {
                 transportAging = transportAging.replace(/^\./g,""); //验证第一个字符是数字
                 transportAging = transportAging.replace(/\.{2,}/g,"."); //只保留第一个, 清除多余的
                 transportAging = transportAging.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
-                transportAging = transportAging.replace(/^(\-)*(\d+)\.(\d).*$/,'$1$2.$3'); //只能输入两个小数
+                transportAging = transportAging.replace(/^(\-)*(\d+)\.(\d).*$/,'$1$2.$3'); //只能输入一位小数
                 this.ruleForm.transportAging = transportAging ; 
             }else{
                 transportAging = transportAging.replace(/[^0-9\-]+/g,"");
@@ -420,7 +425,14 @@ export default {
             switch(type){
                 case 'weight':
                 console.log(item.primeryPrice)
-                    if(item.primeryPrice == ''){
+
+                    if(item.primeryPrice == 'endVolume'){
+                        return this.$message({
+                            type: 'info',
+                            message: '请补充重货价格区间' 
+                        })
+                    }
+                    else if(item.primeryPrice == ''){
                         return this.$message({
                             type: 'info',
                             message: '请补充重货原报价' 
@@ -436,7 +448,13 @@ export default {
                     }
                     break;
                 case 'light':
-                    if(item.primeryPrice == ''){
+                    if(item.primeryPrice == 'endVolume'){
+                        return this.$message({
+                            type: 'info',
+                            message: '请补充重货价格区间' 
+                        })
+                    }
+                    else if(item.primeryPrice == ''){
                          return this.$message({
                             type: 'info',
                             message: '请补充轻货原报价' 
@@ -483,6 +501,8 @@ export default {
             if(this.ruleForm.departureTimeCode){
                 this.ruleForm.departureTime = this.departClassfy.find(item => item.code == this.ruleForm.departureTimeCode)['name'];
             }
+            
+
 
         },
         //提交按钮
@@ -568,7 +588,7 @@ export default {
                 .el-form-item:nth-child(3){
                     .el-form-item__content{
                         .el-input{
-                            width: 122px;
+                            width:130px;
                             .el-input-group__append{
                                 background-color: #f5f7fa;
                                 color: #909399;

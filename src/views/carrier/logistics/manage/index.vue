@@ -25,12 +25,13 @@
                 <div class="created">
                     <el-button type="primary" @click="handleNew">发布专线</el-button>  
                 </div>
-                <div class="tableStyle">
+                <div class="tableStyle" style="height:92%">
                     <el-table
                     :data="tableData"
                     ref="multipleTable"
                     stripe
                     border
+                    height="100%"
                     style="width: 100%">
                         <el-table-column
                             fixed
@@ -269,6 +270,7 @@ export default {
                 height: 76%;
             }
             .tableStyle{
+                height: 80%;
                 .cargo{
                     text-align: left;
                     text-indent: 20px;

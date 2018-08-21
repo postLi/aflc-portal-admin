@@ -40,11 +40,12 @@
                 <div class="created">
                     <el-button type="primary" @click="handleNew">发布网点</el-button>  
                 </div>
-                <div style="height:100%">
+                <div style="height:92%">
                     <el-table
                     :data="tableData"
                     ref="multipleTable"
                     stripe
+                    height="100%"
                     border
                     style="width: 100%">
                         <el-table-column
@@ -55,9 +56,11 @@
                         </el-table-column>
                         <el-table-column
                             fixed
-                            prop="pointName"
                             label="网点名称"
                             width="180">
+                             <template slot-scope="scope">
+                               <span class="moreInfo" @click="handleInfo(scope.row)">{{scope.row.pointName}}</span>
+                            </template>
                         </el-table-column>
                         <el-table-column
                             prop="address"
@@ -167,9 +170,12 @@ export default {
             this.$router.push({name: '发布我的网点'});
         },
         //修改
-        handleEdit(row) {
+        handleEdit(row) {   
             console.log(row);
-            this.$router.push({name: '发布我的网点',params:{ data:row}});
+            this.$router.push({name: '发布我的网点',query:{ data:row}});
+        },
+        handleInfo(row){
+            this.$router.push({name: '发布我的网点',query:{ data:row , type:'check'}});
         },
         //删除网点
         handleDelete(row) {
@@ -242,6 +248,11 @@ export default {
                         color: #fff
                     }
                 }
+            }
+            .moreInfo{
+                cursor: pointer;
+                display: inline-block;
+                color: #169BD5;
             }
         }
     }

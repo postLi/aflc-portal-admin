@@ -26,7 +26,7 @@
             </div>
             <!-- <div class="information">
             </div> -->
-            <div class="information informationTable">
+            <div class="information informationTable" style="height:76%;">
                 <div class="tableStyle">
                     <el-table
                     :data="tableData"
@@ -46,11 +46,11 @@
                             label="出发地"
                             width="250">
                             <template slot-scope="scope">
-                               <span>{{scope.row.startAddress}}</span>
+                               <span>{{scope.row.startProvinceCityArea}}</span>
                             </template>
                         </el-table-column>
                         <el-table-column
-                            prop="endAddress"
+                            prop="endProvinceCityArea"
                             label="到达地"
                             width="250">
                         </el-table-column>

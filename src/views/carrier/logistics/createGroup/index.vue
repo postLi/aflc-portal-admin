@@ -12,36 +12,37 @@
             <div class="companyInformation information">
                 <h2>基本信息</h2>
                 <el-form-item label="网点名称" prop="pointName">
-                    <el-input v-model="logisticsForm.pointName">
+                    <el-input v-model="logisticsForm.pointName" :disabled="unable">
                         <p slot="append">请填写网点名称</p>
                     </el-input>
                 </el-form-item>
                 <el-form-item label="网点地址：">
-                    <el-input @focus="()=>{showMap('strartAddress')}" v-model="logisticsForm.address"></el-input>
+                    <el-input @focus="()=>{showMap('strartAddress')}" v-model="logisticsForm.address" :disabled="unable"></el-input>
                 </el-form-item>
                 <el-form-item label="联系人：" maxlength="18"  prop="name">
-                    <el-input v-model="logisticsForm.name">
+                    <el-input v-model="logisticsForm.name" :disabled="unable">
                     </el-input>
                 </el-form-item>
                 <el-form-item label="手机：" prop="mobile">
-                    <el-input v-model="logisticsForm.mobile" maxlength="11" v-numberOnly>
+                    <el-input v-model="logisticsForm.mobile" maxlength="11" v-numberOnly :disabled="unable">
                     </el-input>
                 </el-form-item>
                 <el-form-item label="固话：">
-                     <el-input v-model="logisticsForm.telNum" maxlength="11" v-numberOnly>
+                     <el-input v-model="logisticsForm.telNum" maxlength="11" v-numberOnly :disabled="unable">
                     </el-input>
                 </el-form-item>
                 <el-form-item label="QQ：" >
-                     <el-input v-model="logisticsForm.contactQq" v-numberOnly>
+                     <el-input v-model="logisticsForm.contactQq" v-numberOnly :disabled="unable">
                             <p slot="append">填写QQ，方便物流公司联系您</p>
                     </el-input>
                 </el-form-item>
                 <el-form-item label="网点LOGO：">
-                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.pointFile" />
+                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.pointFile" v-if="!unable" />
+                    <img class="showPicture" :src="logisticsForm.pointFile ? logisticsForm.pointFile: defaultImg" alt="" v-else>
                     <el-button  class="preview" type="primary" plain v-show="logisticsForm.pointFile ? true : false" v-showPicture :imgurl="logisticsForm.pointFile">点击预览</el-button>
                 </el-form-item>
             </div>
-            <el-form-item class="fromfooter">
+            <el-form-item class="fromfooter" v-show="!unable">
                 <el-button size="medium" type="primary" @click="submitForm('ruleForm')" v-if="logisticsForm.id">保存</el-button>
                 <el-button size="medium" type="primary" @click="submitForm('ruleForm')" v-else>立即发布</el-button>
             </el-form-item>
@@ -117,6 +118,8 @@ export default {
             }
         };
         return {
+            unable:false,
+            defaultImg:'/static/default.png',
             current:'',
             popVisible:false,
             logisticsForm: {
@@ -173,9 +176,10 @@ export default {
             this.current = name
         },
         getParams(){
-            if(this.$route.params.data){
-                let dataObj = this.$route.params.data;//接收数据
+            if(this.$route.query.data){
+                let dataObj = this.$route.query.data;//接收数据
                 this.logisticsForm = Object.assign({},dataObj);
+                this.unable = this.$route.query.type == 'check' ? true : false ;
             }else{
                 return 
             }
