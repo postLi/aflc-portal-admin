@@ -42,7 +42,7 @@
       <div class="nologin">
         <a href="http://192.168.1.157:9528/?nologin=1">
         <el-button size="large" type="primary">TMS系统</el-button></a><br>
-        <a href="http://192.168.1.24:9526/?nologin=1"><el-button size="large" type="success">运力中心</el-button></a><br>
+        <!-- <a href="http://192.168.1.24:9526/?nologin=1"><el-button size="large" type="success">运力中心</el-button></a><br> -->
         <a href="http://192.168.1.170/member/content_list.php?channelid=1"><el-button size="large" type="warning">官网系统</el-button></a>
       </div>
       <div @mouseover="showSubnav" @mouseout="hideSubnav" class="subNavWrapper"></div>
@@ -147,8 +147,9 @@ export default {
   }
 
   .is-active,.el-menu-item:focus, .el-menu-item:hover,.el-submenu__title:hover{
-    background: #000b17;
-    color: #fff;
+    //background: #000b17;
+    background: transparent;
+    color: #fff !important;
   }
   .el-submenu.is-active{
     background: transparent;
@@ -195,7 +196,7 @@ export default {
 .nologin{
   position: fixed;
   width: 190px;
-  height: 150px;
+  height: 100px;
   background: rgb(0,32,57);
   left: 0;
   bottom: 0;
