@@ -1,4 +1,4 @@
-import { login, logout, getInfo } from '@/api/login'
+import { login, logout, getInfo, getAccessInfo } from '@/api/login'
 import { getToken, setToken, removeToken, setUsername, setOrgId, getLogin, setLogin, setUserInfo, removeUserInfo, removeUsername, removeOrgId } from '@/utils/auth'
 
 const user = {
@@ -56,6 +56,65 @@ const user = {
       })
     },
 
+    FeLogin2({ commit }, tokenObject) {
+      return new Promise((resolve, reject) => {
+        setToken(tokenObject.access_token)
+        commit('SET_TOKEN', tokenObject.access_token)
+        console.log('step0000', tokenObject)
+        getAccessInfo().then(data => {
+          console.log('step1111')
+          const mapObj = {
+            'aflc-1': 'AF00102',
+            'aflc-2': 'AF00101',
+            'aflc-5': 'AF00107'
+          }
+
+          const userInfo = {
+            'loginType': 'sso',
+            'accNum': 'aflc-5',
+            'username': data.mobile + '|aflc-5',
+            'password': '',
+            'memberType': 'AF00107',
+            'mobile': data.mobile
+          }
+          setUsername(data.userName)
+          setOrgId(userInfo.accNum)
+          setLogin(userInfo)
+          commit('SET_USERNAME', data.userName)
+
+          data.rolesIdList = [userInfo.memberType]
+          commit('SET_ROLES', data.rolesIdList)
+          commit('SET_NAME', data.contactsName)
+          setUsername(userInfo.username)
+          commit('SET_COMPANY', data.companyName)
+          // setOrgId(data.orgid)
+          commit('SET_AVATAR', require('../../assets/role.png'))
+          commit('SET_OTHERINFO', data)
+          setUserInfo(data)
+          console.log('step2222')
+
+          resolve({ data })
+        }).catch(err => {
+          reject(err)
+        })
+        console.log('feLogin:', tokenObject)
+        /*
+        const userInfo = {
+          'accNum': tokenObject.login_type,
+          'username': tokenObject.login_mobile + '|' + tokenObject.login_type,
+          'password': '',
+          'memberType': mapObj[tokenObject.login_type] || '',
+          'mobile': tokenObject.login_mobile
+        }
+        setToken(tokenObject.access_token)
+        setUsername(tokenObject.login_mobile)
+        setOrgId(tokenObject.login_type)
+        setLogin(userInfo)
+        commit('SET_TOKEN', tokenObject.access_token)
+        commit('SET_USERNAME', userInfo.username)
+        resolve() */
+      })
+    },
     /**
      * 前端设置token信息
      * @param {*} param0 vue对象
