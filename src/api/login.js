@@ -41,6 +41,12 @@ export function getInfo(mobile, memberType) {
   })
 }
 
+export function getAccessInfo() {
+  return fetch.get('/aflcusercenterservice/usercenter/aflcLogisticsCompanyAccout/v1/getAccoutInfo').then(res => {
+    return res.data
+  })
+}
+
 export function logout() {
   return fetch.delete('/uaa/oauth/token', {
     headers: {

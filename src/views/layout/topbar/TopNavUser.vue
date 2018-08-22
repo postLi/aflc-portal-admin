@@ -12,7 +12,7 @@
           <img class="user-avatar" :src="avatar">
         </el-col>
         <el-col :span="16">
-          {{ name }}
+          {{ thename }}
           <br>
           <br>
           <br>
@@ -32,7 +32,7 @@
     </el-popover>
     <div class="avatar-wrapper" v-popover:popoveruser>
       <img class="user-avatar" :src="avatar">
-      <span class="user-name">{{ name }}</span>
+      <span class="user-name">{{ thename }}</span>
     </div>
   </div>
 </template>
@@ -45,7 +45,10 @@ export default {
       'avatar',
       'name',
       'company'
-    ])
+    ]),
+    thename() {
+      return this.otherinfo.loginType === 'sso' ? '管理员' : this.otherinfo.contactsName
+    }
   },
   methods: {
     logout() {
