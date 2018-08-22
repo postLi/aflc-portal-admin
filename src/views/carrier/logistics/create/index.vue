@@ -65,7 +65,7 @@
                 <div class="goodsPriceChoose">
                     <p>
                         <span>运量</span>
-                        <span>原报价</span>
+                        <span>原报价 <strong>(必填)</strong></span>
                         <span>折后价</span>
                     </p>
                     <ul v-for="(form,keys) in weigthPriceForms" :key="keys">
@@ -93,12 +93,12 @@
                 </div>
             </el-form-item>
 
-            <el-form-item label="轻货价格：">
+            <el-form-item label="轻货价格：" prop="ligthPriceForms">
                 <p>(阶梯价格最大值不填，代表无穷大，例如：10-，代表10立方以上)</p>
                 <div class="goodsPriceChoose">
                     <p>
                         <span>运量</span>
-                        <span>原报价</span>
+                        <span>原报价 <strong>(必填)</strong></span>
                         <span>折后价</span>
                     </p>
                     <ul v-for="(form,keys) in ligthPriceForms" :key="keys">
@@ -109,8 +109,10 @@
                             立方
                         </li>
                         <li>
-                            <el-input v-model="form.primeryPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input>
-                            元/立方
+                            <!-- <el-form-item prop="primeryPrice" style="display:inline-block;"> -->
+                                <el-input v-model="form.primeryPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input>
+                                元/立方
+                            <!-- </el-form-item> -->
                         </li>
                         <li>
                             <el-input v-model="form.discountPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input>
@@ -157,10 +159,11 @@
                 <p class="supplement">请对您的线路进行补充说明，尽量使用市场上或物流行业内的常用词。</p>
             </el-form-item>
             <el-form-item label="专线照片：">
-                <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" :disabled="unable" :limit="3" listtype="picture-card" :showFileList = 'true' v-model="ruleForm.rangeLogo"/>
-                <!-- <div v-for="">
-
-                </div> -->
+                <upload class="licensePicture" v-if=" !unable" tip="（必须为jpg/png并且小于5M）" :disabled="unable" :limit="3" listtype="picture-card" :showFileList = 'true'  v-model="ruleForm.rangeLogo"/>
+                <div v-for="item in rangeLogo" :key="item" class="imgBox" v-else>
+                    <img :src='item' alt="">
+                    <el-button  class="preview" type="primary" plain v-showPicture :imgurl="item">点击预览</el-button>
+                </div>
             </el-form-item> 
         </div>
         <el-form-item class="fromfooter" v-show="ifShowRangeType != 2">
@@ -210,19 +213,37 @@ export default {
         };
 
         var checkWeigthPriceForms = (rule,value,callback) => {
-            this.weigthPriceForms.forEach(el => {
+            if(this.weigthPriceForms[0].endVolume == ''){
+                callback(new Error('请补充重货价格区间'));
+            }else{
+                this.weigthPriceForms.forEach(el => {
+                    if(el.primeryPrice === ''){
+                        console.log('123')
+                        callback(new Error('请补充重货价格区间'));
+                    }
+                    else{
+                        callback();
+                    }
+                })
+            }
+        };
+
+        var checkLightPriceForms = (rule,value,callback) => {
+            this.ligthPriceForms.forEach(el => {
                 if(el.endVolume === ''){
-                    callback(new Error('请补充重货运量'));
+                    callback(new Error('请补充轻货运量'));
+                    
                 }else if(el.primeryPrice === ''){
                     console.log('123')
-                    callback(new Error('请补充重货价格区间'));
+                    callback(new Error('请补充轻货价格区间'));
                 }
                 else{
                     callback();
                 }
             })
-        }
+        };
         return {
+            rangeLogo:[],
             unable:false,
             btnText: '请选择',
             current:'',
@@ -308,6 +329,12 @@ export default {
                 ],
                 weigthPriceForms:[
                     { required:true,validator: checkWeigthPriceForms, trigger: 'blur'},
+                ],
+                ligthPriceForms:[
+                    { required:true,validator: checkLightPriceForms, trigger: 'blur'},
+                ],
+                primeryPrice:[
+                    {required:true,message: '请填写价格', trigger: 'blur' },
                 ]
             }
         }
@@ -382,16 +409,19 @@ export default {
         getParams(){
             if(this.$route.query.data){
                 this.ifShowRangeType = this.$route.query.ifrevise;//1是修改，2是详情
-                if(this.ifShowRangeType == 2){
-                    this.unable = true;
-                }
                 
                 let dataObj = this.$route.query.data;//接收数据
                 this.ligthPriceForms = dataObj.lightcargo;
                 this.weigthPriceForms = dataObj.weightcargo;
+                console.log('```',dataObj)
                 TransportRangeInfo(dataObj.id).then(res=>{
                     this.ruleForm = res.data;
+                    this.rangeLogo = this.ruleForm.rangeLogo.split(",");
+                    console.log('this.rangeLogo',this.rangeLogo)
                 })
+                if(this.ifShowRangeType == 2){
+                    this.unable = true;
+                }
             }
         },
         //判断和限制
@@ -501,40 +531,40 @@ export default {
             if(this.ruleForm.departureTimeCode){
                 this.ruleForm.departureTime = this.departClassfy.find(item => item.code == this.ruleForm.departureTimeCode)['name'];
             }
-            
-
-
         },
         //提交按钮
         submitForm(formName) {
             console.log(this.ruleForm)
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                this.completeName();
-                let commitFunction;
-                if(this. ifShowRangeType == '1'){
-                    commitFunction = changeTransportRange(this.ruleForm);
-                }else{
-                    commitFunction = newTransportRangeList(this.ruleForm)
-                }
-                commitFunction.then(res => {
-                    console.log('res',res)
-                    if(res.status == 200){
-                        this.$router.push({name:'管理物流专线'})
+                    this.completeName();
+                    let commitFunction;
+                    if(this. ifShowRangeType == '1'){
+                        commitFunction = changeTransportRange(this.ruleForm);
                     }else{
+                        commitFunction = newTransportRangeList(this.ruleForm)
+                    }
+                    commitFunction.then(res => {
+                        console.log('res',res)
+                        if(res.status == 200){
+                            this.$router.push({name:'管理物流专线'})
+                        }else{
+                            this.$message({
+                                type: 'info',
+                                message: '操作失败，原因：' + res.errorInfo ? res.errorInfo : res.text
+                            })
+                        }
+                    }).catch(err=>{
                         this.$message({
                             type: 'info',
-                            message: '操作失败，原因：' + res.errorInfo ? res.errorInfo : res.text
+                            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
                         })
-                    }
-                }).catch(err=>{
+                    })
+                } else {
                     this.$message({
                         type: 'info',
-                        message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                        message: '请填写完整信息' 
                     })
-                })
-                } else {
-                    console.log('error submit!!');
                     return false;
                 }
             });
@@ -620,14 +650,20 @@ export default {
                             p{
                                 padding: 6px 50px;                     
                                 background: #eaefff;
-                                font-size: 12px;
+                                font-size: 14px;
                                 line-height: 17px;
                                 color: #333333;
+                                span{
+                                    strong{
+                                        color: red;
+                                        font-size: 12px;
+                                    }
+                                }
                                 span:first-child{
                                     margin:0 168px;
                                 }
                                 span:nth-child(2){
-                                    margin:0 146px;
+                                    margin:0 140px;
                                 }
                                  span:nth-child(3){
                                     margin:0 122px;
@@ -717,6 +753,18 @@ export default {
                         span{
                             bottom: 22px;
                         }
+                    }
+                }
+
+                .imgBox{
+                    display: inline-block;
+                    width: 25%;
+                    height: 200px;
+                    margin-right: 10px;
+                    img{
+                        display: block;
+                        width: 100%;
+                        height: 100%;
                     }
                 }
             }

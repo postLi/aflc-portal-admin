@@ -164,6 +164,8 @@ import upload from '@/components/Upload/singleImage'
 import { identifyCarrier } from '@/api/carrier/index.js'
 import { getDictionary,getLogisticsCompanyInfoByMobile } from '@/api/common.js'
 import { REGEX } from '@/utils/validate.js'
+import { parseTime,pickerOptions2 } from '@/utils/index.js'
+
 import { getUserInfo } from '@/utils/auth.js'
 import tmsmap from '@/components/map/index'
 
@@ -203,47 +205,7 @@ export default {
                 disabledDate(time) {
                     return time.getTime() > Date.now();
                 },
-                shortcuts: [{
-                    text: '今天',
-                    onClick(picker) {
-                    picker.$emit('pick', new Date());
-                    }
-                }, {
-                    text: '昨天',
-                    onClick(picker) {
-                    const date = new Date();
-                    date.setTime(date.getTime() - 3600 * 1000 * 24);
-                    picker.$emit('pick', date);
-                    }
-                }, {
-                    text: '一周前',
-                    onClick(picker) {
-                    const date = new Date();
-                    date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                    picker.$emit('pick', date);
-                    }
-                },{
-                    text: '一月前',
-                    onClick(picker) {
-                    const date = new Date();
-                    date.setTime(date.getTime() - 3600 * 1000 * 24 * 30);
-                    picker.$emit('pick', date);
-                    }
-                },{
-                    text: '半年前',
-                    onClick(picker) {
-                    const date = new Date();
-                    date.setTime(date.getTime() - 3600 * 1000 * 24 * 182);
-                    picker.$emit('pick', date);
-                    }
-                },{
-                    text: '一年前',
-                    onClick(picker) {
-                    const date = new Date();
-                    date.setTime(date.getTime() - 3600 * 1000 * 24 * 365);
-                    picker.$emit('pick', date);
-                    }
-                }]
+                shortcuts:pickerOptions2
             },
             totalNumber:0,//當前字數
             maxlengthNum:2000,
@@ -390,9 +352,23 @@ export default {
                     this.logisticsForm.companyDes = res.companyName + text;
                     // this.logisticsForm.companyDes.replaceAll('','&nbsp;')
                 }else{
-                    this.serviceTypeArr = JSON.parse(this.logisticsForm.serviceType) || [];
-                    this.productServiceCodeArr = JSON.parse(this.logisticsForm.productServiceCode)  || [];
-                    this.otherServiceCodeArr = JSON.parse(this.logisticsForm.otherServiceCode)  || [];
+                    if(this.logisticsForm.serviceType != ''){
+                        this.serviceTypeArr = JSON.parse(this.logisticsForm.serviceType);
+                    }else{
+                        this.serviceTypeArr = [];
+                    }
+
+                    if(this.logisticsForm.productServiceCode != ''){
+                        this.productServiceCodeArr = JSON.parse(this.logisticsForm.productServiceCode);
+                    }else{
+                        this.productServiceCodeArr = [];
+                    }
+
+                    if(this.logisticsForm.otherServiceCode != ''){
+                        this.otherServiceCodeArr = JSON.parse(this.logisticsForm.otherServiceCode);
+                    }else{
+                        this.otherServiceCodeArr = [];
+                    }
                 }
                 // this.loading = false;
             }).catch(err=>{
@@ -466,7 +442,10 @@ export default {
                     })
                 })
                 } else {
-                    console.log('error submit!!');
+                    this.$message({
+                        type: 'info',
+                        message: '请填写完整信息' 
+                    })
                     return false;
                 }
             });
