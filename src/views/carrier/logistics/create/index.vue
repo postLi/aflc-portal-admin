@@ -84,7 +84,7 @@
                             元/公斤
                         </li>
                         <li class="buttons">
-                            <span  @click="addItem('weight',keys,form)" class="addItem" v-if="keys == weigthPriceForms.length-1 && form.endVolume!= '' && keys != 4">
+                            <span  @click="addItem('weight',keys,form)" class="addItem" v-if="keys == weigthPriceForms.length-1 && keys != 4">
                             </span>
                             <span  @click="reduceItem(keys,'weight')" class="reduceItem" v-if="keys == weigthPriceForms.length-1 && weigthPriceForms.length !=1 " >
                             </span>
@@ -119,7 +119,7 @@
                             元/立方
                         </li>
                         <li class="buttons">
-                            <span  @click="addItem('light',keys,form)" class="addItem" v-if="keys == ligthPriceForms.length-1 && form.endVolume!= '' && keys != 4">
+                            <span  @click="addItem('light',keys,form)" class="addItem" v-if="keys == ligthPriceForms.length-1 && keys != 4">
                             </span>
                             <span  @click="reduceItem(keys,'light')" class="reduceItem" v-if="keys == ligthPriceForms.length-1 && ligthPriceForms.length !=1">
                             </span>
@@ -218,7 +218,6 @@ export default {
             }else{
                 this.weigthPriceForms.forEach(el => {
                     if(el.primeryPrice === ''){
-                        console.log('123')
                         callback(new Error('请补充重货价格区间'));
                     }
                     else{
@@ -374,18 +373,18 @@ export default {
         },
         regionChangeStart(d) {
             console.log('data:',d)
-            this.ruleForm.startProvince = d.province.name || '';
-            this.ruleForm.startCity = d.city.name || '';
-            this.ruleForm.startArea = d.area.name || '';
             this.ruleForm.startLocation = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
             console.log(this.ruleForm.startLocation)
+            this.ruleForm.startProvince = d.province ? d.province.name : '';
+            this.ruleForm.startCity = d.city ? d.city.name : '';
+            this.ruleForm.startArea = d.area ? d.area.name : '';
         },
         regionChangeEnd(d) {
             console.log('data:',d)
             this.ruleForm.endLocation = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-            this.ruleForm.endProvince = d.province.name || '';
-            this.ruleForm.endCity = d.city.name || '';
-            this.ruleForm.endArea = d.area.name || '';
+            this.ruleForm.endProvince = d.province ? d.province.name : '';
+            this.ruleForm.endCity = d.city ? d.city.name : '';
+            this.ruleForm.endArea = d.area ? d.area.name : '';
         },
         getValue(obj){
             return obj ? obj.value:'';
@@ -454,12 +453,11 @@ export default {
             // console.log(type)
             switch(type){
                 case 'weight':
-                console.log(item.primeryPrice)
-
-                    if(item.primeryPrice == 'endVolume'){
+                // console.log(item.primeryPrice)
+                    if(idx == 0 && item.endVolume == ''){
                         return this.$message({
                             type: 'info',
-                            message: '请补充重货价格区间' 
+                            message: '请补充重货运量' 
                         })
                     }
                     else if(item.primeryPrice == ''){
@@ -478,14 +476,14 @@ export default {
                     }
                     break;
                 case 'light':
-                    if(item.primeryPrice == 'endVolume'){
+                    if(idx == 0 && item.endVolume == ''){
                         return this.$message({
                             type: 'info',
-                            message: '请补充重货价格区间' 
+                            message: '请补充轻货运量' 
                         })
                     }
                     else if(item.primeryPrice == ''){
-                         return this.$message({
+                        return this.$message({
                             type: 'info',
                             message: '请补充轻货原报价' 
                         })
@@ -531,43 +529,74 @@ export default {
             if(this.ruleForm.departureTimeCode){
                 this.ruleForm.departureTime = this.departClassfy.find(item => item.code == this.ruleForm.departureTimeCode)['name'];
             }
+            
         },
         //提交按钮
         submitForm(formName) {
             console.log(this.ruleForm)
-            this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    this.completeName();
-                    let commitFunction;
-                    if(this. ifShowRangeType == '1'){
-                        commitFunction = changeTransportRange(this.ruleForm);
-                    }else{
-                        commitFunction = newTransportRangeList(this.ruleForm)
-                    }
-                    commitFunction.then(res => {
-                        console.log('res',res)
-                        if(res.status == 200){
-                            this.$router.push({name:'管理物流专线'})
+            let ifNull = true;
+            let messageInfo;
+
+            this.ligthPriceForms.forEach(item => {
+                if(item.primeryPrice == ''){
+                    messageInfo= '请补充轻货原报价' 
+                    ifNull = false;
+                }
+            })
+            this.weigthPriceForms.forEach(item => {
+                if(item.primeryPrice == ''){
+                    messageInfo= '请补充重货原报价' 
+                    ifNull = false;
+                }
+            })
+
+            if(ifNull){
+                
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        this.completeName();
+                        let commitFunction;
+                        if(this. ifShowRangeType == '1'){
+                            commitFunction = changeTransportRange(this.ruleForm);
                         }else{
+                            commitFunction = newTransportRangeList(this.ruleForm)
+                        }
+                        commitFunction.then(res => {
+                            console.log('res',res)
+                            if(res.status == 200){
+                                this.$alert('操作成功', '提示', {
+                                    confirmButtonText: '确定',
+                                    callback: action => {
+                                        this.$router.push({name:'管理物流专线'})
+                                    }
+                                });
+                                
+                            }else{
+                                this.$message({
+                                    type: 'info',
+                                    message: '操作失败，原因：' + res.errorInfo ? res.errorInfo : res.text
+                                })
+                            }
+                        }).catch(err=>{
                             this.$message({
                                 type: 'info',
-                                message: '操作失败，原因：' + res.errorInfo ? res.errorInfo : res.text
+                                message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
                             })
-                        }
-                    }).catch(err=>{
+                        })
+                    } else {
                         this.$message({
                             type: 'info',
-                            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                            message: '请填写完整信息' 
                         })
-                    })
-                } else {
-                    this.$message({
-                        type: 'info',
-                        message: '请填写完整信息' 
-                    })
-                    return false;
-                }
-            });
+                        return false;
+                    }
+                });
+            }else{
+                this.$message({
+                    type: 'info',
+                    message: messageInfo
+                })
+            }
         },
     }
 }
@@ -687,13 +716,13 @@ export default {
                                     float: left;
                                 }
                                 li:first-child{
-                                    margin-left: 8%;
+                                    margin-left: 9%;
                                 }
                                 li:nth-child(2){
-                                    margin-left: 19%;
+                                    margin-left: 20%;
                                 }
                                 li:nth-child(3){
-                                    margin-left: 19%; 
+                                    margin-left: 21%; 
                                 }
                                 .buttons{
                                     position: absolute;
