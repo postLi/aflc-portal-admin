@@ -40,13 +40,13 @@
         </template>
       </el-menu>
       <div class="nologin" v-if="otherinfo.rolesIdList[0] === 'AF00107'">
-        <a :href="'http://192.168.1.157:9528/?access_token='+token">
+        <a target="_blank" :href="'http://192.168.157:9528/?access_token='+token">
         <el-button size="large" type="primary">TMS系统</el-button></a><br>
-        <!-- <a href="http://192.168.1.24:9526/?nologin=1"><el-button size="large" type="success">运力中心</el-button></a><br> -->
-        <a :href="'http://192.168.1.170/member/loginbytoken.php?access_token='+token"><el-button size="large" type="warning">官网系统</el-button></a>
+        <!-- < target="_blank"a href="http://192.168.1.24:9526/?nologin=1"><el-button size="large" type="success">运力中心</el-button></a><br> -->
+        <a target="_blank" :href="'http://192.168.1.170/member/loginbytoken.php?access_token='+token"><el-button size="large" type="warning">官网系统</el-button></a>
       </div>
       <div @mouseover="showSubnav" @mouseout="hideSubnav" class="subNavWrapper"></div>
-       <!-- <iframe src="http://192.168.1.170/member/autologin.php" frameborder="0" style="width:0;height:0;"></iframe> -->
+       <iframe v-if="loginaflc" :src="'http://192.168.1.170/member/loginbytoken.php?access_token='+token" frameborder="0" style="width:0;height:0;"></iframe>
   </div>
   
 </template>
@@ -74,11 +74,15 @@ export default {
   },
   data() {
     return {
-      token: ''
+      token: '',
+      loginaflc: false
     }
   },
   mounted() {
     this.token = getToken()
+    this.eventBus.$on('loginmenhu', token => {
+      this.loginaflc = true
+    })
   },
   methods: {
     setLastPath(index) {
