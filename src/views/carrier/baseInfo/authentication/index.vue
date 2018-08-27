@@ -107,7 +107,7 @@
                 <el-form-item label="公司所在地：" prop="belongCityName">
                     <el-input @focus="()=>{showMap('endAddress')}" v-model="logisticsForm.belongCityName" :disabled="ifDisable === false"></el-input>
                 </el-form-item> 
-                <el-form-item label="详细地址：" class="moreWidth" prop="address">{{this.logisticsForm.longitude}}
+                <el-form-item label="详细地址：" class="moreWidth" prop="address">
                     <el-input @focus="()=>{showMap('endAddress')}" v-model="logisticsForm.address" :disabled="ifDisable === false"></el-input>
                 </el-form-item><br>
                 <el-form-item label="联系电话：">
@@ -205,7 +205,26 @@ export default {
                 disabledDate(time) {
                     return time.getTime() > Date.now();
                 },
-                shortcuts:pickerOptions2
+                 shortcuts: [{
+                    text: '今天',
+                    onClick(picker) {
+                    picker.$emit('pick', new Date());
+                    }
+                }, {
+                    text: '昨天',
+                    onClick(picker) {
+                    const date = new Date();
+                    date.setTime(date.getTime() - 3600 * 1000 * 24);
+                    picker.$emit('pick', date);
+                    }
+                }, {
+                    text: '一周前',
+                    onClick(picker) {
+                    const date = new Date();
+                    date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+                    picker.$emit('pick', date);
+                    }
+                }]
             },
             totalNumber:0,//當前字數
             maxlengthNum:2000,
