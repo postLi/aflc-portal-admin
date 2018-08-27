@@ -107,7 +107,7 @@
                 <el-form-item label="公司所在地：" prop="belongCityName">
                     <el-input @focus="()=>{showMap('endAddress')}" v-model="logisticsForm.belongCityName" :disabled="ifDisable === false"></el-input>
                 </el-form-item> 
-                <el-form-item label="详细地址：" class="moreWidth" prop="address">
+                <el-form-item label="详细地址：" class="moreWidth" prop="address">{{this.logisticsForm.longitude}}
                     <el-input @focus="()=>{showMap('endAddress')}" v-model="logisticsForm.address" :disabled="ifDisable === false"></el-input>
                 </el-form-item><br>
                 <el-form-item label="联系电话：">
@@ -243,6 +243,8 @@ export default {
                 businessLicenceFile:'',//营业执照
                 takeIdCardFile:'',//身份证
                 companyFacadeFile:'',//档口
+                longitude:'',//经度
+                latitude:'',//纬度
             },
             rules: {
                 companyName: [
@@ -333,6 +335,8 @@ export default {
             console.log(pos, name, info)
             this.logisticsForm.belongCityName = info.addressComponent.province +info.addressComponent.city+info.addressComponent.district;
             this.logisticsForm.address = name;
+            this.logisticsForm.longitude =  pos.split(",")[0];
+            this.logisticsForm.latitude =  pos.split(",")[1];
         },
         showMap(name) {
             this.popVisible = true ;
