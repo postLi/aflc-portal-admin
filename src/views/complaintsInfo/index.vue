@@ -85,16 +85,19 @@
                                 <p>{{complaintForm.complainTime}}</p>
                             </div>  
                         </div>
-                        <div class="complaint_content" v-if="origin != 'carrier'">
+                        <div class="complaint_content complaint_reply">
                             <div v-if="stepname == 'step-tow'">
                                 <h2> <i class="tishi"></i> 等待物流公司处理</h2>
                                 <p style="text-align:center;">物流公司会尽快处理，请耐心等待！</p>
                             </div>
-                            <div class="complaint_replyinfo" v-else>
-                                {{complaintForm.reply}}
+                            <div v-else>
+                                <h2>{{UserInfo.companyName}}物流公司回复</h2>
+                                <div class="complaint_replyinfo">
+                                    {{complaintForm.reply}}
+                                </div>
                             </div>
                         </div>
-                        <div class="complaint_content complaint_reply" v-else>
+                        <div class="complaint_content complaint_reply">
                             <h2>{{UserInfo.companyName}}物流公司回复</h2>
                             <div v-if="stepname == 'step-tow'" class="replyInfo">
                                 <div class="replyInfo">

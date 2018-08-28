@@ -347,7 +347,6 @@ export default {
     },
     methods:{
         ifWrong(item,idx){
-            // console.log('ifwrong',item,idx)
             let flag = item[idx].endVolume < item[idx].startVolume ? true : false;
             if(flag){
                 this.$message({
@@ -357,8 +356,6 @@ export default {
                 return item[idx].endVolume = ''
             }
             else if(item.length > (idx+1)){
-                // console.log('````')
-                // console.log(item[idx].endVolume,item[idx+1].startVolume)
                 item[idx+1].startVolume = item[idx].endVolume ;
                 if(item[idx+1].endVolume){
                     if(item[idx+1].endVolume < item[idx+1].startVolume){
@@ -382,6 +379,13 @@ export default {
         regionChangeEnd(d) {
             console.log('data:',d)
             this.ruleForm.endLocation = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+            if(this.ruleForm.endLocation == this.ruleForm.startLocation){
+                this.$message({
+                    type: 'info',
+                    message: '出发地不可与到达地重复！' 
+                })
+                return this.ruleForm.endLocation = ''
+            }
             this.ruleForm.endProvince = d.province ? d.province.name : '';
             this.ruleForm.endCity = d.city ? d.city.name : '';
             this.ruleForm.endArea = d.area ? d.area.name : '';

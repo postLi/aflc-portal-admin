@@ -55,7 +55,7 @@
                         <el-radio  label="0" :disabled="ifDisable === false">否</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="企业LOGO：" prop="companyFile">
+                <el-form-item label="企业LOGO：">
                     <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.companyFile" v-if=" ifDisable == true"/>
                     <img class="showPicture" :src="logisticsForm.companyFile ? logisticsForm.companyFile: defaultImg" alt="" v-else>
                     <el-button  class="preview" type="primary" plain v-show="logisticsForm.companyFile ? true : false" v-showPicture :imgurl="logisticsForm.companyFile">点击预览</el-button>

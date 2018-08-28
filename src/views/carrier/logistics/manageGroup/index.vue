@@ -124,6 +124,7 @@ export default {
     data() {
        
         return {
+            defaultImg:'/static/default.png',//默认加载失败图片
             loading:true,
             totalCount:0,
             page:1,

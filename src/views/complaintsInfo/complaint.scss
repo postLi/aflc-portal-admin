@@ -7,6 +7,7 @@ $stepLength : 54px;
         height:  $stepLength ;
         margin: 22px auto;
         background: url('../../assets/tousu_01.png') no-repeat center;
+      
     }
     .step-one{
         background: url('../../assets/tousu_01.png') no-repeat center;
@@ -105,11 +106,15 @@ $stepLength : 54px;
                 padding: 12px 52px;
             }
             .complaint_replyinfo{
-                text-indent: 20%;
-                font-size: 12px;
-                line-height: 18px;
+                font-size: 16px;
+                line-height: 28px;
                 color: #333333;
-                margin-bottom: 100px;
+                margin: 0 11% 10px ;
+                padding: 1%;
+                border: 1px solid #ccc;
+                -webkit-box-shadow:3px 3px 30px #888888;
+                -moz-box-shadow:3px 3px 30px #888888;
+
             }
 
       

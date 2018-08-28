@@ -34,13 +34,13 @@
                     height="100%"
                     style="width: 100%">
                         <el-table-column
-                            fixed
+                            
                             label="序号"
                             type="index"
                             width="80">
                         </el-table-column>
                         <el-table-column
-                            fixed
+                            
                             label="出发地"
                             width="180">
                             <template slot-scope="scope">
@@ -117,7 +117,6 @@
                             </template>
                         </el-table-column>
                         <el-table-column
-                            fixed="right"
                             prop="address"
                             label="操作"
                             width="250"
