@@ -39,14 +39,16 @@
 
         </template>
       </el-menu>
-      <div class="nologin" v-if="otherinfo.rolesIdList[0] === 'AF00107'">
-        <a target="_blank" :href="'http://192.168.1.24:9528/?access_token='+token">
+      <div class="nologin" v-if="otherinfo.rolesIdList[0] === 'AF00107' && otherinfo.isOpenTms === '1'">
+        <!-- <a target="_blank" :href="'http://www.28tms.cn/?from=aflc&access_token='+token"> -->
+        <a target="_blank" :href="'http://192.168.1.24:9528/?from=aflc&access_token='+token">
         <el-button size="large" type="primary">TMS系统</el-button></a><br>
         <!-- < target="_blank"a href="http://192.168.1.24:9526/?nologin=1"><el-button size="large" type="success">运力中心</el-button></a><br> -->
-        <a target="_blank" :href="'http://192.168.1.170/member/loginbytoken.php?access_token='+token"><el-button size="large" type="warning">官网系统</el-button></a>
+        <!-- <a target="_blank" :href="'http://192.168.1.170/member/loginbytoken.php?access_token='+token"><el-button size="large" type="warning">官网系统</el-button></a> -->
+        <a target="_blank" href="/"><el-button size="large" type="warning">官网系统</el-button></a>
       </div>
       <div @mouseover="showSubnav" @mouseout="hideSubnav" class="subNavWrapper"></div>
-       <iframe v-if="loginaflc" :src="'http://192.168.1.170/member/loginbytoken.php?access_token='+token" frameborder="0" style="width:0;height:0;"></iframe>
+       <iframe  v-if="otherinfo.rolesIdList[0] === 'AF00107'" :src="'http://192.168.1.170/member/loginbytoken.php?access_token='+token" frameborder="0" style="width:0;height:0;"></iframe>
   </div>
   
 </template>

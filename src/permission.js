@@ -48,7 +48,7 @@ router.beforeEach((to, from, next) => {
       console.log('step4444', data)
       if (logintype === 'FeLogin2') {
         const roles = data.data.rolesIdList
-        eventBus.$emit('loginmenhu', to.query.access_token)
+        // eventBus.$emit('loginmenhu', to.query.access_token)
         store.dispatch('GenerateRoutes', { roles }).then(() => {
           router.addRoutes(store.getters.addRouters)
           next({
