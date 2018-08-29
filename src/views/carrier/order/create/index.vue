@@ -233,7 +233,10 @@
 
 
       <el-form-item>
-        <el-button class="tab-create-btn" size="middle" type="primary" @click="submitForm('ruleForm')">立即发布</el-button>
+          <div class="tab-create-btn" style="width:30%;">
+            <el-button  size="middle" type="primary" @click="resetForm('ruleForm')">重置</el-button>
+            <el-button  size="middle" type="primary" @click="submitForm('ruleForm')">立即下单</el-button>
+          </div>
         <!-- <el-button @click="resetForm('ruleForm')">重置</el-button> -->
       </el-form-item>
 
@@ -1023,6 +1026,10 @@ export default {
       }).catch(err => {
         this.$message.error('保存失败：' + JSON.stringify(err))
       })
+    },
+    //重置
+    resetForm(formName) {
+        
     },
     // 提交表单
     submitForm(formName) {

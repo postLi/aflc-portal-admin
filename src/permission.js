@@ -147,11 +147,11 @@ router.beforeEach((to, from, next) => {
     if (whiteList.indexOf(to.path) !== -1) {
       next()
     } else {
-      /* next({ path: '/login', query: {
+    next({ path: '/login', query: {
         tourl: to.fullPath
-      }}) */
-      location.href = 'http://192.168.1.170/member/index_do.php?fmdo=login&dopost=exit&nexturl=../member/login.php'
-      NProgress.done()
+      }}) 
+    //   location.href = 'http://192.168.1.170/member/index_do.php?fmdo=login&dopost=exit&nexturl=../member/login.php'
+    //   NProgress.done()
     }
   }
 })

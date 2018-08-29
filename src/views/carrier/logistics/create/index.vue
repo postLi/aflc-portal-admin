@@ -42,7 +42,7 @@
         </div>
         <div class="information priceTime">
             <h2>价格时效</h2>
-            <el-form-item label="运输时效：">
+            <el-form-item label="运输时效：" prop="transportAging">
                 <el-input v-model="ruleForm.transportAging" :disabled="unable" @keyup.native='handlerChoose' ></el-input>
                 <el-radio-group v-model="ruleForm.transportAgingUnit" :disabled="unable">
                     <el-radio label="天"></el-radio>
@@ -52,7 +52,7 @@
                 <span class="supplement">(多天填写如：2-5，其它只能填写阿拉伯数字)</span>
             </el-form-item>
 
-            <el-form-item label="发车频率：">
+            <el-form-item label="发车频率：" prop="departureHzData">
                 <el-input placeholder="请输入" v-numberOnly v-model="ruleForm.departureHzData" :disabled="unable">
                     <template slot="append">天</template>
                 </el-input>
@@ -128,7 +128,7 @@
                 </div>
             </el-form-item>
 
-            <el-form-item label="最低一票价格：">
+            <el-form-item label="最低一票价格：" prop="lowerPrice">
                 <el-input v-model="ruleForm.lowerPrice" placeholder="报价" :disabled="unable" v-number-only:point></el-input> 元
             </el-form-item>
             <el-form-item label="专线类型：" prop="rangeType" v-if="ifShowRangeType != '0'">
@@ -136,7 +136,7 @@
                      <el-radio v-for="range in rangeTypeClassfy" :label="range.code" :key="range.id">{{range.name}}</el-radio>
                 </el-radio-group>
             </el-form-item> 
-            <el-form-item label="发车时间："  class="departureTime">
+            <el-form-item label="发车时间："  class="departureTime" prop="departureTimeCode">
                 <div>
                     <el-select v-model="ruleForm.departureTimeCode" :disabled="unable" clearable placeholder="请选择发车时间">
                         <el-option v-for="time in departClassfy" 
@@ -158,7 +158,7 @@
                 <span>{{ruleForm.transportRemark.length}} / {{maxlength}}</span>
                 <p class="supplement">请对您的线路进行补充说明，尽量使用市场上或物流行业内的常用词。</p>
             </el-form-item>
-            <el-form-item label="专线照片：">
+            <el-form-item label="专线照片：" prop="rangeLogo">
                 <upload class="licensePicture" v-if=" !unable" tip="（必须为jpg/png并且小于5M）" :disabled="unable" :limit="3" listtype="picture-card" :showFileList = 'true'  v-model="ruleForm.rangeLogo"/>
                 <div v-for="item in rangeLogo" :key="item" class="imgBox" v-else>
                     <img :src='item' alt="">
@@ -167,8 +167,9 @@
             </el-form-item> 
         </div>
         <el-form-item class="fromfooter" v-show="ifShowRangeType != 2">
+            <el-button type="primary" @click="resetForm('ruleForm')">重置</el-button>
             <el-button type="primary" @click="submitForm('ruleForm')" v-if="ifShowRangeType == '1'">修改</el-button>
-            <el-button type="primary" @click="submitForm('ruleForm')" v-else>确认提交</el-button>
+            <el-button type="primary" @click="submitForm('ruleForm')" v-else>立即发布</el-button>
         </el-form-item>
     </el-form>
     <!-- <tmsmap @success="getInfo" pos="" name="" :popVisible.sync="popVisible" /> -->
@@ -533,7 +534,6 @@ export default {
             if(this.ruleForm.departureTimeCode){
                 this.ruleForm.departureTime = this.departClassfy.find(item => item.code == this.ruleForm.departureTimeCode)['name'];
             }
-            
         },
         //提交按钮
         submitForm(formName) {
@@ -602,6 +602,29 @@ export default {
                 })
             }
         },
+
+        resetForm(formName) {
+            this.$refs[formName].resetFields();
+            this.ruleForm.departureHzTime = '';
+            this.ligthPriceForms = [
+                {
+                    startVolume:'0',
+                    endVolume:'',
+                    primeryPrice:'',//标准价
+                    discountPrice:'',//折后价
+                    type:'0'
+                } 
+            ];
+            this.weigthPriceForms=[
+                {
+                    startVolume:'0',
+                    endVolume:'',
+                    primeryPrice:'',//标准价
+                    discountPrice:'',//折后价
+                    type:'1'
+                }
+            ];
+        }
     }
 }
 </script>

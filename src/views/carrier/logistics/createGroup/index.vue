@@ -16,7 +16,7 @@
                         <p slot="append">请填写网点名称</p>
                     </el-input>
                 </el-form-item>
-                <el-form-item label="网点地址：">
+                <el-form-item label="网点地址：" prop="address"> 
                     <el-input @focus="()=>{showMap('strartAddress')}" v-model="logisticsForm.address" :disabled="unable"></el-input>
                 </el-form-item>
                 <el-form-item label="联系人：" maxlength="18"  prop="name">
@@ -27,22 +27,23 @@
                     <el-input v-model="logisticsForm.mobile" maxlength="11" v-numberOnly :disabled="unable">
                     </el-input>
                 </el-form-item>
-                <el-form-item label="固话：">
+                <el-form-item label="固话：" prop="telNum">
                      <el-input v-model="logisticsForm.telNum" maxlength="11" v-numberOnly :disabled="unable">
                     </el-input>
                 </el-form-item>
-                <el-form-item label="QQ：" >
+                <el-form-item label="QQ：" prop="contactQq">
                      <el-input v-model="logisticsForm.contactQq" v-numberOnly :disabled="unable">
                             <p slot="append">填写QQ，方便物流公司联系您</p>
                     </el-input>
                 </el-form-item>
-                <el-form-item label="网点LOGO：">
+                <el-form-item label="网点LOGO：" prop="pointFile">
                     <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.pointFile" v-if="!unable" />
                     <img class="showPicture" :src="logisticsForm.pointFile ? logisticsForm.pointFile: defaultImg" alt="" v-else>
                     <el-button  class="preview" type="primary" plain v-show="logisticsForm.pointFile ? true : false" v-showPicture :imgurl="logisticsForm.pointFile">点击预览</el-button>
                 </el-form-item>
             </div>
             <el-form-item class="fromfooter" v-show="!unable">
+                <el-button size="medium" type="primary" @click="resetForm('ruleForm')">重置</el-button>
                 <el-button size="medium" type="primary" @click="submitForm('ruleForm')" v-if="logisticsForm.id">保存</el-button>
                 <el-button size="medium" type="primary" @click="submitForm('ruleForm')" v-else>立即发布</el-button>
             </el-form-item>
@@ -225,6 +226,11 @@ export default {
                 }
             });
         },
+
+        resetForm(formName) {
+            this.$refs[formName].resetFields();
+
+        }
     },
   
 }
