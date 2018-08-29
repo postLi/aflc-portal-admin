@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie'
-console.log("!+Cookies.get('lockScreenStatus')", !+Cookies.get('lockScreenStatus'),Cookies.get('lockScreenStatus'))
+console.log("!+Cookies.get('lockScreenStatus')", !+Cookies.get('lockScreenStatus'), Cookies.get('lockScreenStatus'))
 const app = {
   state: {
     sidebar: {
@@ -26,6 +26,13 @@ const app = {
   actions: {
     ToggleSideBar: ({ commit }) => {
       commit('TOGGLE_SIDEBAR')
+    },
+
+    // 锁定 屏幕
+    login2tms({ commit }) {
+      return new Promise(resolve => {
+        location.href = 'http://192.168.1.157:9528'
+      })
     },
 
     // 锁定 屏幕

@@ -404,8 +404,6 @@ export default {
       wlbestlistObj: {}, // 用来标记是否已经加载过
       wlindex: '',
       ruleForm: {
-        startPointId: '',
-        endPointId: '',
         'clientIp': '', // 终端ip
         'memberType': '', // 会员类型(货主:AF00101,车主:AF00102,物流公司:AF00107)
         'shipperId': '', // 货主id 用户id
@@ -529,7 +527,11 @@ export default {
       // 获取网点相关的信息
       this.getCompany({
         id: this.cid
+      }).then(res => {
+        this.wlindex = this.cid
+        this.getNet(this.wlindex, 0)
       })
+
       this.cargoList = [Object.assign({ isget: false }, this.cargoInfo)]
       this.ruleForm.shipperId = this.otherinfo.id
       this.ruleForm.memberType = this.otherinfo.rolesIdList[0]
@@ -543,7 +545,7 @@ export default {
         this.aflcOrderAddressWebDtoList[0].contactsPhone = data.startLocationContactsMobile
         this.aflcOrderAddressWebDtoList[1].contacts = data.endLocationContacts
         this.aflcOrderAddressWebDtoList[1].contactsPhone = data.endLocationContactsMobile */
-      }).then(err => {
+      }).catch(err => {
         this.$message.error('查询出错：' + (err.errorInfo || err.text || '未知错误'))
       })
     },
@@ -786,7 +788,8 @@ export default {
           }
         })
         this.ruleForm.wlName = obj[0] ? obj[0].publishName : ''
-        const data = this.wlbestlist[$index]
+        const data = this.wlbestlist[$index] || []
+        console.log('calcTotalFee:', transportRangeId, cargolist, data)
         this.ruleForm.startPointId = data[0] ? data[0].id : ''
         this.ruleForm.endPointId = data[1] ? data[1].id : ''
         this.ruleForm.transportRangePublishId = obj[0] ? obj[0].companyId : ''
@@ -845,7 +848,7 @@ export default {
         endCity: this.netQuery.endCity,
         endArea: this.netQuery.endArea
       }
-      ReqApi.getCompany({
+      return ReqApi.getCompany({
         currentPage: 1,
         'pageSize': 100,
         vo

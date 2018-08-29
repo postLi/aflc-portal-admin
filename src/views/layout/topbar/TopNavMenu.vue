@@ -4,8 +4,8 @@
       mode="horizontal" 
       :default-active="current"
       :router="true">
-      <el-menu-item key="/" index="/">
-        返回首页
+      <el-menu-item  index="/">
+        <a href="http://192.168.1.170/" target="_blank">返回首页</a>
       </el-menu-item>   
         <el-menu-item  index="" v-if="LoginInfo.memberType == 'AF00107'">
             <a :href="carrierHref" target="_blank">我的官网</a>
@@ -50,7 +50,7 @@ export default {
   watch: {
     $route() {
       this.setNavHightlight()
-        this.getLoginInfo()
+      this.getLoginInfo()
     }
   },
   mounted() {
@@ -74,8 +74,8 @@ export default {
     },
     getLoginInfo() {
       this.LoginInfo = getLogin()
-        this.carrierHref = 'http://192.168.1.170/member/index.php?uid=' + this.LoginInfo.mobile
-        console.log(this.LoginInfo)
+      this.carrierHref = 'http://192.168.1.170/member/index.php?uid=' + this.LoginInfo.mobile
+      console.log(this.LoginInfo)
     }
   }
 }
@@ -98,6 +98,14 @@ export default {
     color: #fff;
     font-size: $topNavFontSize;
 
+    a{
+      display: block;
+      height: 100%;
+      width: 100%;
+      text-align: center;
+      line-height: 54px;
+    }
+
     &.is-active{
       background: #2a2f32;
       border-bottom: none;
@@ -110,7 +118,10 @@ export default {
     }
 
     &:hover{
-      background: #2a2f32;
+      background: #05375D !important;
+      a{
+        color: #fff;
+      }
     }
   }
   .page-top-nav .el-submenu>.el-menu{

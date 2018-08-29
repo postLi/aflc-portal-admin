@@ -69,7 +69,12 @@ export default {
     doLogin() {
       removeToken()
       this.$store.dispatch('UnLockScreen')
-      this.$router.push('/login')
+      // 如果是从tms过来，则跳转到tms登录
+      if (this.otherinfo.loginType === 'sso') {
+        this.$store.dispatch('login2tms')
+      } else {
+        this.$router.push('/login')
+      }
     }
   }
 }
