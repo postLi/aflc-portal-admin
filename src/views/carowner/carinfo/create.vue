@@ -170,6 +170,9 @@ export default {
         'driverId': '', // 车主id
         'endAddress': '', // 目的地
         'endAddressCoordinate': '', // 目的地坐标
+        endProvince: '',
+        endCity: '',
+        endArea: '',
         // 'endAddressName': 'string', // 目的地地址名称
         // 'endTime': '2018-07-25T02:05:50.884Z', // 发车结束时间
         'expectPrice': 0, // 期望运价
@@ -181,6 +184,9 @@ export default {
         'remark': '', // 备注
         'startTime': '', // 发车时间
         'strartAddress': '', // 出发地
+        startProvince: '',
+        startCity: '',
+        startArea: '',
         'strartAddressCoordinate': '', // 出发地坐标
         // 'strartAddressName': 'string', // 出发地地址名称
         'title': '', // 标题
@@ -218,10 +224,24 @@ export default {
       this.ruleForm.usualPlace = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
     },
     regionChangeStart(d) {
-      this.ruleForm.strartAddress = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
+      if (!d.province && !d.city && !d.area && !d.town) {
+        this.ruleForm.strartAddress = ''
+      } else {
+        this.ruleForm.strartAddress = `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
+        this.ruleForm.startProvince = this.getValue(d.province)
+        this.ruleForm.startCity = this.getValue(d.city)
+        this.ruleForm.startArea = this.getValue(d.area)
+      }
     },
     regionChangeEnd(d) {
-      this.ruleForm.endAddress = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
+      if (!d.province && !d.city && !d.area && !d.town) {
+        this.ruleForm.endAddress = ''
+      } else {
+        this.ruleForm.endAddress = `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
+        this.ruleForm.endProvince = this.getValue(d.province)
+        this.ruleForm.endCity = this.getValue(d.city)
+        this.ruleForm.endArea = this.getValue(d.area)
+      }
     },
     initModify() {
       ReqApi.getCarInfo(this.id).then(res => {
