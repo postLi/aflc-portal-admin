@@ -141,7 +141,7 @@ export default {
   },
   methods: {
     createNew() {
-      this.$router.push('/carowner/carinfo/create')
+      this.$router.push('/carinfo/create')
     },
     fetchAllCustomer() {
       this.loading = true
@@ -291,7 +291,7 @@ export default {
       })
     },
     changeItem(id) {
-      this.$router.push('/carowner/carinfo/create?id=' + id)
+      this.$router.push('/carinfo/create?id=' + id)
     },
     setTable() {
       this.setupTableVisible = true

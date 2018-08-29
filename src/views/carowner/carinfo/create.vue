@@ -309,7 +309,7 @@ export default {
               confirmButtonText: '确定',
               callback: action => {
                 this.$emit('success')
-                this.eventBus.$emit('replaceCurrentView', '/carowner/carinfo/manage')
+                this.eventBus.$emit('replaceCurrentView', '/carinfo/manage')
               }
             })
           }).catch(err => {

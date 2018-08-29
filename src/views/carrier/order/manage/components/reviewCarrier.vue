@@ -64,7 +64,7 @@ export default {
       type: String,
       default: ''
     },
-    shipperId:{
+    shipperId: {
       type: String,
       default: ''
     }
@@ -84,7 +84,7 @@ export default {
       },
       // 1 2 3 4 5
       // AF03601
-      totalRate: ['AF0360103', 'AF0360102', 'AF0360101'],
+      totalRate: ['AF0360203', 'AF0360202', 'AF0360201'],
       // AF03603
       // AF0360301
       priceRate: ['AF036040201', 'AF036040202', 'AF036040203', 'AF036040204', 'AF036040205'],
@@ -94,8 +94,8 @@ export default {
       dockRate: ['AF036040301', 'AF036040302', 'AF036040303', 'AF036040304', 'AF036040305'],
       rules: {},
       // 评分
-      rankColor:['#99A9BF', '#F7BA2A', '#FF9900'],
-      texts:['非常不满意','不满意','一般','满意','非常满意'],
+      rankColor: ['#99A9BF', '#F7BA2A', '#FF9900'],
+      texts: ['非常不满意', '不满意', '一般', '满意', '非常满意'],
       goodsRank: 5,
       payRank: 5,
       dockRank: 5,
@@ -104,48 +104,47 @@ export default {
       loading: false
     }
   },
-  watch:{
-    dialogVisible(newVal){
-      if(newVal){
+  watch: {
+    dialogVisible(newVal) {
+      if (newVal) {
         this.reset()
       }
     },
-    goodsRank:{
-      handler(newVal){
+    goodsRank: {
+      handler(newVal) {
         this.form.goodsStarLevel = this.goodsRate[newVal - 1]
         this.setTotalRank()
       },
       immediate: true
     },
-    payRank:{
-      handler(newVal){
+    payRank: {
+      handler(newVal) {
         this.form.payStarLevel = this.priceRate[newVal - 1]
         this.setTotalRank()
       },
       immediate: true
     },
-    dockRank:{
-      handler(newVal){
+    dockRank: {
+      handler(newVal) {
         this.form.dockStarLevel = this.dockRate[newVal - 1]
         this.setTotalRank()
       },
       immediate: true
     }
   },
-  mounted(){
+  mounted() {
 
   },
   methods: {
-    setTotalRank(){
-      let total = this.goodsRank + this.payRank + this.dockRank
-      if(total < 7){
+    setTotalRank() {
+      const total = this.goodsRank + this.payRank + this.dockRank
+      if (total < 7) {
         this.form.assessLevel = this.totalRate[0]
-      } else if(total < 10){
+      } else if (total < 10) {
         this.form.assessLevel = this.totalRate[1]
       } else {
         this.form.assessLevel = this.totalRate[2]
       }
-      
     },
     close(done) {
       this.$emit('update:dialogVisible', false)
@@ -154,28 +153,26 @@ export default {
         done()
       }
     },
-    reset(){
-      this.form = Object.assign({},this.$data.form)
+    reset() {
+      this.form = Object.assign({}, this.$data.form)
       this.form.evaluationId = this.otherinfo.id
       this.form.evaluationName = this.otherinfo.contactsName
       this.form.orderSerial = this.orderSerial
       this.form.shipperId = this.shipperId
-      
     },
     submitFeeSetup() {
       this.$refs['ruleForm'].validate((valid) => {
         this.loading = true
-        if(valid){
-          postNewCarrierReview(this.form).then(res=>{
-            this.$message.success("保存成功！")
+        if (valid) {
+          postNewCarrierReview(this.form).then(res => {
+            this.$message.success('保存成功！')
             this.loading = false
             this.close()
           }).catch(err => {
-            this.$message.error("保存失败：" + JSON.stringify(err))
+            this.$message.error('保存失败：' + JSON.stringify(err))
             this.loading = false
           })
         }
-        
       })
     }
   }

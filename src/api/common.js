@@ -42,7 +42,7 @@ export function getUploadPolicy() {
     })
   } else {
     return fetch.get('/anfacommonservice/common/oss/v1/policy').then(res => {
-      UPLOADPOLICYDATA = res.data || {}
+      UPLOADPOLICYDATA = res.data || ''
       // 定时清除旧数据
       setTimeout(() => {
         UPLOADPOLICYDATA = ''

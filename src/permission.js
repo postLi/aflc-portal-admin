@@ -31,7 +31,7 @@ loginCms() */
 
 const whiteList = ['/login']
 router.beforeEach((to, from, next) => {
-  console.log('data data:5')
+  const param = getLogin() || {}
   /* must call `next` */
   NProgress.start()
   // 如果链接带有token信息，则将其保存
@@ -45,10 +45,9 @@ router.beforeEach((to, from, next) => {
       access_token: to.query.access_token,
       login_mobile: to.query.login_mobile
     }).then((data) => {
-      console.log('step4444', data)
       if (logintype === 'FeLogin2') {
         const roles = data.data.rolesIdList
-        eventBus.$emit('loginmenhu', to.query.access_token)
+        // eventBus.$emit('loginmenhu', to.query.access_token)
         store.dispatch('GenerateRoutes', { roles }).then(() => {
           router.addRoutes(store.getters.addRouters)
           next({
@@ -62,40 +61,25 @@ router.beforeEach((to, from, next) => {
       }
 
       // console.log('load Token:', getToken(), to.fullPath.replace(/([&|?])(tmstoken=[^&]*&?)/, '$1').replace(/\?$/, ''))
-    })
-  } else if (to.query.nologin) {
-    store.dispatch('Login', {
-      'accNum': 'aflc-5',
-      'username': '13416233760|aflc-5',
-      'password': '123456',
-      'memberType': 'AF00107',
-      'mobile': '13416233760'
-    }).then((data) => {
-      const roles = data.rolesIdList
-      store.dispatch('GenerateRoutes', { roles }).then(() => {
-        router.addRoutes(store.getters.addRouters)
-        next({ ...to, replace: true })
-      })
-      /* next({
-        path: '/'
-      }) */
+    }).catch(err => {
+      if (param.loginType === 'sso') {
+        store.dispatch('login2tms')
+      } else {
+        // 跳转到登录页
+        location.href = 'http://192.168.1.170/member/index_do.php?fmdo=login&dopost=exit&nexturl=../member/login.php'
+      }
     })
   } else if (getToken()) {
-    console.log('step6666')
     if (to.path === '/login') {
       next({ path: '/' })
     } else {
       // 如果没有当前角色权限信息，则请求获取
       if (store.getters.roles.length === 0) {
-        console.log('step77777')
-        const param = getLogin()
         const access_token = getToken()
 
         store.dispatch(param.loginType === 'sso' ? 'FeLogin2' : 'GetInfo', {
           access_token
         }).then(res => {
-          console.log('step3333')
-
           const roles = res.data.rolesIdList
           const data = res.data
           const urlboj = { ...to }
@@ -111,17 +95,20 @@ router.beforeEach((to, from, next) => {
           })
         }).catch(() => {
           removeToken()
-          // 跳转到登录页
-          location.href = 'http://192.168.1.170/member/index_do.php?fmdo=login&dopost=exit&nexturl=../member/login.php'
+          if (param.loginType === 'sso') {
+            store.dispatch('login2tms')
+          } else {
+            // 跳转到登录页
+            location.href = 'http://192.168.1.170/member/index_do.php?fmdo=login&dopost=exit&nexturl=../member/login.php'
+          }
+
           /* next({ path: '/login', query: {
             // 删除settoken，避免重复循环
             tourl: to.fullPath.replace(/([&|?])(settoken=[^&]*&?)/, '$1')
           }}) */
         })
       } else {
-        console.log('step8888')
         const data = getUserInfo()
-        console.log('data data:', data, to)
         // 如果是未认证状态则强制跳转到认证页面
         /* if (data.authStatus === 'AF0010401' && to.path.indexOf('/baseInfo/authentication') === -1) {
           console.log('data data:1')
@@ -143,20 +130,24 @@ router.beforeEach((to, from, next) => {
       }
     }
   } else {
-    console.log('data data:3', to.path)
     if (whiteList.indexOf(to.path) !== -1) {
       next()
     } else {
-    next({ path: '/login', query: {
+      if (param.loginType === 'sso') {
+        store.dispatch('login2tms')
+      } else {
+        // 跳转到登录页
+        location.href = 'http://192.168.1.170/member/index_do.php?fmdo=login&dopost=exit&nexturl=../member/login.php'
+      }
+      /* next({ path: '/login', query: {
         tourl: to.fullPath
-      }}) 
-    //   location.href = 'http://192.168.1.170/member/index_do.php?fmdo=login&dopost=exit&nexturl=../member/login.php'
-    //   NProgress.done()
+      }}) */
+      // location.href = 'http://192.168.1.170/member/index_do.php?fmdo=login&dopost=exit&nexturl=../member/login.php'
+      NProgress.done()
     }
   }
 })
 
 router.afterEach(() => {
-  console.log('data data:4')
   NProgress.done() // 结束Progress
 })

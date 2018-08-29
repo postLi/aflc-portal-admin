@@ -101,16 +101,20 @@ export default {
   watch: {
     value: {
       handler(newVal) {
-          if (this.showFileList) {
-              let arr = Array.isArray(newVal) ? newVal : newVal ? newVal.split(',') : []
-              arr = arr.filter(el => el)
-              this.filelist = arr.map(el => {
-                  const obj = {}
-                  obj.url = el
-                  return obj
-                })
-            }
-        },
+        if (this.showFileList) {
+          let arr = Array.isArray(newVal) ? newVal : newVal ? newVal.split(',') : []
+          arr = arr.filter(el => el)
+          this.filelist = arr.map(el => {
+            const obj = {}
+            obj.url = el
+            return obj
+          })
+        } else {
+          this.filelist = [{
+            url: newVal
+          }]
+        }
+      },
       immediate: true
     }
   },
@@ -120,15 +124,16 @@ export default {
   methods: {
     init() {
         // 从后台获取policy
-      getUploadPolicy().then(data => {
-          this.upload.OSSAccessKeyId = data.accessid
-          this.upload.policy = data.policy
-          this.upload.signature = data.signature
-          this.uploadUrl = data.host
-          this.dir = data.dir
-          this.upload.key = data.dir + this.random_string() + type
-        }).catch(err => {
-        })
+      return getUploadPolicy().then(data => {
+        this.upload.OSSAccessKeyId = data.accessid
+        this.upload.policy = data.policy
+        this.upload.signature = data.signature
+        this.uploadUrl = data.host
+        this.dir = data.dir
+        // this.upload.key = data.dir + this.random_string() + type
+      }).catch(err => {
+        console.log('get Policy ERror:', err)
+      })
     },
     rmImage() {
       this.emitInput('')
@@ -150,8 +155,8 @@ export default {
       　　var maxPos = chars.length
       　　var pwd = ''
       　　for (var i = 0; i < len; i++) {
-      pwd += chars.charAt(Math.floor(Math.random() * maxPos))
-    }
+        pwd += chars.charAt(Math.floor(Math.random() * maxPos))
+      }
       return pwd
     },
     emitInput(val) {
@@ -168,16 +173,18 @@ export default {
     handleImageScucess(xml) {
       let url = ''
       if (xml.indexOf('Location') !== -1) {
-          url = xml.match(/<Location>([^<]+)<\/Location>/m)
-          url = url ? url[1] : ''
-        }
+        url = xml.match(/<Location>([^<]+)<\/Location>/m)
+        url = url ? url[1] : ''
+      }
       this.emitInput(url)
       // this.imageUrl = url
     },
     handleError(err) {
+      console.log('upload err:', err)
       this.$emit('error', err)
     },
     beforeUpload(file) {
+      console.log('beforeUpload:', file)
       const _self = this
       const isJPG = /image\/\w+/.test(file.type) && /(jpe?g|png)/i.test(file.type)
       const isLt5M = file.size / 1024 / 1024 < 5
@@ -192,9 +199,18 @@ export default {
           this.$message.error('上传头像图片大小不能超过 5MB!')
           reject(false)
         } else {
+          console.log('loooo1')
+          // 上传前统一获取下凭证
+          this.init().then(res => {
+            console.log('loooo2')
             // 设置文件名
-          this.upload.key = this.dir + parseTime(new Date(), '{y}{m}{d}') + '/' + this.random_string() + type
-          resolve(true)
+            this.upload.key = this.dir + parseTime(new Date(), '{y}{m}{d}') + '/' + this.random_string() + type
+            resolve(true)
+          }).catch(err => {
+            console.log('loooo3')
+            this.$message.error('未知错误：' + JSON.stringify(err))
+            resolve(false)
+          })
         }
       })
     }
