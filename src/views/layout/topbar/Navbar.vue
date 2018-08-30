@@ -1,7 +1,7 @@
 <template>
   <div class="navbar clearfix">
     <div class="logo-panel">
-      <router-link to="/"><img src="../../../assets/logo.png" alt=""></router-link>
+      <router-link to="/"><img src="../../../assets/logo2.png" alt=""></router-link>
     </div>
     <TopNavMenu />
 <!--     <router-link tag="div" class="pickClip" to="/order/pickClip"><icon-svg icon-class="tiaodanjia" />挑坕夹</router-link> -->

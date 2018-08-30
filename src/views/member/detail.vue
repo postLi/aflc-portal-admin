@@ -13,7 +13,7 @@ export default {
   watch: {
     $route: {
       handler() {
-        this.url = 'http://wwww.56lines.cn' + this.$route.meta.url
+        this.url = 'http://www.56lines.cn' + this.$route.meta.url
         console.log('this.url:', this.url)
       },
       immediate: true
