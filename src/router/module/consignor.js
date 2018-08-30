@@ -18,7 +18,7 @@ export default {
   children: [
     // 基本信息
     {
-      path: '/consignor/baseInfo', icon: 'QQ', name: '账号管理', component: _import('consignor/baseInfo/index'), redirect: '/consignor/baseInfo/index', meta: { role: ['admin'], title: '账号管理', istab: true, noCache: false },
+      path: '/consignor/baseInfo', icon: 'zhanghaogl', name: '账号管理', component: _import('consignor/baseInfo/index'), redirect: '/consignor/baseInfo/index', meta: { role: ['admin'], title: '账号管理', istab: true, noCache: false },
       children: [
         {
           path: '/baseInfo/authentication', icon: 'QQ', name: '完善实名认证', component: _import('consignor/baseInfo/authentication/index'), meta: { role: ['admin'], title: '完善实名认证', noCache: false }
@@ -30,7 +30,7 @@ export default {
     },
     // 订单管理
     {
-      path: '/consignor/order', icon: 'QQ', name: '订单管理', component: _import('carrier/order/index'), redirect: '/order/manage', meta: { role: ['admin'], title: '订单管理', istab: true, noCache: false },
+      path: '/consignor/order', icon: 'dingdangl', name: '订单管理', component: _import('carrier/order/index'), redirect: '/order/manage', meta: { role: ['admin'], title: '订单管理', istab: true, noCache: false },
       children: [
         {
           path: '/order/create', icon: 'QQ', name: '创建订单', component: _import('carrier/order/create/index'), meta: { role: ['admin'], title: '创建订单', noCache: false }
@@ -52,14 +52,14 @@ export default {
       ]
     },
     {
-      path: '/order/rate', icon: 'QQ', name: '评价管理', component: _import('consignor/order/rate/index'), meta: { role: ['admin'], title: '评价管理', noCache: false }
+      path: '/order/rate', icon: 'pingjiagl', name: '评价管理', component: _import('consignor/order/rate/index'), meta: { role: ['admin'], title: '评价管理', noCache: false }
     },
     {
-      path: '/order/complaints', icon: 'QQ', name: '投诉管理', component: _import('consignor/order/complaints/index'), meta: { role: ['admin'], title: '投诉管理', noCache: false }
+      path: '/order/complaints', icon: 'tousugl', name: '投诉管理', component: _import('consignor/order/complaints/index'), meta: { role: ['admin'], title: '投诉管理', noCache: false }
     },
     // 货源信息管理
     {
-      path: '/consignor/cargoInfo', icon: 'QQ', name: '货源管理', component: _import('consignor/cargoInfo/index'), redirect: '/cargoInfo/manage', meta: { role: ['admin'], title: '货源管理', istab: true, noCache: false },
+      path: '/consignor/cargoInfo', icon: 'huoyuangl', name: '货源管理', component: _import('consignor/cargoInfo/index'), redirect: '/cargoInfo/manage', meta: { role: ['admin'], title: '货源管理', istab: true, noCache: false },
       children: [
         {
           path: '/cargoInfo/create', icon: 'QQ', name: '发布货源', component: _import('carrier/order/create/index'), meta: { role: ['admin'], title: '发布货源信息', noCache: false }

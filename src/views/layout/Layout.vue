@@ -13,12 +13,7 @@
       </div>
     </div>
     <LockScreen></LockScreen>
-    <el-dialog top="0" width="90%" :close-on-click-modal="false" class="showDetailPop" v-if="showDetail" title="订单详情" :visible.sync="showDetailVisible">
-        <OrderDetail :ispop="true" :orderid="orderid" />
-    </el-dialog>
-    <el-dialog top="0" :close-on-click-modal="false" width="90%" class="showDetailPop" v-if="showCreate" title="创建订单" :visible.sync="showCreateVisible">
-        <CreateOrder :ispop="true" :orderobj="orderobj" />
-    </el-dialog>
+
   </div>
 </template>
 
@@ -26,8 +21,6 @@
 <script>
 import { objectMerge2 } from '@/utils/'
 import LockScreen from '@/components/LockScreen/index'
-import OrderDetail from '@/views/operation/order/orderDetail/index'
-import CreateOrder from '@/views/operation/order/createOrder/main'
 import { Navbar, Sidebar, AppMain, TagsView } from '@/views/layout'
 
 export default {
@@ -37,9 +30,7 @@ export default {
     Sidebar,
     AppMain,
     TagsView,
-    LockScreen,
-    CreateOrder,
-    OrderDetail
+    LockScreen
   },
   data() {
     return {

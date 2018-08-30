@@ -100,19 +100,19 @@ service.interceptors.response.use(
           })
         })
       } else {
-        Message({
+        /* Message({
           message: '请求错误：' + status,
           type: 'error',
           duration: 5 * 1000
-        })
+        }) */
       }
     } else {
       console.log('response err:', error)// for debug
-      Message({
+      /* Message({
         message: error.message,
         type: 'error',
         duration: 5 * 1000
-      })
+      }) */
     }
     return Promise.reject(error)
   }
