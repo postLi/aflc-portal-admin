@@ -31,7 +31,7 @@ const app = {
     // 锁定 屏幕
     login2tms({ commit }) {
       return new Promise(resolve => {
-        location.href = 'http://192.168.1.157:9528'
+        location.href = 'http://www.28tms.cn'
       })
     },
 

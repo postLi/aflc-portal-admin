@@ -10,7 +10,7 @@ function loginCms() {
   const form = new FormData()
   form.append('fmdo', 'login')
   form.append('dopost', 'login')
-  form.append('gourl', 'http://192.168.1.170/member/content_list.php?channelid=1')
+  form.append('gourl', 'http://www.56lines.cn/member/content_list.php?channelid=1')
 
   form.append('userType', 'aflc-5')
   form.append('userid', '13088888881')
@@ -18,7 +18,7 @@ function loginCms() {
   form.append('vdcode', '99999')
 
   return fetch.request({
-    url: 'http://192.168.1.170/member/index_do.php',
+    url: 'http://www.56lines.cn/member/index_do.php',
     method: 'post',
     headers: {
       'Content-Type': 'multipart/form-data',
@@ -66,7 +66,7 @@ router.beforeEach((to, from, next) => {
         store.dispatch('login2tms')
       } else {
         // 跳转到登录页
-        location.href = 'http://192.168.1.170/member/index_do.php?fmdo=login&dopost=exit&nexturl=../member/login.php'
+        location.href = 'http://www.56lines.cn/member/index_do.php?fmdo=login&dopost=exit&nexturl=../member/login.php'
       }
     })
   } else if (getToken()) {
@@ -99,7 +99,7 @@ router.beforeEach((to, from, next) => {
             store.dispatch('login2tms')
           } else {
             // 跳转到登录页
-            location.href = 'http://192.168.1.170/member/index_do.php?fmdo=login&dopost=exit&nexturl=../member/login.php'
+            location.href = 'http://www.56lines.cn/member/index_do.php?fmdo=login&dopost=exit&nexturl=../member/login.php'
           }
 
           /* next({ path: '/login', query: {
@@ -137,12 +137,12 @@ router.beforeEach((to, from, next) => {
         store.dispatch('login2tms')
       } else {
         // 跳转到登录页
-        location.href = 'http://192.168.1.170/member/index_do.php?fmdo=login&dopost=exit&nexturl=../member/login.php'
+        location.href = 'http://www.56lines.cn/member/index_do.php?fmdo=login&dopost=exit&nexturl=../member/login.php'
       }
       /* next({ path: '/login', query: {
         tourl: to.fullPath
       }}) */
-      // location.href = 'http://192.168.1.170/member/index_do.php?fmdo=login&dopost=exit&nexturl=../member/login.php'
+      // location.href = 'http://www.56lines.cn/member/index_do.php?fmdo=login&dopost=exit&nexturl=../member/login.php'
       NProgress.done()
     }
   }
