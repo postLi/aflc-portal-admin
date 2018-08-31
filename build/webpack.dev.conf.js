@@ -36,6 +36,8 @@ const devWebpackConfig = merge(baseWebpackConfig, {
   // cheap-module-eval-source-map is faster for development
   devtool: '#cheap-module-eval-source-map',
   // these devServer options should be customized in /config/index.js
+  //https://webpack.docschina.org/configuration/dev-server/
+  //文档
   devServer: {
     clientLogLevel: 'warning',
     historyApiFallback: {
@@ -43,10 +45,13 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         { from: /.*/, to: path.posix.join(config.dev.assetsPublicPath, 'index.html') },
       ],
     },
+    allowedHosts:['member.56lines.cn','*.56lines.cn'],
+    // useLocalIp: true,
     hot: true,
     contentBase: false, // since we use CopyWebpackPlugin.
     compress: true,
     host:  getLocalIp() || config.dev.host,
+    // host:  config.dev.host,
     port:  config.dev.port,
     disableHostCheck: true,
     open: config.dev.autoOpenBrowser,
