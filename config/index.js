@@ -40,7 +40,10 @@ module.exports = {
       '/api' : {
         target: "http://192.168.1.78:7010",
         pathRewrite: {'^/api': ''},
-        changeOrigin: true
+        changeOrigin: true,
+        // secure: false,
+        // toProxy: true,
+        logLevel: 'debug'
       },
     //   '/localapi' : {
     //     target: "http://192.168.1.233:7010",

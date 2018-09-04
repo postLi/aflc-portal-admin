@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>wzgl</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Artboard" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(-20.000000, -329.000000)">
+        <g id="wzgl" transform="translate(21.000000, 330.000000)" stroke="#FFFFFF">
+            <circle id="Oval-2" cx="9" cy="9" r="9"></circle>
+            <path d="M9.31120948,18 C11.6922247,18 13.622419,13.9705627 13.622419,9 C13.622419,4.02943725 11.6922247,1.77635684e-15 9.31120948,0 C6.93019423,8.8817842e-15 5,4.02943725 5,9 C5,13.9705627 6.93019423,18 9.31120948,18 Z" id="Oval-2-Copy"></path>
+            <path d="M9.9514881,-3 C8.76803717,-1.65141796 8,0.521649241 8,2.97271975 C8,5.45712311 8.78906875,7.65591043 10,9" id="Oval-2-Copy-2" stroke-width="0.81" transform="translate(9.000000, 3.000000) rotate(-90.000000) translate(-9.000000, -3.000000) "></path>
+            <path d="M9.9514881,9 C8.76803717,10.348582 8,12.5216492 8,14.9727198 C8,17.4571231 8.78906875,19.6559104 10,21" id="Oval-2-Copy-3" stroke-width="0.81" transform="translate(9.000000, 15.000000) scale(1, -1) rotate(-90.000000) translate(-9.000000, -15.000000) "></path>
+            <path d="M0.5,9.5 L17.5,9.5" id="Line-3" stroke-linecap="square"></path>
+        </g>
+    </g>
+</svg>
