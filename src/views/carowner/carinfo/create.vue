@@ -109,8 +109,11 @@
         <upload :limit="5" listtype="picture-card" :title="'身份证'" :showFileList="true" v-model="ruleForm.carFile" />
       </el-form-item>
 </div>
-        <el-button class="create-carinfo-btn" type="primary" @click="submitForm('ruleForm')">立即发布</el-button>
-        <!-- <el-button @click="resetForm('ruleForm')">重置</el-button> -->
+<div class="car-submit">
+  <el-button type="info" @click="resetForm">重置</el-button>
+  <el-button class="create-carinfo-btn" type="primary" @click="submitForm('ruleForm')">立即发布</el-button>
+</div>
+        
   
     </el-form>
   </div>
@@ -154,17 +157,17 @@ export default {
         'belongDriver': '', // 车源所属车主
         // 'browseNumber': 0, // 浏览量
         'carFile': '', // 车辆45度照
-        'carHeight': 0, // 车高
-        'carLength': 0, // 车长
-        'carLoad': 0, // 车载重
+        'carHeight': '', // 车高
+        'carLength': '', // 车长
+        'carLoad': '', // 车载重
         'carNum': '', // 车牌号
         'carSourceType': '', // 车源类型  "AF01801","回程车" "AF01802","本地车"
         'carSpec': '', // 车辆规格
         'carTag': '', // 车辆标签属性（用|分割）
         'carTagName': '', // 车辆标签属性（用|分割）
         'carType': '', // 车类型
-        'carVolume': 0, // 车辆体积
-        'carWidth': 0, // 车宽
+        'carVolume': '', // 车辆体积
+        'carWidth': '', // 车宽
         // 'createTime': '', // 创建时间
         // 'creater': '', // 创建人
         'driverId': '', // 车主id
@@ -175,7 +178,7 @@ export default {
         endArea: '',
         // 'endAddressName': 'string', // 目的地地址名称
         // 'endTime': '2018-07-25T02:05:50.884Z', // 发车结束时间
-        'expectPrice': 0, // 期望运价
+        'expectPrice': '', // 期望运价
         // 'id': 'string', // 车源id 修改时要查
         // 'isCommonRoute': 'string', // 是否常用路线
         // 'isEnable': 'string', // 是否启用
@@ -306,11 +309,61 @@ export default {
       this.popVisible = true
       this.current = name
     },
+    resetForm() {
+      this.ruleForm = this.$options.data().ruleForm
+    },
+    // 检测必填项
+    checkValue(data) {
+      if (!data.carNum) {
+        this.$message.error('请填写车牌号。')
+        return false
+      }
+      if (!data.carType) {
+        this.$message.error('请选择车辆类型。')
+        return false
+      }
+      if (!data.carLength) {
+        this.$message.error('请填写车辆长度。')
+        return false
+      }
+      if (!data.carWidth) {
+        this.$message.error('请填写车辆宽度。')
+        return false
+      }
+      if (!data.carHeight) {
+        this.$message.error('请填写车辆高度。')
+        return false
+      }
+      if (!data.carLoad) {
+        this.$message.error('请填写车辆载重。')
+        return false
+      }
+      if (!data.usualPlace) {
+        this.$message.error('请填写车辆常驻地。')
+        return false
+      }
+      if (!data.strartAddress) {
+        this.$message.error('请填写车辆出发地。')
+        return false
+      }
+      if (!data.endAddress) {
+        this.$message.error('请填写车辆到达地。')
+        return false
+      }
+      if (!data.carFile) {
+        this.$message.error('请上传车辆45°照片。')
+        return false
+      }
+      return true
+    },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.loading = true
           const data = Object.assign({}, this.ruleForm)
+          if (this.checkValue(data) === false) {
+            return false
+          }
+          this.loading = true
           data.title = data.strartAddress + '->' + data.endAddress
           data.carTag = this.labelArr.filter(el => el.ischeck).map(el => el.code).join('|')
           data.carTagName = this.labelArr.filter(el => el.ischeck).map(el => el.name).join('|')
@@ -396,9 +449,12 @@ export default {
       width: 40%;
     }
   }
-  .create-carinfo-btn{
+  .car-submit{
     margin: 40px auto 100px;
-    display: block;
+    text-align: center;
+  }
+  .create-carinfo-btn{
+    
   }
   .label-content{
     span{

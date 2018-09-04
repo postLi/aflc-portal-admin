@@ -234,7 +234,7 @@
 
       <el-form-item>
           <div class="tab-create-btn" style="width:30%;">
-            <el-button  size="middle" type="primary" @click="resetForm('ruleForm')">重置</el-button>
+            <el-button  size="middle" type="info" @click="resetForm('ruleForm')">重置</el-button>
             <el-button  size="middle" type="primary" @click="submitForm('ruleForm')">立即下单</el-button>
           </div>
         <!-- <el-button @click="resetForm('ruleForm')">重置</el-button> -->
@@ -1030,9 +1030,19 @@ export default {
         this.$message.error('保存失败：' + JSON.stringify(err))
       })
     },
-    //重置
+    // 重置
     resetForm(formName) {
-        
+      this.aflcOrderAddressWebDtoList = this.$options.data().aflcOrderAddressWebDtoList
+      this.ruleForm = this.$options.data().ruleForm
+      this.cargoList = []
+      // this.cargoListPre = []
+      this.wlbestlist = []
+      this.wlbestlistObj = {}
+      this.usersArr = []
+      this.netQuery = {}
+      this.popPointList = this.$options.data().popPointList
+      this.contactform = this.$options.data().contactform
+      this.initNew()
     },
     // 提交表单
     submitForm(formName) {

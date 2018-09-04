@@ -212,7 +212,7 @@ export default {
 .nologin{
   position: fixed;
   width: 190px;
-  height: 100px;
+  height: 50px;
   background: rgb(0,32,57);
   left: 0;
   bottom: 0;
