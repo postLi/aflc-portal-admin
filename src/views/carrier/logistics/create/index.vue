@@ -191,6 +191,18 @@ export default {
         vregion
     },
     data() {
+        var checkStartLocation  = (rule, value, callback) => {
+            // console.log(value)
+            console.log(value)
+            // if (value === '') {
+            //     callback(new Error('请输入出发地'));
+            // } else {
+            //     if (!REGEX.MOBILE.test(value)) {
+            //         callback(new Error('请输入正确的手机号码格式'));
+            //     }
+            //     callback();
+            // }
+        };
         var checkStartLocationContactsMobile  = (rule, value, callback) => {
             // console.log(value)
             if (value === '') {
@@ -304,7 +316,7 @@ export default {
             ],
             rules: {
                 startLocation:[
-                    { required: true, message: '请输入出发地', trigger: 'change' },
+                    { required: true, validator: checkStartLocation, trigger: 'change' },
                 ],
                 endLocation: [
                     { required: true, message: '请输入到达地', trigger: 'change' },

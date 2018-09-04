@@ -137,7 +137,10 @@ router.beforeEach((to, from, next) => {
         store.dispatch('login2tms')
       } else {
         // 跳转到登录页
-        location.href = 'http://192.168.1.170/member/index_do.php?fmdo=login&dopost=exit&nexturl=../member/login.php'
+        next({ path: '/login', query: {
+            tourl: to.fullPath
+          }})
+        // location.href = 'http://192.168.1.170/member/index_do.php?fmdo=login&dopost=exit&nexturl=../member/login.php'
       }
       /* next({ path: '/login', query: {
         tourl: to.fullPath

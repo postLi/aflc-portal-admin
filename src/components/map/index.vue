@@ -188,6 +188,7 @@ export default {
       }, 3)
 
       function findInfo(pos) {
+          console.log('2222',pos)
         geocoder.getAddress(pos, function(status, result) {
           if (status === 'complete' && result.info === 'OK') {
             geocoder_CallBack(result, pos)
@@ -208,6 +209,7 @@ export default {
       })
 
       function geocoder_CallBack(data, pos) {
+        console.log('1111111111111',pos)
         var haspx = !!pos.lat
 
         console.log('geocodeer:', data)
@@ -256,6 +258,7 @@ export default {
       this.thename = addr
       this.theobj = obj
       this.noinfo = false
+      console.log(obj)
     },
     submitForm() {
       this.$emit('success', this.thepos, this.thename, this.theobj)

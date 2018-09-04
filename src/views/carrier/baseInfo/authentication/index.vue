@@ -452,25 +452,24 @@ export default {
                 this.completeInfo();
                 let form = Object.assign({},this.logisticsForm,{authStatus:'AF0010402',authStatusName:'待认证'});
                 console.log(form)
-                if (valid) {
-                    // this.logisticsForm.
-                    identifyCarrier(form).then(res=>{
-                        console.log(res)
-                        this.getMoreInformation();
-                        this.clear();
-                    }).catch(err=>{
-                    this.$message({
-                        type: 'info',
-                        message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
-                    })
-                })
-                } else {
-                    this.$message({
-                        type: 'info',
-                        message: '请填写完整信息' 
-                    })
-                    return false;
-                }
+                // if (valid) {
+                //     identifyCarrier(form).then(res=>{
+                //         console.log(res)
+                //         this.getMoreInformation();
+                //         this.clear();
+                //     }).catch(err=>{
+                //         this.$message({
+                //             type: 'info',
+                //             message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                //         })
+                //     })
+                // } else {
+                //     this.$message({
+                //         type: 'info',
+                //         message: '请填写完整信息' 
+                //     })
+                //     return false;
+                // }
             });
         },
         resetForm(formName) {
