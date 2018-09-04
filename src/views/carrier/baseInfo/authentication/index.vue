@@ -105,7 +105,11 @@
                     </el-input>
                 </el-form-item><br>
                 <el-form-item label="公司所在地：" prop="belongCityName">
-                    <el-input @focus="()=>{showMap('endAddress')}" v-model="logisticsForm.belongCityName" :disabled="ifDisable === false"></el-input>
+                    
+                    <vregion :ui="true" @values="regionChange" class="form-control">
+                        <el-input v-model="logisticsForm.belongCityName" :disabled="ifDisable === false" placeholder="请选择出发地"></el-input>
+                    </vregion>
+                    <!-- <el-input @focus="()=>{showMap(logisticsForm.belongCityName)}" v-model="logisticsForm.belongCityName" :disabled="ifDisable === false"></el-input> -->
                 </el-form-item> 
                 <el-form-item label="详细地址：" class="moreWidth" prop="address">
                     <el-input @focus="()=>{showMap('endAddress')}" v-model="logisticsForm.address" :disabled="ifDisable === false"></el-input>
@@ -152,7 +156,7 @@
                 <el-button size="medium" type="primary" @click="submitForm('ruleForm')" v-show="ifDisable">确认提交</el-button>
             </el-form-item>
         </el-form>
-        <tmsmap @success="getInfo" pos="" name="" :popVisible.sync="popVisible" />
+        <tmsmap @success="getInfo" pos="" :name="logisticsForm.belongCityName" :popVisible.sync="popVisible" />
 
     </div>
 </template>
@@ -168,11 +172,13 @@ import { parseTime,pickerOptions2 } from '@/utils/index.js'
 
 import { getUserInfo } from '@/utils/auth.js'
 import tmsmap from '@/components/map/index'
+import vregion from '@/components/vregion/Region.vue'
 
 export default {
     components:{
         upload,
-        tmsmap
+        tmsmap,
+        vregion
     },
     data() {
         var checkCreditCode = (rule, value, callback) => {
@@ -264,6 +270,9 @@ export default {
                 companyFacadeFile:'',//档口
                 longitude:'',//经度
                 latitude:'',//纬度
+                provinceCode:'',//省code
+                cityCode:'',//市code
+                areaCode:'',//区code
             },
             rules: {
                 companyName: [
@@ -349,16 +358,37 @@ export default {
         this.getMoreInformation();
     },  
     methods: {
+        regionChange(d) {
+            console.log('data:',d)
+            this.logisticsForm.address = '';
+            this.logisticsForm.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+            this.logisticsForm.provinceCode = d.province ? d.province.code : '';
+            this.logisticsForm.cityCode = d.city ? d.city.code : '';
+            this.logisticsForm.areaCode = d.area ? d.area.code : '';
+            // console.log(this.logisticsForm.provinceCode,this.logisticsForm.cityCode,this.logisticsForm.areaCode)
+        },
+        getValue(obj){
+            return obj ? obj.value:'';
+        },
         getInfo(pos, name, info) {
             // info.name  info.pos
             console.log(pos, name, info)
-            this.logisticsForm.belongCityName = info.addressComponent.province +info.addressComponent.city+info.addressComponent.district;
+            // this.logisticsForm.belongCityName = info.addressComponent.province +info.addressComponent.city+info.addressComponent.district;
             this.logisticsForm.address = name;
             this.logisticsForm.longitude =  pos.split(",")[0];
             this.logisticsForm.latitude =  pos.split(",")[1];
+            console.log(this.logisticsForm.address,this.logisticsForm.belongCityName)
+            if(this.logisticsForm.address.indexOf(this.logisticsForm.belongCityName) == -1){
+                this.$message({
+                    type: 'info',
+                    message: '检测到详细地址中未包含公司所在地，请填写正确详细地址！'
+                })
+                return  this.logisticsForm.address = '';
+            }
         },
         showMap(name) {
             this.popVisible = true ;
+            console.log(name)
         },
         getMoreInformation(){
             let res = getUserInfo() ;
@@ -510,5 +540,14 @@ export default {
         }
 
 
+        .carrierIdentification .el-form-item .el-form-item__content .v-region .v-dropdown-container {
+            top: 35px !important;
+            left: 0px !important;
+        }
+
+
+        .carrierIdentification .el-form-item .el-form-item__content .v-region .caller-container,.carrierIdentification .el-form-item .el-form-item__content .v-region{
+            width: 100%;
+        }
 
 </style>

@@ -191,18 +191,6 @@ export default {
         vregion
     },
     data() {
-        var checkStartLocation  = (rule, value, callback) => {
-            // console.log(value)
-            console.log(value)
-            // if (value === '') {
-            //     callback(new Error('请输入出发地'));
-            // } else {
-            //     if (!REGEX.MOBILE.test(value)) {
-            //         callback(new Error('请输入正确的手机号码格式'));
-            //     }
-            //     callback();
-            // }
-        };
         var checkStartLocationContactsMobile  = (rule, value, callback) => {
             // console.log(value)
             if (value === '') {
@@ -316,7 +304,7 @@ export default {
             ],
             rules: {
                 startLocation:[
-                    { required: true, validator: checkStartLocation, trigger: 'change' },
+                    { required: true, message: '请输入出发地', trigger: 'change' },
                 ],
                 endLocation: [
                     { required: true, message: '请输入到达地', trigger: 'change' },
@@ -388,6 +376,20 @@ export default {
             this.ruleForm.startProvince = d.province ? d.province.name : '';
             this.ruleForm.startCity = d.city ? d.city.name : '';
             this.ruleForm.startArea = d.area ? d.area.name : '';
+            let zhixiashi = ['北京市','天津市','重庆市','上海市'];
+            let ifZhixia = false;
+            zhixiashi.forEach(el => {
+                if(this.ruleForm.startProvince == el){
+                    ifZhixia = true;
+                }
+            })
+            if(this.ruleForm.startCity == '' && ifZhixia == false){
+                this.$message({
+                    type: 'info',
+                    message: '至少选择到市级范围'
+                })
+                return this.ruleForm.startLocation = '';
+            }
         },
         regionChangeEnd(d) {
             console.log('data:',d)
@@ -402,6 +404,22 @@ export default {
             this.ruleForm.endProvince = d.province ? d.province.name : '';
             this.ruleForm.endCity = d.city ? d.city.name : '';
             this.ruleForm.endArea = d.area ? d.area.name : '';
+            let zhixiashi = ['北京市','天津市','重庆市','上海市'];
+            let ifZhixia = false;
+            zhixiashi.forEach(el => {
+                if(this.ruleForm.endProvince == el){
+                    ifZhixia = true;
+                }
+            })
+
+            console.log(ifZhixia,this.ruleForm.endProvince)
+            if(this.ruleForm.endCity == '' && ifZhixia == false){
+                this.$message({
+                    type: 'info',
+                    message: '至少选择到市级范围'
+                })
+                return this.ruleForm.endLocation = '';
+            }
         },
         getValue(obj){
             return obj ? obj.value:'';
