@@ -235,7 +235,7 @@
       <el-form-item>
           <div class="tab-create-btn" style="width:30%;">
             <el-button  size="middle" type="info" @click="resetForm('ruleForm')">重置</el-button>
-            <el-button  size="middle" type="primary" @click="submitForm('ruleForm')">立即下单</el-button>
+            <el-button  size="middle" type="primary" @click="submitForm('ruleForm')">立即发布</el-button>
           </div>
         <!-- <el-button @click="resetForm('ruleForm')">重置</el-button> -->
       </el-form-item>
