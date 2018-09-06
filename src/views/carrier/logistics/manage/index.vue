@@ -172,6 +172,7 @@ export default {
     },  
     methods: {
         firstblood(){
+            this.loading = true;
             getTransportRangeList(this.page,this.pagesize,this.logisticsForm).then(res=>{
                 this.tableData = res.data.list;
                 this.totalCount = res.data.totalCount;

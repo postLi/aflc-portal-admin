@@ -151,6 +151,7 @@ export default {
             this.pagesize = obj.pageSize
         },
         firstblood(){
+            this.loading = true;
             getPointNetwork(this.page,this.pagesize,this.logisticsForm).then(res=>{
                 // console.log(res)
                 this.tableData = res.data.list;
@@ -232,6 +233,7 @@ export default {
             .el-table{
                 .cell{
                     img{
+                        cursor: pointer;
                         display: inline-block;
                         width: 128px;
                         height: 60px;
