@@ -15,8 +15,8 @@
                 <!-- <el-input @focus="()=>{showMap('strartAddress')}"  v-model="ruleForm.startLocation"></el-input> -->
                 <el-input v-model="ruleForm.startLocation" v-if="unable" :disabled="unable"></el-input>
 
-                <vregion :ui="true" @values="regionChangeStart" class="form-control" v-else>
-                    <el-input v-model="ruleForm.startLocation" placeholder="请选择出发地"></el-input>
+                <vregion :ui="true" @values="regionChangeStart" :ifAera = 'true' class="form-control" @testCity="ifProvice('startLocation')" v-else>
+                    <el-input v-model="ruleForm.startLocation" placeholder="请选择出发地" ></el-input>
                 </vregion>
             </el-form-item>
             <el-form-item label="联系人：" prop="startLocationContacts" label-width="150px">
@@ -29,7 +29,7 @@
                 <!-- <el-input @focus="()=>{showMap('endAddress')}" v-model="ruleForm.endLocation"></el-input> -->
                 <el-input v-model="ruleForm.endLocation" v-if="unable" :disabled="unable"></el-input>
 
-                <vregion :ui="true" @values="regionChangeEnd" class="form-control" v-else>
+                <vregion :ui="true" @values="regionChangeEnd" :ifAera = 'true' class="form-control"  @testCity="ifProvice('endLocation')" v-else>
                     <el-input v-model="ruleForm.endLocation"  placeholder="请选择到达地"></el-input>
                 </vregion>
             </el-form-item>
@@ -248,7 +248,6 @@ export default {
             btnText: '请选择',
             current:'',
             popVisible:false,
-            listtype:'picture-card',
             ifShowRangeType:'0',
             dedicated:'AF033',
             depart:'AF026',
@@ -370,29 +369,29 @@ export default {
             }
         },
         regionChangeStart(d) {
-            console.log('data:',d)
+            // console.log('data:',d)
             this.ruleForm.startLocation = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
             console.log(this.ruleForm.startLocation)
             this.ruleForm.startProvince = d.province ? d.province.name : '';
             this.ruleForm.startCity = d.city ? d.city.name : '';
             this.ruleForm.startArea = d.area ? d.area.name : '';
-            let zhixiashi = ['北京市','天津市','重庆市','上海市'];
-            let ifZhixia = false;
-            zhixiashi.forEach(el => {
-                if(this.ruleForm.startProvince == el){
-                    ifZhixia = true;
-                }
-            })
-            if(this.ruleForm.startCity == '' && ifZhixia == false){
-                this.$message({
-                    type: 'info',
-                    message: '至少选择到市级范围'
-                })
-                return this.ruleForm.startLocation = '';
-            }
+            // let zhixiashi = ['北京市','天津市','重庆市','上海市'];
+            // let ifZhixia = false;
+            // zhixiashi.forEach(el => {
+            //     if(this.ruleForm.startProvince == el){
+            //         ifZhixia = true;
+            //     }
+            // })
+            // if(this.ruleForm.startCity == '' && ifZhixia == false){
+            //     this.$message({
+            //         type: 'info',
+            //         message: '至少选择到市级范围'
+            //     })
+            //     return this.ruleForm.startLocation = '';
+            // }
         },
         regionChangeEnd(d) {
-            console.log('data:',d)
+            // console.log('data:',d)
             this.ruleForm.endLocation = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
             if(this.ruleForm.endLocation == this.ruleForm.startLocation){
                 this.$message({
@@ -404,20 +403,32 @@ export default {
             this.ruleForm.endProvince = d.province ? d.province.name : '';
             this.ruleForm.endCity = d.city ? d.city.name : '';
             this.ruleForm.endArea = d.area ? d.area.name : '';
-            let zhixiashi = ['北京市','天津市','重庆市','上海市'];
-            let ifZhixia = false;
-            zhixiashi.forEach(el => {
-                if(this.ruleForm.endProvince == el){
-                    ifZhixia = true;
-                }
-            })
+            // let zhixiashi = ['北京市','天津市','重庆市','上海市'];
+            // let ifZhixia = false;
+            // zhixiashi.forEach(el => {
+            //     if(this.ruleForm.endProvince == el){
+            //         ifZhixia = true;
+            //     }
+            // })
 
-            console.log(ifZhixia,this.ruleForm.endProvince)
-            if(this.ruleForm.endCity == '' && ifZhixia == false){
-                this.$message({
-                    type: 'info',
-                    message: '至少选择到市级范围'
-                })
+            // console.log(ifZhixia,this.ruleForm.endProvince)
+            // if(this.ruleForm.endCity == '' && ifZhixia == false){
+            //     this.$message({
+            //         type: 'info',
+            //         message: '至少选择到市级范围'
+            //     })
+            //     return this.ruleForm.endLocation = '';
+            // }
+        },
+        ifProvice(type){
+            console.log('ifProvice',type)
+            this.$message({
+                type: 'info',
+                message: '至少选择到市级范围'
+            })
+            if(type == 'startLocation'){
+                return this.ruleForm.startLocation = '';
+            }else{
                 return this.ruleForm.endLocation = '';
             }
         },

@@ -119,6 +119,10 @@
             text: {
                 type: Boolean,
                 default: false
+            },
+            ifAera:{
+                type:Boolean,
+                default:false
             }
         },
         data(){
@@ -404,9 +408,24 @@
                 }
             },
             showDropdown(val){
+                console.log(val)
                 if(typeof(val) === 'boolean') {
                     let that = this;
                     this.$refs.dropdown.$emit('show', val, this.$refs.caller);
+                    let ifZhixia = false;
+                    let zhixiashi = ['北京市','天津市','重庆市','上海市'];
+                    if(val == false && this.ifAera){
+                        zhixiashi.forEach(el => {
+                            if(this.itemProvince == el){
+                                ifZhixia = true;
+                            }
+                        })
+                        if(this.itemCity == null && ifZhixia == false){
+                            this.$emit('testCity');
+                            console.log('nonononononoo')
+                        }
+                    }
+
                     if(val) {
                         this.query = '';
                         this.$nextTick(()=>that.$refs.input.focus({preventScroll:true}));
