@@ -422,7 +422,6 @@
                         })
                         if(this.itemCity == null && ifZhixia == false){
                             this.$emit('testCity');
-                            console.log('nonononononoo')
                         }
                     }
 
