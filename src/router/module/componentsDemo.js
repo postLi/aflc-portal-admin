@@ -1,4 +1,4 @@
-const _import = require('../_import_' + process.env.NODE_ENV)
+const _import = require('../_import_' + (process.env.NODE_ENV === 'development' ? 'development' : 'production'))
 
 export default {
   name: 'components',

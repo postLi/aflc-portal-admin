@@ -66,7 +66,7 @@ router.beforeEach((to, from, next) => {
         store.dispatch('login2tms')
       } else {
         // 跳转到登录页
-        location.href = 'http://www.56lines.cn/member/index_do.php?fmdo=login&dopost=exit&nexturl=../member/login.php'
+        location.href = this.$const.INDEXURL + '/member/index_do.php?fmdo=login&dopost=exit&nexturl=../member/login.php'
       }
     })
   } else if (getToken()) {
@@ -99,7 +99,7 @@ router.beforeEach((to, from, next) => {
             store.dispatch('login2tms')
           } else {
             // 跳转到登录页
-            location.href = 'http://www.56lines.cn/member/index_do.php?fmdo=login&dopost=exit&nexturl=../member/login.php'
+            location.href = this.$const.INDEXURL + '/member/index_do.php?fmdo=login&dopost=exit&nexturl=../member/login.php'
           }
 
           /* next({ path: '/login', query: {
@@ -137,7 +137,7 @@ router.beforeEach((to, from, next) => {
         store.dispatch('login2tms')
       } else {
         // 跳转到登录页
-        location.href = 'http://www.56lines.cn/member/index_do.php?fmdo=login&dopost=exit&nexturl=../member/login.php'
+        location.href = this.$const.INDEXURL + '/member/index_do.php?fmdo=login&dopost=exit&nexturl=../member/login.php'
       }
       /* next({ path: '/login', query: {
         tourl: to.fullPath

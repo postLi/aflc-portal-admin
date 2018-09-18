@@ -24,7 +24,7 @@ export const SHORT_STATE = {
   3: '已到货',
   4: '已入库',
   5: '全部',
-  6: '已装车',
+  6: '已装车'
 }
 /**
  * 库存类型 repertoryType
@@ -33,3 +33,11 @@ export const REPERTORY_TYPE = {
   1: '发货库存',
   2: '到货库存'
 }
+let the56url = 'http://www.56lines.cn'
+if (process.env.NODE_ENV === 'development') {
+  the56url = 'http://192.168.1.170'
+} else if (process.env.NODE_ENV !== 'test') {
+  the56url = 'http://192.168.1.157:89'
+}
+
+export const INDEXURL = the56url

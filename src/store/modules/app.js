@@ -32,7 +32,7 @@ const app = {
     login2tms({ commit }) {
       return new Promise(resolve => {
         // location.href = 'http://www.28tms.cn'
-        location.href = 'http://www.56lines.cn/member/index_do.php?fmdo=login&dopost=exit&nexturl=../member/login.php'
+        location.href = this.$const.INDEXURL + '/member/index_do.php?fmdo=login&dopost=exit&nexturl=../member/login.php'
       })
     },
 
