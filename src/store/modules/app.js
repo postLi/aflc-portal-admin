@@ -1,4 +1,5 @@
 import Cookies from 'js-cookie'
+import * as $const from '@/utils/constant'
 console.log("!+Cookies.get('lockScreenStatus')", !+Cookies.get('lockScreenStatus'), Cookies.get('lockScreenStatus'))
 const app = {
   state: {
@@ -32,7 +33,7 @@ const app = {
     login2tms({ commit }) {
       return new Promise(resolve => {
         // location.href = 'http://www.28tms.cn'
-        location.href = this.$const.INDEXURL + '/member/index_do.php?fmdo=login&dopost=exit&nexturl=../member/login.php'
+        location.href = $const.INDEXURL + '/member/index_do.php?fmdo=login&dopost=exit&nexturl=../member/login.php'
       })
     },
 

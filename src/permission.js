@@ -1,4 +1,5 @@
 import router from './router'
+import * as $const from '@/utils/constant'
 import store from './store'
 import { eventBus } from '@/eventBus'
 import NProgress from 'nprogress' // Progress 进度条
@@ -66,7 +67,7 @@ router.beforeEach((to, from, next) => {
         store.dispatch('login2tms')
       } else {
         // 跳转到登录页
-        location.href = this.$const.INDEXURL + '/member/index_do.php?fmdo=login&dopost=exit&nexturl=../member/login.php'
+        location.href = $const.INDEXURL + '/member/index_do.php?fmdo=login&dopost=exit&nexturl=../member/login.php'
       }
     })
   } else if (getToken()) {
@@ -99,7 +100,7 @@ router.beforeEach((to, from, next) => {
             store.dispatch('login2tms')
           } else {
             // 跳转到登录页
-            location.href = this.$const.INDEXURL + '/member/index_do.php?fmdo=login&dopost=exit&nexturl=../member/login.php'
+            location.href = $const.INDEXURL + '/member/index_do.php?fmdo=login&dopost=exit&nexturl=../member/login.php'
           }
 
           /* next({ path: '/login', query: {
@@ -137,7 +138,7 @@ router.beforeEach((to, from, next) => {
         store.dispatch('login2tms')
       } else {
         // 跳转到登录页
-        location.href = this.$const.INDEXURL + '/member/index_do.php?fmdo=login&dopost=exit&nexturl=../member/login.php'
+        location.href = $const.INDEXURL + '/member/index_do.php?fmdo=login&dopost=exit&nexturl=../member/login.php'
       }
       /* next({ path: '/login', query: {
         tourl: to.fullPath

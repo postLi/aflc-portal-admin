@@ -36,7 +36,7 @@ export const REPERTORY_TYPE = {
 let the56url = 'http://www.56lines.cn'
 if (process.env.NODE_ENV === 'development') {
   the56url = 'http://192.168.1.170'
-} else if (process.env.NODE_ENV !== 'test') {
+} else if (process.env.NODE_ENV === 'test') {
   the56url = 'http://192.168.1.157:89'
 }
 
