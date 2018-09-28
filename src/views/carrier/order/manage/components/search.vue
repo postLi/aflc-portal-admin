@@ -16,16 +16,16 @@
             <el-input v-model="searchForm.endAddress" :maxlength="50" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="发货人：">
-            <el-input v-model="searchForm.consignee" :maxlength="50" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="发货人手机：">
-            <el-input v-model="searchForm.consigneePhone" :maxlength="50" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="收货人：">
             <el-input v-model="searchForm.consignor" :maxlength="50" auto-complete="off"></el-input>
         </el-form-item>
+        <el-form-item label="发货人手机：">
+            <el-input v-model="searchForm.consignorPhone" :maxlength="50" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="收货人：">
+            <el-input v-model="searchForm.consignee" :maxlength="50" auto-complete="off"></el-input>
+        </el-form-item>
         <el-form-item label="收货人手机：">
-            <el-input v-model="searchForm.shiconsignorPhonepSn" :maxlength="50" auto-complete="off"></el-input>
+            <el-input v-model="searchForm.consigneePhone" :maxlength="50" auto-complete="off"></el-input>
         </el-form-item>
       </div>
       <el-form-item class="staff_searchinfo--btn">
