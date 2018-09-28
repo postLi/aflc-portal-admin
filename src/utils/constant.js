@@ -33,11 +33,18 @@ export const REPERTORY_TYPE = {
   1: '发货库存',
   2: '到货库存'
 }
+
 let the56url = 'http://www.56lines.cn'
-if (process.env.NODE_ENV === 'development') {
+/* if (process.env.NODE_ENV === 'development') {
   the56url = 'http://192.168.1.170'
 } else if (process.env.NODE_ENV === 'test') {
   the56url = 'http://192.168.1.157:89'
+} */
+// 调整为根据当前链接去判断，不根据打包参数变化
+if (window.location.host.indexOf('192.168.1.157') !== -1) {
+  the56url = 'http://192.168.1.157:89'
+} else if (window.location.host.indexOf('192.168.1') !== -1) {
+  the56url = 'http://192.168.1.170'
 }
 
 export const INDEXURL = the56url
