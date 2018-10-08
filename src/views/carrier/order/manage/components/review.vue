@@ -40,8 +40,8 @@
           </el-form-item>
         </el-form-item>
         <el-form-item class="carrierRemarks" label="评价说明" prop="carrierRemarks">
-          <el-input :rows="10" type="textarea" :maxlength="400" v-model="form.evaluationDes"></el-input>
-          <div class="last-input-num">还可输入<span>{{ 400 - form.evaluationDes.length}}</span>字</div>
+          <el-input :rows="10" type="textarea" :maxlength="100" v-model="form.evaluationDes"></el-input>
+          <div class="last-input-num">还可输入<span>{{ 100 - form.evaluationDes.length}}</span>字</div>
         </el-form-item>
       </el-form>
     </div>
