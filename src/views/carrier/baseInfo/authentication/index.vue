@@ -349,7 +349,6 @@ export default {
                 }else{
                     this.ifDisable = true;
                 }
-                console.log('this.ifDisable',this.logisticsForm.isCollection)
             },
             deep:true
         }

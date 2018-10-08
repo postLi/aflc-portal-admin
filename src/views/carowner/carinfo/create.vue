@@ -41,7 +41,7 @@
         <selectType v-model="ruleForm.carSpec" type="AF009" clearable size="mini"></selectType>
       </el-form-item>
       <el-form-item required label="车辆常驻地">
-         <vregion :ui="true" @values="regionChangeUsual" class="form-control">
+         <vregion :ui="true" @values="regionChangeUsual" class="form-control" :ifAera = 'true' @testCity="ifProvice('usualPlace')">
           <el-input v-model="ruleForm.usualPlace" placeholder="车辆常驻地"></el-input>
         </vregion>
       </el-form-item>
@@ -52,12 +52,12 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item required label="出发地">
-        <vregion :ui="true" @values="regionChangeStart" class="form-control">
+        <vregion :ui="true" @values="regionChangeStart" class="form-control" :ifAera = 'true' @testCity="ifProvice('strartAddress')">
           <el-input v-model="ruleForm.strartAddress" placeholder="出发地"></el-input>
         </vregion>
       </el-form-item>
       <el-form-item required label="到达地">
-        <vregion :ui="true" @values="regionChangeEnd" class="form-control">
+        <vregion :ui="true" @values="regionChangeEnd" class="form-control" :ifAera = 'true' @testCity="ifProvice('endAddress')">
           <el-input v-model="ruleForm.endAddress" placeholder="到达地"></el-input>
         </vregion>
       </el-form-item>
@@ -245,6 +245,20 @@ export default {
         this.ruleForm.endCity = this.getValue(d.city)
         this.ruleForm.endArea = this.getValue(d.area)
       }
+    },
+    ifProvice(type){
+        console.log('ifProvice',type)
+        this.$message({
+            type: 'info',
+            message: '至少选择到市级范围'
+        })
+        if(type == 'usualPlace'){
+            return this.ruleForm.usualPlace = '';
+        }else if(type == 'strartAddress'){
+            return this.ruleForm.strartAddress = '';
+        }else{
+            return this.ruleForm.endAddress = '';
+        }
     },
     initModify() {
       ReqApi.getCarInfo(this.id).then(res => {
