@@ -74,7 +74,7 @@ export default {
     },
     getLoginInfo() {
       this.LoginInfo = getLogin()
-      this.carrierHref = this.$const.INDEXURL + '/member/index.php?uid=' + this.LoginInfo.mobile
+      this.carrierHref = this.$const.INDEXURL + '/member/' + this.LoginInfo.mobile + '.html'
       console.log(this.LoginInfo)
     }
   }

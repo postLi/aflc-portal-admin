@@ -99,7 +99,7 @@ export default {
       if (window.AMap) {
         this.initMap()
       } else {
-        loadJs('https://webapi.amap.com/maps?v=1.4.8&key=73bdb8428fbfe511ed6c5f3328b5734b&plugin=AMap.Autocomplete,AMap.PlaceSearch,AMap.Geocoder').then(() => {
+        loadJs('https://webapi.amap.com/maps?v=1.4.8&key=e61aa7ddc6349acdb3b57c062080f730&plugin=AMap.Autocomplete,AMap.PlaceSearch,AMap.Geocoder').then(() => {
          // loadJs('//webapi.amap.com/ui/1.0/main.js').then(() => {
           this.initMap()
          // })
@@ -188,7 +188,7 @@ export default {
       }, 3)
 
       function findInfo(pos) {
-          console.log('2222',pos)
+        console.log('2222', pos)
         geocoder.getAddress(pos, function(status, result) {
           if (status === 'complete' && result.info === 'OK') {
             geocoder_CallBack(result, pos)
@@ -209,7 +209,7 @@ export default {
       })
 
       function geocoder_CallBack(data, pos) {
-        console.log('1111111111111',pos)
+        console.log('1111111111111', pos)
         var haspx = !!pos.lat
 
         console.log('geocodeer:', data)
