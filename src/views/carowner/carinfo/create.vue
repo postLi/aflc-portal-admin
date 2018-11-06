@@ -45,7 +45,7 @@
           <el-input v-model="ruleForm.usualPlace" placeholder="车辆常驻地"></el-input>
         </vregion>
       </el-form-item>
-      <el-form-item label="车源类型">
+      <el-form-item required label="车源类型">
         <el-radio-group v-model="ruleForm.carSourceType">
           <el-radio label="AF01801">回程车</el-radio>
           <el-radio label="AF01802">本地车</el-radio>
@@ -246,18 +246,18 @@ export default {
         this.ruleForm.endArea = this.getValue(d.area)
       }
     },
-    ifProvice(type){
-        console.log('ifProvice',type)
-        this.$message({
-            type: 'info',
-            message: '至少选择到市级范围'
-        })
-        if(type == 'usualPlace'){
-            return this.ruleForm.usualPlace = '';
-        }else if(type == 'strartAddress'){
-            return this.ruleForm.strartAddress = '';
-        }else{
-            return this.ruleForm.endAddress = '';
+    ifProvice(type) {
+      console.log('ifProvice', type)
+      this.$message({
+        type: 'info',
+        message: '至少选择到市级范围'
+      })
+      if (type == 'usualPlace') {
+        return this.ruleForm.usualPlace = ''
+      } else if (type == 'strartAddress') {
+          return this.ruleForm.strartAddress = ''
+        } else {
+          return this.ruleForm.endAddress = ''
         }
     },
     initModify() {
@@ -354,6 +354,10 @@ export default {
       }
       if (!data.usualPlace) {
         this.$message.error('请填写车辆常驻地。')
+        return false
+      }
+      if (!data.carSourceType) {
+        this.$message.error('请选择车源类型。')
         return false
       }
       if (!data.strartAddress) {

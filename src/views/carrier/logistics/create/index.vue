@@ -72,15 +72,21 @@
                         <li>
                             <el-input v-model.number="form.startVolume" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
                             <span>----</span>
-                            <el-input v-model.number="form.endVolume" :disabled="unable" v-numberOnly placeholder="不包含" maxlength="7" @change="ifWrong(weigthPriceForms,keys)"></el-input>
+                            <!-- <el-input v-model.number="form.endVolume" :disabled="unable" v-numberOnly placeholder="不包含" maxlength="7" @change="ifWrong(weigthPriceForms,keys)"></el-input> -->
+                            <input class="nativeinput" :value="form.endVolume" @change="(e)=>{setInputVal(e.target.value,form, 'endVolume'),ifWrong(weigthPriceForms,keys)}" :maxlength="7" placeholder="不包含" auto-complete="off"  clearable
+                            v-number-only :disabled="unable" type="text">
                             公斤
                         </li>
                         <li>
-                            <el-input v-model="form.primeryPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input>
+                            <!-- <el-input v-model="form.primeryPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input> -->
+                            <input class="nativeinput" :value="form.primeryPrice" @change="(e)=>{setInputVal(e.target.value,form, 'primeryPrice'),ifWrong(weigthPriceForms,keys)}" :maxlength="7" auto-complete="off"  clearable
+                            v-number-only:point :disabled="unable" type="text">
                             元/公斤
                         </li>
                         <li>
-                            <el-input v-model="form.discountPrice" :disabled="unable"  v-number-only:point maxlength="7"></el-input>
+                            <!-- <el-input v-model="form.discountPrice" :disabled="unable"  v-number-only:point maxlength="7"></el-input> -->
+                            <input class="nativeinput" :value="form.discountPrice" @change="(e)=>{setInputVal(e.target.value,form, 'discountPrice'),ifWrong(weigthPriceForms,keys)}" :maxlength="7" auto-complete="off"  clearable
+                            v-number-only:point :disabled="unable" type="text">
                             元/公斤
                         </li>
                         <li class="buttons">
@@ -105,17 +111,23 @@
                         <li>
                             <el-input v-model.number="form.startVolume" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
                             <span>----</span>
-                            <el-input v-model.number="form.endVolume" :disabled="unable" v-numberOnly placeholder="不包含"  maxlength="7" @change="ifWrong(ligthPriceForms,keys)"></el-input>
+                            <!-- <el-input v-model.number="form.endVolume" :disabled="unable" v-numberOnly placeholder="不包含"  maxlength="7" @change="ifWrong(ligthPriceForms,keys)"></el-input> -->
+                            <input class="nativeinput" :value="form.endVolume" @change="(e)=>{setInputVal(e.target.value,form, 'endVolume'),ifWrong(ligthPriceForms,keys)}" :maxlength="7" placeholder="不包含" auto-complete="off"  clearable
+                            v-number-only :disabled="unable" type="text">
                             立方
                         </li>
                         <li>
                             <!-- <el-form-item prop="primeryPrice" style="display:inline-block;"> -->
-                                <el-input v-model="form.primeryPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input>
+                                <!-- <el-input v-model="form.primeryPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input> -->
+                                <input class="nativeinput" :value="form.primeryPrice" @change="(e)=>{setInputVal(e.target.value,form, 'primeryPrice'),ifWrong(weigthPriceForms,keys)}" :maxlength="7" auto-complete="off"  clearable
+                            v-number-only:point :disabled="unable" type="text">
                                 元/立方
                             <!-- </el-form-item> -->
                         </li>
                         <li>
-                            <el-input v-model="form.discountPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input>
+                            <!-- <el-input v-model="form.discountPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input> -->
+                            <input class="nativeinput" :value="form.discountPrice" @change="(e)=>{setInputVal(e.target.value,form, 'discountPrice'),ifWrong(weigthPriceForms,keys)}" :maxlength="7" auto-complete="off"  clearable
+                            v-number-only:point :disabled="unable" type="text">
                             元/立方
                         </li>
                         <li class="buttons">
@@ -178,203 +190,206 @@
 </template>
 <script>
 import { getDictionary } from '@/api/common.js'
-import { newTransportRangeList,TransportRangeInfo,changeTransportRange } from '@/api/carrier/TransportRange.js'
+import { newTransportRangeList, TransportRangeInfo, changeTransportRange } from '@/api/carrier/TransportRange.js'
 import { getUserInfo } from '@/utils/auth.js'
 import { REGEX } from '@/utils/validate.js'
 import upload from '@/components/Upload/singleImage2'
 // import tmsmap from '@/components/map/index'
 import vregion from '@/components/vregion/Region.vue'
 export default {
-    components:{
-        upload,
+  components: {
+    upload,
         // tmsmap,
-        vregion
-    },
-    data() {
-        var checkStartLocationContactsMobile  = (rule, value, callback) => {
+    vregion
+  },
+  data() {
+    var checkStartLocationContactsMobile = (rule, value, callback) => {
             // console.log(value)
-            if (value === '') {
-                callback(new Error('请输入手机号码'));
-            } else {
-                if (!REGEX.MOBILE.test(value)) {
-                    callback(new Error('请输入正确的手机号码格式'));
-                }
-                callback();
-            }
-        };
-        var checkEndLocationContactsMobile  = (rule, value, callback) => {
-            if (value === '') {
-                callback(new Error('请输入手机号码'));
-            } else {
-                if (!REGEX.MOBILE.test(value)) {
-                    callback(new Error('请输入正确的手机号码格式'));
-                }
-                callback();
-            }
-        };
-
-        var checkWeigthPriceForms = (rule,value,callback) => {
-            if(this.weigthPriceForms[0].endVolume == ''){
-                callback(new Error('请补充重货价格区间'));
-            }else{
-                this.weigthPriceForms.forEach(el => {
-                    if(el.primeryPrice === ''){
-                        callback(new Error('请补充重货价格区间'));
-                    }
-                    else{
-                        callback();
-                    }
-                })
-            }
-        };
-
-        var checkLightPriceForms = (rule,value,callback) => {
-            this.ligthPriceForms.forEach(el => {
-                if(el.endVolume === ''){
-                    callback(new Error('请补充轻货运量'));
-                    
-                }else if(el.primeryPrice === ''){
-                    console.log('123')
-                    callback(new Error('请补充轻货价格区间'));
-                }
-                else{
-                    callback();
-                }
-            })
-        };
-        return {
-            rangeLogo:[],
-            unable:false,
-            btnText: '请选择',
-            current:'',
-            popVisible:false,
-            ifShowRangeType:'0',
-            dedicated:'AF033',
-            depart:'AF026',
-            totalNumber:0,//當前字數
-            maxlength:2000,
-            ruleForm: {
-                startLocation:'',//出发地
-                startProvince:'',
-                startCity:'',
-                startArea:'',
-                startLocationContacts:'',//出发地联系人
-                startLocationContactsMobile:'',//出发地联系人电话
-                endLocation:'',//到达地
-                endProvince:'',
-                endCity:'',
-                endArea:'',
-                endLocationContacts:'',//到达地联系人
-                endLocationContactsMobile:'',//到达地联系人电话
-                transportAging:'',//运输时效
-                transportAgingUnit:'天',//运输时效单位
-                departureHzData:'',//发车频率天数
-                departureHzTime:'',//发车频率车次
-                rangePrices:[],
-                lowerPrice:'',//最低一票价
-                rangeType:'AF03301',
-                rangeTypeName:'普通线路',
-                departureTimeCode:'',//发车时间code
-                departureTime:'',//发车时间
-                transportRemark:'',//线路说明
-                publishName:'',
-                publishId:'',
-                rangeLogo:'',//专线图片
-            },
-            rangeTypeClassfy:[],//专线类型选项
-            departClassfy:[],//发车时间选项
-            ligthPriceForms:[
-                {
-                    startVolume:'0',
-                    endVolume:'',
-                    primeryPrice:'',//标准价
-                    discountPrice:'',//折后价
-                    type:'0'
-                } 
-            ],
-            weigthPriceForms:[
-                {
-                    startVolume:'0',
-                    endVolume:'',
-                    primeryPrice:'',//标准价
-                    discountPrice:'',//折后价
-                    type:'1'
-                }
-            ],
-            rules: {
-                startLocation:[
-                    { required: true, message: '请输入出发地', trigger: 'change' },
-                ],
-                endLocation: [
-                    { required: true, message: '请输入到达地', trigger: 'change' },
-                ],
-                startLocationContacts: [
-                    { required: true, message: '请输入出发地联系人信息', trigger: 'blur' }
-                ],
-                endLocationContacts: [
-                    { required: true, message: '请输入到达地联系人信息', trigger: 'blur' }
-                ],
-                startLocationContactsMobile: [
-                    { required: true, validator: checkStartLocationContactsMobile, trigger: 'change' }
-                ],
-                endLocationContactsMobile: [
-                    { required: true, validator: checkEndLocationContactsMobile, trigger: 'change' }
-                ],
-                rangeType: [
-                    { required: true, message: '请选择专线类型', trigger: 'change' }
-                ],
-                transportRemark:[
-                    { min: 30, max: 2000, message: '专线说明请在30-2000字', trigger: 'blur' }
-                ],
-                weigthPriceForms:[
-                    { required:true,validator: checkWeigthPriceForms, trigger: 'blur'},
-                ],
-                ligthPriceForms:[
-                    { required:true,validator: checkLightPriceForms, trigger: 'blur'},
-                ],
-                primeryPrice:[
-                    {required:true,message: '请填写价格', trigger: 'blur' },
-                ]
-            }
+      if (value === '') {
+        callback(new Error('请输入手机号码'))
+      } else {
+        if (!REGEX.MOBILE.test(value)) {
+          callback(new Error('请输入正确的手机号码格式'))
         }
+        callback()
+      }
+    }
+    var checkEndLocationContactsMobile = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入手机号码'))
+      } else {
+        if (!REGEX.MOBILE.test(value)) {
+          callback(new Error('请输入正确的手机号码格式'))
+        }
+        callback()
+      }
+    }
+
+    var checkWeigthPriceForms = (rule, value, callback) => {
+      if (this.weigthPriceForms[0].endVolume == '') {
+        callback(new Error('请补充重货价格区间'))
+      } else {
+        this.weigthPriceForms.forEach(el => {
+          if (el.primeryPrice === '') {
+            callback(new Error('请补充重货价格区间'))
+          } else {
+            callback()
+          }
+        })
+      }
+    }
+
+    var checkLightPriceForms = (rule, value, callback) => {
+      this.ligthPriceForms.forEach(el => {
+        if (el.endVolume === '') {
+          callback(new Error('请补充轻货运量'))
+        } else if (el.primeryPrice === '') {
+          console.log('123')
+          callback(new Error('请补充轻货价格区间'))
+        } else {
+          callback()
+        }
+      })
+    }
+    return {
+      rangeLogo: [],
+      unable: false,
+      btnText: '请选择',
+      current: '',
+      popVisible: false,
+      ifShowRangeType: '0',
+      dedicated: 'AF033',
+      depart: 'AF026',
+      totalNumber: 0, // 當前字數
+      maxlength: 2000,
+      ruleForm: {
+        startLocation: '', // 出发地
+        startLocationCode: '',
+        startProvince: '',
+        startCity: '',
+        startArea: '',
+        startLocationContacts: '', // 出发地联系人
+        startLocationContactsMobile: '', // 出发地联系人电话
+        endLocation: '', // 到达地
+        endLocationCode: '',
+        endProvince: '',
+        endCity: '',
+        endArea: '',
+        endLocationContacts: '', // 到达地联系人
+        endLocationContactsMobile: '', // 到达地联系人电话
+        transportAging: '', // 运输时效
+        transportAgingUnit: '天', // 运输时效单位
+        departureHzData: '', // 发车频率天数
+        departureHzTime: '', // 发车频率车次
+        rangePrices: [],
+        lowerPrice: '', // 最低一票价
+        rangeType: 'AF03301',
+        rangeTypeName: '普通线路',
+        departureTimeCode: '', // 发车时间code
+        departureTime: '', // 发车时间
+        transportRemark: '', // 线路说明
+        publishName: '',
+        publishId: '',
+        rangeLogo: '' // 专线图片
+      },
+      rangeTypeClassfy: [], // 专线类型选项
+      departClassfy: [], // 发车时间选项
+      ligthPriceForms: [
+        {
+          startVolume: '0',
+          endVolume: '',
+          primeryPrice: '', // 标准价
+          discountPrice: '', // 折后价
+          type: '0'
+        }
+      ],
+      weigthPriceForms: [
+        {
+          startVolume: '0',
+          endVolume: '',
+          primeryPrice: '', // 标准价
+          discountPrice: '', // 折后价
+          type: '1'
+        }
+      ],
+      rules: {
+        startLocation: [
+                    { required: true, message: '请输入出发地', trigger: 'change' }
+        ],
+        endLocation: [
+                    { required: true, message: '请输入到达地', trigger: 'change' }
+        ],
+        startLocationContacts: [
+                    { required: true, message: '请输入出发地联系人信息', trigger: 'blur' }
+        ],
+        endLocationContacts: [
+                    { required: true, message: '请输入到达地联系人信息', trigger: 'blur' }
+        ],
+        startLocationContactsMobile: [
+                    { required: true, validator: checkStartLocationContactsMobile, trigger: 'change' }
+        ],
+        endLocationContactsMobile: [
+                    { required: true, validator: checkEndLocationContactsMobile, trigger: 'change' }
+        ],
+        rangeType: [
+                    { required: true, message: '请选择专线类型', trigger: 'change' }
+        ],
+        transportRemark: [
+                    { min: 30, max: 2000, message: '专线说明请在30-2000字', trigger: 'blur' }
+        ],
+        weigthPriceForms: [
+                    { required: true, validator: checkWeigthPriceForms, trigger: 'blur' }
+        ],
+        ligthPriceForms: [
+                    { required: true, validator: checkLightPriceForms, trigger: 'blur' }
+        ],
+        primeryPrice: [
+                    { required: true, message: '请填写价格', trigger: 'blur' }
+        ]
+      }
+    }
+  },
+  watch: {
+
+  },
+  mounted() {
+    this.getInformations()
+    this.getParams()
+  },
+  methods: {
+    setInputVal(val, item, name) {
+    //   this.$set(this.form.tmsOrderCargoList, name, val)
+      this.$set(item, name, val)
     },
-    watch:{
-       
+    ifWrong(item, idx) {
+      const flag = item[idx].endVolume < item[idx].startVolume
+      if (flag) {
+        this.$message({
+          type: 'info',
+          message: '终止运量应不小于起始运量'
+        })
+        item[idx].endVolume = ''
+        return
+      } else if (item.length > (idx + 1)) {
+        item[idx + 1].startVolume = item[idx].endVolume
+        if (item[idx + 1].endVolume) {
+          if (item[idx + 1].endVolume < item[idx + 1].startVolume) {
+            this.$message({
+              type: 'info',
+              message: '终止运量应不小于起始运量'
+            })
+            return item.splice(idx + 1)
+          }
+        }
+      }
     },
-    mounted(){
-        this.getInformations();
-        this.getParams();
-    },
-    methods:{
-        ifWrong(item,idx){
-            let flag = item[idx].endVolume < item[idx].startVolume ? true : false;
-            if(flag){
-                this.$message({
-                    type: 'info',
-                    message: '终止运量应不小于起始运量' 
-                })
-                return item[idx].endVolume = ''
-            }
-            else if(item.length > (idx+1)){
-                item[idx+1].startVolume = item[idx].endVolume ;
-                if(item[idx+1].endVolume){
-                    if(item[idx+1].endVolume < item[idx+1].startVolume){
-                        this.$message({
-                            type: 'info',
-                            message: '终止运量应不小于起始运量' 
-                        })
-                        return item.splice(idx+1);
-                    }
-                }
-            }
-        },
-        regionChangeStart(d) {
+    regionChangeStart(d) {
             // console.log('data:',d)
-            this.ruleForm.startLocation = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-            console.log(this.ruleForm.startLocation)
-            this.ruleForm.startProvince = d.province ? d.province.name : '';
-            this.ruleForm.startCity = d.city ? d.city.name : '';
-            this.ruleForm.startArea = d.area ? d.area.name : '';
+      this.ruleForm.startLocation = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
+      console.log(this.ruleForm.startLocation)
+      this.ruleForm.startProvince = d.province ? d.province.name : ''
+      this.ruleForm.startCity = d.city ? d.city.name : ''
+      this.ruleForm.startArea = d.area ? d.area.name : ''
             // let zhixiashi = ['北京市','天津市','重庆市','上海市'];
             // let ifZhixia = false;
             // zhixiashi.forEach(el => {
@@ -389,20 +404,20 @@ export default {
             //     })
             //     return this.ruleForm.startLocation = '';
             // }
-        },
-        regionChangeEnd(d) {
+    },
+    regionChangeEnd(d) {
             // console.log('data:',d)
-            this.ruleForm.endLocation = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-            if(this.ruleForm.endLocation == this.ruleForm.startLocation){
-                this.$message({
-                    type: 'info',
-                    message: '出发地不可与到达地重复！' 
-                })
-                return this.ruleForm.endLocation = ''
-            }
-            this.ruleForm.endProvince = d.province ? d.province.name : '';
-            this.ruleForm.endCity = d.city ? d.city.name : '';
-            this.ruleForm.endArea = d.area ? d.area.name : '';
+      this.ruleForm.endLocation = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
+      if (this.ruleForm.endLocation == this.ruleForm.startLocation) {
+        this.$message({
+          type: 'info',
+          message: '出发地不可与到达地重复！'
+        })
+        return this.ruleForm.endLocation = ''
+      }
+      this.ruleForm.endProvince = d.province ? d.province.name : ''
+      this.ruleForm.endCity = d.city ? d.city.name : ''
+      this.ruleForm.endArea = d.area ? d.area.name : ''
             // let zhixiashi = ['北京市','天津市','重庆市','上海市'];
             // let ifZhixia = false;
             // zhixiashi.forEach(el => {
@@ -419,22 +434,22 @@ export default {
             //     })
             //     return this.ruleForm.endLocation = '';
             // }
-        },
-        ifProvice(type){
-            console.log('ifProvice',type)
-            this.$message({
-                type: 'info',
-                message: '至少选择到市级范围'
-            })
-            if(type == 'startLocation'){
-                return this.ruleForm.startLocation = '';
-            }else{
-                return this.ruleForm.endLocation = '';
-            }
-        },
-        getValue(obj){
-            return obj ? obj.value:'';
-        },
+    },
+    ifProvice(type) {
+      console.log('ifProvice', type)
+      this.$message({
+        type: 'info',
+        message: '至少选择到市级范围'
+      })
+      if (type == 'startLocation') {
+        return this.ruleForm.startLocation = ''
+      } else {
+        return this.ruleForm.endLocation = ''
+      }
+    },
+    getValue(obj) {
+      return obj ? obj.value : ''
+    },
         // getInfo(pos, name, info) {
         //     // info.name  info.pos
         //     console.log(pos, name, info)
@@ -451,222 +466,227 @@ export default {
         //     this.popVisible = true ;
         //     this.current = name;
         // },
-        getParams(){
-            if(this.$route.query.data){
-                this.ifShowRangeType = this.$route.query.ifrevise;//1是修改，2是详情
-                
-                let dataObj = this.$route.query.data;//接收数据
-                this.ligthPriceForms = dataObj.lightcargo;
-                this.weigthPriceForms = dataObj.weightcargo;
-                console.log('```',dataObj)
-                TransportRangeInfo(dataObj.id).then(res=>{
-                    this.ruleForm = res.data;
-                    this.rangeLogo = this.ruleForm.rangeLogo.split(",");
-                    console.log('this.rangeLogo',this.rangeLogo)
-                })
-                if(this.ifShowRangeType == 2){
-                    this.unable = true;
-                }
-            }
-        },
-        //判断和限制
-        handlerChoose(){
-            let type = this.ruleForm.transportAgingUnit;
-            let transportAging = this.ruleForm.transportAging;
-            if(type != '多天'){
-                transportAging = transportAging.replace(/[^\d.]/g,""); //清除"数字"和"."以外的字符
-                transportAging = transportAging.replace(/^\./g,""); //验证第一个字符是数字
-                transportAging = transportAging.replace(/\.{2,}/g,"."); //只保留第一个, 清除多余的
-                transportAging = transportAging.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
-                transportAging = transportAging.replace(/^(\-)*(\d+)\.(\d).*$/,'$1$2.$3'); //只能输入一位小数
-                this.ruleForm.transportAging = transportAging ; 
-            }else{
-                transportAging = transportAging.replace(/[^0-9\-]+/g,"");
-                this.ruleForm.transportAging = transportAging ; 
-            }
-        },
-        getInformations(){
-            Promise.all([ getDictionary(this.dedicated), getDictionary(this.depart)]).then(resArr => {
-                this.rangeTypeClassfy = resArr[0].data;
-                this.departClassfy = resArr[1].data;
-            })
-            let userInfo = getUserInfo();
-            this.ruleForm.publishName = userInfo.companyName;
-            this.ruleForm.publishId = userInfo.id;
-        },
-        //添加子节点新增
-        addItem(type,idx,item){
-            // console.log(type)
-            switch(type){
-                case 'weight':
-                // console.log(item.primeryPrice)
-                    if(idx == 0 && item.endVolume == ''){
-                        return this.$message({
-                            type: 'info',
-                            message: '请补充重货运量' 
-                        })
-                    }
-                    else if(item.primeryPrice == ''){
-                        return this.$message({
-                            type: 'info',
-                            message: '请补充重货原报价' 
-                        })
-                    }else{
-                        this.weigthPriceForms.push({
-                            startVolume:this.weigthPriceForms[idx].endVolume,
-                            endVolume:'',
-                            primeryPrice:'',//标准价
-                            discountPrice:'',//折后价
-                            type:'1'
-                        }); 
-                    }
-                    break;
-                case 'light':
-                    if(idx == 0 && item.endVolume == ''){
-                        return this.$message({
-                            type: 'info',
-                            message: '请补充轻货运量' 
-                        })
-                    }
-                    else if(item.primeryPrice == ''){
-                        return this.$message({
-                            type: 'info',
-                            message: '请补充轻货原报价' 
-                        })
-                    }else{
-                        this.ligthPriceForms.push({
-                            startVolume:this.ligthPriceForms[idx].endVolume,
-                            endVolume:'',
-                            primeryPrice:'',//标准价
-                            discountPrice:'',//折后价
-                            type:'0'
-                        }); 
-                    }
-                    break;
-            }
-        },
-        //删除子节点新增
-        reduceItem(idx,type){
-            console.log(idx,type)
-            switch(type){
-                case 'weight':
-                    this.weigthPriceForms.splice(idx,1);
-                    break;
-                case 'light':
-                    this.ligthPriceForms.splice(idx,1);
-                    break;
-            }
-        },  
-        completeName(){
-            this.ruleForm.rangePrices = [];
+    getParams() {
+      if (this.$route.query.data) {
+        this.ifShowRangeType = this.$route.query.ifrevise// 1是修改，2是详情
 
-            this.ligthPriceForms.forEach(item => {
-                this.ruleForm.rangePrices.push(item) 
-            })
-
-            this.weigthPriceForms.forEach(item => {
-                this.ruleForm.rangePrices.push(item) 
-            })
-            
-            if(this.ruleForm.rangeType){
-                this.ruleForm.rangeTypeName = this.rangeTypeClassfy.find(item => item.code == this.ruleForm.rangeType)['name'];
-            }
-
-            if(this.ruleForm.departureTimeCode){
-                this.ruleForm.departureTime = this.departClassfy.find(item => item.code == this.ruleForm.departureTimeCode)['name'];
-            }
-        },
-        //提交按钮
-        submitForm(formName) {
-            console.log(this.ruleForm)
-            let ifNull = true;
-            let messageInfo;
-
-            this.ligthPriceForms.forEach(item => {
-                if(item.primeryPrice == ''){
-                    messageInfo= '请补充轻货原报价' 
-                    ifNull = false;
-                }
-            })
-            this.weigthPriceForms.forEach(item => {
-                if(item.primeryPrice == ''){
-                    messageInfo= '请补充重货原报价' 
-                    ifNull = false;
-                }
-            })
-
-            if(ifNull){
-                
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        this.completeName();
-                        let commitFunction;
-                        if(this. ifShowRangeType == '1'){
-                            commitFunction = changeTransportRange(this.ruleForm);
-                        }else{
-                            commitFunction = newTransportRangeList(this.ruleForm)
-                        }
-                        commitFunction.then(res => {
-                            console.log('res',res)
-                            if(res.status == 200){
-                                this.$alert('操作成功', '提示', {
-                                    confirmButtonText: '确定',
-                                    callback: action => {
-                                        this.$router.push({name:'管理物流专线'})
-                                    }
-                                });
-                                
-                            }else{
-                                this.$message({
-                                    type: 'info',
-                                    message: '操作失败，原因：' + res.errorInfo ? res.errorInfo : res.text
-                                })
-                            }
-                        }).catch(err=>{
-                            this.$message({
-                                type: 'info',
-                                message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
-                            })
-                        })
-                    } else {
-                        this.$message({
-                            type: 'info',
-                            message: '请填写完整信息' 
-                        })
-                        return false;
-                    }
-                });
-            }else{
-                this.$message({
-                    type: 'info',
-                    message: messageInfo
-                })
-            }
-        },
-
-        resetForm(formName) {
-            this.$refs[formName].resetFields();
-            this.ruleForm.departureHzTime = '';
-            this.ligthPriceForms = [
-                {
-                    startVolume:'0',
-                    endVolume:'',
-                    primeryPrice:'',//标准价
-                    discountPrice:'',//折后价
-                    type:'0'
-                } 
-            ];
-            this.weigthPriceForms=[
-                {
-                    startVolume:'0',
-                    endVolume:'',
-                    primeryPrice:'',//标准价
-                    discountPrice:'',//折后价
-                    type:'1'
-                }
-            ];
+        const dataObj = this.$route.query.data// 接收数据
+        this.ligthPriceForms = dataObj.lightcargo
+        this.weigthPriceForms = dataObj.weightcargo
+        console.log('```', dataObj)
+        TransportRangeInfo(dataObj.id).then(res => {
+          this.ruleForm = res.data
+          this.rangeLogo = this.ruleForm.rangeLogo.split(',')
+          console.log('this.rangeLogo', this.rangeLogo)
+        })
+        if (this.ifShowRangeType == 2) {
+          this.unable = true
         }
+      }
+    },
+        // 判断和限制
+    handlerChoose() {
+      const type = this.ruleForm.transportAgingUnit
+      let transportAging = this.ruleForm.transportAging
+      if (type != '多天') {
+        transportAging = transportAging.replace(/[^\d.]/g, '') // 清除"数字"和"."以外的字符
+        transportAging = transportAging.replace(/^\./g, '') // 验证第一个字符是数字
+        transportAging = transportAging.replace(/\.{2,}/g, '.') // 只保留第一个, 清除多余的
+        transportAging = transportAging.replace('.', '$#$').replace(/\./g, '').replace('$#$', '.')
+        transportAging = transportAging.replace(/^(\-)*(\d+)\.(\d).*$/, '$1$2.$3') // 只能输入一位小数
+        this.ruleForm.transportAging = transportAging
+      } else {
+        transportAging = transportAging.replace(/[^0-9\-]+/g, '')
+        this.ruleForm.transportAging = transportAging
+      }
+    },
+    getInformations() {
+      Promise.all([getDictionary(this.dedicated), getDictionary(this.depart)]).then(resArr => {
+        this.rangeTypeClassfy = resArr[0].data
+        this.departClassfy = resArr[1].data
+      })
+      const userInfo = getUserInfo()
+      this.ruleForm.publishName = userInfo.companyName
+      this.ruleForm.publishId = userInfo.id
+    },
+        // 添加子节点新增
+    addItem(type, idx, item) {
+            // console.log(type)
+      switch (type) {
+        case 'weight':
+                // console.log(item.primeryPrice)
+          if (item.endVolume === '' || item.endVolume === 0) {
+            return this.$message({
+              type: 'info',
+              message: '请补充重货运量'
+            })
+          } else if (item.primeryPrice === '') {
+            return this.$message({
+              type: 'info',
+              message: '请补充重货原报价'
+            })
+          } else {
+            this.weigthPriceForms.push({
+              startVolume: this.weigthPriceForms[idx].endVolume,
+              endVolume: '',
+              primeryPrice: '', // 标准价
+              discountPrice: '', // 折后价
+              type: '1'
+            })
+          }
+          break
+        case 'light':
+          if (item.endVolume === '' || item.endVolume === 0) {
+            return this.$message({
+              type: 'info',
+              message: '请补充轻货运量'
+            })
+          } else if (item.primeryPrice === '') {
+            return this.$message({
+              type: 'info',
+              message: '请补充轻货原报价'
+            })
+          } else {
+            this.ligthPriceForms.push({
+              startVolume: this.ligthPriceForms[idx].endVolume,
+              endVolume: '',
+              primeryPrice: '', // 标准价
+              discountPrice: '', // 折后价
+              type: '0'
+            })
+          }
+          break
+      }
+    },
+        // 删除子节点新增
+    reduceItem(idx, type) {
+      console.log(idx, type)
+      switch (type) {
+        case 'weight':
+          this.weigthPriceForms.splice(idx, 1)
+          break
+        case 'light':
+          this.ligthPriceForms.splice(idx, 1)
+          break
+      }
+    },
+    completeName() {
+      this.ruleForm.rangePrices = []
+
+      this.ligthPriceForms.forEach(item => {
+        this.ruleForm.rangePrices.push(item)
+      })
+
+      this.weigthPriceForms.forEach(item => {
+        this.ruleForm.rangePrices.push(item)
+      })
+
+      if (this.ruleForm.rangeType) {
+        this.ruleForm.rangeTypeName = this.rangeTypeClassfy.find(item => item.code == this.ruleForm.rangeType)['name']
+      }
+
+      if (this.ruleForm.departureTimeCode) {
+        this.ruleForm.departureTime = this.departClassfy.find(item => item.code == this.ruleForm.departureTimeCode)['name']
+      }
+    },
+        // 提交按钮
+    submitForm(formName) {
+      console.log(this.ruleForm)
+      let ifNull = true
+      let messageInfo
+
+      this.ligthPriceForms.forEach(item => {
+        if (item.primeryPrice == '') {
+          messageInfo = '请补充轻货原报价'
+          ifNull = false
+        }
+      })
+      this.weigthPriceForms.forEach(item => {
+        if (item.primeryPrice == '') {
+          messageInfo = '请补充重货原报价'
+          ifNull = false
+        }
+      })
+
+      const departureHzData = parseInt(this.ruleForm.departureHzData, 10) || 0
+      const departureHzTime = parseInt(this.ruleForm.departureHzTime, 10) || 0
+
+      if ((!departureHzData && departureHzTime) || (departureHzData && !departureHzTime)) {
+    //   if (!departureHzData || !departureHzTime) {
+        messageInfo = '请填写完整的“发车频率”信息'
+        ifNull = false
+      }
+
+      if (ifNull) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.completeName()
+            let commitFunction
+            if (this.ifShowRangeType == '1') {
+              commitFunction = changeTransportRange(this.ruleForm)
+            } else {
+              commitFunction = newTransportRangeList(this.ruleForm)
+            }
+            commitFunction.then(res => {
+              console.log('res', res)
+              if (res.status == 200) {
+                this.$alert('操作成功', '提示', {
+                  confirmButtonText: '确定',
+                  callback: action => {
+                    this.$router.push({ name: '管理物流专线' })
+                  }
+                })
+              } else {
+                this.$message({
+                  type: 'info',
+                  message: '操作失败，原因：' + res.errorInfo ? res.errorInfo : res.text
+                })
+              }
+            }).catch(err => {
+              this.$message({
+                type: 'info',
+                message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+              })
+            })
+          } else {
+            this.$message({
+              type: 'info',
+              message: '请填写完整信息'
+            })
+            return false
+          }
+        })
+      } else {
+        this.$message({
+          type: 'info',
+          message: messageInfo
+        })
+      }
+    },
+
+    resetForm(formName) {
+      this.$refs[formName].resetFields()
+      this.ruleForm.departureHzTime = ''
+      this.ligthPriceForms = [
+        {
+          startVolume: '0',
+          endVolume: '',
+          primeryPrice: '', // 标准价
+          discountPrice: '', // 折后价
+          type: '0'
+        }
+      ]
+      this.weigthPriceForms = [
+        {
+          startVolume: '0',
+          endVolume: '',
+          primeryPrice: '', // 标准价
+          discountPrice: '', // 折后价
+          type: '1'
+        }
+      ]
     }
+  }
 }
 </script>
 <style lang="scss">
@@ -744,6 +764,9 @@ export default {
                         }
                         .goodsPriceChoose{  
                             border: 1px solid #ccc;
+                            .nativeinput{
+                                width: 80px;
+                            }
                             p{
                                 padding: 6px 50px;                     
                                 background: #eaefff;

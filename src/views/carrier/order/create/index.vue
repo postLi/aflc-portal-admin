@@ -209,7 +209,7 @@
                 <el-input v-model="aflcOrderAddressWebDtoList[0].contacts"></el-input>
               </el-form-item>
               <el-form-item required label="发货人手机">
-                <el-input v-model="aflcOrderAddressWebDtoList[0].contactsPhone"></el-input>
+                <el-input :maxlength="11" v-model="aflcOrderAddressWebDtoList[0].contactsPhone"></el-input>
               </el-form-item>
               <el-form-item >
                 <el-button type="primary" @click="showContactPop(0)">选择常用发货人</el-button>
@@ -221,7 +221,7 @@
                 <el-input v-model="aflcOrderAddressWebDtoList[1].contacts"></el-input>
               </el-form-item>
               <el-form-item label="收货人手机">
-                <el-input v-model="aflcOrderAddressWebDtoList[1].contactsPhone"></el-input>
+                <el-input :maxlength="11" v-model="aflcOrderAddressWebDtoList[1].contactsPhone"></el-input>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" @click="showContactPop(1)">选择常用收货人</el-button>

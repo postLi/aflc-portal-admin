@@ -46,7 +46,7 @@ import fetch from '@/utils/fetch'
 }
  */
 export function getOrderList(user_token, data) {
-  return fetch.post('/aflcorderservice/order/fclOrder/v1/findOderCarrierList?user_token=' + user_token, data).then(res => {
+  return fetch.post('/aflcorderservice/order/fclOrder/v1/findOderCarrierList', data).then(res => {
     return res.data || { list: [], total: 0 }
   })
 }
@@ -54,7 +54,7 @@ export function getOrderList(user_token, data) {
  * 获取订单各个状态下的数量
  */
 export function getOrderListCount(user_token, data = {}) {
-  return fetch.post('/aflcorderservice/order/fclOrder/v1/getOrderStatusGroupCountList?user_token=' + user_token, data).then(res => {
+  return fetch.post('/aflcorderservice/order/fclOrder/v1/getOrderStatusGroupCountList', data).then(res => {
     return res.data ? (res.data[0] || {}) : {}
   })
 }

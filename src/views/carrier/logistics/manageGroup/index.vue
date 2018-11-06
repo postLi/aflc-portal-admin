@@ -91,7 +91,7 @@
                                 </template>
                         </el-table-column>
                         <el-table-column 
-                            fixed="right"
+                            
                             prop="address"
                             label="操作"
                             >

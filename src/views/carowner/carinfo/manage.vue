@@ -158,8 +158,10 @@ export default {
     handlePageChange(obj) {
       this.searchQuery.currentPage = obj.pageNum
       this.searchQuery.pageSize = obj.pageSize
+      this.fetchAllCustomer()
     },
     getSearchParam(obj) {
+      this.searchQuery.currentPage = 1
       this.searchQuery.vo = obj
       this.fetchAllCustomer()
     },

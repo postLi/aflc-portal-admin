@@ -17,7 +17,7 @@
             <a :href="$const.INDEXURL+'/plus/list.php?tid=2'" target="_blank">找货源</a>
         </el-menu-item>
         <el-menu-item key="4" index="" v-if="LoginInfo.memberType == 'AF00107' || LoginInfo.memberType == 'AF00101'">
-            <a :href="$const.INDEXURL+'/plus/list.php?tid=2'" target="_blank">找专线</a>
+            <a :href="$const.INDEXURL+'/plus/list.php?tid=4'" target="_blank">找专线</a>
         </el-menu-item>
       <!-- <template v-for="(menu, index) in permission_routers">
          <el-menu-item :key="index" :index="menu.path" v-if="!menu.hidden">
@@ -74,6 +74,7 @@ export default {
     },
     getLoginInfo() {
       this.LoginInfo = getLogin()
+      // /member/index.php?uid
       this.carrierHref = this.$const.INDEXURL + '/member/' + this.LoginInfo.mobile + '.html'
       console.log(this.LoginInfo)
     }

@@ -43,13 +43,13 @@ import fetch from '@/utils/fetch'
 }
  */
 export function postCreateOrder(usertoken, data) {
-  return fetch.post('/aflcorderservice/order/fclOrder/v1/createOrder?user_token=' + usertoken, data)
+  return fetch.post('/aflcorderservice/order/fclOrder/v1/createOrder', data)
 }
 /**
  * 修改订单/货源
  */
 export function putChangeOrder(usertoken, data) {
-  return fetch.put('/aflcorderservice/order/fclOrder/v1/updateOrder?user_token=' + usertoken, data)
+  return fetch.put('/aflcorderservice/order/fclOrder/v1/updateOrder', data)
 }
 /**
  * 根据id获取信息

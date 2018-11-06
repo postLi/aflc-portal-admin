@@ -44,7 +44,7 @@ let the56url = 'http://www.56lines.cn'
 if (window.location.host.indexOf('192.168.1.157') !== -1) {
   the56url = 'http://192.168.1.157:89'
 } else if (window.location.host.indexOf('192.168.1') !== -1) {
-  the56url = 'http://192.168.1.170'
+  the56url = 'http://192.168.1.188:8342'
 }
 
 export const INDEXURL = the56url

@@ -35,7 +35,7 @@
         </el-form-item>
 
         <el-form-item prop="username">
-          <el-input name="username" type="text" @keyup.enter.native="handleLogin" v-model="loginForm.username" autoComplete="off"
+          <el-input name="username" type="text" @keyup.enter.native="handleLogin" v-model="loginForm.username" :maxlength="11" autoComplete="off"
                     :placeholder="holder.username" @focus='username()' clearable>
                     <template slot="prepend">手机号</template>
          </el-input>

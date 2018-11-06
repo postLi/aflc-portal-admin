@@ -14,7 +14,6 @@ export default {
     $route: {
       handler() {
         this.url = this.$const.INDEXURL + this.$route.meta.url
-        console.log('this.url:', this.url)
       },
       immediate: true
     }
