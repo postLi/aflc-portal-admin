@@ -46,18 +46,33 @@
                   <ul class="preCaogoList clearfix">
                     <li @click="setCargoName(index, item.name,item)" :key="inx" v-for="(item, inx) in cargoListPre">{{ item.name }}</li>
                   </ul>
-                  <el-input @focus="item.isget = true"  @blur="calcTotalFee(item)" slot="reference" v-model="item.goodsName"></el-input>
+                  <el-input @focus="item.isget = true"  @blur="calcTotalFee(item)" :maxlength="10" slot="reference" v-model="item.goodsName"></el-input>
                 </el-popover>
                 
               </el-form-item>
               <el-form-item label="总件数：">
-                <el-input :maxlength="7" v-numberOnly v-model="item.goodsNum"><template slot="append">件</template></el-input>
+                <!-- <el-input :maxlength="7" v-numberOnly v-model="item.goodsNum"><template slot="append">件</template></el-input> -->
+                <div class="el-input-group">
+                  <input class="nativeinput"  :value="item.goodsNum" @blur="()=>{detectGoodsNum(item)}" @change="(e)=>{setInputVal(e.target.value,item, 'goodsNum')}" :maxlength="7" v-numberOnly placeholder="" auto-complete="off"  clearable
+                            type="text" />
+                  <div class="el-input-group__append">件</div>
+               </div>
               </el-form-item>
               <el-form-item required label="预估重量：">
-                <el-input :maxlength="7" v-numberOnly  @blur="calcTotalFee" v-model="item.goodsWeight"><template slot="append">公斤</template></el-input>
+                <!-- <el-input :maxlength="7" v-numberOnly  @blur="calcTotalFee" v-model="item.goodsWeight"><template slot="append">公斤</template></el-input> -->
+                <div class="el-input-group">
+                  <input class="nativeinput" @blur="calcTotalFee"  :value="item.goodsWeight" @change="(e)=>{setInputVal(e.target.value,item, 'goodsWeight')}" :maxlength="7" v-numberOnly:point1 placeholder="" auto-complete="off"  clearable
+                            type="text" />
+                  <div class="el-input-group__append">公斤</div>
+               </div>
               </el-form-item>
               <el-form-item required label="预估体积：">
-                <el-input :maxlength="7" v-numberOnly @blur="calcTotalFee" v-model="item.goodsVolume"><template slot="append">立方米</template></el-input>
+                <div class="el-input-group">
+                  <input class="nativeinput" @blur="calcTotalFee"  :value="item.goodsVolume" @change="(e)=>{setInputVal(e.target.value,item, 'goodsVolume')}" :maxlength="7" v-numberOnly:point1 placeholder="" auto-complete="off"  clearable
+                            type="text" />
+                  <div class="el-input-group__append">立方米</div>
+               </div>
+                <!-- <el-input :maxlength="7" v-numberOnly @blur="calcTotalFee" v-model="item.goodsVolume"><template slot="append">立方米</template></el-input> -->
               </el-form-item>
               <el-form-item  class="cargo-button">
                 <el-button size="mini" type="primary" v-if="index === (cargoList.length-1)" @click="resetCargo">重置</el-button>
@@ -504,6 +519,17 @@ export default {
   },
   methods: {
     // 公用工具类
+    setInputVal(val, item, name) {
+    //   this.$set(this.form.tmsOrderCargoList, name, val)
+      this.$set(item, name, val)
+    },
+    detectGoodsNum(item) {
+      const i = parseInt(item.goodsNum, 10) || 0
+      if (i < 1) {
+        this.$message.error('总件数不能小于0')
+        item.goodsNum = ''
+      }
+    },
     validateIsEmpty(prop, checkrule) {
       return (rule, value, callback) => {
         const msg = rule.message
@@ -1069,6 +1095,10 @@ export default {
           }
           // 只提交填写了名称的货物信息
           data.aflcFCLOrderGoodsDtoList = data.aflcFCLOrderGoodsDtoList.filter(el => el.goodsName)
+          if (data.aflcFCLOrderGoodsDtoList.length < 1) {
+            this.$message.error('请至少填写一项货物信息')
+            return false
+          }
           if (data.wlId === '' && !this.isCargo) {
             this.$message.error('需要选择物流公司~')
             return false

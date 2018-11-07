@@ -5,7 +5,7 @@
             v-if="uploadUrl" 
             :data="upload" 
             :action="uploadUrl"
-            :multiple="false" 
+            :multiple="multiple" 
             :drag="!showFileList" 
             :show-file-list="showFileList" 
             :file-list="filelist"
@@ -51,6 +51,10 @@ export default {
     tip: {
       type: String,
       default: '（jpg/png。小于5M）'
+    },
+    multiple: {
+      type: Boolean,
+      default: false
     },
     size: {
       type: String,

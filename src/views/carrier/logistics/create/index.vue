@@ -119,14 +119,14 @@
                         <li>
                             <!-- <el-form-item prop="primeryPrice" style="display:inline-block;"> -->
                                 <!-- <el-input v-model="form.primeryPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input> -->
-                                <input class="nativeinput" :value="form.primeryPrice" @change="(e)=>{setInputVal(e.target.value,form, 'primeryPrice'),ifWrong(weigthPriceForms,keys)}" :maxlength="7" auto-complete="off"  clearable
+                                <input class="nativeinput" :value="form.primeryPrice" @change="(e)=>{setInputVal(e.target.value,form, 'primeryPrice'),ifWrong(ligthPriceForms,keys)}" :maxlength="7" auto-complete="off"  clearable
                             v-number-only:point :disabled="unable" type="text">
                                 元/立方
                             <!-- </el-form-item> -->
                         </li>
                         <li>
                             <!-- <el-input v-model="form.discountPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input> -->
-                            <input class="nativeinput" :value="form.discountPrice" @change="(e)=>{setInputVal(e.target.value,form, 'discountPrice'),ifWrong(weigthPriceForms,keys)}" :maxlength="7" auto-complete="off"  clearable
+                            <input class="nativeinput" :value="form.discountPrice" @change="(e)=>{setInputVal(e.target.value,form, 'discountPrice'),ifWrong(ligthPriceForms,keys)}" :maxlength="7" auto-complete="off"  clearable
                             v-number-only:point :disabled="unable" type="text">
                             元/立方
                         </li>
@@ -196,6 +196,7 @@ import { REGEX } from '@/utils/validate.js'
 import upload from '@/components/Upload/singleImage2'
 // import tmsmap from '@/components/map/index'
 import vregion from '@/components/vregion/Region.vue'
+import { objectMerge2 } from '@/utils/'
 export default {
   components: {
     upload,
@@ -226,7 +227,7 @@ export default {
     }
 
     var checkWeigthPriceForms = (rule, value, callback) => {
-      if (this.weigthPriceForms[0].endVolume == '') {
+      if (this.weigthPriceForms[0].endVolume === '') {
         callback(new Error('请补充重货价格区间'))
       } else {
         this.weigthPriceForms.forEach(el => {
@@ -359,7 +360,7 @@ export default {
   methods: {
     setInputVal(val, item, name) {
     //   this.$set(this.form.tmsOrderCargoList, name, val)
-      this.$set(item, name, val)
+      this.$set(item, name, Number(val) || 0)
     },
     ifWrong(item, idx) {
       const flag = item[idx].endVolume < item[idx].startVolume
@@ -386,10 +387,13 @@ export default {
     regionChangeStart(d) {
             // console.log('data:',d)
       this.ruleForm.startLocation = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
-      console.log(this.ruleForm.startLocation)
+      // startLocationCode
+      console.log('regionChangeStart', d, this.ruleForm.startLocation)
       this.ruleForm.startProvince = d.province ? d.province.name : ''
       this.ruleForm.startCity = d.city ? d.city.name : ''
       this.ruleForm.startArea = d.area ? d.area.name : ''
+      const obj = d.area || d.city || d.province
+      this.ruleForm.startLocationCode = obj.code
             // let zhixiashi = ['北京市','天津市','重庆市','上海市'];
             // let ifZhixia = false;
             // zhixiashi.forEach(el => {
@@ -413,11 +417,14 @@ export default {
           type: 'info',
           message: '出发地不可与到达地重复！'
         })
-        return this.ruleForm.endLocation = ''
+        this.ruleForm.endLocation = ''
+        return
       }
       this.ruleForm.endProvince = d.province ? d.province.name : ''
       this.ruleForm.endCity = d.city ? d.city.name : ''
       this.ruleForm.endArea = d.area ? d.area.name : ''
+      const obj = d.area || d.city || d.province
+      this.ruleForm.endLocationCode = obj.code
             // let zhixiashi = ['北京市','天津市','重庆市','上海市'];
             // let ifZhixia = false;
             // zhixiashi.forEach(el => {
@@ -441,10 +448,12 @@ export default {
         type: 'info',
         message: '至少选择到市级范围'
       })
-      if (type == 'startLocation') {
-        return this.ruleForm.startLocation = ''
+      if (type === 'startLocation') {
+        this.ruleForm.startLocation = ''
+        return
       } else {
-        return this.ruleForm.endLocation = ''
+        this.ruleForm.endLocation = ''
+        return
       }
     },
     getValue(obj) {
@@ -622,14 +631,41 @@ export default {
           if (valid) {
             this.completeName()
             let commitFunction
-            if (this.ifShowRangeType == '1') {
-              commitFunction = changeTransportRange(this.ruleForm)
+            const data = objectMerge2({}, this.ruleForm)
+            const lists = this.$const.UPLOAD_CAR_IMAGES
+            const len = lists.length
+            const rimg = lists[parseInt(Math.random() * len, 10)]
+            const companyFacadeFile = this.otherinfo.companyFacadeFile
+            // 1.判断是否有照片
+            // 1.1 判断照片是否为随机列表中的一个
+            // 1.2 如果是随机图片，则判端是否有档口图片
+            // 1.3 用档口图片替换随机图片
+            // 1.4 没有就保留随机图片
+            // 2.没有图片
+            // 2.1 如果有档口图片，用之
+            // 2.2 没有就取随机图片
+            if (!data.rangeLogo) {
+              if (companyFacadeFile) {
+                data.rangeLogo = companyFacadeFile
+              } else {
+                data.rangeLogo = rimg
+              }
             } else {
-              commitFunction = newTransportRangeList(this.ruleForm)
+              if (companyFacadeFile) {
+                const index = lists.indexOf(data.rangeLogo)
+                if (index !== -1) {
+                  data.rangeLogo = companyFacadeFile
+                }
+              }
+            }
+            if (this.ifShowRangeType === '1') {
+              commitFunction = changeTransportRange(data)
+            } else {
+              commitFunction = newTransportRangeList(data)
             }
             commitFunction.then(res => {
               console.log('res', res)
-              if (res.status == 200) {
+              if (res.status === 200) {
                 this.$alert('操作成功', '提示', {
                   confirmButtonText: '确定',
                   callback: action => {

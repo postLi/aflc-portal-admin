@@ -11,7 +11,7 @@
             <p><span class="tishi"><i class="el-icon-warning"></i>小提示： </span>(打<span class="star">*</span>号为必填项)</p>
         </div>
     </div>
-    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+    <el-form :model="ruleForm" :rules="rules" size="mini" ref="ruleForm" label-width="100px" class="demo-ruleForm">
       <div class="car-baseinfo-wrapper">
       <div class="tab-info-stitle"><strong>基本信息：</strong>(<span class="important">带*为必填项</span>)</div>
       <div class="car-base-info clearfix">
@@ -22,15 +22,26 @@
         <selectType v-model="ruleForm.carType" type="AF018" clearable size="mini"></selectType>
       </el-form-item>
       <el-form-item class="carvinfo" required label="车长">
-        长 <el-input maxlength="5" v-numberOnly:point1 v-model="ruleForm.carLength"></el-input>
-        宽 <el-input maxlength="5" v-numberOnly:point1 v-model="ruleForm.carWidth"></el-input>
-        高 <el-input maxlength="5" v-numberOnly:point1 v-model="ruleForm.carHeight"></el-input>（米）
+        长 <input class="nativeinput" :value="ruleForm.carLength" @change="(e)=>{setInputVal(e.target.value,ruleForm, 'carLength')}" :maxlength="4" placeholder="" auto-complete="off"  clearable
+          v-number-only:point1 type="text">
+          <!-- <el-input maxlength="5" v-numberOnly:point1 v-model="ruleForm.carLength"></el-input> -->
+        宽 <input class="nativeinput" :value="ruleForm.carWidth" @change="(e)=>{setInputVal(e.target.value,ruleForm, 'carWidth')}" :maxlength="4" placeholder="" auto-complete="off"  clearable
+          v-number-only:point1 type="text">
+          <!-- <el-input maxlength="5" v-numberOnly:point1 v-model="ruleForm.carWidth"></el-input> -->
+        高 <input class="nativeinput" :value="ruleForm.carHeight" @change="(e)=>{setInputVal(e.target.value,ruleForm, 'carHeight')}" :maxlength="4" placeholder="" auto-complete="off"  clearable
+          v-number-only:point1 type="text">
+          <!-- <el-input maxlength="5" v-numberOnly:point1 v-model="ruleForm.carHeight"></el-input>（米） -->
       </el-form-item>
 
       <el-form-item required label="车辆载重">
-        <el-input v-model="ruleForm.carLoad">
+        <div class="el-input-group">
+            <input class="nativeinput"  :value="ruleForm.carLoad"  @change="(e)=>{setInputVal(e.target.value,ruleForm, 'carLoad')}" :maxlength="5" v-numberOnly:point1 placeholder="" auto-complete="off"  clearable
+                      type="text" />
+            <div class="el-input-group__append">（吨）</div>
+          </div>
+        <!-- <el-input v-model="ruleForm.carLoad">
            <template slot="append">（吨）</template>
-        </el-input>
+        </el-input> -->
       </el-form-item>
       <el-form-item required label="车辆体积">
         <el-input disabled v-model="ruleForm.carVolume">
@@ -75,7 +86,9 @@
       </el-form-item>
       
       <el-form-item class="carinfo-expect" label="期望运价">
-        <el-input v-model="ruleForm.expectPrice"></el-input>元/车  （运价不填自动为面议）
+        <input class="nativeinput" :value="ruleForm.expectPrice" @change="(e)=>{setInputVal(e.target.value,ruleForm, 'expectPrice')}" :maxlength="9" placeholder="" auto-complete="off"  clearable
+          v-number-only:point1 type="text">元/车  （运价不填自动为面议）
+          <!-- <el-input v-model="ruleForm.expectPrice"></el-input> -->
       </el-form-item>
       <el-form-item label="即时/长期">
         <el-radio-group v-model="ruleForm.isLongCar">
@@ -220,6 +233,10 @@ export default {
     }
   },
   methods: {
+    setInputVal(val, item, name) {
+    //   this.$set(this.form.tmsOrderCargoList, name, val)
+      this.$set(item, name, val)
+    },
     getValue(obj) {
       return obj ? obj.value : ''
     },
@@ -255,10 +272,10 @@ export default {
       if (type == 'usualPlace') {
         return this.ruleForm.usualPlace = ''
       } else if (type == 'strartAddress') {
-          return this.ruleForm.strartAddress = ''
-        } else {
-          return this.ruleForm.endAddress = ''
-        }
+        return this.ruleForm.strartAddress = ''
+      } else {
+        return this.ruleForm.endAddress = ''
+      }
     },
     initModify() {
       ReqApi.getCarInfo(this.id).then(res => {
@@ -438,7 +455,7 @@ export default {
     }
   }
   .carvinfo{
-    .el-input{
+    .el-input,.nativeinput{
       width: 50px;
     }
   }
@@ -463,7 +480,7 @@ export default {
     }
   }
   .carinfo-expect{
-    .el-input{
+    .el-input, .nativeinput{
       width: 40%;
     }
   }

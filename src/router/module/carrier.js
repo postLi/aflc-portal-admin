@@ -42,7 +42,10 @@ export default {
         },
 
         {
-          path: '/order/rateInfo', icon: 'QQ', hidden: true, name: '评价详情', component: _import('carrier/order/rateInfo/index'), meta: { role: ['admin'], title: '评价详情', noCache: false }
+          path: '/order/rateInfo/carrier', icon: 'QQ', hidden: true, name: '评价详情', component: _import('carrier/order/rateInfo/index'), meta: { role: ['admin'], title: '评价详情', noCache: false }
+        },
+        {
+          path: '/order/rateInfo', icon: 'QQ', hidden: true, name: '评价详情2', component: _import('consignor/order/rateInfo/index'), meta: { role: ['admin'], title: '评价详情2', noCache: false }
         },
 
         /* {

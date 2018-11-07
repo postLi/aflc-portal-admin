@@ -13,7 +13,7 @@
     <img :src="url" />
 
     <h4>展示预览列表</h4>
-    <UploadImage @success="getUrl" showFileList :limit="2" listtype="picture" v-model="url4" tip="" />
+    <UploadImage @success="getUrl" multiple showFileList :limit="50" listtype="picture" v-model="url4" tip="" />
     <p>上传后的链接地址：{{ JSON.stringify(url4) }}</p>
 
     <blockquote>

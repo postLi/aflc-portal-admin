@@ -97,7 +97,11 @@ export default {
     },
     loadMap() {
       if (window.AMap) {
-        this.initMap()
+        // 稍微延时下渲染，以改进展现质量
+        // 如果不延时，地图对象所要绑定的DOM元素可能还没初始化好
+        setTimeout(() => {
+          this.initMap()
+        }, 500)
       } else {
         loadJs('https://webapi.amap.com/maps?v=1.4.8&key=e61aa7ddc6349acdb3b57c062080f730&plugin=AMap.Autocomplete,AMap.PlaceSearch,AMap.Geocoder').then(() => {
          // loadJs('//webapi.amap.com/ui/1.0/main.js').then(() => {
@@ -133,9 +137,10 @@ export default {
         extensions: 'base' // all base
         // type: '商务住宅|生活服务|公司企业|地名地址信息'
       })
-      if (this.name) {
-        this.$refs['tipinput'].value = this.name
-        placeSearch.search(this.name)
+      const name = this.name
+      if (name) {
+        this.$refs['tipinput'].value = name.replace('市辖区', '')
+        placeSearch.search(name)
       }
 
       /* AMapUI.loadUI(['misc/PositionPicker'], function(PositionPicker) {

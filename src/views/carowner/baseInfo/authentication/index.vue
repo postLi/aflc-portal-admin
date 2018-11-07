@@ -76,143 +76,141 @@ import '@/styles/identification.scss'
 
 import upload from '@/components/Upload/singleImage'
 import { identifyOwner } from '@/api/carowner/index.js'
-import { getDictionary,getDriverInfoByMobile } from '@/api/common.js'
+import { getDictionary, getDriverInfoByMobile } from '@/api/common.js'
 import { REGEX } from '@/utils/validate.js'
 import { getUserInfo } from '@/utils/auth.js'
 
 export default {
-    components:{
-        upload,
+  components: {
+    upload
+  },
+  computed: {
+    totalNum() {
+      return this.logisticsForm.driverDesc
     },
-    computed: {
-        totalNum() {
-    　　　　return this.logisticsForm.driverDesc
-    　　},
-        disabled(){
-            return this.logisticsForm.driverStatusName;
-        }
-    },
-    watch:{
-        totalNum:{
-            handler(val, oldVal){
+    disabled() {
+      return this.logisticsForm.driverStatusName
+    }
+  },
+  watch: {
+    totalNum: {
+      handler(val, oldVal) {
             //    console.log(val.length)
-                if(val){
-                    this.totalNumber = val.length;
-                }
-            },
-            deep:true
-        },
-        disabled:{
-            handler(newVal){
-                if(newVal == '待认证' || newVal == '认证成功'){
-                    this.ifDisable = false;
-                }else{
-                    this.ifDisable = true;
-                }
-            },
-            deep:true
+        if (val) {
+          this.totalNumber = val.length
         }
+      },
+      deep: true
     },
-    data() {
-        var checkDriverCardid = (rule, value, callback) => {
-            if(!value){
-                return callback(new Error('请输入身份证号码'))
-            }
-            else if(!REGEX.ID_CARD.test(value)){
-                return callback(new Error('请输入正确的二代身份证号码'));
-            }else{
-                callback()
-            }
-        };
-        return {
-            loading:true,
-            defaultImg:'/static/default.png',//默认加载失败图片
-            ifDisable:false,
-            totalNumber:0,//当前字数
-            maxlength:2000,
-            logisticsForm: {
-                driverName: '',//车主名称
-                driverCardid: '',//生份证号
-                driverMobile: '',//手机号码
-                qq: '',//qq
-                driverDesc: '',//车主描述
-                drivingLicenceFile:'',//驾驶证件
-                idCardFile:'',//身份证
-                personalImageFile:'',//個人形象照
-            },
-            rules: {
-                driverName: [
-                    { required: true, message: '请输入车主名称', trigger: 'blur' },
-                ],
-                driverCardid:[
-                    {required: true, validator: checkDriverCardid, trigger: 'blur'},
-                ],
-                driverDesc: [
+    disabled: {
+      handler(newVal) {
+        if (newVal === '待认证' || newVal === '认证成功') {
+          this.ifDisable = false
+        } else {
+          this.ifDisable = true
+        }
+      },
+      deep: true
+    }
+  },
+  data() {
+    var checkDriverCardid = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('请输入身份证号码'))
+      } else if (!REGEX.ID_CARD.test(value)) {
+        return callback(new Error('请输入正确的二代身份证号码'))
+      } else {
+        callback()
+      }
+    }
+    return {
+      loading: true,
+      defaultImg: '/static/default.png', // 默认加载失败图片
+      ifDisable: false,
+      totalNumber: 0, // 当前字数
+      maxlength: 2000,
+      logisticsForm: {
+        driverName: '', // 车主名称
+        driverCardid: '', // 生份证号
+        driverMobile: '', // 手机号码
+        qq: '', // qq
+        driverDesc: '', // 车主描述
+        drivingLicenceFile: '', // 驾驶证件
+        idCardFile: '', // 身份证
+        personalImageFile: '' // 個人形象照
+      },
+      rules: {
+        driverName: [
+                    { required: true, message: '请输入车主名称', trigger: 'blur' }
+        ],
+        driverCardid: [
+                    { required: true, validator: checkDriverCardid, trigger: 'blur' }
+        ],
+        driverDesc: [
                     { required: true, message: '请完善个人内容', trigger: 'blur' },
                     { min: 30, message: '车主简介，不能少于30个字', trigger: 'blur' }
-                ],
-                driverMobile: [
-                    {required: true, message: '请填写手机号码', trigger: 'blur' }
-                ],
-                drivingLicenceFile:[
-                    {required: true, message: '请上传驾驶证照片', trigger: 'blur'}
-                ],
-                idCardFile:[
-                    {required: true, message: '请上传车主身份证照片', trigger: 'blur'}
-                ],
-                personalImageFile:[
-                    {required: true, message: '请上传车主个人形象照', trigger: 'blur'}
-                ],
-            }
-        };
-    },
-    mounted(){
-        this.getMoreInformation();
-    },  
-    methods: {
-        getMoreInformation(){
-            let res = getUserInfo() ;
-            getDriverInfoByMobile(res.mobile).then(res=>{
+        ],
+        driverMobile: [
+                    { required: true, message: '请填写手机号码', trigger: 'blur' }
+        ],
+        drivingLicenceFile: [
+                    { required: true, message: '请上传驾驶证照片', trigger: 'blur' }
+        ],
+        idCardFile: [
+                    { required: true, message: '请上传车主身份证照片', trigger: 'blur' }
+        ],
+        personalImageFile: [
+                    { required: true, message: '请上传车主个人形象照', trigger: 'blur' }
+        ]
+      }
+    }
+  },
+  mounted() {
+    this.getMoreInformation()
+  },
+  methods: {
+    getMoreInformation() {
+      const res = getUserInfo()
+      getDriverInfoByMobile(res.mobile).then(res => {
             //    console.log(res)
-               this.logisticsForm = res.data;
-               this.loading = false;
-            })
-
-        },
-        submitForm(formName) {
-            this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    let form = Object.assign({},this.logisticsForm,{driverStatus:'AF0010402'})
-                    identifyOwner(form).then(res=>{
-                        // console.log(res)
-                        this.$alert('操作成功', '提示', {
-                            confirmButtonText: '确定',
-                            callback: action => {
-                                this.getMoreInformation();
-                            }
-                        }).catch(() => {
-                            this.$message({
-                                type: 'info',
-                                message: '已取消'
-                            })
-                        })
-                    }).catch(err => {
-                        this.$message({
-                            type: 'info',
-                            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
-                        })
-                    })
-                } else {
-                    console.log('error submit!!');
-                    return false;
-                }
-            });
-        },
-        resetForm(formName) {
-            this.$refs[formName].resetFields();
-        }
+        this.logisticsForm = res.data
+        this.loading = false
+      })
     },
-  
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          const form = Object.assign({}, this.logisticsForm, { driverStatus: 'AF0010402' })
+          identifyOwner(form).then(res => {
+                        // console.log(res)
+            this.$alert('操作成功', '提示', {
+              confirmButtonText: '确定',
+              callback: action => {
+                this.getMoreInformation()
+              }
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消'
+              })
+            })
+          }).catch(err => {
+            this.$message({
+              type: 'info',
+              message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+            })
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields()
+    }
+  }
+
 }
 </script>
 

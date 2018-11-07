@@ -147,235 +147,232 @@
 import '@/styles/identification.scss'
 
 import upload from '@/components/Upload/singleImage'
-import { getDictionary,getShipperInfoByMobile } from '@/api/common.js'
+import { getDictionary, getShipperInfoByMobile } from '@/api/common.js'
 import { getUserInfo } from '@/utils/auth.js'
 import { identifyShipper } from '@/api/consignor/index.js'
 import { REGEX } from '@/utils/validate.js'
 import tmsmap from '@/components/map/index'
 
 export default {
-    components:{
-        upload,
-        tmsmap
+  components: {
+    upload,
+    tmsmap
+  },
+  computed: {
+    totalNum() {
+      return this.logisticsForm.driverDesc
     },
-    computed: {
-        totalNum() {
-    　　　　return this.logisticsForm.driverDesc;
-    　　},
-        disabled(){
-            return this.logisticsForm.shipperStatusName;
-        }
-    },
-    watch:{
-        totalNum:{
-            handler(val, oldVal){
+    disabled() {
+      return this.logisticsForm.shipperStatusName
+    }
+  },
+  watch: {
+    totalNum: {
+      handler(val, oldVal) {
             //    console.log(val.length)
-                if(val){
-                    this.totalNumber = val.length;
-                }
-            },
-            deep:true
-        },
-        disabled:{
-            handler(newVal){
-                console.log(newVal)
-                if(newVal == '待认证' || newVal == '认证成功'){
-                    this.ifDisable = false;
-                }else{
-                    this.ifDisable = true;
-                }
-
-                console.log(this.ifDisable)
-            },
-            deep:true
+        if (val) {
+          this.totalNumber = val.length
         }
+      },
+      deep: true
     },
-    data() {
-        var checkcreditCode = (rule, value, callback) => {
-            if(value && !REGEX.ENGLISH_AND_NUMBER.test(value)){
-                return callback(new Error('仅可输入数字或者英文字母'));
-            }else{
-                callback()
-            }
-        };
-        var checkDriverCardid = (rule, value, callback) => {
-            if(!value){
-                return callback(new Error('请输入身份证号码'))
-            }
-            else if(!REGEX.ID_CARD.test(value)){
-                return callback(new Error('请输入正确的二代身份证号码'));
-            }else{
-                callback()
-            }
-        };
-        var checkMoblie = (rule, value, callback) => {
-            if(!value){
-                return callback(new Error('请输入手机号码'))
-            }
-            else if(!REGEX.MOBILE.test(value)){
-                return callback(new Error('请输入正确的手机号码格式'));
-            }else{
-                callback()
-            }
-        };
-        return {
-            pickerOptions:{
-                disabledDate(time) {
-                    return time.getTime() > Date.now();
-                },
-                shortcuts: [{
-                    text: '今天',
-                    onClick(picker) {
-                    picker.$emit('pick', new Date());
-                    }
-                }, {
-                    text: '昨天',
-                    onClick(picker) {
-                    const date = new Date();
-                    date.setTime(date.getTime() - 3600 * 1000 * 24);
-                    picker.$emit('pick', date);
-                    }
-                }, {
-                    text: '一周前',
-                    onClick(picker) {
-                    const date = new Date();
-                    date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                    picker.$emit('pick', date);
-                    }
-                },{
-                    text: '一月前',
-                    onClick(picker) {
-                    const date = new Date();
-                    date.setTime(date.getTime() - 3600 * 1000 * 24 * 30);
-                    picker.$emit('pick', date);
-                    }
-                },{
-                    text: '半年前',
-                    onClick(picker) {
-                    const date = new Date();
-                    date.setTime(date.getTime() - 3600 * 1000 * 24 * 182);
-                    picker.$emit('pick', date);
-                    }
-                },{
-                    text: '一年前',
-                    onClick(picker) {
-                    const date = new Date();
-                    date.setTime(date.getTime() - 3600 * 1000 * 24 * 365);
-                    picker.$emit('pick', date);
-                    }
-                }]
-            },
-            popVisible:false,
-            ifDisable:true,
-            driverPhone:'',//货主电话（账户）
-            totalNumber:0,//當前字數
-            maxlength:2000,
-            shipperType:'AF00101',//数据字典类型
-            optionsShipperType:[],//货主类型
-            logisticsForm: {
-                shipperType: "AF0010202",//货主名称
-                shipperTypeName:'企业货主',
-                companyName: '',//公司名称
-                legalPerson: '',//法人
-                legalPersonIdno: '',//身份证号
-                companyEstablishDate:'',//公司成立时间
-                companyLogo:'',//企业logo
-                driverDesc: '',//车主描述
-                contacts:'',//联系人
-                mobile:'',//手机
-                belongCity:'',//所在地
-                address:'',//详细地址
-                contactsTel:'',//联系电话
-                qq:'',//qq
-                businessLicenceFile:'',//营业执照
-                companyFacadeFile:'',//公司或者档口照片
-                shipperCardFile:'',//身份证
-            },
-            rules: {
-                shipperType:[
-                    { required: true, message: '请选择货主类型', trigger: 'blur' },
-                ],
-                companyName: [
-                    { required: true, message: '请输入公司名称', trigger: 'blur' },
-                ],
-                legalPerson:[
-                    {required: true, message: '请输入法人/负责人信息', trigger: 'blur'},
-                ],
-                creditCode:[
-                    {validator: checkcreditCode, trigger: 'blur'},
-                ],
-                legalPersonIdno:[
-                    {required: true, validator: checkDriverCardid, trigger: 'blur'},
-                ],
-                driverDesc: [
+    disabled: {
+      handler(newVal) {
+        console.log(newVal)
+        if (newVal === '待认证' || newVal === '认证成功') {
+          this.ifDisable = false
+        } else {
+          this.ifDisable = true
+        }
+
+        console.log(this.ifDisable)
+      },
+      deep: true
+    }
+  },
+  data() {
+    var checkcreditCode = (rule, value, callback) => {
+      if (value && !REGEX.ENGLISH_AND_NUMBER.test(value)) {
+        return callback(new Error('仅可输入数字或者英文字母'))
+      } else {
+        callback()
+      }
+    }
+    var checkDriverCardid = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('请输入身份证号码'))
+      } else if (!REGEX.ID_CARD.test(value)) {
+        return callback(new Error('请输入正确的二代身份证号码'))
+      } else {
+        callback()
+      }
+    }
+    var checkMoblie = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('请输入手机号码'))
+      } else if (!REGEX.MOBILE.test(value)) {
+        return callback(new Error('请输入正确的手机号码格式'))
+      } else {
+        callback()
+      }
+    }
+    return {
+      pickerOptions: {
+        disabledDate(time) {
+          return time.getTime() > Date.now()
+        },
+        shortcuts: [{
+          text: '今天',
+          onClick(picker) {
+            picker.$emit('pick', new Date())
+          }
+        }, {
+          text: '昨天',
+          onClick(picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24)
+            picker.$emit('pick', date)
+          }
+        }, {
+          text: '一周前',
+          onClick(picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', date)
+          }
+        }, {
+          text: '一月前',
+          onClick(picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24 * 30)
+            picker.$emit('pick', date)
+          }
+        }, {
+          text: '半年前',
+          onClick(picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24 * 182)
+            picker.$emit('pick', date)
+          }
+        }, {
+          text: '一年前',
+          onClick(picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24 * 365)
+            picker.$emit('pick', date)
+          }
+        }]
+      },
+      popVisible: false,
+      ifDisable: true,
+      driverPhone: '', // 货主电话（账户）
+      totalNumber: 0, // 當前字數
+      maxlength: 2000,
+      shipperType: 'AF00101', // 数据字典类型
+      optionsShipperType: [], // 货主类型
+      logisticsForm: {
+        shipperType: 'AF0010202', // 货主名称
+        shipperTypeName: '企业货主',
+        companyName: '', // 公司名称
+        legalPerson: '', // 法人
+        legalPersonIdno: '', // 身份证号
+        companyEstablishDate: '', // 公司成立时间
+        companyLogo: '', // 企业logo
+        driverDesc: '', // 车主描述
+        contacts: '', // 联系人
+        mobile: '', // 手机
+        belongCity: '', // 所在地
+        address: '', // 详细地址
+        contactsTel: '', // 联系电话
+        qq: '', // qq
+        businessLicenceFile: '', // 营业执照
+        companyFacadeFile: '', // 公司或者档口照片
+        shipperCardFile: '' // 身份证
+      },
+      rules: {
+        shipperType: [
+                    { required: true, message: '请选择货主类型', trigger: 'blur' }
+        ],
+        companyName: [
+                    { required: true, message: '请输入公司名称', trigger: 'blur' }
+        ],
+        legalPerson: [
+                    { required: true, message: '请输入法人/负责人信息', trigger: 'blur' }
+        ],
+        creditCode: [
+                    { validator: checkcreditCode, trigger: 'blur' }
+        ],
+        legalPersonIdno: [
+                    { required: true, validator: checkDriverCardid, trigger: 'blur' }
+        ],
+        driverDesc: [
                     { required: true, message: '请完善公司简介内容', trigger: 'blur' },
                     { min: 30, message: '公司简介，不能少于30个字', trigger: 'blur' }
-                ],
-                contacts:[
-                    { required: true, message: '请输入联系人信息，以方便物流公司和您联系', trigger: 'blur' },
-                ],
-                mobile: [
-                    {required: true,  validator: checkMoblie,  trigger: 'blur' }
-                ],
-                companyFacadeFile:[
-                    {required: true, message: '请上传公司或者档口照片', trigger: 'blur'}
-                ],
-                shipperCardFile:[
-                    {required: true, message: '请上传发货人名片', trigger: 'blur'}
-                ],
-            }
-        };
-    },
-    mounted(){
-        this.getMoreInformation();
-    },  
-    methods: {
-        getInfo(pos, name, info) {
+        ],
+        contacts: [
+                    { required: true, message: '请输入联系人信息，以方便物流公司和您联系', trigger: 'blur' }
+        ],
+        mobile: [
+                    { required: true, validator: checkMoblie, trigger: 'blur' }
+        ],
+        companyFacadeFile: [
+                    { required: true, message: '请上传公司或者档口照片', trigger: 'blur' }
+        ],
+        shipperCardFile: [
+                    { required: true, message: '请上传发货人名片', trigger: 'blur' }
+        ]
+      }
+    }
+  },
+  mounted() {
+    this.getMoreInformation()
+  },
+  methods: {
+    getInfo(pos, name, info) {
             // info.name  info.pos
-            console.log(pos, name, info)
-          
-            this.logisticsForm.belongCity = info.addressComponent.province +info.addressComponent.city+info.addressComponent.district;
-            
-            this.logisticsForm.address = name;
-        },
-        showMap(name) {
-            this.popVisible = true ;
-        },
-        getMoreInformation(){
+      console.log(pos, name, info)
 
-            let res = getUserInfo() ;
-            Promise.all([getDictionary(this.shipperType),getShipperInfoByMobile(res.mobile)]).then(resArr => {
-                // this.loading = false
-                this.optionsShipperType = resArr[0].data;
-                this.logisticsForm = Object.assign({},resArr[1].data,{'shipperType': "AF0010202",'shipperTypeName':'企业货主'});
-            }).catch(err => {
-                this.$message.error('操作失败：' + JSON.stringify(err.text))
-            })
-        },
-        submitForm(formName) {
-            this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    let form = Object.assign({},this.logisticsForm,{'shipperStatus':"AF0010402"})
-                    // console.log(form)
-                    identifyShipper(form).then(res=>{
-                        console.log(res)
-                        this.getMoreInformation();
-                    }).catch(err=>{
-                        this.$message({
-                            type: 'info',
-                            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
-                        })
-                    })
-                } else {
-                    console.log('error submit!!');
-                    return false;
-                }
-            });
-        },
-        resetForm(formName) {
-            this.$refs[formName].resetFields();
-        }
+      this.logisticsForm.belongCity = info.addressComponent.province + info.addressComponent.city + info.addressComponent.district
+
+      this.logisticsForm.address = name
     },
+    showMap(name) {
+      this.popVisible = true
+    },
+    getMoreInformation() {
+      const res = getUserInfo()
+      Promise.all([getDictionary(this.shipperType), getShipperInfoByMobile(res.mobile)]).then(resArr => {
+                // this.loading = false
+        this.optionsShipperType = resArr[0].data
+        this.logisticsForm = Object.assign({}, resArr[1].data, { 'shipperType': 'AF0010202', 'shipperTypeName': '企业货主' })
+      }).catch(err => {
+        this.$message.error('操作失败：' + JSON.stringify(err.text))
+      })
+    },
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          const form = Object.assign({}, this.logisticsForm, { 'shipperStatus': 'AF0010402' })
+                    // console.log(form)
+          identifyShipper(form).then(res => {
+            console.log(res)
+            this.getMoreInformation()
+          }).catch(err => {
+            this.$message({
+              type: 'info',
+              message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+            })
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields()
+    }
+  }
 }
 </script>
 
