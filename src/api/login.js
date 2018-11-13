@@ -22,7 +22,7 @@ export function login(username, password, orgid) {
   form.append('password', password)
   form.append('grant_type', grant_type)
   return fetch.request({
-    url: '/uaa/oauth/token',
+    url: '/api-uaa/password/token',
     method: 'post',
     headers: {
       'Content-Type': 'multipart/form-data',
@@ -48,7 +48,7 @@ export function getAccessInfo() {
 }
 
 export function logout() {
-  return fetch.delete('/uaa/oauth/token', {
+  return fetch.delete('/uaa/app/oauth/logout', {
     headers: {
       'content-type': 'application/x-www-form-urlencoded',
       'authorization': 'Basic d2ViQXBwOndlYkFwcA=='
