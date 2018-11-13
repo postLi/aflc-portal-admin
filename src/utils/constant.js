@@ -69,7 +69,7 @@ export const REPERTORY_TYPE = {
   2: '到货库存'
 }
 
-let the56url = 'http://www.56lines.cn'
+let the56url = 'http://www.28china.cn'
 /* if (process.env.NODE_ENV === 'development') {
   the56url = 'http://192.168.1.170'
 } else if (process.env.NODE_ENV === 'test') {

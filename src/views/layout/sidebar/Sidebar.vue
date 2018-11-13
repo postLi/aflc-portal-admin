@@ -87,7 +87,7 @@ export default {
   },
   mounted() {
     this.token = getToken()
-    this.tmsurl = location.host.indexOf('56lines.cn') === -1 ? 'http://192.168.1.157:9528' : this.tmsurl
+    this.tmsurl = location.host.indexOf('28china.cn') === -1 ? 'http://192.168.1.157:9528' : this.tmsurl
     this.eventBus.$on('loginmenhu', token => {
       this.loginaflc = true
     })

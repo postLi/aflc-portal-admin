@@ -11,7 +11,7 @@ function loginCms() {
   const form = new FormData()
   form.append('fmdo', 'login')
   form.append('dopost', 'login')
-  form.append('gourl', 'http://www.56lines.cn/member/content_list.php?channelid=1')
+  form.append('gourl', 'http://www.28china.cn/member/content_list.php?channelid=1')
 
   form.append('userType', 'aflc-5')
   form.append('userid', '13088888881')
@@ -19,7 +19,7 @@ function loginCms() {
   form.append('vdcode', '99999')
 
   return fetch.request({
-    url: 'http://www.56lines.cn/member/index_do.php',
+    url: 'http://www.28china.cn/member/index_do.php',
     method: 'post',
     headers: {
       'Content-Type': 'multipart/form-data',
@@ -155,7 +155,7 @@ router.beforeEach((to, from, next) => {
       /* next({ path: '/login', query: {
         tourl: to.fullPath
       }}) */
-      // location.href = 'http://www.56lines.cn/member/index_do.php?fmdo=login&dopost=exit&nexturl=../member/login.php'
+      // location.href = 'http://www.28china.cn/member/index_do.php?fmdo=login&dopost=exit&nexturl=../member/login.php'
       NProgress.done()
     }
   }
