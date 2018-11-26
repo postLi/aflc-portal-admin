@@ -48,7 +48,7 @@ export function getAccessInfo() {
 }
 
 export function logout() {
-  return fetch.delete('/uaa/app/oauth/logout', {
+  return fetch.post('/uaa/app/oauth/logout', {
     headers: {
       'content-type': 'application/x-www-form-urlencoded',
       'authorization': 'Basic d2ViQXBwOndlYkFwcA=='

@@ -44,7 +44,8 @@
             <h2>价格时效</h2>
             <el-form-item label="运输时效：" prop="transportAging">
                 <el-input v-model="ruleForm.transportAging" :disabled="unable" @keyup.native='handlerChoose' ></el-input>
-                <el-radio-group v-model="ruleForm.transportAgingUnit" :disabled="unable">
+                <el-radio-group v-model="ruleForm.transportAgingUnit"
+                @change="resetTransportAging" :disabled="unable">
                     <el-radio label="天"></el-radio>
                     <el-radio label="小时"></el-radio>
                     <el-radio label="多天"></el-radio>
@@ -363,7 +364,7 @@ export default {
       this.$set(item, name, Number(val) || 0)
     },
     ifWrong(item, idx) {
-      const flag = item[idx].endVolume < item[idx].startVolume
+      const flag = item[idx].endVolume <= item[idx].startVolume
       if (flag) {
         this.$message({
           type: 'info',
@@ -492,6 +493,9 @@ export default {
           this.unable = true
         }
       }
+    },
+    resetTransportAging() {
+      this.ruleForm.transportAging = ''
     },
         // 判断和限制
     handlerChoose() {

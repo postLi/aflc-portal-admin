@@ -167,6 +167,7 @@ export default {
           postNewReview(this.form).then(res => {
             this.$message.success('保存成功！')
             this.loading = false
+            this.$emit('success')
             this.close()
           }).catch(err => {
             this.$message.error('保存失败：' + JSON.stringify(err))

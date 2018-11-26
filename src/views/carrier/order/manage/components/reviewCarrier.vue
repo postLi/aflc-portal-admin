@@ -67,11 +67,16 @@ export default {
     shipperId: {
       type: String,
       default: ''
+    },
+    companyId: {
+      type: String,
+      default: ''
     }
   },
   data() {
     return {
       form: {
+        'companyId': '',
         'assessLevel': '', // 评价等级
         'evaluationDes': '', // 评价描述
         'evaluationId': '', // 评价人ID
@@ -159,6 +164,7 @@ export default {
       this.form.evaluationName = this.otherinfo.contactsName
       this.form.orderSerial = this.orderSerial
       this.form.shipperId = this.shipperId
+      this.form.companyId = this.companyId
     },
     submitFeeSetup() {
       this.$refs['ruleForm'].validate((valid) => {
@@ -167,6 +173,7 @@ export default {
           postNewCarrierReview(this.form).then(res => {
             this.$message.success('保存成功！')
             this.loading = false
+            this.$emit('success')
             this.close()
           }).catch(err => {
             this.$message.error('保存失败：' + JSON.stringify(err))

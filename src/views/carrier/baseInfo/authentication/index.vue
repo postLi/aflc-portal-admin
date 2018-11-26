@@ -114,7 +114,7 @@
                 <el-form-item label="详细地址：" class="moreWidth" prop="address">
                     <el-input @focus="()=>{showMap('endAddress')}" v-model="logisticsForm.address" :disabled="ifDisable === false"></el-input>
                 </el-form-item><br>
-                <el-form-item label="联系电话：">
+                <el-form-item label="联系电话：" prop="contactsTel">
                     <el-input v-model="logisticsForm.contactsTel" maxlength="11" :disabled="ifDisable === false">
                     </el-input>
                 </el-form-item>
@@ -306,6 +306,8 @@ export default {
         mobile: [
                     { required: true, message: '请填写手机号码', trigger: 'blur' }
         ],
+        contactsTel: [
+                    { pattern: /^\d{11}$/, message: '请填写正确的联系电话', trigger: 'blur' }],
         belongCityName: [
                     { required: true, message: '请输入公司所在地', trigger: 'change' }
         ],

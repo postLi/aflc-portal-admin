@@ -8,7 +8,7 @@
                 </div>
                 <div class="prompt">
                     <p><span class="tishi"><i class="el-icon-warning"></i>小提示： </span>(打<span class="star">*</span>号为必填项)</p>
-                    <p>修改完善公司基本信息后，我们将在24小时内进行人工审核，审核通过后，免费赠送您一个<span class="site">企业网站</span></p>
+                    <!-- <p>修改完善公司基本信息后，我们将在24小时内进行人工审核，审核通过后，免费赠送您一个<span class="site">企业网站</span></p> -->
                 </div>
             </div>
             <div class="companyInformation information">
@@ -101,8 +101,8 @@
                 <el-form-item label="详细地址："  class="moreWidth"  prop="address">
                     <el-input @focus="()=>{showMap('endAddress')}" v-model="logisticsForm.address" :disabled="ifDisable === false"></el-input>
                 </el-form-item><br>
-                <el-form-item label="联系电话：">
-                    <el-input v-model="logisticsForm.contactsTel" maxlength="12"  :disabled="ifDisable === false">
+                <el-form-item label="联系电话：" prop="contactsTel">
+                    <el-input v-model="logisticsForm.contactsTel" maxlength="11"  :disabled="ifDisable === false">
                     </el-input>
                 </el-form-item>
                 <el-form-item label="QQ：" >
@@ -312,6 +312,8 @@ export default {
         contacts: [
                     { required: true, message: '请输入联系人信息，以方便物流公司和您联系', trigger: 'blur' }
         ],
+        contactsTel: [
+                    { pattern: /^\d{11}$/, message: '请填写正确的联系电话', trigger: 'blur' }],
         mobile: [
                     { required: true, validator: checkMoblie, trigger: 'blur' }
         ],

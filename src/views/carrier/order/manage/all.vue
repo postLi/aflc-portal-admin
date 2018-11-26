@@ -274,8 +274,8 @@
       </div>
       <div class="info_tab_footer">共计:{{ total }} <div class="show_pager"> <Pager :total="total" @change="handlePageChange" /></div> </div>    
     </div>
-    <AddReview :dialogVisible.sync="dialogVisible" :orderSerial="orderSerial" :transportRangeId="transportRangeId" />
-    <AddReview2 :dialogVisible.sync="dialogVisible2" :orderSerial="orderSerial" :shipperId="shipperId" />
+    <AddReview @success="fetchData" :dialogVisible.sync="dialogVisible" :orderSerial="orderSerial" :transportRangeId="transportRangeId" />
+    <AddReview2 @success="fetchData" :dialogVisible.sync="dialogVisible2" :companyId="companyId" :orderSerial="orderSerial" :shipperId="shipperId" />
   </div>
 </template>
 <script>
@@ -346,6 +346,7 @@ export default {
       orderSerial: '',
       transportRangeId: '',
       shipperId: '',
+      companyId: '',
 
       isOwner: false,
       isall: false,
@@ -555,6 +556,7 @@ export default {
       this.orderSerial = row.orderSerial
       this.transportRangeId = row.wlId
       this.shipperId = row.shipperId
+      this.companyId = row.companyId
       if (this.isOwner) {
         this.dialogVisible = true
       } else {

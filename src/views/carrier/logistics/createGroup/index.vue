@@ -143,7 +143,7 @@ export default {
                     { required: true, message: '请输入网点名称', trigger: 'blur' }
         ],
         address: [
-                    { required: true, message: '请填写网点地址', trigger: 'blur' }
+                    { required: true, message: '请填写网点地址', trigger: ['blur', 'change'] }
         ],
         name: [
                     { required: true, message: '请输入联系人', trigger: 'blur' }
@@ -168,10 +168,10 @@ export default {
       this.logisticsForm.address = name
       this.logisticsForm.longitude = posArr[0]
       this.logisticsForm.latitude = posArr[1]
-      this.logisticsForm.province = info.addressComponent.province,
-            this.logisticsForm.city = info.addressComponent.city,
-            this.logisticsForm.area = info.addressComponent.district,
-            this.logisticsForm.belongCityName = info.addressComponent.province + info.addressComponent.city + info.addressComponent.district
+      this.logisticsForm.province = info.addressComponent.province
+      this.logisticsForm.city = info.addressComponent.city
+      this.logisticsForm.area = info.addressComponent.district
+      this.logisticsForm.belongCityName = info.addressComponent.province + info.addressComponent.city + info.addressComponent.district
     },
     showMap(name) {
       this.popVisible = true

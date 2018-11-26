@@ -24,7 +24,7 @@
             <router-link to="/baseInfo/authentication">
             <el-button type="primary" icon="el-icon-info">我的信息</el-button>
             </router-link>
-            <el-button type="primary" @click="lockScreen" icon="el-icon-news">锁定屏幕</el-button>
+            <!-- <el-button type="primary" @click="lockScreen" icon="el-icon-news">锁定屏幕</el-button> -->
             <el-button type="primary" @click="logout" icon="el-icon-circle-close-outline">退出登录</el-button>
           </el-button-group>
         </el-col>
