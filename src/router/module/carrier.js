@@ -120,13 +120,17 @@ export default {
     },
     // 我的收藏
     {
-      path: '/carrier/collection', hidden: false, icon: 'QQ', name: '我的收藏', component: _import('carrier/collection/index'), redirect: '/collection/resource', meta: { role: ['admin'], title: '我的收藏', istab: true, noCache: false },
-      children: [
-        {
-          path: '/collection/resource', icon: 'QQ', name: '资源收藏', component: _import('carrier/collection/resource/index'), meta: { role: ['admin'], title: '资源收藏', noCache: false }
-        }
-      ]
+      path: '/carrier/collection', hidden: false, icon: 'QQ', name: '我的收藏', component: _import('carrier/collection/index'), meta: { role: ['admin'], title: '我的收藏', istab: true, noCache: false },
     },
+    // // 我的收藏
+    // {
+    //   path: '/carrier/collection', hidden: false, icon: 'QQ', name: '我的收藏', component: _import('carrier/collection/index'), redirect: '/collection/resource', meta: { role: ['admin'], title: '我的收藏', istab: true, noCache: false },
+    //   children: [
+    //     {
+    //       path: '/collection/resource', icon: 'QQ', name: '资源收藏', component: _import('carrier/collection/resource/index'), meta: { role: ['admin'], title: '资源收藏', noCache: false }
+    //     }
+    //   ]
+    // },
     {
       path: '/member', icon: 'wzgl', name: '网站管理', component: _import('member/index'), redirect: '/member/manage/26', meta: { role: ['admin'], title: '网站管理', istab: true, noCache: false },
       children: [
