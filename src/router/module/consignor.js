@@ -71,7 +71,7 @@ export default {
     },
     // 我的收藏
     {
-      path: '/consignor/collection', icon: 'QQ', hidden: true, name: '我的收藏', component: _import('consignor/collection/index'), redirect: '/collection/logistics', meta: { role: ['admin'], title: '我的收藏', istab: true, noCache: false },
+      path: '/consignor/collection', icon: 'QQ', hidden: false, name: '我的收藏', component: _import('consignor/collection/index'), redirect: '/collection/logistics', meta: { role: ['admin'], title: '我的收藏', istab: true, noCache: false },
       children: [
         {
           path: '/collection/logistics', icon: 'QQ', name: '物流公司收藏', component: _import('consignor/collection/logistics/index'), meta: { role: ['admin'], title: '物流公司收藏', noCache: false }

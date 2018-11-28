@@ -120,7 +120,7 @@ export default {
     },
     // 我的收藏
     {
-      path: '/carrier/collection', hidden: true, icon: 'QQ', name: '我的收藏', component: _import('carrier/collection/index'), redirect: '/collection/resource', meta: { role: ['admin'], title: '我的收藏', istab: true, noCache: false },
+      path: '/carrier/collection', hidden: false, icon: 'QQ', name: '我的收藏', component: _import('carrier/collection/index'), redirect: '/collection/resource', meta: { role: ['admin'], title: '我的收藏', istab: true, noCache: false },
       children: [
         {
           path: '/collection/resource', icon: 'QQ', name: '资源收藏', component: _import('carrier/collection/resource/index'), meta: { role: ['admin'], title: '资源收藏', noCache: false }
