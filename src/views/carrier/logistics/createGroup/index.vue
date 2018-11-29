@@ -19,6 +19,9 @@
                 <el-form-item label="网点地址：" prop="address"> 
                     <el-input @focus="()=>{showMap('strartAddress')}" v-model="logisticsForm.address" :disabled="unable"></el-input>
                 </el-form-item>
+                <el-form-item label="所属园区：" maxlength="18"  prop="">
+                    <el-input v-model="logisticsForm.parkName" :disabled="unable" @focus="doction" placeholder="选择公司所在园区"></el-input>
+                </el-form-item>
                 <el-form-item label="联系人：" maxlength="18"  prop="name">
                     <el-input v-model="logisticsForm.name" :disabled="unable">
                     </el-input>
@@ -51,7 +54,8 @@
 
 
         <tmsmap @success="getInfo" pos="" name="" :popVisible.sync="popVisible" />
-
+        <Add :isMatreg="isMatreg" :centerDialogVisible="centerDialogVisible" @close="closeAddReg" @success="getsuccess"></add>
+         <!-- <Add></Add> -->
     </div>
 
     
@@ -66,11 +70,12 @@ import { REGEX } from '@/utils/validate.js'
 import upload from '@/components/Upload/singleImage'
 import tmsmap from '@/components/map/index'
 import { getUserInfo } from '@/utils/auth.js'
-
+import Add from './add'
 export default {
   components: {
     upload,
-    tmsmap
+    tmsmap,
+    Add
   },
   watch: {
     // 监测路由变化,只要变化了就调用获取路由参数方法将数据存储本组件即可
@@ -121,7 +126,10 @@ export default {
       defaultImg: '/static/default.png',
       current: '',
       popVisible: false,
+      centerDialogVisible: false,
+      isMatreg:false,
       logisticsForm: {
+        parkName:'',
         pointName: '', // 网点名称
         address: '', // 网点详细地址
         province: '',
@@ -176,6 +184,20 @@ export default {
     showMap(name) {
       this.popVisible = true
       this.current = name
+    },
+    getsuccess(obj) {
+      console.log(obj)
+      this.$set(this.logisticsForm, 'parkName', obj.parkName)
+      // this.firstblood()
+    },
+    doction(){
+      this.centerDialogVisible = true
+      this.isMatreg = true
+      // console.log( this.centerDialogVisible)
+    },
+    closeAddReg() {
+      this.centerDialogVisible = false
+      this.isMatreg = false
     },
     getParams() {
       if (this.$route.query.data) {
