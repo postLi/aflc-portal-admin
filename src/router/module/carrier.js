@@ -115,12 +115,15 @@ export default {
         },
         {
           path: '/cargoInfo/manage', icon: 'QQ', name: '管理货源', component: _import('carrier/cargoInfo/manage/index'), meta: { role: ['admin'], title: '管理货源信息', noCache: false }
+        },
+        {
+          path: '/cargoInfo/insure', icon: 'QQ', name: '我的投保单', component: _import('carrier/cargoInfo/insure/index'), meta: { role: ['admin'], title: '我的投保单', noCache: false }
         }
       ]
     },
     // 我的收藏
     {
-      path: '/carrier/collection', hidden: false, icon: 'QQ', name: '我的收藏', component: _import('carrier/collection/index'), meta: { role: ['admin'], title: '我的收藏', istab: true, noCache: false },
+      path: '/carrier/collection', hidden: false, icon: 'QQ', name: '我的收藏', component: _import('carrier/collection/index'), meta: { role: ['admin'], title: '我的收藏', istab: true, noCache: false }
     },
     // // 我的收藏
     // {
