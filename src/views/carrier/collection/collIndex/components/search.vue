@@ -1,12 +1,17 @@
 <template>
   <el-form label-width="140px" :inline="true" size="mini" label-position="right" :model="searchForm"
-           class="orderlist-search staff_searchinfo clearfix">
-    <div class="search_warrper" v-if="isAllSupplyl">
+           class="orderlist-search staff_searchinfo clearfix lll-search">
+    <div class="search_warrper searchInformation" v-if="isAllSupplyl">
       <el-form-item label="出发地：">
-        <el-input v-model="searchForm.isAllSupplyl.orderStartAddress" :maxlength="50" auto-complete="off"></el-input>
+        <vregion :ui="true" @values="orderStartAddressChange" class="form-control">
+          <el-input v-model="searchForm.isAllSupplyl.orderStartAddress" placeholder="请选择出发地"></el-input>
+        </vregion>
       </el-form-item>
       <el-form-item label="到达地：">
-        <el-input v-model="searchForm.isAllSupplyl.orderEndAddress" :maxlength="50" auto-complete="off"></el-input>
+        <!--<el-input v-model="searchForm.isAllSupplyl.orderEndAddress" :maxlength="50" auto-complete="off"></el-input>-->
+        <vregion :ui="true" @values="orderEndAddressChange" class="form-control">
+          <el-input v-model="searchForm.isAllSupplyl.orderEndAddress" placeholder="请选择到达地"></el-input>
+        </vregion>
       </el-form-item>
       <el-form-item label="货源类型：">
         <el-select v-model="searchForm.isAllSupplyl.orderClass">
@@ -29,12 +34,17 @@
         <el-input v-model="searchForm.isAllSupplyl.orderMobile" :maxlength="50" auto-complete="off"></el-input>
       </el-form-item>
     </div>
-    <div class="search_warrper" v-if="isSpacialLine">
+    <div class="search_warrper searchInformation" v-if="isSpacialLine">
       <el-form-item label="出发地：">
-        <el-input v-model="searchForm.isSpacialLine.rangeStartLocation" :maxlength="50" auto-complete="off"></el-input>
+        <!--<el-input v-model="searchForm.isSpacialLine.rangeStartLocation" :maxlength="50" auto-complete="off"></el-input>-->
+        <vregion :ui="true" @values="rangeStartLocationChange" class="form-control">
+          <el-input v-model="searchForm.isSpacialLine.rangeStartLocation" placeholder="请选择出发地"></el-input>
+        </vregion>
       </el-form-item>
       <el-form-item label="到达地：">
-        <el-input v-model="searchForm.isSpacialLine.rangeEndLocation" :maxlength="50" auto-complete="off"></el-input>
+        <vregion :ui="true" @values="rangeEndLocationChange" class="form-control">
+          <el-input v-model="searchForm.isSpacialLine.rangeEndLocation" placeholder="请选择到达地"></el-input>
+        </vregion>
       </el-form-item>
       <el-form-item label="公司名：">
         <el-input v-model="searchForm.isSpacialLine.companyName" :maxlength="50" auto-complete="off"></el-input>
@@ -46,12 +56,15 @@
         <el-input v-model="searchForm.isSpacialLine.rangeMobile" :maxlength="50" auto-complete="off"></el-input>
       </el-form-item>
     </div>
-    <div class="search_warrper" v-if="isPhysicalDis" style="margin-right: 250px;">
+    <div class="search_warrper searchInformation" v-if="isPhysicalDis" style="margin-right: 250px;">
       <el-form-item label="公司名：">
         <el-input v-model="searchForm.isPhysicalDis.companyName" :maxlength="50" auto-complete="off"></el-input>
       </el-form-item>
       <el-form-item label="所在地：">
-        <el-input v-model="searchForm.isPhysicalDis.belongCityName" :maxlength="50" auto-complete="off"></el-input>
+        <!--<el-input v-model="searchForm.isPhysicalDis.belongCityName" :maxlength="50" auto-complete="off"></el-input>-->
+        <vregion :ui="true" @values="belongCityNameChange" class="form-control">
+          <el-input v-model="searchForm.isPhysicalDis.belongCityName" placeholder="请选择出发地"></el-input>
+        </vregion>
       </el-form-item>
       <el-form-item label="联系人：">
         <el-input v-model="searchForm.isPhysicalDis.contactsName" :maxlength="50" auto-complete="off"></el-input>
@@ -60,21 +73,19 @@
         <el-input v-model="searchForm.isPhysicalDis.mobile" :maxlength="50" auto-complete="off"></el-input>
       </el-form-item>
     </div>
-    <div class="search_warrper" v-if="isCarSoure">
+    <div class="search_warrper searchInformation" v-if="isCarSoure">
       <el-form-item label="出发地：">
-        <el-input v-model="searchForm.isCarSoure.carStrartAddress" :maxlength="50" auto-complete="off"></el-input>
+        <vregion :ui="true" @values="carStrartAddressChange" class="form-control">
+          <el-input v-model="searchForm.isCarSoure.carStrartAddress" placeholder="请选择出发地"></el-input>
+        </vregion>
       </el-form-item>
       <el-form-item label="到达地：">
-        <el-input v-model="searchForm.isCarSoure.carEndAddress" :maxlength="50" auto-complete="off"></el-input>
+        <vregion :ui="true" @values="carEndAddressChange" class="form-control">
+          <el-input v-model="searchForm.isCarSoure.carEndAddress" placeholder="请选择到达地"></el-input>
+        </vregion>
       </el-form-item>
       <el-form-item label="车辆类型：">
         <selectType v-model="searchForm.isCarSoure.carType" type="AF018" clearable size="mini"></selectType>
-        <!--<el-select v-model="searchForm.isCarSoure.carType">-->
-          <!--<el-option label="全部" value=''></el-option>-->
-          <!--<el-option label="单次急发货源" value='0'></el-option>-->
-          <!--<el-option label="长期稳定货源" value='1'></el-option>-->
-        <!--</el-select>-->
-        <!--<el-input v-model="searchForm.isCarSoure.carType" :maxlength="50" auto-complete="off"></el-input>-->
       </el-form-item>
       <el-form-item label="车源类型：">
         <el-select v-model="searchForm.isCarSoure.carSourceType">
@@ -90,22 +101,11 @@
       <el-form-item label="手机号：">
         <el-input v-model="searchForm.isCarSoure.carPhone" :maxlength="50" auto-complete="off"></el-input>
       </el-form-item>
-      <el-form-item label="常驻地：">
-        <!--<vregion></vregion>-->
-        <!--<el-input v-model="searchForm.isCarSoure.usualPlace" :maxlength="50" auto-complete="off" v-if="unable"></el-input>-->
-
-
-        <!--<el-input v-model="searchForm.isCarSoure.usualPlace" v-if="unable" :disabled="unable"></el-input>-->
-
-        <!--<vregion :ui="true" @values="regionChangeStart" :ifAera = 'true' class="form-control" >-->
-          <!--<el-input v-model="searchForm.isCarSoure.usualPlace" placeholder="请选择出发地" ></el-input>-->
-        <!--</vregion>-->
-        <vregion :ui="true" @values="regionChange" class="form-control">
-          <el-input v-model="searchForm.isCarSoure.usualPlace"  placeholder="请选择出发地"></el-input>
-        </vregion>
-
-
-      </el-form-item>
+        <el-form-item label="常驻地：">
+          <vregion :ui="true" @values="usualPlaceChange" class="form-control">
+            <el-input v-model="searchForm.isCarSoure.usualPlace" placeholder="请选择常驻地"></el-input>
+          </vregion>
+        </el-form-item>
       <el-form-item label="即时/长期：">
         <el-select v-model="searchForm.isCarSoure.isLongCar">
           <el-option label="全部" value=''></el-option>
@@ -126,6 +126,7 @@
   import vregion from '@/components/vregion/Region.vue'
   // import vregion from '@/components/vregion/Region'
   import selectType from '@/components/selectType/index'
+
   export default {
     name: "search",
     components: {
@@ -191,46 +192,18 @@
             "carBelongDriver": "",
             "carPhone": "",
             "usualPlace": "",
-            "isLongCar": ""
+            "isLongCar": "",
+            provinceCode:'',
+            cityCode:'',
+            areaCode:'',
           }
         }
       }
     },
     methods: {
-      ifProvice(type) {
-        console.log('ifProvice', type)
-        // this.$message({
-        //   type: 'info',
-        //   message: '至少选择到市级范围'
-        // })
-        // if (type === 'startLocation') {
-        //   this.ruleForm.startLocation = ''
-        //   return
-        // } else {
-        //   this.ruleForm.endLocation = ''
-        //   return
-        // }
+      getValue(obj) {
+        return obj ? obj.value : ''
       },
-      regionChange(d) {
-        console.log('data:', d)
-        // this.logisticsForm.address = ''
-        this.searchForm.isCarSoure.usualPlace = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
-        this.searchForm.isCarSoure.provinceCode = d.province ? d.province.code : ''
-        this.searchForm.isCarSoure.cityCode = d.city ? d.city.code : ''
-        this.searchForm.isCarSoure.areaCode = d.area ? d.area.code : ''
-        // console.log(this.logisticsForm.provinceCode,this.logisticsForm.cityCode,this.logisticsForm.areaCode)
-      },
-      // regionChangeStart(d) {
-      //   console.log('data:',d)
-      //   this.searchForm.isCarSoure.usualPlace = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
-      //   // startLocationCode
-      //   // console.log('regionChangeStart', d, this.ruleForm.startLocation)
-      //   this.searchForm.isCarSoure.usualPlace = d.province ? d.province.name : ''
-      //   // this.ruleForm.startCity = d.city ? d.city.name : ''
-      //   // this.ruleForm.startArea = d.area ? d.area.name : ''
-      //   // const obj = d.area || d.city || d.province
-      //   // this.ruleForm.startLocationCode = obj.code
-      // },
       onSubmit() {
         let searchObj
         if (this.isAllSupplyl) {
@@ -286,7 +259,33 @@
             "isLongCar": ""
           }
         }
-      }
+      },
+
+
+      orderStartAddressChange(d) {
+        this.searchForm.isAllSupplyl.orderStartAddress = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
+      },
+      orderEndAddressChange(d) {
+        this.searchForm.isAllSupplyl.orderEndAddress = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
+      },
+      rangeStartLocationChange(d) {
+        this.searchForm.isSpacialLine.rangeStartLocation = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
+      },
+      rangeEndLocationChange(d) {
+        this.searchForm.isSpacialLine.rangeEndLocation = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
+      },
+      belongCityNameChange(d) {
+        this.searchForm.isPhysicalDis.belongCityName = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
+      },
+      carEndAddressChange(d) {
+        this.searchForm.isCarSoure.carEndAddress = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
+      },
+      carStrartAddressChange(d) {
+        this.searchForm.isCarSoure.carStrartAddress = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
+      },
+      usualPlaceChange(d) {
+        this.searchForm.isCarSoure.usualPlace = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
+      },
     }
   }
 </script>
@@ -310,5 +309,27 @@
     .el-input--suffix .el-input__inner {
       padding-right: 15px;
     }
+  }
+
+  .lll-search {
+      > .searchInformation {
+        .el-form-item {
+          margin-bottom: 20px;
+          .el-form-item__content {
+            .v-region {
+              width: 100%;
+              .caller-container {
+                width: 100%;
+              }
+              .v-dropdown-container {
+                top: 35px !important;
+                left: 0px !important;
+              }
+            }
+          }
+        }
+
+      }
+
   }
 </style>

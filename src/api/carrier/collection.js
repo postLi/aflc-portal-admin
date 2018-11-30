@@ -6,3 +6,13 @@ export function getCollectList(user_token, data) {
     return res.data || { list: [], total: 0 }
   })
 }
+export function getCollectListNum(user_token, data = {}) {
+  return fetch.post('/aflc-uc/usercenter/aflcCollect/v1/getCollectNum', data).then(res => {
+    return res.data ? (res.data || {}) : {}
+    // return res.data ? (res.data[0] || {}) : {}
+  })
+}
+///usercenter/aflcCollect/v1/cancelCollect
+export function postCancelCollect(data) {
+  return fetch.post('/aflc-uc/usercenter/aflcCollect/v1/cancelCollect/' ,data)
+}

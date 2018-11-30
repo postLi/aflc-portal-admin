@@ -43,8 +43,8 @@
             <el-table-column prop="collectTime" label="收藏时间" width="160"></el-table-column>
             <el-table-column prop="consignor" label="操作" width="250">
               <template slot-scope="scope">
-                <el-button type="info" size="small" plain @click="viewDetail(scope.row)">查看详情</el-button>
-                <el-button type="danger" size="small" plain @click="viewDetail(scope.row)">删除</el-button>
+                <el-button type="info" size="small" plain @click="viewDetail(scope.row,'allSupplyl')">查看详情</el-button>
+                <el-button type="danger" size="small" plain @click="remDetail(scope.row,'allSupplyl')">删除</el-button>
               </template>
             </el-table-column>
           </div>
@@ -61,10 +61,10 @@
             <el-table-column prop="collectTime" label="收藏时间" width="160"></el-table-column>
             <el-table-column prop="consignor" label="操作" width="350">
               <template slot-scope="scope">
-                <el-button type="info" size="small" plain @click="viewDetail(scope.row)">查看详情</el-button>
-                <el-button type="success" size="small" plain @click="viewDetail(scope.row)">下单
+                <el-button type="info" size="small" plain @click="viewDetail(scope.row,'spacialLine')">查看详情</el-button>
+                <el-button type="success" size="small" plain @click="createDetail(scope.row)">下单
                 </el-button>
-                <el-button type="danger" size="small" plain @click="viewDetail(scope.row)">删除</el-button>
+                <el-button type="danger" size="small" plain @click="remDetail(scope.row,'spacialLine')">删除</el-button>
               </template>
             </el-table-column>
           </div>
@@ -77,8 +77,8 @@
             <el-table-column prop="collectTime" label="收藏时间" width="160"></el-table-column>
             <el-table-column prop="consignor" label="操作" width="250">
               <template slot-scope="scope">
-                <el-button type="info" size="small" plain @click="viewDetail(scope.row)">查看详情</el-button>
-                <el-button type="danger" size="small" plain @click="viewDetail(scope.row)">删除</el-button>
+                <el-button type="info" size="small" plain @click="viewDetail(scope.row,'physicalDis')">查看详情</el-button>
+                <el-button type="danger" size="small" plain @click="remDetail(scope.row,'physicalDis')">删除</el-button>
               </template>
             </el-table-column>
           </div>
@@ -96,8 +96,8 @@
             <el-table-column prop="collectTime" label="收藏时间" width="250"></el-table-column>
             <el-table-column prop="consignor" label="操作" width="250">
               <template slot-scope="scope">
-                <el-button type="info" size="small" plain @click="viewDetail(scope.row)">查看详情</el-button>
-                <el-button type="danger" size="small" plain @click="viewDetail(scope.row)">删除</el-button>
+                <el-button type="info" size="small" plain @click="viewDetail(scope.row,'carSoure')">查看详情</el-button>
+                <el-button type="danger" size="small" plain @click="remDetail(scope.row,'carSoure')">删除</el-button>
               </template>
             </el-table-column>
           </div>
@@ -119,7 +119,8 @@
   // getCollectList
   import * as ReqApi from '@/api/carrier/manage'
   import * as collApi from '@/api/carrier/collection'
-  import {getOrgId} from '@/utils/auth'
+  import {getOrgId, getLogin} from '@/utils/auth'
+  // import {getOrgId} from '@/utils/auth'
 
   export default {
     name: "supply",
@@ -156,11 +157,87 @@
       }
     },
     mounted() {
-      this.userTypeFn()
+      this.userTypeFn(this.searchQuery.vo)
       this.listtypeFn()
 
     },
     methods: {
+      createDetail(row, type) {
+        //
+        this.$router.push({path: '/order/create', query: {isquery: JSON.stringify(row)}})
+        // console.log(this.$router.push, type)
+      },
+      viewDetail(row, type) {
+        const isApi = 'http://www.28china.cn'
+        let isApihttp = '/huoyuan/'
+        let isApiDate = '2018/0508'
+        let isApinum = '/2'
+        if (type === 'allSupplyl') {
+          window.open(isApi + isApihttp + isApiDate + isApinum + '.html?id=' + row.orderId + '&shipperId=' + row.shipperId)
+        }
+        if (type === 'spacialLine') {
+          isApihttp = '/wlzx/'
+          isApiDate = '2018/0509'
+          isApinum = '/7'
+          window.open(isApi + isApihttp + isApiDate + isApinum + '.html?id=' + row.rangeId + '&shipperId=' + row.shipperId)
+        }
+        if (type === 'physicalDis') {
+          isApihttp = '/member/'
+          isApiDate = row.account
+          window.open(isApi + isApihttp + isApiDate + '.html#')
+        }
+        if (type === 'carSoure') {
+          isApihttp = '/cyxx/'
+          isApinum = '/5'
+          window.open(isApi + isApihttp + isApiDate + isApinum + '.html?id=' + row.carId + '&driverId=' + row.driverId)
+        }
+        // console.log(row, type)
+      },
+      remDetail(row, type) {
+        const sendData = {}
+        this.userTypeFn(sendData)
+        this.collectTypeFn(sendData, type, row)
+
+        this.$set(sendData, 'mobile', getLogin().mobile)
+        this.$confirm('确定删除吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          center: true
+        }).then(() => {
+          collApi.postCancelCollect(sendData).then(data => {
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+            this.fetchData()
+          })
+
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
+
+      },
+      collectTypeFn(sendData, type, row) {
+        if (type === 'allSupplyl') {
+          this.$set(sendData, 'collectType', 3)
+          this.$set(sendData, 'collectId', row.orderId)
+        }
+        if (type === 'spacialLine') {
+          this.$set(sendData, 'collectType', 4)
+          this.$set(sendData, 'collectId', row.rangeId)
+        }
+        if (type === 'physicalDis') {
+          this.$set(sendData, 'collectType', 1)
+          this.$set(sendData, 'collectId', row.companyId)
+        }
+        if (type === 'carSoure') {
+          this.$set(sendData, 'collectType', 2)
+          this.$set(sendData, 'collectId', row.carId)
+        }
+      },
       listtypeFn() {
         this.isAllSupplyl = false
         this.isSpacialLine = false
@@ -192,23 +269,24 @@
             break
         }
       },
-      userTypeFn() {
-        this.$set(this.searchQuery.vo, 'userId', this.otherinfo.id)
+      userTypeFn(item) {
+        this.$set(item, 'userId', this.otherinfo.id)
         switch (getOrgId()) {
           case 'aflc-1':
-            this.$set(this.searchQuery.vo, 'userType', 2)
+            this.$set(item, 'userType', 2)
             break
           case 'aflc-2':
-            this.$set(this.searchQuery.vo, 'userType', 2)
+            this.$set(item, 'userType', 3)
             break
           case 'aflc-5':
-            this.$set(this.searchQuery.vo, 'userType', 1)
+            this.$set(item, 'userType', 1)
             break
         }
       },
       fetchAllCollList() {
         return collApi.getCollectList(this.otherinfo.userToken, this.searchQuery).then(data => {
           this.usersArr = data.list
+          this.total = data.totalCount
         })
       },
       fetchData() {

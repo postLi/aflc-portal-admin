@@ -1,15 +1,16 @@
 <!--<template>-->
-  <!--<router-view></router-view>-->
+<!--<router-view></router-view>-->
 <!--</template>-->
 
 <template>
   <div class="manage-orderinfo page-main">
     <div class="list-tab-title clearfix">
-      <span :class="{'active': component === item.name}" @click="component = item.name" v-for="(item,index) in tabs" :key="index">{{item.title + '(' + item.num + ')'}}</span>
+      <span :class="{'active': component === item.name}" @click="component = item.name" v-for="(item,index) in tabs"
+            :key="index">{{item.title + '(' + item.num + ')'}}</span>
     </div>
     <div class="list-tab-content">
       <keep-alive>
-        <component :key="component" :listtype="component"  v-bind:is="component"></component>
+        <component :key="component" :listtype="component" v-bind:is="component"></component>
       </keep-alive>
     </div>
   </div>
@@ -20,6 +21,9 @@
   import physicalDis from './collIndex/supply'
   import carSoure from './collIndex/supply'
   import * as ReqApi from '@/api/carrier/manage'
+  import * as collApi from '@/api/carrier/collection'
+  import {getOrgId} from '@/utils/auth'
+  import {objectMerge2} from '@/utils/'
 
   export default {
     components: {
@@ -41,57 +45,72 @@
         tabs: [{
           title: '货源收藏',
           name: 'allSupplyl',
-          type: 'AF03701',
+          type: '1',
           num: 0
         }, {
           title: '专线收藏',
           name: 'spacialLine',
-          type: 'AF03702',
+          type: '2',
           num: 0
         }, {
           title: '物流公司收藏',
           name: 'physicalDis',
-          type: 'AF03703',
+          type: '3',
           num: 0
         }, {
           title: '车源收藏',
           name: 'carSoure',
-          type: 'AF03704',
+          type: '4',
           num: 0
         }],
         component: 'allSupplyl',
-        isCarrier: false
+        isCarrier: false,
+        collListNum: {},
+        isdata: {},
       }
     },
+
     methods: {
+      userTypeFn() {
+        this.$set(this.collListNum, 'userId', this.otherinfo.id)
+        switch (getOrgId()) {
+          case 'aflc-1':
+            this.$set(this.collListNum, 'userType', 2)
+            break
+          case 'aflc-2':
+            this.$set(this.collListNum, 'userType', 2)
+            break
+          case 'aflc-5':
+            this.$set(this.collListNum, 'userType', 1)
+            break
+        }
+      },
       getCount() {
         if (this.$route.path.indexOf('/carrier/collection') !== -1) {
           this.isCarrier = true
           // console.log(this.isCarrier,' this.isCarrier');
         }
+        this.userTypeFn()
         const isOwner = !this.isCarrier
-        ReqApi.getOrderListCount(this.otherinfo.userToken, {
-          releaseOrCarrier: isOwner ? '1' : '2',
-          queryType: '1'
-        }).then(data => {
-          this.tabs.forEach(el => {
-
-            // if (data[el.type]) {
-            el.num = data[el.type] || 0
-            el.num = el.num > 99 ? '99+' : el.num
-            // }
+        let data = objectMerge2({}, this.collListNum)
+        collApi.getCollectListNum(this.otherinfo.userToken, data).then((data, index) => {
+          this.tabs.forEach((el, index) => {
+            if (this.tabs[index].type === data[index].collectType) {
+              this.tabs[index].num = data[index].collectNum
+            }
           })
         })
+
       }
     }
   }
 </script>
 <style lang="scss">
-  .list-tab-title{
+  .list-tab-title {
     height: 74px;
     background: #fff;
     padding: 0 20px;
-    span{
+    span {
       float: left;
       height: 74px;
       line-height: 74px;
@@ -102,17 +121,17 @@
       color: #aaa;
       position: relative;
 
-      &.active{
+      &.active {
         color: #000;
         border-bottom-color: #0d91e9;
 
-        &:hover{
+        &:hover {
           background: #fff;
           border-bottom-color: #0d91e9;
         }
       }
 
-      &:before{
+      &:before {
         content: "";
         position: absolute;
         width: 2px;
@@ -122,20 +141,21 @@
         background: #ccc;
       }
 
-      &:last-child{
-        &:before{
+      &:last-child {
+        &:before {
           display: none;
         }
       }
 
-      &:hover{
+      &:hover {
         background: #eee;
         border-bottom-color: #eee;
       }
     }
   }
-  .manage-orderinfo{
-    .el-table{
+
+  .manage-orderinfo {
+    .el-table {
       font-size: 12px;
     }
   }
