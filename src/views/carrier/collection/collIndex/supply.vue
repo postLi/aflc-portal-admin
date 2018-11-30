@@ -173,20 +173,32 @@
         let isApiDate = '2018/0508'
         let isApinum = '/2'
         if (type === 'allSupplyl') {
+          if (row.orderId === null || row.shipperId === null) {
+            return false
+          }
           window.open(isApi + isApihttp + isApiDate + isApinum + '.html?id=' + row.orderId + '&shipperId=' + row.shipperId)
         }
         if (type === 'spacialLine') {
           isApihttp = '/wlzx/'
           isApiDate = '2018/0509'
           isApinum = '/7'
+          if (row.rangeId === null || row.shipperId === null) {
+            return false
+          }
           window.open(isApi + isApihttp + isApiDate + isApinum + '.html?id=' + row.rangeId + '&shipperId=' + row.shipperId)
         }
         if (type === 'physicalDis') {
+          if (row.account === null) {
+            return false
+          }
           isApihttp = '/member/'
           isApiDate = row.account
           window.open(isApi + isApihttp + isApiDate + '.html#')
         }
         if (type === 'carSoure') {
+          if (row.carId === null || row.driverId === null) {
+            return false
+          }
           isApihttp = '/cyxx/'
           isApinum = '/5'
           window.open(isApi + isApihttp + isApiDate + isApinum + '.html?id=' + row.carId + '&driverId=' + row.driverId)

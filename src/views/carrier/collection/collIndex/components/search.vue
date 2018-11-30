@@ -4,34 +4,32 @@
     <div class="search_warrper searchInformation" v-if="isAllSupplyl">
       <el-form-item label="出发地：">
         <vregion :ui="true" @values="orderStartAddressChange" class="form-control">
-          <el-input v-model="searchForm.isAllSupplyl.orderStartAddress" placeholder="请选择出发地"></el-input>
+          <el-input v-model="searchForm.isAllSupplyl.orderStartAddress" placeholder="请选择出发地" clearable></el-input>
         </vregion>
       </el-form-item>
       <el-form-item label="到达地：">
-        <!--<el-input v-model="searchForm.isAllSupplyl.orderEndAddress" :maxlength="50" auto-complete="off"></el-input>-->
         <vregion :ui="true" @values="orderEndAddressChange" class="form-control">
           <el-input v-model="searchForm.isAllSupplyl.orderEndAddress" placeholder="请选择到达地"></el-input>
         </vregion>
       </el-form-item>
       <el-form-item label="货源类型：">
-        <el-select v-model="searchForm.isAllSupplyl.orderClass">
+        <el-select v-model="searchForm.isAllSupplyl.orderClass" clearable>
           <el-option label="全部" value=''></el-option>
           <el-option label="单次急发货源" value='0'></el-option>
           <el-option label="长期稳定货源" value='1'></el-option>
         </el-select>
-        <!--<el-input v-model="searchForm.orderSerialOrGoodsName" :maxlength="50" auto-complete="off"></el-input>-->
       </el-form-item>
       <el-form-item label="货物名称：">
-        <el-input v-model="searchForm.isAllSupplyl.goodsName" :maxlength="50" auto-complete="off"></el-input>
+        <el-input v-model="searchForm.isAllSupplyl.goodsName" clearable auto-complete="off"></el-input>
       </el-form-item>
       <el-form-item label="公司名：">
-        <el-input v-model="searchForm.isAllSupplyl.companyName" :maxlength="50" auto-complete="off"></el-input>
+        <el-input v-model="searchForm.isAllSupplyl.companyName" clearable auto-complete="off"></el-input>
       </el-form-item>
       <el-form-item label="发货人：">
-        <el-input v-model="searchForm.isAllSupplyl.orderContacts" :maxlength="50" auto-complete="off"></el-input>
+        <el-input v-model="searchForm.isAllSupplyl.orderContacts" clearable auto-complete="off"></el-input>
       </el-form-item>
       <el-form-item label="发货人手机：">
-        <el-input v-model="searchForm.isAllSupplyl.orderMobile" :maxlength="50" auto-complete="off"></el-input>
+        <el-input v-model="searchForm.isAllSupplyl.orderMobile" clearable auto-complete="off"></el-input>
       </el-form-item>
     </div>
     <div class="search_warrper searchInformation" v-if="isSpacialLine">
@@ -47,18 +45,18 @@
         </vregion>
       </el-form-item>
       <el-form-item label="公司名：">
-        <el-input v-model="searchForm.isSpacialLine.companyName" :maxlength="50" auto-complete="off"></el-input>
+        <el-input v-model="searchForm.isSpacialLine.companyName" clearable auto-complete="off"></el-input>
       </el-form-item>
       <el-form-item label="联系人：">
-        <el-input v-model="searchForm.isSpacialLine.rangeContacts" :maxlength="50" auto-complete="off"></el-input>
+        <el-input v-model="searchForm.isSpacialLine.rangeContacts" clearable auto-complete="off"></el-input>
       </el-form-item>
       <el-form-item label="手机号：">
-        <el-input v-model="searchForm.isSpacialLine.rangeMobile" :maxlength="50" auto-complete="off"></el-input>
+        <el-input v-model="searchForm.isSpacialLine.rangeMobile" clearable auto-complete="off"></el-input>
       </el-form-item>
     </div>
     <div class="search_warrper searchInformation" v-if="isPhysicalDis" style="margin-right: 250px;">
       <el-form-item label="公司名：">
-        <el-input v-model="searchForm.isPhysicalDis.companyName" :maxlength="50" auto-complete="off"></el-input>
+        <el-input v-model="searchForm.isPhysicalDis.companyName" clearable auto-complete="off"></el-input>
       </el-form-item>
       <el-form-item label="所在地：">
         <!--<el-input v-model="searchForm.isPhysicalDis.belongCityName" :maxlength="50" auto-complete="off"></el-input>-->
@@ -67,10 +65,10 @@
         </vregion>
       </el-form-item>
       <el-form-item label="联系人：">
-        <el-input v-model="searchForm.isPhysicalDis.contactsName" :maxlength="50" auto-complete="off"></el-input>
+        <el-input v-model="searchForm.isPhysicalDis.contactsName" clearable auto-complete="off"></el-input>
       </el-form-item>
       <el-form-item label="手机号：">
-        <el-input v-model="searchForm.isPhysicalDis.mobile" :maxlength="50" auto-complete="off"></el-input>
+        <el-input v-model="searchForm.isPhysicalDis.mobile" clearable auto-complete="off"></el-input>
       </el-form-item>
     </div>
     <div class="search_warrper searchInformation" v-if="isCarSoure">
@@ -96,7 +94,7 @@
         <!--<el-input v-model="searchForm.isCarSoure.orderSerialOrGoodsName" :maxlength="50" auto-complete="off"></el-input>-->
       </el-form-item>
       <el-form-item label="联系人：">
-        <el-input v-model="searchForm.isCarSoure.carBelongDriver" :maxlength="50" auto-complete="off"></el-input>
+        <el-input v-model="searchForm.isCarSoure.carBelongDriver" clearable auto-complete="off"></el-input>
       </el-form-item>
       <el-form-item label="手机号：">
         <el-input v-model="searchForm.isCarSoure.carPhone" :maxlength="50" auto-complete="off"></el-input>
