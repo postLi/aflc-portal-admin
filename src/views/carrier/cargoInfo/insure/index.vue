@@ -1,0 +1,139 @@
+
+
+<template>
+  <div class="manage-orderinfo page-main">
+    <div class="list-tab-title clearfix">
+      <span :class="{'active': component === item.name}" @click="changeComponent(item)" v-for="(item,index) in tabs" :key="index">{{item.title + '(' + item.num + ')'}}</span>
+    </div>
+    <div class="list-tab-content">
+      <keep-alive>
+        <component :key="componentKey" :listtype="component"  v-bind:is="component"></component>
+      </keep-alive>
+    </div>
+  </div>
+</template>
+<script>
+import all from './all'
+import havepaid from './all'
+import unpaid from './all'
+// import all from './all'
+// import havepaid from './all'
+// import unpaid from './all'
+import * as ReqApi from '@/api/carrier/manage'
+
+export default {
+  components: {
+    all,
+    havepaid,
+    unpaid
+  },
+  created() {
+    this.getCount()
+  },
+  mounted() {
+    this.eventBus.$on('updateListCount', () => {
+     // this.getCount()
+    })
+  },
+  data() {
+    return {
+      componentKey: 0,
+      tabs: [{
+        title: '全部投保单',
+        name: 'all',
+        type: 'AF03701',
+        num: 0
+      }, {
+        title: '已支付投保单',
+        name: 'havepaid',
+        type: 'AF03702',
+        num: 0
+      }, {
+        title: '未支付投保单',
+        name: 'unpaid',
+        type: 'AF03703',
+        num: 0
+      }],
+      component: 'all',
+      isCarrier: false
+    }
+  },
+  methods: {
+    getCount() {
+      if (this.$route.path.indexOf('/order/manage/carrier') !== -1) {
+        this.isCarrier = true
+      }
+      const isOwner = !this.isCarrier
+      ReqApi.getOrderListCount(this.otherinfo.userToken, {
+        releaseOrCarrier: isOwner ? '1' : '2',
+        queryType: '1'
+      }).then(data => {
+        this.tabs.forEach(el => {
+          // if (data[el.type]) {
+          el.num = data[el.type] || 0
+          el.num = el.num > 99 ? '99+' : el.num
+          // }
+        })
+      })
+    },
+    changeComponent (item) {
+      this.component = item.name
+      this.componentKey = Math.random()
+    }
+  }
+}
+</script>
+<style lang="scss">
+.list-tab-title{
+  height: 74px;
+  background: #fff;
+  padding: 0 20px;
+  span{
+    float: left;
+    height: 74px;
+    line-height: 74px;
+    width: 14.2%;
+    text-align: center;
+    cursor: pointer;
+    border-bottom: 2px solid #fff;
+    color: #aaa;
+    position: relative;
+
+    &.active{
+      color: #000;
+      border-bottom-color: #0d91e9;
+
+      &:hover{
+        background: #fff;
+        border-bottom-color: #0d91e9;
+      }
+    }
+
+  &:before{
+    content: "";
+    position: absolute;
+    width: 2px;
+    height: 31px;
+    top: 21px;
+    right: 0;
+    background: #ccc;
+  }
+
+  &:last-child{
+    &:before{
+      display: none;
+    }
+  }
+
+    &:hover{
+      background: #eee;
+      border-bottom-color: #eee;
+    }
+  }
+}
+.manage-orderinfo{
+  .el-table{
+    font-size: 12px;
+  }
+}
+</style>
