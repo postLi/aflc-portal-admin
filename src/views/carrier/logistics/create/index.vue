@@ -148,11 +148,11 @@
                 <el-radio-group v-model="ruleForm.rangeType" :disabled="unable">
                      <el-radio v-for="range in rangeTypeClassfy" :label="range.code" :key="range.id">{{range.name}}</el-radio>
                 </el-radio-group>
-            </el-form-item> 
+            </el-form-item>
             <el-form-item label="发车时间："  class="departureTime" prop="departureTimeCode">
                 <div>
                     <el-select v-model="ruleForm.departureTimeCode" :disabled="unable" clearable placeholder="请选择发车时间">
-                        <el-option v-for="time in departClassfy" 
+                        <el-option v-for="time in departClassfy"
                         :key="time.id"
                         :label="time.name"
                         :value="time.code">
@@ -161,11 +161,11 @@
                 </div>
             </el-form-item>
             <el-form-item label="线路说明：" class="textarea" prop="transportRemark" >
-                <el-input type="textarea" 
+                <el-input type="textarea"
                     :disabled="unable"
-                    v-model="ruleForm.transportRemark" 
+                    v-model="ruleForm.transportRemark"
                     :autosize="{ minRows: 3, maxRows: 10}"
-                    :maxlength="maxlength" 
+                    :maxlength="maxlength"
                     placeholder="请填写备注30-2000个字。提供原创说明有助于提升线路效果。">
                 </el-input>
                 <span>{{ruleForm.transportRemark.length}} / {{maxlength}}</span>
@@ -177,7 +177,7 @@
                     <img :src='item' alt="">
                     <el-button  class="preview" type="primary" plain v-showPicture :imgurl="item">点击预览</el-button>
                 </div>
-            </el-form-item> 
+            </el-form-item>
         </div>
         <el-form-item class="fromfooter" v-show="ifShowRangeType != 2">
             <el-button type="primary" @click="resetForm('ruleForm')">重置</el-button>
@@ -444,7 +444,7 @@ export default {
             // }
     },
     ifProvice(type) {
-      console.log('ifProvice', type)
+      console.log('ifProvice111111', type)
       this.$message({
         type: 'info',
         message: '至少选择到市级范围'
@@ -749,7 +749,7 @@ export default {
                         }
                     }
                 }
-                
+
             }
             .priceTime{
                 .el-input{
@@ -802,13 +802,13 @@ export default {
                             font-size: 12px;
                             color:red;
                         }
-                        .goodsPriceChoose{  
+                        .goodsPriceChoose{
                             border: 1px solid #ccc;
                             .nativeinput{
                                 width: 80px;
                             }
                             p{
-                                padding: 6px 50px;                     
+                                padding: 6px 50px;
                                 background: #eaefff;
                                 font-size: 14px;
                                 line-height: 17px;
@@ -853,7 +853,7 @@ export default {
                                     margin-left: 20%;
                                 }
                                 li:nth-child(3){
-                                    margin-left: 21%; 
+                                    margin-left: 21%;
                                 }
                                 .buttons{
                                     position: absolute;

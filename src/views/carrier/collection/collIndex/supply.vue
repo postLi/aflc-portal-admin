@@ -1,6 +1,7 @@
 <template>
   <div class="tab-content lll-list" v-loading="loading">
-    <SearchForm :isAllSupplyl="isAllSupplyl" :isSpacialLine="isSpacialLine" :isPhysicalDis="isPhysicalDis" :isCarSoure="isCarSoure"></SearchForm>
+    <SearchForm :isAllSupplyl="isAllSupplyl" :isSpacialLine="isSpacialLine" :isPhysicalDis="isPhysicalDis"
+                :isCarSoure="isCarSoure" @change="getSearchParam"></SearchForm>
     <div class="tab_info">
       <!--<div class="btns_box">-->
       <!--<el-button type="primary" size="large" icon="el-icon-circle-plus" @click="doAction('add')">创建订单</el-button>-->
@@ -25,23 +26,81 @@
               {{ (searchQuery.currentPage - 1)*searchQuery.pageSize + scope.$index + 1 }}
             </template>
           </el-table-column>
-          <el-table-column fixed prop="consignor" label="出发地" width="180" v-if="/(physicalDis)/.test(listtype)===false"></el-table-column>
-          <el-table-column prop="consignor" label="到达地" width="180" v-if="/(physicalDis)/.test(listtype)===false"></el-table-column>
-          <el-table-column prop="consignor" label="货物名称" width="150" v-if="/(spacialLine|physicalDis|carSoure)/.test(listtype)===false"></el-table-column>
-          <el-table-column prop="consignor" label="总数量" width="100" v-if="/(spacialLine|physicalDis|carSoure)/.test(listtype)===false"></el-table-column>
-          <el-table-column prop="consignor" label="预估总重量（公斤）" width="150" v-if="/(spacialLine|physicalDis|carSoure)/.test(listtype)===false"></el-table-column>
-          <el-table-column prop="consignor" label="预估总体积（方）" width="150" v-if="/(spacialLine|physicalDis|carSoure)/.test(listtype)===false"></el-table-column>
-          <el-table-column prop="consignor" label="货源类型" width="150" v-if="/(spacialLine|physicalDis|carSoure)/.test(listtype)===false"></el-table-column>
-          <el-table-column prop="consignor" label="公司名称" width="150"></el-table-column>
-          <el-table-column prop="consignor" label="发货人" width="150"></el-table-column>
-          <el-table-column prop="consignor" label="发货人手机" width="150"></el-table-column>
-          <el-table-column prop="consignor" label="收藏时间" width="160"></el-table-column>
-          <el-table-column prop="consignor" label="操作" width="230">
-            <template slot-scope="scope">
-              <el-button type="info" size="small" plain @click="viewDetail(scope.row)">查看详情</el-button>
-              <el-button type="danger" size="small" plain @click="viewDetail(scope.row)">删除</el-button>
-            </template>
-          </el-table-column>
+
+          <div v-if="/(allSupplyl)/.test(listtype)===true">
+            <el-table-column prop="orderStartAddress" label="出发地" width="150"></el-table-column>
+            <el-table-column prop="orderEndAddress" label="到达地" width="150"></el-table-column>
+            <el-table-column prop="goodsName" label="货物名称" width="150"></el-table-column>
+            <el-table-column prop="goodsNum" label="总数量" width="120"></el-table-column>
+            <el-table-column prop="goodsWeight" label="预估总重量（公斤）" width="150"></el-table-column>
+            <el-table-column prop="goodsVolume" label="预估总体积（方）" width="150"></el-table-column>
+            <el-table-column prop="orderClassName" label="货源类型" width="150"></el-table-column>
+            <el-table-column prop="companyName" label="公司名称" width="150">
+              <!--<template slot-scope="scope">{{scope.row.companyName===null?'普通货主':scope.row.companyName}}</template>-->
+            </el-table-column>
+            <el-table-column prop="orderContacts" label="发货人" width="150"></el-table-column>
+            <el-table-column prop="orderMobile" label="发货人手机" width="150"></el-table-column>
+            <el-table-column prop="collectTime" label="收藏时间" width="160"></el-table-column>
+            <el-table-column prop="consignor" label="操作" width="250">
+              <template slot-scope="scope">
+                <el-button type="info" size="small" plain @click="viewDetail(scope.row,'allSupplyl')">查看详情</el-button>
+                <el-button type="danger" size="small" plain @click="remDetail(scope.row,'allSupplyl')">删除</el-button>
+              </template>
+            </el-table-column>
+          </div>
+          <div v-if="/(spacialLine)/.test(listtype)===true">
+            <el-table-column prop="rangeStartLocation" label="出发地" width="150"></el-table-column>
+            <el-table-column prop="rangeEndLocation" label="到达地" width="150"></el-table-column>
+            <el-table-column prop="companyName" label="公司名称" width="150"></el-table-column>
+            <el-table-column prop="zhPrice" label="重货价" width="150"></el-table-column>
+            <el-table-column prop="qhPrice" label="轻货价" width="150"></el-table-column>
+            <el-table-column prop="transportAging" label="时效" width="150"></el-table-column>
+            <el-table-column prop="hz" label="发车频率" width="150"></el-table-column>
+            <el-table-column prop="rangeContacts" label="联系人" width="150"></el-table-column>
+            <el-table-column prop="rangeMobile" label="手机号" width="150"></el-table-column>
+            <el-table-column prop="collectTime" label="收藏时间" width="160"></el-table-column>
+            <el-table-column prop="consignor" label="操作" width="350">
+              <template slot-scope="scope">
+                <el-button type="info" size="small" plain @click="viewDetail(scope.row,'spacialLine')">查看详情</el-button>
+                <el-button type="success" size="small" plain @click="createDetail(scope.row)">下单
+                </el-button>
+                <el-button type="danger" size="small" plain @click="remDetail(scope.row,'spacialLine')">删除</el-button>
+              </template>
+            </el-table-column>
+          </div>
+          <div v-if="/(physicalDis)/.test(listtype)===true">
+            <el-table-column prop="companyName" label="公司名称" width="250"></el-table-column>
+            <el-table-column prop="contactsName" label="联系人" width="150"></el-table-column>
+            <el-table-column prop="mobile" label="手机号" width="150"></el-table-column>
+            <el-table-column prop="belongCityName" label="公司所在地" width="288"></el-table-column>
+            <el-table-column prop="address" label="详细地址" width="350"></el-table-column>
+            <el-table-column prop="collectTime" label="收藏时间" width="160"></el-table-column>
+            <el-table-column prop="consignor" label="操作" width="250">
+              <template slot-scope="scope">
+                <el-button type="info" size="small" plain @click="viewDetail(scope.row,'physicalDis')">查看详情</el-button>
+                <el-button type="danger" size="small" plain @click="remDetail(scope.row,'physicalDis')">删除</el-button>
+              </template>
+            </el-table-column>
+          </div>
+          <div v-if="/(carSoure)/.test(listtype)===true">
+            <el-table-column prop="carStrartAddress" label="出发地" width="150"></el-table-column>
+            <el-table-column prop="carEndAddress" label="到达地" width="150"></el-table-column>
+            <el-table-column prop="carTypeName" label="车辆类型" width="150"></el-table-column>
+            <el-table-column prop="carSourceTypeName" label="车源类型" width="150"></el-table-column>
+            <el-table-column prop="carLoad" label="车辆载重" width="150"></el-table-column>
+            <el-table-column prop="carVolume" label="车辆体积" width="150"></el-table-column>
+            <el-table-column prop="usualPlace" label="车辆常驻地" width="150"></el-table-column>
+            <el-table-column prop="isLongCar" label="即时/长期" width="150"></el-table-column>
+            <el-table-column prop="carBelongDriver" label="联系人" width="150"></el-table-column>
+            <el-table-column prop="carPhone" label="手机号" width="160"></el-table-column>
+            <el-table-column prop="collectTime" label="收藏时间" width="250"></el-table-column>
+            <el-table-column prop="consignor" label="操作" width="250">
+              <template slot-scope="scope">
+                <el-button type="info" size="small" plain @click="viewDetail(scope.row,'carSoure')">查看详情</el-button>
+                <el-button type="danger" size="small" plain @click="remDetail(scope.row,'carSoure')">删除</el-button>
+              </template>
+            </el-table-column>
+          </div>
 
         </el-table>
       </div>
@@ -57,6 +116,11 @@
 <script>
   import SearchForm from './components/search'
   import Pager from '@/components/Pagination/index'
+  // getCollectList
+  import * as ReqApi from '@/api/carrier/manage'
+  import * as collApi from '@/api/carrier/collection'
+  import {getOrgId, getLogin} from '@/utils/auth'
+  // import {getOrgId} from '@/utils/auth'
 
   export default {
     name: 'supply',
@@ -85,44 +149,163 @@
           'currentPage': 1,
           'pageSize': 20,
           'vo': {
-            'orderSerialOrGoodsName': '', // 订单流水号/货品名称
-            orderStatus: '', // 订单状态
-            startAddress: '', // 出发地
-            endAddress: '', // 目的地
-            consignee: '', // 收货人
-            consigneePhone: '', // 收货人手机
-            consignor: '', // 发货人
-            consignorPhone: '', // 发货人手机
-            userToken: '',
-            queryType: '1', // 1 为订单 2为货源
-            releaseOrCarrier: '1', // 订单查询标志（1：我创建的订单；2：我承运的订单）
-            wlName: ''
+            userId: '',
+            userType: '',
+            collectType: 1,
           }
         }
       }
     },
     mounted() {
-      this.isAllSupplyl = false
-      this.isSpacialLine = false
-      this.isPhysicalDis = false
-      this.isCarSoure = false
-      switch (this.listtype) {
+      this.userTypeFn(this.searchQuery.vo)
+      this.listtypeFn()
 
-        case 'allSupplyl':
-          this.isAllSupplyl = true
-          break
-        case 'spacialLine':
-          this.isSpacialLine = true
-          break
-        case 'physicalDis':
-          this.isPhysicalDis = true
-          break
-        case 'carSoure':
-          this.isCarSoure = true
-          break
-      }
     },
     methods: {
+      createDetail(row, type) {
+        //
+        this.$router.push({path: '/order/create', query: {isquery: JSON.stringify(row)}})
+        // console.log(this.$router.push, type)
+      },
+      viewDetail(row, type) {
+        const isApi = 'http://www.28china.cn'
+        let isApihttp = '/huoyuan/'
+        let isApiDate = '2018/0508'
+        let isApinum = '/2'
+        if (type === 'allSupplyl') {
+          if (row.orderId === null || row.shipperId === null) {
+            return false
+          }
+          window.open(isApi + isApihttp + isApiDate + isApinum + '.html?id=' + row.orderId + '&shipperId=' + row.shipperId)
+        }
+        if (type === 'spacialLine') {
+          isApihttp = '/wlzx/'
+          isApiDate = '2018/0509'
+          isApinum = '/7'
+          if (row.rangeId === null || row.shipperId === null) {
+            return false
+          }
+          window.open(isApi + isApihttp + isApiDate + isApinum + '.html?id=' + row.rangeId + '&shipperId=' + row.shipperId)
+        }
+        if (type === 'physicalDis') {
+          if (row.account === null) {
+            return false
+          }
+          isApihttp = '/member/'
+          isApiDate = row.account
+          window.open(isApi + isApihttp + isApiDate + '.html#')
+        }
+        if (type === 'carSoure') {
+          if (row.carId === null || row.driverId === null) {
+            return false
+          }
+          isApihttp = '/cyxx/'
+          isApinum = '/5'
+          window.open(isApi + isApihttp + isApiDate + isApinum + '.html?id=' + row.carId + '&driverId=' + row.driverId)
+        }
+        // console.log(row, type)
+      },
+      remDetail(row, type) {
+        const sendData = {}
+        this.userTypeFn(sendData)
+        this.collectTypeFn(sendData, type, row)
+
+        this.$set(sendData, 'mobile', getLogin().mobile)
+        this.$confirm('确定删除吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          center: true
+        }).then(() => {
+          collApi.postCancelCollect(sendData).then(data => {
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+            this.fetchData()
+          })
+
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
+
+      },
+      collectTypeFn(sendData, type, row) {
+        if (type === 'allSupplyl') {
+          this.$set(sendData, 'collectType', 3)
+          this.$set(sendData, 'collectId', row.orderId)
+        }
+        if (type === 'spacialLine') {
+          this.$set(sendData, 'collectType', 4)
+          this.$set(sendData, 'collectId', row.rangeId)
+        }
+        if (type === 'physicalDis') {
+          this.$set(sendData, 'collectType', 1)
+          this.$set(sendData, 'collectId', row.companyId)
+        }
+        if (type === 'carSoure') {
+          this.$set(sendData, 'collectType', 2)
+          this.$set(sendData, 'collectId', row.carId)
+        }
+      },
+      listtypeFn() {
+        this.isAllSupplyl = false
+        this.isSpacialLine = false
+        this.isPhysicalDis = false
+        this.isCarSoure = false
+        switch (this.listtype) {
+          case 'allSupplyl':
+            this.isAllSupplyl = true
+            this.$set(this.searchQuery.vo, 'collectType', 3)
+            // this.$set(this.searchQuery.vo, 'orderClassName','')
+
+            // this.setIsAllSupply()
+            this.fetchData()
+            break
+          case 'spacialLine':
+            this.isSpacialLine = true
+            this.$set(this.searchQuery.vo, 'collectType', 4)
+            this.fetchData()
+            break
+          case 'physicalDis':
+            this.isPhysicalDis = true
+            this.$set(this.searchQuery.vo, 'collectType', 1)
+            this.fetchData()
+            break
+          case 'carSoure':
+            this.isCarSoure = true
+            this.$set(this.searchQuery.vo, 'collectType', 2)
+            this.fetchData()
+            break
+        }
+      },
+      userTypeFn(item) {
+        this.$set(item, 'userId', this.otherinfo.id)
+        switch (getOrgId()) {
+          case 'aflc-1':
+            this.$set(item, 'userType', 2)
+            break
+          case 'aflc-2':
+            this.$set(item, 'userType', 3)
+            break
+          case 'aflc-5':
+            this.$set(item, 'userType', 1)
+            break
+        }
+      },
+      fetchAllCollList() {
+        return collApi.getCollectList(this.otherinfo.userToken, this.searchQuery).then(data => {
+          this.usersArr = data.list
+          this.total = data.totalCount
+        })
+      },
+      fetchData() {
+        // 更新顶部总数
+        this.eventBus.$emit('updateListCount')
+        this.fetchAllCollList()
+      },
       handlePageChange(obj) {
         this.searchQuery.currentPage = obj.pageNum
         this.searchQuery.pageSize = obj.pageSize
