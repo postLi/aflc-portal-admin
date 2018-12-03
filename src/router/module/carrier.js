@@ -119,6 +119,9 @@ export default {
         {
           path: '/cargoInfo/insure', icon: 'QQ', name: '我的投保单', component: _import('carrier/cargoInfo/insure/index'), meta: { role: ['admin'], title: '我的投保单', noCache: false }
         }
+        // {
+        //   path: '/cargoInfo/particulars', icon: 'QQ', name: '我的投保单', component: _import('carrier/cargoInfo/particulars/index'), meta: { role: ['admin'], title: '我的投保单', noCache: false }
+        // }
       ]
     },
     // 我的收藏

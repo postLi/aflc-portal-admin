@@ -2,9 +2,6 @@
   <div class="tab-content lll-list" v-loading="loading">
     <SearchForm></SearchForm>
     <div class="tab_info">
-      <!--<div class="btns_box">-->
-      <!--<el-button type="primary" size="large" icon="el-icon-circle-plus" @click="doAction('add')">创建订单</el-button>-->
-      <!--</div>-->
       <div class="info_tab">
         <el-table
           ref="multipleTable"
@@ -26,13 +23,6 @@
               {{ (searchQuery.currentPage - 1)*searchQuery.pageSize + scope.$index + 1 }}
             </template>
           </el-table-column>
-          <!-- <el-table-column fixed prop="consignor" label="出发地" width="180" v-if="/(physicalDis)/.test(listtype)===false"></el-table-column> -->
-          <!-- <el-table-column prop="consignor" label="到达地" width="180" v-if="/(physicalDis)/.test(listtype)===false"></el-table-column> -->
-          <!-- <el-table-column prop="consignor" label="货物名称" width="150" v-if="/(spacialLine|physicalDis|carSoure)/.test(listtype)===false"></el-table-column> -->
-          <!-- <el-table-column prop="consignor" label="总数量" width="100" v-if="/(spacialLine|physicalDis|carSoure)/.test(listtype)===false"></el-table-column> -->
-          <!-- <el-table-column prop="consignor" label="预估总重量（公斤）" width="150" v-if="/(spacialLine|physicalDis|carSoure)/.test(listtype)===false"></el-table-column> -->
-          <!-- <el-table-column prop="consignor" label="预估总体积（方）" width="150" v-if="/(spacialLine|physicalDis|carSoure)/.test(listtype)===false"></el-table-column> -->
-          <!-- <el-table-column prop="consignor" label="货源类型" width="150" v-if="/(spacialLine|physicalDis|carSoure)/.test(listtype)===false"></el-table-column> -->
           <el-table-column prop="insuranceNum" label="投保单号"></el-table-column>
           <el-table-column prop="insuranceCompany" label="保险公司"></el-table-column>
           <el-table-column prop="insuranceFee" label="保险金额"></el-table-column>
@@ -46,24 +36,19 @@
           </el-table-column> -->
           <el-table-column prop="consignor" label="操作" width="400">
             <template slot-scope="scope">
-             
-               <el-button type="warning" size="small" plain @click="handleEdit(scope.$index, scope.row,'check')">查看详情</el-button> 
+              <el-button type="warning" size="small" plain @click="handleEdit(scope.$index, scope.row,'check')">查看详情</el-button> 
               <el-button type="info" size="small" plain @click="handleEdit(scope.$index, scope.row,'amend')"
               v-if="/(all|unpaid)/.test(listtype)">修改</el-button>
-              <!-- <el-button type="primary" size="small" plain @click="handleEdit(scope.$index, scope.row,'payment')" >已支付</el-button> -->
+              
               <el-button type="danger" size="small" plain @click="handleEdit(scope.$index, scope.row,'delete')">删除</el-button> 
               <el-button type="primary" size="small" plain @click="handleEdit(scope.$index, scope.row,'payment')"  
-              v-if="/(all|unpaid)/.test(listtype)">已支付</el-button>
-               <!-- <el-button type="primary" size="small" plain @click="handleEdit(scope.$index, scope.row,'payment')" v-if="scope.row.orderStatus === 'AF03702'">已支付</el-button>  -->
-              <!-- <el-button type="primary" size="small" plain @click="handleEdit(scope.$index, scope.row,'payment')" v-if="scope.row.orderStatus === 'AF03703'">未支付</el-button>  -->
-              <!-- <el-button type="primary" size="small" plain @click="handleEdit(scope.$index, scope.row,'payment')">{{scope.row.paymentState === 0 '未支付' : '支付'}}</el-button> -->
-              
+              v-if="/(all|unpaid)/.test(listtype)">{{scope.row.paymentState === 0 ? '支付' : '未支付'}}</el-button>
             </template>
           </el-table-column>
 
         </el-table>
       </div>
-      <!-- <Particulars></Particulars> -->
+     
       <div class="info_tab_footer">共计:{{ total }}
         <div class="show_pager">
           <Pager :total="total" @change="handlePageChange"/>
@@ -76,11 +61,10 @@
 <script>
   import SearchForm from './components/search'
   import Pager from '@/components/Pagination/index'
-  import {postInsurelist} from '@/api/carrier/insure.js'
+  import { postInsurelist ,deleteInsure} from '@/api/carrier/insure.js'
   // import * as ReqApi from '@/api/carrier/manage'
-  // import Particulars from'./particulars/index'
   export default {
-    name: "all",
+    name: 'all',
 
     props: {
       listtype: {
@@ -91,7 +75,6 @@
     components: {
       SearchForm,
       Pager
-      // Particulars
     },
     watch: {
       listtype: {
@@ -119,7 +102,7 @@
           'pageSize': 20,
           'vo': {
             'orderSerialOrGoodsName': '', // 订单流水号/货品名称
-            paymentState:'',//支付状态 （0-未支付 1-已支付）
+            paymentState: '', // 支付状态 （0-未支付 1-已支付）
             orderStatus: '', // 订单状态
             startAddress: '', // 出发地
             endAddress: '', // 目的地
@@ -137,25 +120,6 @@
     },
     mounted() {
       this.fetchData()
-      // this.isAllSupplyl = false
-      // this.isSpacialLine = false
-      // this.isPhysicalDis = false
-      // this.isCarSoure = false
-      // switch (this.listtype) {
-
-      //   case 'allSupplyl':
-      //     this.isAllSupplyl = true
-      //     break
-      //   case 'spacialLine':
-      //     this.isSpacialLine = true
-      //     break
-      //   case 'physicalDis':
-      //     this.isPhysicalDis = true
-      //     break
-      //   case 'carSoure':
-      //     this.isCarSoure = true
-      //     break
-      // }
     },
     methods: {
       handlePageChange(obj) {
@@ -179,32 +143,59 @@
       fetchData() {
         this.loading = true
         return postInsurelist(this.otherinfo.userToken, this.searchQuery).then(data => {
-          // this.usersArr = data.list
-          console.warn('listtype', this.listtype)
-         this.userArr =  Object.assign([],data.list).filter(e => {
-           if (this.listtype !== 'all') {
-            console.log('sdfsdfsdf', typeof e.paymentState , this.listtype === 'havepaid' ? 1: 0)
-             return e.paymentState === (this.listtype === 'havepaid' ? 1: 0)
-           }
-         })
-         this.tableKey = new Date().getTime()
-          this.total = data.totalCount
+          this.usersArr = []
+          const type = this.listtype === 'all' ? '' : (this.listtype === 'havepaid' ? 1 : 0)
+          // console.warn('listtype', this.listtype)
+          // console.log('sdfsdfsdf', this.listtype === 'havepaid' ? 1 : 0)
+          data.list.forEach((e, index) => {
+            if (e.paymentState === type) {
+              this.usersArr.push(e)
+            } else if (type === '') {
+              this.usersArr.push(e)
+            }
+          })
+          this.tableKey = new Date().getTime()
+          this.total = data.total
           this.loading = false
-          console.log('保险单列表',data)
+          // console.log('保险单列表', data)
         })
       },
-      handleEdit(index, row, type){
+      handleEdit(index, row, type) {
         switch (type) {
           case 'check':
-            console.log(row)
-            // this.$router.push('/cargoInfo/particulars/index?orderSerial=' + row.orderSerial + (!this.isOwner ? '&type=carrier' : ''))
-            break;
-            case 'payment':
-              this.searchQuery.vo.paymentState = 'AF03702'
-              this.searchQuery.vo.paymentState = 'AF03703'
-            break;
+            this.$emit('showDetail', row)
+            break
+          case 'payment':
+            
+            break
+          case 'delete':
+            console.log(index, row, row.id)
+            deleteInsure(row.id).then(res => {
+              this.$confirm('确定要删除此投保单吗?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+              }).then(() => {
+                this.$message({
+                  type: 'success',
+                  message: '删除成功!'
+                })
+                this.fetchData()
+              }).catch(() => {
+                this.$message({
+                  type: 'info',
+                  message: '已取消删除'
+                })
+              })
+            }).catch(err => {
+              this.$message({
+                type: 'error',
+                message: err.errorInfo || err.text || '未知错误，请重试~'
+              })
+            })
+          break
           default:
-            break;
+            break
         }
       }
     }

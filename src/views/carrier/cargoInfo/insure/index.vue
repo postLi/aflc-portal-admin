@@ -2,13 +2,15 @@
 
 <template>
   <div class="manage-orderinfo page-main">
-    <div class="list-tab-title clearfix">
+    <div class="list-tab-title clearfix"  v-if="allVisible">
       <span :class="{'active': component === item.name}" @click="changeComponent(item)" v-for="(item,index) in tabs" :key="index">{{item.title + '(' + item.num + ')'}}</span>
     </div>
     <div class="list-tab-content">
-      <keep-alive>
+      <all :listtype="component"  @showDetail="showDetail" v-if="allVisible"></all>
+       <Particulars :info="detailInfo" v-if="centerDialogVisible" @reback="reback"></Particulars>
+      <!-- <keep-alive>
         <component :key="componentKey" :listtype="component"  v-bind:is="component"></component>
-      </keep-alive>
+      </keep-alive> -->
     </div>
   </div>
 </template>
@@ -16,16 +18,15 @@
 import all from './all'
 import havepaid from './all'
 import unpaid from './all'
-// import all from './all'
-// import havepaid from './all'
-// import unpaid from './all'
 import * as ReqApi from '@/api/carrier/manage'
+import Particulars from '../particulars/index'
 
 export default {
   components: {
     all,
     havepaid,
-    unpaid
+    unpaid,
+    Particulars
   },
   created() {
     this.getCount()
@@ -37,6 +38,9 @@ export default {
   },
   data() {
     return {
+      detailInfo: {},
+      allVisible: true,
+      centerDialogVisible: false,
       componentKey: 0,
       tabs: [{
         title: '全部投保单',
@@ -59,6 +63,15 @@ export default {
     }
   },
   methods: {
+    showDetail(row){
+      this.allVisible = false
+      this.centerDialogVisible = true
+      this.detailInfo = row
+    },
+    reback () {
+       this.allVisible = true
+      this.centerDialogVisible = false
+    },
     getCount() {
       if (this.$route.path.indexOf('/order/manage/carrier') !== -1) {
         this.isCarrier = true
@@ -76,9 +89,10 @@ export default {
         })
       })
     },
-    changeComponent (item) {
+    changeComponent(item) {
+      console.log('item', item)
       this.component = item.name
-      this.componentKey = Math.random()
+      // this.componentKey = Math.random()
     }
   }
 }
