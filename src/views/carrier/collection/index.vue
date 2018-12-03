@@ -10,7 +10,7 @@
     </div>
     <div class="list-tab-content">
       <keep-alive>
-        <component :key="component" :listtype="component" v-bind:is="component"></component>
+        <component :key="component" :listtype="component" v-bind:is="component" :collListNum="collListNum"></component>
       </keep-alive>
     </div>
   </div>
@@ -37,30 +37,32 @@
     },
     mounted() {
       this.eventBus.$on('updateListCount', () => {
-        // this.getCount()
+        this.getCount()
       })
     },
     data() {
       return {
+        //物流公司(2) 车源(2) 货源(1) 专线(3)
+
         tabs: [{
           title: '货源收藏',
           name: 'allSupplyl',
-          type: '1',
+          type: '3',
           num: 0
         }, {
           title: '专线收藏',
           name: 'spacialLine',
-          type: '2',
+          type: '4',
           num: 0
         }, {
           title: '物流公司收藏',
           name: 'physicalDis',
-          type: '3',
+          type: '1',
           num: 0
         }, {
           title: '车源收藏',
           name: 'carSoure',
-          type: '4',
+          type: '2',
           num: 0
         }],
         component: 'allSupplyl',
@@ -91,12 +93,20 @@
           // console.log(this.isCarrier,' this.isCarrier');
         }
         this.userTypeFn()
-        const isOwner = !this.isCarrier
         let data = objectMerge2({}, this.collListNum)
         collApi.getCollectListNum(this.otherinfo.userToken, data).then((data, index) => {
-          this.tabs.forEach((el, index) => {
-            if (this.tabs[index].type === data[index].collectType) {
-              this.tabs[index].num = data[index].collectNum
+          data.forEach((el, index) => {
+            if (el.collectType === '1') {
+              this.tabs[2].num = Object.assign(el.collectNum)
+            }
+            if (el.collectType === '2') {
+              this.tabs[3].num = Object.assign(el.collectNum)
+            }
+            if (el.collectType === '3') {
+              this.tabs[0].num = Object.assign(el.collectNum)
+            }
+            if (el.collectType === '4') {
+              this.tabs[1].num = Object.assign(el.collectNum)
             }
           })
         })

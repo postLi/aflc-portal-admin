@@ -129,6 +129,10 @@
       listtype: {
         type: String,
         default: 'allSupplyl'
+      },
+      collListNum: {
+        type: Object,
+        // default: false
       }
     },
     components: {
@@ -144,7 +148,7 @@
         isCarSoure: false,
         total: 0,
         btnsize: 'small',
-        usersArr: [{}, {}],
+        usersArr: [],
         searchQuery: {
           'currentPage': 1,
           'pageSize': 20,
@@ -159,21 +163,32 @@
     mounted() {
       this.userTypeFn(this.searchQuery.vo)
       this.listtypeFn()
-
     },
     methods: {
       createDetail(row, type) {
         //
-        this.$router.push({path: '/order/create', query: {isquery: JSON.stringify(row)}})
+        this.$router.push({path: '/order/create', query: {id: row.rangeId}})
+        // this.$router.push({path: '/order/create', query: {isquery: JSON.stringify(row)}})
         // console.log(this.$router.push, type)
       },
       viewDetail(row, type) {
-        const isApi = 'http://www.28china.cn'
+
+        let isApi = 'http://192.168.1.157:89'
+        // const isApi = 'http://www.28china.cn'
         let isApihttp = '/huoyuan/'
         let isApiDate = '2018/0508'
         let isApinum = '/2'
+        if (window.location.host.indexOf('192.168.1') !== -1) {
+          console.log(window.location.host);
+          console.log(window.location.host.indexOf('192.168.1.157:89'))
+          isApi = 'http://192.168.1.157:89'
+        }
+        else {
+          isApi = 'http://www.28china.cn'
+        }
         if (type === 'allSupplyl') {
           if (row.orderId === null || row.shipperId === null) {
+            this.$message.info('详情暂无数据~')
             return false
           }
           window.open(isApi + isApihttp + isApiDate + isApinum + '.html?id=' + row.orderId + '&shipperId=' + row.shipperId)
@@ -183,20 +198,23 @@
           isApiDate = '2018/0509'
           isApinum = '/7'
           if (row.rangeId === null || row.shipperId === null) {
+            this.$message.info('详情暂无数据~')
             return false
           }
           window.open(isApi + isApihttp + isApiDate + isApinum + '.html?id=' + row.rangeId + '&shipperId=' + row.shipperId)
         }
         if (type === 'physicalDis') {
           if (row.account === null) {
+            this.$message.info('详情暂无数据~')
             return false
           }
           isApihttp = '/member/'
           isApiDate = row.account
-          window.open(isApi + isApihttp + isApiDate + '.html#')
+          window.open(isApi + isApihttp + isApiDate + '.html')
         }
         if (type === 'carSoure') {
           if (row.carId === null || row.driverId === null) {
+            this.$message.info('详情暂无数据~')
             return false
           }
           isApihttp = '/cyxx/'
