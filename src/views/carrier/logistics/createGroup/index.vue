@@ -19,7 +19,7 @@
                 <el-form-item label="网点地址：" prop="address"> 
                     <el-input @focus="()=>{showMap('strartAddress')}" v-model="logisticsForm.address" :disabled="unable"></el-input>
                 </el-form-item>
-                <el-form-item label="所属园区：" maxlength="18"  prop="">
+                <el-form-item label="所属园区：" maxlength="18"  prop="parkName">
                     <el-input v-model="logisticsForm.parkName" :disabled="unable" @focus="doction" placeholder="选择公司所在园区"></el-input>
                 </el-form-item>
                 <el-form-item label="联系人：" maxlength="18"  prop="name">
@@ -152,6 +152,9 @@ export default {
         ],
         address: [
                     { required: true, message: '请填写网点地址', trigger: ['blur', 'change'] }
+        ],
+        parkName: [
+                    { required: true, message: '请选择公司所在的园区', trigger: ['blur', 'change'] }
         ],
         name: [
                     { required: true, message: '请输入联系人', trigger: 'blur' }

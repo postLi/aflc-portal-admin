@@ -9,24 +9,27 @@
       :close-on-click-modal="false" 
       :before-close="closeMe">
       <el-form :model="formAllData" :rules="rules"  ref="ruleForm" :inline="true"  label-position="right" label-width="100px" class="demo-ruleForm">
-        <el-form-item label="" prop="belongCityName">
+        <div class="search_warrper">
+          <el-form-item label="" prop="belongCityName" >
                     
           <vregion :ui="true" @values="regionChange" class="form-control" >
               <el-input v-model="formAllData.belongCityName" placeholder="请选择园区所在地"></el-input>
           </vregion>
             <!-- <el-input @focus="()=>{showMap(formAllData.belongCityName)}" v-model="formAllData.belongCityName" :disabled="ifDisable === false"></el-input> -->
-        </el-form-item>
-        <el-form-item label="" prop="recommendFee">
-          <el-input v-model.trim="formAllData.parkName" :maxlength="20" placeholder="请输入园区名称" auto-complete="off" clearable></el-input>
-        </el-form-item>
-        <el-form-item class="staff_searchinfo--btn">
-          <el-button size="mini" icon="el-icon-search" type="primary" @click="handleSearch('searchForm')">搜索</el-button>
-          <el-button size="mini" icon="el-icon-close" type="info" @click="handleSearch('clearForm')" plain>重置</el-button>
-        </el-form-item>
+          </el-form-item>
+          <el-form-item label="" prop="recommendFee">
+            <el-input v-model.trim="formAllData.parkName" :maxlength="20" placeholder="请输入园区名称" auto-complete="off" clearable></el-input>
+          </el-form-item>
+          <el-form-item class="staff_searchinfo--btn">
+            <el-button size="mini" icon="el-icon-search" type="primary" @click="handleSearch('searchForm')">搜索</el-button>
+            <el-button size="mini" icon="el-icon-close" type="info" @click="handleSearch('clearForm')" plain>重置</el-button>
+          </el-form-item>
+        </div>
+        
         <div class="classify_info">
           <ul class="addlist">
             <!-- :class="{active: active == item}" -->
-            <li v-for="(item, index) in dataset" :key="index" @click="selectList(item)">
+            <li v-for="(item, index) in dataset" :key="index" @click="selectList(item)" @mouseenter="enter(item,index) in dataset" :class="{itemHover:itemIndex === index}">
               <h4>{{item.parkName}}</h4>
               <span>{{item.locationProvince + item.locationCity + item.locationArea + item.parkAddress}}</span>
             </li>
@@ -105,7 +108,7 @@ export default {
       page: 1, // 初始化页码
       totalCount: null,
       value: '',
-
+      itemIndex: null,
       // pickerOptions2: {
       //   shortcuts: pickerOptions2
       // },
@@ -154,11 +157,11 @@ export default {
         ]
       },
       formAllData: {
-        belongCityName:'',
+        belongCityName: '',
         parkName: '',
         locationProvince: '',
         locationCity: '',
-        locationArea: '',
+        locationArea: ''
         // parkName: '',
         // openStatus: '',
         // parkMobile: '',
@@ -206,7 +209,7 @@ export default {
       this.formAllData.locationProvince = d.province ? d.province.name : ''
       this.formAllData.locationCity = d.city ? d.city.name : ''
       this.formAllData.locationArea = d.area ? d.area.name : ''
-            console.log(d.province.name)
+      console.log(d.province.name)
     },
     getValue(obj) {
       return obj ? obj.value : ''
@@ -214,6 +217,14 @@ export default {
     selectList(item) {
       this.$emit('success', item)
       this.$emit('close')
+      // console.log(item)
+    },
+    enter(item, index) {
+      // console.log(index)
+      this.itemIndex = index
+    },
+    leave() {
+
     },
     reset() {
       this.$refs['ruleForm'].resetFields()
@@ -401,13 +412,18 @@ export default {
     }
   }
   .addlist{
-  
+    height: 300px;
+    overflow-y: scroll;
     li{
-      // padding-left:20px;
+      padding-left:20px;
     }
-    // .active{
-    //   background:#eeeff1;
-    // }
+    .itemHover{
+      background:#eeeff1;
+      cursor: pointer;
+      border-radius: 5px;
+      // text-align: center;
+      
+    }
     h4,span{
       height: 30px;
       line-height: 30px;
@@ -441,6 +457,17 @@ export default {
     position:absolute;
     top:38px;
     left:0px;
+  }
+  .v-region {
+    position: relative;
+  }
+  .v-dropdown-container{
+    position:absolute !important;
+    top: 38px !important;
+    left: 0px !important;
+  }
+  .rg-results{
+    height:300px !important;
   }
 }
 </style>

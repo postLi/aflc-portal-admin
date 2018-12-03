@@ -12,7 +12,9 @@ export function postInsurelist(user_token, data) {
 根据ID查询保险单信息
  */
 export function getCheckinsure(id) {
-  return fetch.get('/aflcusercenterservice/usercenter/aflcinsurancepolicy/v1/' + id)
+  return fetch.get('/aflcusercenterservice/usercenter/aflcinsurancepolicy/v1/' + id).then(res => {
+    return res.data
+  })
 }
 
 /**

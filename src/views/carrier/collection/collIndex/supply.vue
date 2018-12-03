@@ -59,7 +59,7 @@
   import Pager from '@/components/Pagination/index'
 
   export default {
-    name: "supply",
+    name: 'supply',
 
     props: {
       listtype: {

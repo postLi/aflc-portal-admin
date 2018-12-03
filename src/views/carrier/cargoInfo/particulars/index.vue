@@ -5,17 +5,17 @@
       <el-button @click="reback" class="reback">返回</el-button>
     </el-header>
     <el-main>
-      <ul class="check_head" v-for="(item,index) in usersArr" :key="index">
+      <ul class="check_head">
         <li class="check_title">
-          <div class="baoxian1"><h4>中国平安全国运输保险{item.insuranceName}</h4><span class="baoxiandan">保险单</span></div>
-          <div class="baoxian2">投保日期：<span>2018-11-14 15:23:45</span></div>
+          <div class="baoxian1"><h4>{{usersArr1.insuranceName}}</h4><span class="baoxiandan">{{usersArr1.insuranceType}}</span></div>
+          <div class="baoxian2">投保日期：<span>{{usersArr1.createTime}}</span></div>
         </li>
         <li>
           <div class="baoxiandanhao">
-            <div>投保单号：afd45623465555555534</div>
-            <div>投保金额:<span>100元</span></div>
-            <div><span>已支付</span></div>
-            <div>支付时间：<span>2018-11-14 15:23:45</span></div>
+            <div>投保单号：{{usersArr1.insuranceNum}}</div>
+            <div>投保金额：<span class="money">{{usersArr1.insuranceFee ? usersArr1.insuranceFee + '元' : ''}}</span></div>
+            <div><span class="payment">{{usersArr1.paymentState === 0 ? '未支付' : '已支付'}}</span></div>
+            <div><span>{{usersArr1.paymentTime ? '支付时间：' + usersArr1.paymentTime : ''}}</span></div>
           </div>
         </li>
       </ul>
@@ -73,7 +73,6 @@
             </el-table-column>
             <el-table-column prop="theInsuredName" label="被保人"></el-table-column>
             <el-table-column prop="theInsuredNum" label="证件号"></el-table-column>
-            
           </el-table>
         </div>
          <div class="info_tab">
@@ -120,7 +119,6 @@
                 {{scope.row.transferProvince ? scope.row.transferProvince : ''}}{{ scope.row.transferCity ? scope.row.transferCity : ''}}
               </template>
             </el-table-column>
-            
           </el-table>
           <el-table
             ref="multipleTable"
@@ -134,86 +132,76 @@
             <el-table-column prop="startTime" label="起运日期"></el-table-column>
             <el-table-column prop="carNum" label="车牌号"></el-table-column>
             <el-table-column prop="orderNum" label="运单号"></el-table-column>
-            
           </el-table>
-          
         </div>
       </ul>
     </el-main>
-    
-    <!-- {{info}} -->
   </el-container>
 </template>
 <script>
  import { getCheckinsure } from '@/api/carrier/insure.js'
 export default {
-  computed: {
-    isShow: {
-      get() {
-        return this.centerDialogVisible
-      },
-      set() {}
-    }
-  },
-  components: {
-   
-  },
-  props: {
-    centerDialogVisible: {
-      type: Boolean,
-      default: false
-    },
-    info: {
-      type: Object,
-      default: () => {}
-    }
-  },
-  watch: {
-    info: {
-      handler (cval, oval) {
-        console.log(666,cval,this.info)
-      }
-    }
-  },
-  data(){
-    return{
-    usersArr: [],
-    usersArr1: [],
+   computed: {
+     isShow: {
+       get() {
+         return this.centerDialogVisible
+       },
+       set() {}
+     }
+   },
+   components: {
+ 
+   },
+   props: {
+     centerDialogVisible: {
+       type: Boolean,
+       default: false
+     },
+     info: {
+       type: Object,
+       default: () => {}
+     }
+   },
+   watch: {
+     info: {
+       handler(cval, oval) {
+         console.log(666, cval, this.info)
+       }
+     }
+   },
+   data() {
+     return {
+       usersArr: [],
+       usersArr1: {}
       // tableKey: 0,
-    }
-  },
-  mounted() {
-    // this.usersArr = [this.info]
-    console.log(this.usersArr)
-    this.firstblood()
-  },
-  methods: {
-    reback() {
-      this.$emit('reback')
-    },
-    clickDetails(row, event, column) {
-      this.$refs.multipleTable.toggleRowSelection(row)
-    },
-    getSelection(selection) {
-      this.selected = selection
-    },
+     }
+   },
+   mounted() {
+     console.log(this.info)
+     this.firstblood()
+   },
+   methods: {
+     reback() {
+       this.$emit('reback')
+     },
+     clickDetails(row, event, column) {
+       this.$refs.multipleTable.toggleRowSelection(row)
+     },
+     getSelection(selection) {
+       this.selected = selection
+     },
     // 请求接口刷新页面
-    firstblood() {
-      // this.loading = false
-      // this.formAllData.recommendPrescription = this.options4[0].value
-
-      getCheckinsure(this.info.id).then(res => {
-        // this.dataTotal = res.data.total
-        // this.dataset = res.data.list
-        this.usersArr = [res.data]
-        this.userArr1 = Object.assign({},res.data)
-        console.log(res)
-      }).catch(err => {
-        this.$message.warning(err.text || err.errorInfo || '无法获取服务端数据~')
-        this.loading = true
-      })
-    },
-  },
+     firstblood() {
+       getCheckinsure(this.info.id).then(res => {
+         console.log('34fsdf',res)
+         this.usersArr = [res]
+         this.usersArr1 = res
+       }).catch(err => {
+         this.$message.warning(err.text || err.errorInfo || '无法获取服务端数据~')
+         this.loading = true
+       })
+     }
+   }
 }
 </script>
 
@@ -280,6 +268,15 @@ export default {
         margin-bottom: 15px;
       }
     }
+  }
+  .money{
+    color:red;
+    font-size:16px;
+    margin:0 5px;
+  }
+  .payment{
+    color:#0e91e9;
+    font-weight: bold;
   }
 }
   

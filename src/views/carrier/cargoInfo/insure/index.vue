@@ -63,13 +63,13 @@ export default {
     }
   },
   methods: {
-    showDetail(row){
+    showDetail(row) {
       this.allVisible = false
       this.centerDialogVisible = true
       this.detailInfo = row
     },
-    reback () {
-       this.allVisible = true
+    reback() {
+      this.allVisible = true
       this.centerDialogVisible = false
     },
     getCount() {
