@@ -1,6 +1,6 @@
 <template>
   <div class="tab-content lll-list" v-loading="loading">
-    <SearchForm></SearchForm>
+    <SearchForm @change="getSearchParam" :btnsize="btnsize"></SearchForm>
     <div class="tab_info">
       <div class="info_tab">
         <el-table
@@ -29,20 +29,18 @@
           <el-table-column prop="createTime" label="投保日期"></el-table-column>
           <el-table-column prop="orderNum" label="运单号"></el-table-column>
           <el-table-column prop="paymentStateName" label="状态"></el-table-column>
-          <!-- <el-table-column prop="delFlag" label="状态">
-            <template slot-scope="scope">
-               {{ scope.row.delFlag === 0 ? "正常" : "已删除" }}
-            </template>
-          </el-table-column> -->
           <el-table-column prop="consignor" label="操作" width="400">
             <template slot-scope="scope">
-              <el-button type="warning" size="small" plain @click="handleEdit(scope.$index, scope.row,'check')">查看详情</el-button> 
-              <el-button type="info" size="small" plain @click="handleEdit(scope.$index, scope.row,'amend')"
-              v-if="/(all|unpaid)/.test(listtype)">修改</el-button>
-              
+              <el-button type="warning" size="small" plain @click="handleEdit(scope.$index, scope.row,'check')">查看详情</el-button>
+              <!-- <el-button type="info" size="small" plain @click="handleEdit(scope.$index, scope.row,'amend')"
+              v-if="/(all|unpaid)/.test(listtype)">修改</el-button> -->
+              <el-button  v-if="scope.row.paymentState === 0" type="primary" size="small" plain @click="handleEdit(scope.$index, scope.row,'amend')"  
+              >修改</el-button>
               <el-button type="danger" size="small" plain @click="handleEdit(scope.$index, scope.row,'delete')">删除</el-button> 
-              <el-button type="primary" size="small" plain @click="handleEdit(scope.$index, scope.row,'payment')"  
-              v-if="/(all|unpaid)/.test(listtype)">{{scope.row.paymentState === 0 ? '支付' : '未支付'}}</el-button>
+              <!-- <el-button type="primary" size="small" plain @click="handleEdit(scope.$index, scope.row,'payment')"  
+              v-if="/(unpaid)/.test(listtype)">{{scope.row.paymentState === 0 ? '支付' : '已支付'}}</el-button> -->
+              <el-button  v-if="scope.row.paymentState === 0" type="primary" size="small" plain @click="handleEdit(scope.$index, scope.row,'payment')"  
+              >支付</el-button>
             </template>
           </el-table-column>
 
@@ -51,7 +49,7 @@
      
       <div class="info_tab_footer">共计:{{ total }}
         <div class="show_pager">
-          <Pager :total="total" @change="handlePageChange"/>
+          <Pager :total="total"  @change="handlePageChange"/>
         </div>
       </div>
     </div>
@@ -61,11 +59,10 @@
 <script>
   import SearchForm from './components/search'
   import Pager from '@/components/Pagination/index'
-  import { postInsurelist ,deleteInsure} from '@/api/carrier/insure.js'
+  import { postInsurelist, deleteInsure } from '@/api/carrier/insure.js'
   // import * as ReqApi from '@/api/carrier/manage'
   export default {
     name: 'all',
-
     props: {
       listtype: {
         type: String,
@@ -80,6 +77,8 @@
       listtype: {
         handler(cval, oval) {
           if (cval) {
+          this.searchQuery.currentPage = 1
+          this.searchQuery.vo.paymentState = cval ===  'all' ? '' : (cval=== 'havepaid' ? 1 : 0)
             this.fetchData()
           }
         },
@@ -93,7 +92,6 @@
         isAll: false,
         isHavePaid: false,
         isUnpaid: false,
-        // isCarSoure: false,
         total: 0,
         btnsize: 'small',
         usersArr: [],
@@ -101,19 +99,9 @@
           'currentPage': 1,
           'pageSize': 20,
           'vo': {
-            'orderSerialOrGoodsName': '', // 订单流水号/货品名称
             paymentState: '', // 支付状态 （0-未支付 1-已支付）
-            orderStatus: '', // 订单状态
-            startAddress: '', // 出发地
-            endAddress: '', // 目的地
-            consignee: '', // 收货人
-            consigneePhone: '', // 收货人手机
-            consignor: '', // 发货人
-            consignorPhone: '', // 发货人手机
-            userToken: '',
-            queryType: '1', // 1 为订单 2为货源
-            releaseOrCarrier: '1', // 订单查询标志（1：我创建的订单；2：我承运的订单）
-            wlName: ''
+            delFlag: 0,
+            createId:''
           }
         }
       }
@@ -127,11 +115,10 @@
         this.searchQuery.pageSize = obj.pageSize
         this.fetchData()
       },
-      getSearchParam(obj) {
-        console.log('obj::', JSON.stringify(obj), this.searchQuery.vo)
+      getSearchParam(row,obj) {
+        // console.log('obj::', obj,JSON.stringify(obj), this.searchQuery.vo)
         this.searchQuery.vo = Object.assign(this.searchQuery.vo, obj)
         this.loading = false
-
         this.fetchData()
       },
       clickDetails(row, event, column) {
@@ -145,8 +132,6 @@
         return postInsurelist(this.otherinfo.userToken, this.searchQuery).then(data => {
           this.usersArr = []
           const type = this.listtype === 'all' ? '' : (this.listtype === 'havepaid' ? 1 : 0)
-          // console.warn('listtype', this.listtype)
-          // console.log('sdfsdfsdf', this.listtype === 'havepaid' ? 1 : 0)
           data.list.forEach((e, index) => {
             if (e.paymentState === type) {
               this.usersArr.push(e)
@@ -157,7 +142,6 @@
           this.tableKey = new Date().getTime()
           this.total = data.total
           this.loading = false
-          // console.log('保险单列表', data)
         })
       },
       handleEdit(index, row, type) {
@@ -165,11 +149,14 @@
           case 'check':
             this.$emit('showDetail', row)
             break
+          case 'amend':
+            return window.location.href = 'http://192.168.1.157:89/Insurance/step1.htm?id=' + row.id
+            break
           case 'payment':
-            
+            return window.location.href = 'http://192.168.1.157:89/Insurance/pay.htm?id=' + row.id
             break
           case 'delete':
-            console.log(index, row, row.id)
+            // console.log(index, row, row.id)
             deleteInsure(row.id).then(res => {
               this.$confirm('确定要删除此投保单吗?', '提示', {
                 confirmButtonText: '确定',
@@ -193,7 +180,7 @@
                 message: err.errorInfo || err.text || '未知错误，请重试~'
               })
             })
-          break
+            break
           default:
             break
         }

@@ -66,6 +66,12 @@ module.exports = {
     //     pathRewrite: {'^/dingfei': ''},
     //     changeOrigin: true
     //   },
+    '/79server': {
+      target: "http://192.168.1.79:7010",
+      pathRewrite: {'^/79server': ''},
+      changeOrigin: true,
+      logLevel: 'debug'
+    },
       '/ceshi': {
         target: "http://192.168.1.78:7010",
         pathRewrite: {'^/ceshi': ''},

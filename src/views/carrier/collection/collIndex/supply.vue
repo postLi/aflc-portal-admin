@@ -123,7 +123,7 @@
   // import {getOrgId} from '@/utils/auth'
 
   export default {
-    name: "supply",
+    name: 'supply',
 
     props: {
       listtype: {

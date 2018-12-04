@@ -726,4 +726,5 @@ export default {
     .icon-selected:before { content: "\e72e"; }
     .icon-removeall:before { content: "\e74b"; }
     .icon-back:before { content: "\e627"; }
+    
 </style>

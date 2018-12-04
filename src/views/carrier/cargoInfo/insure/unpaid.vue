@@ -4,7 +4,7 @@
 
 <script>
     export default {
-        name: "un-paid"
+      name: 'unpaid'
     }
 </script>
 
