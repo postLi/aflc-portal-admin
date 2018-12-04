@@ -99,11 +99,11 @@
       <el-form-item label="手机号：">
         <el-input v-model="searchForm.isCarSoure.carPhone" :maxlength="50" auto-complete="off"></el-input>
       </el-form-item>
-        <el-form-item label="常驻地：">
-          <vregion :ui="true" @values="usualPlaceChange" class="form-control">
-            <el-input v-model="searchForm.isCarSoure.usualPlace" placeholder="请选择常驻地"></el-input>
-          </vregion>
-        </el-form-item>
+      <el-form-item label="常驻地：">
+        <vregion :ui="true" @values="usualPlaceChange" class="form-control">
+          <el-input v-model="searchForm.isCarSoure.usualPlace" placeholder="请选择常驻地"></el-input>
+        </vregion>
+      </el-form-item>
       <el-form-item label="即时/长期：">
         <el-select v-model="searchForm.isCarSoure.isLongCar">
           <el-option label="全部" value=''></el-option>
@@ -156,6 +156,7 @@
     data() {
       return {
         unable: false,
+        searchObj:{},
         searchForm: {
           isAllSupplyl: {
             "orderStartAddress": "",//货源
@@ -191,33 +192,33 @@
             "carPhone": "",
             "usualPlace": "",
             "isLongCar": "",
-            provinceCode:'',
-            cityCode:'',
-            areaCode:'',
+            provinceCode: '',
+            cityCode: '',
+            areaCode: '',
           }
         }
       }
     },
     methods: {
-      getValue(obj) {
-        return obj ? obj.value : ''
-      },
       onSubmit() {
-        let searchObj
+        // let searchObj
         if (this.isAllSupplyl) {
-          searchObj = Object.assign({}, this.searchForm.isAllSupplyl)
+          this.searchObj = Object.assign({}, this.searchForm.isAllSupplyl)
         }
         if (this.isSpacialLine) {
-          searchObj = Object.assign({}, this.searchForm.isSpacialLine)
+          this.searchObj = Object.assign({}, this.searchForm.isSpacialLine)
         }
         if (this.isPhysicalDis) {
-          searchObj = Object.assign({}, this.searchForm.isPhysicalDis)
+          this.searchObj = Object.assign({}, this.searchForm.isPhysicalDis)
         }
         if (this.isCarSoure) {
-          searchObj = Object.assign({}, this.searchForm.isCarSoure)
+          this.searchObj = Object.assign({}, this.searchForm.isCarSoure)
         }
         // console.log('this.searchForm2:', this.searchForm, JSON.stringify(searchObj))
-        this.$emit('change', searchObj)
+        this.$emit('change', this.searchObj)
+      },
+      changeVal(type) {
+        console.log(type);
       },
       clearForm() {
         this.searchForm = {
@@ -257,9 +258,8 @@
             "isLongCar": ""
           }
         }
+        this.onSubmit()
       },
-
-
       orderStartAddressChange(d) {
         this.searchForm.isAllSupplyl.orderStartAddress = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
       },
@@ -283,6 +283,9 @@
       },
       usualPlaceChange(d) {
         this.searchForm.isCarSoure.usualPlace = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
+      },
+      getValue(obj) {
+        return obj ? obj.value : ''
       },
     }
   }
@@ -310,24 +313,24 @@
   }
 
   .lll-search {
-      > .searchInformation {
-        .el-form-item {
-          margin-bottom: 20px;
-          .el-form-item__content {
-            .v-region {
+    > .searchInformation {
+      .el-form-item {
+        margin-bottom: 20px;
+        .el-form-item__content {
+          .v-region {
+            width: 100%;
+            .caller-container {
               width: 100%;
-              .caller-container {
-                width: 100%;
-              }
-              .v-dropdown-container {
-                top: 35px !important;
-                left: 0px !important;
-              }
+            }
+            .v-dropdown-container {
+              top: 35px !important;
+              left: 0px !important;
             }
           }
         }
-
       }
+
+    }
 
   }
 </style>
