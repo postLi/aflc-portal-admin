@@ -104,23 +104,28 @@
             @selection-change="getSelection"
             tooltip-effect="dark"
             style="width: 100%;">
+            <el-table-column prop="orderNum" label="运单号"></el-table-column>
+            
+            <el-table-column prop="carNum" label="车牌号"></el-table-column>
             <el-table-column prop="" label="起运地">
               <template slot-scope="scope">
                 {{scope.row.startProvince ? scope.row.startProvince : ''}}{{ scope.row.startCity ? scope.row.startCity : ''}}
               </template>
             </el-table-column>
-            <el-table-column prop="insuranceCompany" label="目的地">
+            <el-table-column prop="" label="目的地">
               <template slot-scope="scope">
                 {{scope.row.endProvince ? scope.row.endProvince : ''}}{{ scope.row.endCity ? scope.row.endCity : ''}}
               </template>
             </el-table-column>
-            <el-table-column prop="insuranceCompany" label="中转地">
+            <el-table-column prop="" label="中转地">
               <template slot-scope="scope">
                 {{scope.row.transferProvince ? scope.row.transferProvince : ''}}{{ scope.row.transferCity ? scope.row.transferCity : ''}}
               </template>
             </el-table-column>
+            <el-table-column prop="startTime" label="起运日期"></el-table-column>
+            
           </el-table>
-          <el-table
+          <!-- <el-table
             ref="multipleTable"
             :data="usersArr"
             stripe
@@ -132,7 +137,7 @@
             <el-table-column prop="startTime" label="起运日期"></el-table-column>
             <el-table-column prop="carNum" label="车牌号"></el-table-column>
             <el-table-column prop="orderNum" label="运单号"></el-table-column>
-          </el-table>
+          </el-table> -->
         </div>
       </ul>
     </el-main>

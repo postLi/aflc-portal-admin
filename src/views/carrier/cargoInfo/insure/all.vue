@@ -32,7 +32,6 @@
           <el-table-column prop="consignor" label="操作" width="400">
             <template slot-scope="scope">
               <el-button type="warning" size="small" plain @click="handleEdit(scope.$index, scope.row,'check')">查看详情</el-button>
-
               <!-- <el-button type="info" size="small" plain @click="handleEdit(scope.$index, scope.row,'amend')"
               v-if="/(all|unpaid)/.test(listtype)">修改</el-button> -->
               <el-button  v-if="scope.row.paymentState === 0" type="primary" size="small" plain @click="handleEdit(scope.$index, scope.row,'amend')"  
@@ -130,7 +129,6 @@
       },
       fetchData() {
         this.loading = true
-        console.log('sdfsdf', this.searchQuery)
         return postInsurelist(this.otherinfo.userToken, this.searchQuery).then(data => {
           this.usersArr = []
           const type = this.listtype === 'all' ? '' : (this.listtype === 'havepaid' ? 1 : 0)
@@ -141,7 +139,6 @@
               this.usersArr.push(e)
             }
           })
-          // this.usersArr = data.list
           this.tableKey = new Date().getTime()
           this.total = data.total
           this.loading = false
@@ -159,7 +156,7 @@
             return window.location.href = 'http://192.168.1.157:89/Insurance/pay.htm?id=' + row.id
             break
           case 'delete':
-            console.log(index, row, row.id)
+            // console.log(index, row, row.id)
             deleteInsure(row.id).then(res => {
               this.$confirm('确定要删除此投保单吗?', '提示', {
                 confirmButtonText: '确定',
