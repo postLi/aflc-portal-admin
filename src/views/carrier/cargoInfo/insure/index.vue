@@ -7,7 +7,7 @@
     </div>
     <div class="list-tab-content">
       <all :listtype="component"  @showDetail="showDetail" v-if="allVisible"></all>
-       <Particulars :info="detailInfo" v-if="centerDialogVisible" @reback="reback"></Particulars>
+      <Particulars :info="detailInfo" v-if="centerDialogVisible" @reback="reback"></Particulars>
       <!-- <keep-alive>
         <component :key="componentKey" :listtype="component"  v-bind:is="component"></component>
       </keep-alive> -->
@@ -18,7 +18,7 @@
 import all from './all'
 import havepaid from './all'
 import unpaid from './all'
-import * as ReqApi from '@/api/carrier/manage'
+import * as ReqApi from '@/api/carrier/insure'
 import Particulars from '../particulars/index'
 
 export default {
@@ -33,7 +33,7 @@ export default {
   },
   mounted() {
     this.eventBus.$on('updateListCount', () => {
-     // this.getCount()
+      this.getCount()
     })
   },
   data() {
@@ -58,8 +58,7 @@ export default {
         type: 'AF03703',
         num: 0
       }],
-      component: 'all',
-      isCarrier: false
+      component: 'all'
     }
   },
   methods: {
@@ -73,24 +72,21 @@ export default {
       this.centerDialogVisible = false
     },
     getCount() {
-      if (this.$route.path.indexOf('/order/manage/carrier') !== -1) {
-        this.isCarrier = true
-      }
-      const isOwner = !this.isCarrier
-      ReqApi.getOrderListCount(this.otherinfo.userToken, {
-        releaseOrCarrier: isOwner ? '1' : '2',
+      ReqApi.postGetCountByPaymentState(this.otherinfo.userToken, {
         queryType: '1'
       }).then(data => {
         this.tabs.forEach(el => {
-          // if (data[el.type]) {
-          el.num = data[el.type] || 0
-          el.num = el.num > 99 ? '99+' : el.num
-          // }
+          if (el.name === 'all') {
+            el.num = data.totalCount
+          } else if (el.name === 'havepaid') {
+            el.num = data.paymentCount
+          } else if (el.name === 'unpaid') {
+            el.num = data.notPaymentCount
+          }
         })
       })
     },
     changeComponent(item) {
-      console.log('item', item)
       this.component = item.name
       // this.componentKey = Math.random()
     }

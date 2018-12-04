@@ -198,7 +198,6 @@ export default {
     // 请求接口刷新页面
      firstblood() {
        getCheckinsure(this.info.id).then(res => {
-         console.log('34fsdf',res)
          this.usersArr = [res]
          this.usersArr1 = res
        }).catch(err => {
