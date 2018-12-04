@@ -96,6 +96,7 @@
         let data = objectMerge2({}, this.collListNum)
         collApi.getCollectListNum(this.otherinfo.userToken, data).then((data, index) => {
           data.forEach((el, index) => {
+            el.collectNum = el.collectNum > 99 ? '99+' : el.collectNum
             if (el.collectType === '1') {
               this.tabs[2].num = Object.assign(el.collectNum)
             }
