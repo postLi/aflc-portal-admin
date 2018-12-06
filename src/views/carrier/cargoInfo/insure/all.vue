@@ -100,7 +100,7 @@
             paymentState: '', // 支付状态 （0-未支付 1-已支付）
             delFlag: 0,
             createId: '',
-            queryType:1
+            queryType: 1
           }
         }
       }
