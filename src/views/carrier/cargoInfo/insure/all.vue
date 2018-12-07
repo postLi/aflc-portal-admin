@@ -32,8 +32,6 @@
           <el-table-column prop="consignor" label="操作" width="400">
             <template slot-scope="scope">
               <el-button type="warning" size="small" plain @click="handleEdit(scope.$index, scope.row,'check')">查看详情</el-button>
-              <!-- <el-button type="info" size="small" plain @click="handleEdit(scope.$index, scope.row,'amend')"
-              v-if="/(all|unpaid)/.test(listtype)">修改</el-button> -->
               <el-button  v-if="scope.row.paymentState === 0" type="primary" size="small" plain @click="handleEdit(scope.$index, scope.row,'amend')"  
               >修改</el-button>
               <el-button type="danger" size="small" plain @click="handleEdit(scope.$index, scope.row,'delete')">删除</el-button> 
@@ -77,8 +75,8 @@
       listtype: {
         handler(cval, oval) {
           if (cval) {
-          this.searchQuery.currentPage = 1
-          this.searchQuery.vo.paymentState = cval ===  'all' ? '' : (cval=== 'havepaid' ? 1 : 0)
+            this.searchQuery.currentPage = 1
+            this.searchQuery.vo.paymentState = cval === 'all' ? '' : (cval === 'havepaid' ? 1 : 0)
             this.fetchData()
           }
         },
@@ -101,7 +99,8 @@
           'vo': {
             paymentState: '', // 支付状态 （0-未支付 1-已支付）
             delFlag: 0,
-            createId:''
+            createId: '',
+            queryType:1
           }
         }
       }
@@ -115,7 +114,7 @@
         this.searchQuery.pageSize = obj.pageSize
         this.fetchData()
       },
-      getSearchParam(row,obj) {
+      getSearchParam(obj) {
         // console.log('obj::', obj,JSON.stringify(obj), this.searchQuery.vo)
         this.searchQuery.vo = Object.assign(this.searchQuery.vo, obj)
         this.loading = false
@@ -203,7 +202,6 @@
         margin: 0;
         margin-bottom: 5px;
         width: 80px;
-        /*display: block;*/
       }
     }
     .info_tab_footer {

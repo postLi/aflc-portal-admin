@@ -32,3 +32,11 @@ export function putAmendinsure(id) {
 export function deleteInsure(id) {
   return fetch.delete('/aflcusercenterservice/usercenter/aflcinsurancepolicy/v1/' + id)
 }
+/**
+ * /aflc-uc/usercenter/aflcinsurancepolicy/v1/getCountByPaymentState
+ */
+export function postGetCountByPaymentState(user_token, data) {
+  return fetch.post('/aflc-uc/usercenter/aflcinsurancepolicy/v1/getCountByPaymentState', data).then(res => {
+    return res.data ? (res.data || {}) : {}
+  })
+}
