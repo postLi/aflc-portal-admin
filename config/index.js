@@ -61,11 +61,12 @@ module.exports = {
     //     pathRewrite: {'^/huangyuwen': ''},
     //     changeOrigin: true
     //   },
-    //   '/dingfei': {
-    //     target: "http://192.168.1.34:7010",
-    //     pathRewrite: {'^/dingfei': ''},
-    //     changeOrigin: true
-    //   },
+    //
+      '/dingfei': {
+        target: "http://192.168.1.68:7010",
+        pathRewrite: {'^/dingfei': ''},
+        changeOrigin: true
+      },
     '/79server': {
       target: "http://192.168.1.79:7010",
       pathRewrite: {'^/79server': ''},

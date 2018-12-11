@@ -19,12 +19,12 @@
           style="width: 100%;">
           <el-table-column
             fixed
-            prop="customerId"
             label="序号"
-            width="80">
-            <template slot-scope="scope">
-              {{ (searchQuery.currentPage - 1)*searchQuery.pageSize + scope.$index + 1 }}
-            </template>
+            width="80"
+            type="index">
+            <!--<template slot-scope="scope">-->
+              <!--{{ (searchQuery.currentPage - 1)*searchQuery.pageSize + scope.$index + 1 }}-->
+            <!--</template>-->
           </el-table-column>
 
           <div v-if="/(allSupplyl)/.test(listtype)===true">
@@ -106,7 +106,7 @@
       </div>
       <div class="info_tab_footer">共计:{{ total }}
         <div class="show_pager">
-          <Pager :total="total" @change="handlePageChange"/>
+          <Pager :total="total" @change="handlePageChange" ></Pager>
         </div>
       </div>
     </div>
@@ -325,9 +325,11 @@
         this.fetchAllCollList()
       },
       handlePageChange(obj) {
+
         this.searchQuery.currentPage = obj.pageNum
         this.searchQuery.pageSize = obj.pageSize
-        this.fetchData()
+        // console.log(obj,this.searchQuery,'8888888888');
+        this.fetchAllCollList()
       },
       getSearchParam(obj) {
         console.log('obj::', JSON.stringify(obj), this.searchQuery.vo)
