@@ -127,9 +127,9 @@ export default {
       current: '',
       popVisible: false,
       centerDialogVisible: false,
-      isMatreg:false,
+      isMatreg: false,
       logisticsForm: {
-        parkName:'',
+        parkName: '',
         pointName: '', // 网点名称
         address: '', // 网点详细地址
         province: '',
@@ -153,9 +153,9 @@ export default {
         address: [
                     { required: true, message: '请填写网点地址', trigger: ['blur', 'change'] }
         ],
-        parkName: [
-                    { required: true, message: '请选择公司所在的园区', trigger: ['blur', 'change'] }
-        ],
+        // parkName: [
+        //             { required: true, message: '请选择公司所在的园区', trigger: ['blur', 'change'] }
+        // ],
         name: [
                     { required: true, message: '请输入联系人', trigger: 'blur' }
         ],
@@ -193,7 +193,7 @@ export default {
       this.$set(this.logisticsForm, 'parkName', obj.parkName)
       // this.firstblood()
     },
-    doction(){
+    doction() {
       this.centerDialogVisible = true
       this.isMatreg = true
       // console.log( this.centerDialogVisible)
