@@ -189,10 +189,12 @@ export default {
       this.current = name
     },
     getsuccess(obj) {
-      console.log(obj)
+      // console.log(obj)
       this.$set(this.logisticsForm, 'parkName', obj.parkName)
+      this.$set(this.logisticsForm, 'parkId', obj.id)
       // this.firstblood()
     },
+
     doction() {
       this.centerDialogVisible = true
       this.isMatreg = true
