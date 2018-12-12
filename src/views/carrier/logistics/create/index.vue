@@ -44,9 +44,9 @@
           <el-input v-model="ruleForm.endLocationContactsMobile" :disabled="unable" v-numberOnly
                     maxlength="11"></el-input>
         </el-form-item>
-        <el-checkbox v-model="checked" style="display: block;margin-left: 180px" :disabled="checkedFlag||unable">生成全境专线
+        <el-checkbox v-model="checked" style="display: block;margin-left: 180px" v-if="checkedFlag">生成全境专线
         </el-checkbox>
-        <p style="margin-left: 180px;padding-top: 10px;font-size: 14px">
+        <p style="margin-left: 180px;padding-top: 10px;font-size: 14px" v-if="checkedFlag">
           即系统自动生成出发地【{{ruleForm.startCity}}】至目的地【{{ruleForm.endProvince}} 下所有市】的专线，其他属性默认同此专线一致，可修改 </p>
       </div>
       <div class="information priceTime">
@@ -288,7 +288,7 @@
         flag: 1,//1选 0 不选
         rangeLogo: [],
         unable: false,
-        checkedFlag: false,
+        checkedFlag: true,
         btnText: '请选择',
         current: '',
         popVisible: false,
@@ -514,14 +514,14 @@
           const dataObj = this.$route.query.data// 接收数据
           this.ligthPriceForms = dataObj.lightcargo
           this.weigthPriceForms = dataObj.weightcargo
-          if (dataObj.flag === '1') {
-            this.checked = true
-            this.checkedFlag = true
-          }else{
-            this.checked = false
-            this.checkedFlag = false
-          }
-
+          // if (dataObj.flag === '1') {
+          //   this.checked = true
+          //   this.checkedFlag = true
+          // }else{
+          //   this.checked = false
+          //   this.checkedFlag = false
+          // }
+          this.checkedFlag = false
           console.log('```', dataObj)
           TransportRangeInfo(dataObj.id).then(res => {
             this.ruleForm = res.data
