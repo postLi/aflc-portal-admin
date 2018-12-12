@@ -194,6 +194,7 @@ export default {
       this.$set(this.logisticsForm, 'parkId', obj.id)
       // this.firstblood()
     },
+
     doction() {
       this.centerDialogVisible = true
       this.isMatreg = true
