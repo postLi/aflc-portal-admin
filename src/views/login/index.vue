@@ -175,7 +175,7 @@ export default {
           const data = Object.assign({}, this.loginForm)
           data.mobile = data.username
           data.username = data.username + '|' + this.loginForm.accNum
-          console.log('md5',data);
+          // console.log('md5',data);
           data.password = md5(data.password)
           this.$store.dispatch('Login', data).then(() => {
             // if (!this.loginForm.accNum) {

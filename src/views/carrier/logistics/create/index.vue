@@ -525,11 +525,12 @@
           console.log('```', dataObj)
           TransportRangeInfo(dataObj.id).then(res => {
             this.ruleForm = res.data
+            // console.log(res.data,'xiug ');
             this.rangeLogo = this.ruleForm.rangeLogo.split(',')
 
             this.ruleForm.startCity = this.ruleForm.startLocation
-            this.ruleForm.endProvince = this.ruleForm.endLocationContacts
-            console.log('this.rangeLogo', this.rangeLogo, this.ruleForm)
+            // this.ruleForm.endProvince =res.data.endProvince
+            console.log('this.rangeLogo', this.rangeLogo,res.data)
           })
           if (this.ifShowRangeType == 2) {
             this.unable = true
