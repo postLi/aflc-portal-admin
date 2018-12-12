@@ -24,7 +24,7 @@ export function newTransportRangeList(data){
     })
   }
 
-  
+
 
 //根据Id获取物流专线
 export function TransportRangeInfo(id){
@@ -61,3 +61,34 @@ export function deleteTransportRange(id){
       method: 'delete',
     })
   }
+///usercenter/aflcTransportRange/v1/deleteBatch
+// 批量删除物流专线
+// export function deletebatchDelete(ids) {
+//   return fetch.delete('/api-order/order/pickup/v1/batchDelete/?ids=' + ids)
+// }
+//批量删除物流专线
+export function deleteBatch(ids){
+  return fetch.axios({
+    url: '/'+baseUrl+'/usercenter/aflcTransportRange/v1/deleteBatch/',
+    method: 'delete',
+    data:ids
+  })
+}
+// /usercenter/aflcTransportRange/v1/disable
+// 批量禁用承运物流专线
+export function putBatch(ids){
+  return fetch.axios({
+    url: '/'+baseUrl+'/usercenter/aflcTransportRange/v1/disable/',
+    method: 'put',
+    data:ids
+  })
+}
+// /usercenter/aflcTransportRange/v1/enable
+// 批量启用承运物流专线
+export function putEnable(ids){
+  return fetch.axios({
+    url: '/'+baseUrl+'/usercenter/aflcTransportRange/v1/enable/',
+    method: 'put',
+    data:ids
+  })
+}

@@ -10,7 +10,7 @@
       :disabled="total<size"
       :total="total">
     </el-pagination> -->
-    
+
     <span class="page-num" @click="jumpTo(1)" :class="{disabled: pageNum <= 1}">
       <span class="first-page"></span>
     </span><span class="page-num" @click="jumpTo(pageNum-1)" :class="{disabled: pageNum <= 1}">
@@ -40,7 +40,7 @@
       <span class="last-page"></span>
     </span>
     <span class="tms-pagination__sizes">
-      <el-select class="page-select" v-model="size" placeholder="请选择">
+      <el-select class="page-select" @change="sizeChange" v-model="size" placeholder="请选择">
         <el-option
           v-for="(item,index) in sizes"
           :key="index"
@@ -92,6 +92,14 @@ export default {
   methods: {
     handleFocus(event) {
       this.oldValue = event.target.value
+    },
+    sizeChange(){
+      this.pageNum =1
+      this.pageNum =this.pageNum
+      this.$emit('change',{
+        pageNum:this.pageNum,
+        pageSize:this.size,
+      })
     },
     changeEvent() {
       // 判断页码是否实际发生了变化
@@ -236,7 +244,7 @@ $borderWidth: 6px;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
   }
-  
+
 </style>
 <style lang="scss">
 .tms-pagination__sizes .el-input .el-input__inner:hover {
