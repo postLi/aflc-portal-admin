@@ -43,6 +43,10 @@ export default {
           path: '/carinfo/manage', icon: 'QQ', name: '管理车源', component: _import('carowner/carinfo/manage'), meta: { role: ['admin'], title: '管理车源', noCache: false }
         }
       ]
-    }
+    },
+    // 我的收藏
+    {
+      path: '/carrier/collection', icon: 'QQ', name: '我的收藏', component: _import('carrier/collection/index'), meta: { role: ['admin'], title: '我的收藏', istab: true, noCache: false }
+    },
   ]
 }

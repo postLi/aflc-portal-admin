@@ -81,7 +81,7 @@
 
 <script>
 import { isvalidUsername } from '@/utils/validate'
-
+import md5 from 'js-md5'
 export default {
   name: 'login',
   data() {
@@ -175,6 +175,8 @@ export default {
           const data = Object.assign({}, this.loginForm)
           data.mobile = data.username
           data.username = data.username + '|' + this.loginForm.accNum
+          console.log('md5',data);
+          data.password = md5(data.password)
           this.$store.dispatch('Login', data).then(() => {
             // if (!this.loginForm.accNum) {
             //   this.errInfo = true

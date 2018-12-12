@@ -126,7 +126,7 @@ export default {
     },
     // 我的收藏
     {
-      path: '/carrier/collection', hidden: false, icon: 'QQ', name: '我的收藏', component: _import('carrier/collection/index'), meta: { role: ['admin'], title: '我的收藏', istab: true, noCache: false }
+      path: '/carrier/collection', icon: 'QQ', name: '我的收藏', component: _import('carrier/collection/index'), meta: { role: ['admin'], title: '我的收藏', istab: true, noCache: false }
     },
     // // 我的收藏
     // {
