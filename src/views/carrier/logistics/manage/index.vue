@@ -35,6 +35,7 @@
             :data="tableData"
             ref="multipleTable"
             @selection-change="getSelection"
+            @row-click="clickDetails"
             stripe
             border
             height="100%"
@@ -304,7 +305,7 @@
             })
           })
           this.loading = false;
-          console.log(this.tableData)
+          // console.log(this.tableData)
         })
       },
       handlePageChange(obj) {
@@ -314,6 +315,9 @@
       },
       getSelection(selection) {
         this.selected = selection
+      },
+      clickDetails(row, event, column) {
+        this.$refs.multipleTable.toggleRowSelection(row)
       },
       clearSearch() {
         this.$refs.ruleForm.resetFields();
