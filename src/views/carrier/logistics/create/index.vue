@@ -361,10 +361,10 @@
             {required: true, message: '请输入到达地联系人信息', trigger: 'blur'}
           ],
           startLocationContactsMobile: [
-            {required: true, validator: checkStartLocationContactsMobile, trigger: 'change'}
+            {required: true, validator: checkStartLocationContactsMobile}
           ],
           endLocationContactsMobile: [
-            {required: true, validator: checkEndLocationContactsMobile, trigger: 'change'}
+            {required: true, validator: checkEndLocationContactsMobile}
           ],
           rangeType: [
             {required: true, message: '请选择专线类型', trigger: 'change'}

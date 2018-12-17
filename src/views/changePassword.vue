@@ -38,7 +38,7 @@
 import '@/styles/identification.scss'
 import { putChangeMyPassword } from '@/api/common.js'
 import { REGEX } from '@/utils/validate.js'
-
+import md5 from 'js-md5'
 export default {
   data() {
     var validatePass2 = (rule, value, callback) => {
@@ -96,7 +96,12 @@ export default {
     submitForm() {
       this.$refs['ruleForm'].validate((valid) => {
         if (valid) {
-          putChangeMyPassword(this.otherinfo.rolesIdList[0], this.logisticsForm).then(res => {
+          let data = Object.assign({},this.logisticsForm)
+          data.oldPassword = md5(data.oldPassword)
+          data.newPassword = md5(data.newPassword)
+          data.surePassword = md5(data.surePassword)
+          // console.log(data,'dataaaa',this.logisticsForm)
+          putChangeMyPassword(this.otherinfo.rolesIdList[0], data).then(res => {
             this.$message.success('修改成功！')
             this.$refs['ruleForm'].resetFields()
           }).catch(err => {
@@ -128,7 +133,7 @@ export default {
     }
 .el-form .carrierTitle{
     margin-bottom: 0;
-    
+
 }
 .el-form-item{
   display: block !important;

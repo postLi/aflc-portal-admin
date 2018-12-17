@@ -101,16 +101,17 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item label="手机："  prop="mobile">
-                    <el-input v-model="logisticsForm.mobile" maxlength="11"  v-numberOnly   :disabled="ifDisable === false">
+                  <!--<el-input v-model="logisticsForm.mobile" maxlength="11"  v-numberOnly   :disabled="ifDisable === false"></el-input>-->
+                    <el-input v-model="logisticsForm.mobile" maxlength="11"  v-numberOnly   disabled>
                     </el-input>
                 </el-form-item><br>
                 <el-form-item label="公司所在地：" prop="belongCityName">
-                    
+
                     <vregion :ui="true" @values="regionChange" class="form-control">
                         <el-input v-model="logisticsForm.belongCityName" :disabled="ifDisable === false" placeholder="请选择出发地"></el-input>
                     </vregion>
                     <!-- <el-input @focus="()=>{showMap(logisticsForm.belongCityName)}" v-model="logisticsForm.belongCityName" :disabled="ifDisable === false"></el-input> -->
-                </el-form-item> 
+                </el-form-item>
                 <el-form-item label="详细地址：" class="moreWidth" prop="address">
                     <el-input @focus="()=>{showMap('endAddress')}" v-model="logisticsForm.address" :disabled="ifDisable === false"></el-input>
                 </el-form-item><br>
@@ -141,7 +142,7 @@
                     <p><span>*</span>负责人手持身份证正面照片：</p>
                     <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="logisticsForm.takeIdCardFile" v-if=" ifDisable == true"/>
                     <img class="showPicture" :src="logisticsForm.takeIdCardFile? logisticsForm.takeIdCardFile: defaultImg" alt="" v-else>
-                    
+
                     <el-button  class="preview" type="primary" plain v-show="logisticsForm.takeIdCardFile ? true : false" v-showPicture :imgurl="logisticsForm.takeIdCardFile">点击预览</el-button>
                 </el-form-item>
                 <el-form-item  prop="companyFacadeFile">
@@ -531,9 +532,9 @@ export default {
 <style type="text/css" lang="scss">
 
         .carrierIdentification {
-           
+
         }
-        
+
          .carrierIdentification .el-form .information .textarea .el-form-item__content {
             .el-textarea{
                 .el-textarea__inner{

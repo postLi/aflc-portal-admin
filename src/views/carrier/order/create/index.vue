@@ -32,7 +32,7 @@
       </div>
       <!-- 货物信息 -->
       <div class="cargo-info tab-info-panel">
-        <div class="tab-info-stitle"><strong>货物信息</strong></div> 
+        <div class="tab-info-stitle"><strong>货物信息</strong></div>
         <ul class="clearfix">
            <li :key="index" v-for="(item, index) in cargoList">
              <el-form-item required label="货物名称：">
@@ -48,7 +48,7 @@
                   </ul>
                   <el-input @focus="item.isget = true"  @blur="calcTotalFee(item)" :maxlength="10" slot="reference" v-model="item.goodsName"></el-input>
                 </el-popover>
-                
+
               </el-form-item>
               <el-form-item label="总件数：">
                 <!-- <el-input :maxlength="7" v-numberOnly v-model="item.goodsNum"><template slot="append">件</template></el-input> -->
@@ -81,7 +81,7 @@
               </el-form-item>
            </li>
         </ul>
-        
+
       </div>
       <!-- 选择物流公司 -->
       <div class="select-line tab-info-panel" v-if="!isCargo">
@@ -134,7 +134,7 @@
               width="200"
               label="重货">
               <template slot-scope="scope">
-                <span class="important">{{findLowestPrice(scope.row.rangePrices,'1')}}</span>元/公斤 
+                <span class="important">{{findLowestPrice(scope.row.rangePrices,'1')}}</span>元/公斤
                 <el-popover
                   :visible-arrow="false"
                   placement="bottom"
@@ -156,7 +156,7 @@
                 </el-popover>
               </template>
             </el-table-column>
-            
+
             <el-table-column
               prop="carSourceTypeName"
               width="200"
@@ -217,14 +217,14 @@
       <!-- 联系方式 -->
       <div class="select-contact tab-info-panel">
           <h3>联系方式</h3>
-          
+
           <ul class="concat-list clearfix">
             <li>
               <el-form-item required label="发货人：">
                 <el-input v-model="aflcOrderAddressWebDtoList[0].contacts"></el-input>
               </el-form-item>
               <el-form-item required label="发货人手机">
-                <el-input :maxlength="11" v-model="aflcOrderAddressWebDtoList[0].contactsPhone"></el-input>
+                <el-input :maxlength="11" v-model="aflcOrderAddressWebDtoList[0].contactsPhone" v-number-only></el-input>
               </el-form-item>
               <el-form-item >
                 <el-button type="primary" @click="showContactPop(0)">选择常用发货人</el-button>
@@ -236,7 +236,7 @@
                 <el-input v-model="aflcOrderAddressWebDtoList[1].contacts"></el-input>
               </el-form-item>
               <el-form-item label="收货人手机">
-                <el-input :maxlength="11" v-model="aflcOrderAddressWebDtoList[1].contactsPhone"></el-input>
+                <el-input :maxlength="11" v-model="aflcOrderAddressWebDtoList[1].contactsPhone" v-number-only></el-input>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" @click="showContactPop(1)">选择常用收货人</el-button>
@@ -255,8 +255,8 @@
         <!-- <el-button @click="resetForm('ruleForm')">重置</el-button> -->
       </el-form-item>
 
-      
-  
+
+
     </el-form>
     <!-- 地图 -->
     <tmsmap @success="getInfo" :pos="thepos" :name="thename" :popVisible.sync="popVisible" />
@@ -324,7 +324,7 @@
             </li>
           </ul>
         </div>
-        
+
         <div slot="footer" class="dialog-footer">
           <el-button @click="showPopNet = false">取 消</el-button>
           <el-button type="primary" @click="submitNetForm">确 定</el-button>
@@ -1267,7 +1267,7 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
 
-    
+
   }
   li{
     padding: 5px 0;
@@ -1288,7 +1288,7 @@ export default {
       padding-left: 25px;
     }
   }
-  
+
 }
 .create-orderinfo{
   padding: 0;
@@ -1296,9 +1296,9 @@ export default {
   .tab-info-stitle{
     margin-bottom: 10px;
   }
-  
+
   .order-base-info{
-    
+
     .el-form-item{
       float: left;
       width: 50%;
@@ -1361,11 +1361,11 @@ export default {
       height: 28px;
       line-height: 28px;
       padding: 0 23px;
-      
-      background-image: linear-gradient(180deg, 
-		#0d91e9 0%, 
+
+      background-image: linear-gradient(180deg,
+		#0d91e9 0%,
     #22c3f5 100%);
-    
+
       .el-dialog__title{
         font-size: 12px;
         color: #fff;
@@ -1428,7 +1428,7 @@ export default {
   .tab-info-panel{
     margin: 10px auto;
   }
-  
+
   .label-content{
     span{
       float: left;
