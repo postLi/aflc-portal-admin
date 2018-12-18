@@ -80,7 +80,7 @@
             this.$set(this.collListNum, 'userType', 2)
             break
           case 'aflc-2':
-            this.$set(this.collListNum, 'userType', 2)
+            this.$set(this.collListNum, 'userType', 3)
             break
           case 'aflc-5':
             this.$set(this.collListNum, 'userType', 1)

@@ -93,7 +93,7 @@
               <li>
                 <!-- <el-input v-model="form.primeryPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input> -->
                 <input class="nativeinput" :value="form.primeryPrice"
-                       @change="(e)=>{setInputVal(e.target.value,form, 'primeryPrice'),ifWrong(weigthPriceForms,keys)}"
+                       @change="(e)=>{setInputVal(e.target.value,form, 'primeryPrice')}"
                        :maxlength="7" auto-complete="off" clearable
                        v-number-only:point :disabled="unable" type="text">
                 元/公斤
@@ -101,7 +101,7 @@
               <li>
                 <!-- <el-input v-model="form.discountPrice" :disabled="unable"  v-number-only:point maxlength="7"></el-input> -->
                 <input class="nativeinput" :value="form.discountPrice"
-                       @change="(e)=>{setInputVal(e.target.value,form, 'discountPrice'),ifWrong(weigthPriceForms,keys)}"
+                       @change="(e)=>{setInputVal(e.target.value,form, 'discountPrice')}"
                        :maxlength="7" auto-complete="off" clearable
                        v-number-only:point :disabled="unable" type="text">
                 元/公斤
@@ -142,7 +142,7 @@
                 <!-- <el-form-item prop="primeryPrice" style="display:inline-block;"> -->
                 <!-- <el-input v-model="form.primeryPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input> -->
                 <input class="nativeinput" :value="form.primeryPrice"
-                       @change="(e)=>{setInputVal(e.target.value,form, 'primeryPrice'),ifWrong(ligthPriceForms,keys)}"
+                       @change="(e)=>{setInputVal(e.target.value,form, 'primeryPrice')}"
                        :maxlength="7" auto-complete="off" clearable
                        v-number-only:point :disabled="unable" type="text">
                 元/立方
@@ -151,7 +151,7 @@
               <li>
                 <!-- <el-input v-model="form.discountPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input> -->
                 <input class="nativeinput" :value="form.discountPrice"
-                       @change="(e)=>{setInputVal(e.target.value,form, 'discountPrice'),ifWrong(ligthPriceForms,keys)}"
+                       @change="(e)=>{setInputVal(e.target.value,form, 'discountPrice')}"
                        :maxlength="7" auto-complete="off" clearable
                        v-number-only:point :disabled="unable" type="text">
                 元/立方
@@ -361,10 +361,10 @@
             {required: true, message: '请输入到达地联系人信息', trigger: 'blur'}
           ],
           startLocationContactsMobile: [
-            {required: true, validator: checkStartLocationContactsMobile, trigger: 'change'}
+            {required: true, validator: checkStartLocationContactsMobile}
           ],
           endLocationContactsMobile: [
-            {required: true, validator: checkEndLocationContactsMobile, trigger: 'change'}
+            {required: true, validator: checkEndLocationContactsMobile}
           ],
           rangeType: [
             {required: true, message: '请选择专线类型', trigger: 'change'}
@@ -381,7 +381,8 @@
           primeryPrice: [
             {required: true, message: '请填写价格', trigger: 'blur'}
           ]
-        }
+        },
+        publishId:''
       }
     },
     watch: {},
@@ -514,13 +515,7 @@
           const dataObj = this.$route.query.data// 接收数据
           this.ligthPriceForms = dataObj.lightcargo
           this.weigthPriceForms = dataObj.weightcargo
-          // if (dataObj.flag === '1') {
-          //   this.checked = true
-          //   this.checkedFlag = true
-          // }else{
-          //   this.checked = false
-          //   this.checkedFlag = false
-          // }
+          this.publishId = dataObj.publishId
           this.checkedFlag = false
           console.log('```', dataObj)
           TransportRangeInfo(dataObj.id).then(res => {
@@ -714,8 +709,11 @@
                 this.$set(data, 'flag', "0")
               }
               if (this.ifShowRangeType === '1') {
+                this.$set(data,'publishId',this.publishId)
+                // console.log(data,'changeTransportRange')
                 commitFunction = changeTransportRange(data)
               } else {
+                // console.log(data,'newTransportRangeList')
                 commitFunction = newTransportRangeList(data)
               }
               commitFunction.then(res => {

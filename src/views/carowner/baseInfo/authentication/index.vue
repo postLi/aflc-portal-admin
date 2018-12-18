@@ -15,16 +15,17 @@
                 <el-form-item label="车主：" prop="driverName">
                     <el-input v-model="logisticsForm.driverName"  placeholder="请填写车主姓名" :disabled="ifDisable === false">
                     </el-input>
-                </el-form-item> 
+                </el-form-item>
                 <el-form-item label="身份证号：" prop="driverCardid">
                      <el-input v-model="logisticsForm.driverCardid" placeholder="请输入18位身份证号" :disabled="ifDisable === false">
                     </el-input>
                 </el-form-item>
-                <el-form-item label="手机号码：" prop="driverMobile"> 
-                     <el-input v-model="logisticsForm.driverMobile" maxlength="11" v-numberOnly :disabled="ifDisable === false">
+                <el-form-item label="手机号码：" prop="driverMobile">
+                     <!--<el-input v-model="logisticsForm.driverMobile" maxlength="11" v-numberOnly :disabled="ifDisable === false">-->
+                     <el-input v-model="logisticsForm.driverMobile" maxlength="11" v-numberOnly disabled>
                     </el-input>
                 </el-form-item>
-                <el-form-item label="车主QQ：" prop="QQ">             
+                <el-form-item label="车主QQ：" prop="QQ">
                     <el-input v-model="logisticsForm.qq" v-numberOnly :disabled="ifDisable === false">
                     </el-input>
                 </el-form-item>
@@ -223,13 +224,13 @@ export default {
                 }
             }
         }
-        
+
         .carownerIdentification .el-form .information .textarea .el-form-item__content span {
             right: 18px;
             bottom:22px;
         }
-        
-      
+
+
 
 </style>
 
