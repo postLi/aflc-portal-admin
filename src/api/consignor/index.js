@@ -1,6 +1,6 @@
 import fetch from '@/utils/fetch'
 
-const baseUrl = 'aflcusercenterservice' ;
+const baseUrl = 'aflc-uc' ;
 
 
 //认证货主

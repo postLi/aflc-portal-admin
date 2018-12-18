@@ -42,7 +42,7 @@ export function getInfo(mobile, memberType) {
 }
 
 export function getAccessInfo() {
-  return fetch.get('/aflcusercenterservice/usercenter/aflcLogisticsCompanyAccout/v1/getAccoutInfo').then(res => {
+  return fetch.get('/aflc-uc/usercenter/aflcLogisticsCompanyAccout/v1/getAccoutInfo').then(res => {
     return res.data
   })
 }

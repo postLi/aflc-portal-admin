@@ -158,7 +158,7 @@ export function putEnableOrder(id, type) {
 }
  */
 export function getListDetailPoint(data) {
-  return fetch.post('/aflcusercenterservice/usercenter/aflcPointNetwork/v1/listDetailPointNetwork', data)
+  return fetch.post('/aflc-uc/usercenter/aflcPointNetwork/v1/listDetailPointNetwork', data)
 }
 /**
  * 新增常用收发货人
@@ -183,7 +183,7 @@ export function getListDetailPoint(data) {
 }
  */
 export function postAddContact(data) {
-  return fetch.post('/aflcusercenterservice/usercenter/aflcShipperContacts/v1/add', data)
+  return fetch.post('/aflc-uc/usercenter/aflcShipperContacts/v1/add', data)
 }
 /**
  * 根据条件获取常用收发货人列表
@@ -213,7 +213,7 @@ export function postAddContact(data) {
 }
  */
 export function getContactList(data) {
-  return fetch.post('/aflcusercenterservice/usercenter/aflcShipperContacts/v1/list', data).then(res => {
+  return fetch.post('/aflc-uc/usercenter/aflcShipperContacts/v1/list', data).then(res => {
     return res.data || { list: [], totalCount: 0 }
   })
 }
@@ -240,7 +240,7 @@ export function getContactList(data) {
 }
  */
 export function putChangeContact(data) {
-  return fetch.put('/aflcusercenterservice/usercenter/aflcShipperContacts/v1/update', data)
+  return fetch.put('/aflc-uc/usercenter/aflcShipperContacts/v1/update', data)
 }
 /**
  * 获取货品的预估价格
@@ -271,7 +271,7 @@ export function getTotalPrice(data) {
 }
  */
 export function getBestNet(cid, data) {
-  return fetch.post('/aflcusercenterservice/usercenter/aflcPointNetwork/v1/listPointByCompanyId/' + cid, data)
+  return fetch.post('/aflc-uc/usercenter/aflcPointNetwork/v1/listPointByCompanyId/' + cid, data)
 }
 /**
  * 根据物流公司ID获取出发网点、到达网点
@@ -287,7 +287,7 @@ export function getBestNet(cid, data) {
 }
  */
 export function getAllNet(cid, data) {
-  return fetch.post('/aflcusercenterservice/usercenter/aflcPointNetwork/v1/listCompanyPointByCompanyId/' + cid, data)
+  return fetch.post('/aflc-uc/usercenter/aflcPointNetwork/v1/listCompanyPointByCompanyId/' + cid, data)
 }
 /**
  * 承运获取物流专线列表
@@ -333,5 +333,5 @@ export function getAllNet(cid, data) {
 }
  */
 export function getCompany(data) {
-  return fetch.post('/aflcusercenterservice/usercenter/aflcTransportRange/v1/findRangesWithCreateOrder', data)
+  return fetch.post('/aflc-uc/usercenter/aflcTransportRange/v1/findRangesWithCreateOrder', data)
 }
