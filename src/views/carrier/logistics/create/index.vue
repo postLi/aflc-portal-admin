@@ -381,7 +381,8 @@
           primeryPrice: [
             {required: true, message: '请填写价格', trigger: 'blur'}
           ]
-        }
+        },
+        publishId:''
       }
     },
     watch: {},
@@ -514,13 +515,7 @@
           const dataObj = this.$route.query.data// 接收数据
           this.ligthPriceForms = dataObj.lightcargo
           this.weigthPriceForms = dataObj.weightcargo
-          // if (dataObj.flag === '1') {
-          //   this.checked = true
-          //   this.checkedFlag = true
-          // }else{
-          //   this.checked = false
-          //   this.checkedFlag = false
-          // }
+          this.publishId = dataObj.publishId
           this.checkedFlag = false
           console.log('```', dataObj)
           TransportRangeInfo(dataObj.id).then(res => {
@@ -714,8 +709,11 @@
                 this.$set(data, 'flag', "0")
               }
               if (this.ifShowRangeType === '1') {
+                this.$set(data,'publishId',this.publishId)
+                // console.log(data,'changeTransportRange')
                 commitFunction = changeTransportRange(data)
               } else {
+                // console.log(data,'newTransportRangeList')
                 commitFunction = newTransportRangeList(data)
               }
               commitFunction.then(res => {

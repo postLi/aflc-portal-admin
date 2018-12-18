@@ -46,7 +46,7 @@
                   <ul class="preCaogoList clearfix">
                     <li @click="setCargoName(index, item.name,item)" :key="inx" v-for="(item, inx) in cargoListPre">{{ item.name }}</li>
                   </ul>
-                  <el-input @focus="item.isget = true"  @blur="calcTotalFee(item)" :maxlength="10" slot="reference" v-model="item.goodsName"></el-input>
+                  <el-input @focus="item.isget = true"  @blur="calcTotalFee(item)" :maxlength="50" slot="reference" v-model="item.goodsName"></el-input>
                 </el-popover>
 
               </el-form-item>
@@ -736,7 +736,8 @@ export default {
     // 货物信息
     resetCargo() {
       const index = this.cargoList.length
-      this.$set(this.cargoList, index - 1, {})
+      console.log(index,'indexindex');
+      // this.$set(this.cargoList, index - 1, {})
       // this.cargoList = [{}]
     },
     removeCargo(index) {

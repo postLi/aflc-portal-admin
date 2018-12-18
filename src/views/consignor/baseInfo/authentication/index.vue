@@ -26,22 +26,22 @@
               </el-option>
           </el-select> -->
         </el-form-item>
-        <el-form-item label="公司名称：" v-if="logisticsForm.shipperType == 'AF0010101'">
+        <el-form-item label="公司名称：" v-if="logisticsForm.shipperType == 'AF0010101'" prop="companyName">
           <el-input v-model="logisticsForm.companyName" :disabled="ifDisable === false" :maxlength="25">
             <p slot="append">请填写企业在工商局注册的全称，完整的信息让客户更加信赖您</p>
           </el-input>
         </el-form-item>
-        <el-form-item label="公司名称：" prop="companyName" v-else>
-          <el-input v-model="logisticsForm.companyName" :disabled="ifDisable === false">
+        <el-form-item label="公司名称：" prop="companyName" v-else >
+          <el-input v-model="logisticsForm.companyName" :disabled="ifDisable === false" :maxlength="25">
             <p slot="append">请填写企业在工商局注册的全称，完整的信息让客户更加信赖您</p>
           </el-input>
         </el-form-item>
-        <el-form-item label="法人/负责人：" v-if="logisticsForm.shipperType == 'AF0010101'">
-          <el-input v-model="logisticsForm.legalPerson" :disabled="ifDisable === false">
+        <el-form-item label="法人/负责人：" v-if="logisticsForm.shipperType == 'AF0010101'" prop="legalPerson">
+          <el-input v-model="logisticsForm.legalPerson" :disabled="ifDisable === false" :maxlength="15">
           </el-input>
         </el-form-item>
-        <el-form-item label="法人/负责人：" prop="legalPerson" v-else>
-          <el-input v-model="logisticsForm.legalPerson" :disabled="ifDisable === false">
+        <el-form-item label="法人/负责人：" v-else prop="legalPerson">
+          <el-input v-model="logisticsForm.legalPerson" :disabled="ifDisable === false" :maxlength="15">
           </el-input>
         </el-form-item>
         <el-form-item label="统一社会信用代码（营业执照）：" prop="creditCode">
@@ -323,10 +323,12 @@
             {required: true, message: '请选择货主类型', trigger: 'blur'}
           ],
           companyName: [
-            {required: true, message: '请输入公司名称', trigger: 'blur'}
+            {required: true, message: '请输入公司名称', trigger: 'blur'},
+            {message: '只能输入中文和字母~',pattern: REGEX.CHINESE_AND_ENGLISH}
           ],
           legalPerson: [
-            {required: true, message: '请输入法人/负责人信息', trigger: 'blur'}
+            {required: true, message: '请输入法人/负责人信息', trigger: 'blur'},
+            {message: '只能输入中文和字母~',pattern: REGEX.CHINESE_AND_ENGLISH}
           ],
           creditCode: [
             {validator: checkcreditCode, trigger: 'blur'}
