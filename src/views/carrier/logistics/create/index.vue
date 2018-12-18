@@ -93,7 +93,7 @@
               <li>
                 <!-- <el-input v-model="form.primeryPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input> -->
                 <input class="nativeinput" :value="form.primeryPrice"
-                       @change="(e)=>{setInputVal(e.target.value,form, 'primeryPrice'),ifWrong(weigthPriceForms,keys)}"
+                       @change="(e)=>{setInputVal(e.target.value,form, 'primeryPrice')}"
                        :maxlength="7" auto-complete="off" clearable
                        v-number-only:point :disabled="unable" type="text">
                 元/公斤
@@ -101,7 +101,7 @@
               <li>
                 <!-- <el-input v-model="form.discountPrice" :disabled="unable"  v-number-only:point maxlength="7"></el-input> -->
                 <input class="nativeinput" :value="form.discountPrice"
-                       @change="(e)=>{setInputVal(e.target.value,form, 'discountPrice'),ifWrong(weigthPriceForms,keys)}"
+                       @change="(e)=>{setInputVal(e.target.value,form, 'discountPrice')}"
                        :maxlength="7" auto-complete="off" clearable
                        v-number-only:point :disabled="unable" type="text">
                 元/公斤
@@ -142,7 +142,7 @@
                 <!-- <el-form-item prop="primeryPrice" style="display:inline-block;"> -->
                 <!-- <el-input v-model="form.primeryPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input> -->
                 <input class="nativeinput" :value="form.primeryPrice"
-                       @change="(e)=>{setInputVal(e.target.value,form, 'primeryPrice'),ifWrong(ligthPriceForms,keys)}"
+                       @change="(e)=>{setInputVal(e.target.value,form, 'primeryPrice')}"
                        :maxlength="7" auto-complete="off" clearable
                        v-number-only:point :disabled="unable" type="text">
                 元/立方
@@ -151,7 +151,7 @@
               <li>
                 <!-- <el-input v-model="form.discountPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input> -->
                 <input class="nativeinput" :value="form.discountPrice"
-                       @change="(e)=>{setInputVal(e.target.value,form, 'discountPrice'),ifWrong(ligthPriceForms,keys)}"
+                       @change="(e)=>{setInputVal(e.target.value,form, 'discountPrice')}"
                        :maxlength="7" auto-complete="off" clearable
                        v-number-only:point :disabled="unable" type="text">
                 元/立方
