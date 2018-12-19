@@ -203,11 +203,6 @@
         let ids
         switch (type) {
           case 'use':
-            // ids = this.selected.filter(el => {
-            //   return el.rangeStatus !== 0
-            // }).map(el => {
-            //   return el.id
-            // })
             ids = this.selected.map(el => {
               return el.id
             })
@@ -218,7 +213,7 @@
               })
               return false
             } else {
-              console.log(ids,typeof ids,typeof ids[1],'idsidsidsids');
+              // console.log(ids,typeof ids,typeof ids[1],'idsidsidsids');
               putEnable(ids).then(res => {
                 this.$message({
                   type: 'success',
@@ -226,10 +221,9 @@
                 })
                 this.firstblood()
               }).catch(err => {
-                console.log(err, 'errrr')
+                // console.log(err, 'errrr')
               })
             }
-            //
             break
           case 'disable':
             ids = this.selected.map(el => {
@@ -242,7 +236,7 @@
               })
               return false
             } else {
-              console.log(ids,typeof ids,typeof ids[1],'idsidsidsids');
+              // console.log(ids,typeof ids,typeof ids[1],'idsidsidsids');
               putBatch(ids).then(res => {
                 this.$message({
                   type: 'success',
@@ -250,7 +244,7 @@
                 })
                 this.firstblood()
               }).catch(err => {
-                console.log(err, 'errrr')
+                // console.log(err, 'errrr')
               })
             }
             break
@@ -270,7 +264,7 @@
                 })
                 this.firstblood()
               }).catch(err => {
-                console.log(err, 'errrr')
+                // console.log(err, 'errrr')
                 // this._handlerCatchMsg(err)
               })
             })
@@ -345,7 +339,7 @@
         else {
           isApi = 'http://www.28china.cn'
         }
-        window.open(isApi + isApihttp + '.html?id=' + row.id + '&shipperId=' + row.publishId)
+        window.open(isApi + isApihttp + '.html?id=' + row.id + '&publishId=' + row.publishId)
       },
       //修改
       handleEdit(row) {

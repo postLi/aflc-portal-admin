@@ -153,7 +153,7 @@ export default {
         },
         fetchCode(){
           getDictionary(this.complainStatus).then(res => {
-            console.log(res)
+            // console.log(res)
             this.OptionscomplainStatus = [{
               code:'',
               name:'全部'
@@ -165,7 +165,7 @@ export default {
         },
         firstblood(){
             listCompanyComplain(this.page,this.pagesize,this.logisticsForm).then(res=>{
-                console.log(res)
+                // console.log(res)
                 this.tableData = res.data.list;
                 this.totalCount = res.data.totalCount;
             })
@@ -182,7 +182,7 @@ export default {
         },
         //投诉回复
         handleComplain(row) {
-            console.log(row);
+            // console.log(row);
             this.$router.push({name: '投诉详情',query:{ orderSerial:row.orderSerial,type:'carrier'}});
         },
     },

@@ -166,6 +166,7 @@
         let isApihttp = '/huoyuan/'
         let isApiDate = '2018/0508'
         let isApinum = '/2'
+        console.log(row,'spacialLine');
         if (window.location.host.indexOf('192.168.1') !== -1) {
           // console.log(window.location.host);
           // console.log(window.location.host.indexOf('192.168.1.157:89'))
@@ -185,6 +186,7 @@
           isApihttp = '/wlzx/'
           isApiDate = '2018/0509'
           isApinum = '/7'
+
           if (row.rangeId === null || row.publishId === null) {
             this.$message.info('详情暂无数据~')
             return false

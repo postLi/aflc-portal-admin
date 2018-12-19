@@ -205,7 +205,6 @@ export default {
     },
     forgetPsw() {
       // this.$router.push({ path: '/' })
-      // console.log(5555)
     },
     accNum() {
       this.holder = ''
