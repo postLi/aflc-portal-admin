@@ -323,7 +323,7 @@
       },
       //查看详情
       handleInfo(row) {
-        this.$router.push({name: '发布物流专线', query: {data: row, ifrevise: '2'}});
+        this.$router.push({name: '发布物流专线', query: {data: JSON.stringify(row), ifrevise: '2'}});
       },
       //新增网点
       handleNew() {
@@ -343,7 +343,7 @@
       },
       //修改
       handleEdit(row) {
-        this.$router.push({name: '发布物流专线', query: {data: row, ifrevise: '1'}});
+        this.$router.push({name: '发布物流专线', query: {data: JSON.stringify(row), ifrevise: '1'}});
       },
       //删除网点
       handleDelete(row) {

@@ -512,7 +512,7 @@
         if (this.$route.query.data) {
           this.ifShowRangeType = this.$route.query.ifrevise// 1是修改，2是详情
 
-          const dataObj = this.$route.query.data// 接收数据
+          const dataObj =JSON.parse( this.$route.query.data)// 接收数据
           this.ligthPriceForms = dataObj.lightcargo
           this.weigthPriceForms = dataObj.weightcargo
           this.publishId = dataObj.publishId
