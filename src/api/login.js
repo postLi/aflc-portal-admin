@@ -33,12 +33,41 @@ export function login(username, password, orgid) {
 }
 
 export function getInfo(mobile, memberType) {
-  return fetch.get('/aflccommonservice/common/aflcMemberCenter/v1/getUserInfo', {
+  if (memberType === 'AF00102') {
+    // 车主
+    return getDriverInfo(mobile)
+  } else if (memberType === 'AF00101') {
+    // 货主
+    return getShipperInfo(mobile)
+  } else {
+    // 物流公司
+    return getLogisticsCompanyInfo(mobile)
+  }
+  return fetch.get('/aflc-common/common/aflcMemberCenter/v1/getUserInfo', {
     params: {
       mobile,
       memberType
     }
   })
+}
+
+ // 获取车主信息
+export function getDriverInfo(mobile) {
+  return fetch.get('/aflc-common/common/aflcMemberCenter/v1/getDriverInfoByMobile', { params: {
+    mobile: mobile
+  }})
+}
+// 获取物流商信息
+export function getLogisticsCompanyInfo(mobile) {
+  return fetch.get('/aflc-common/common/aflcMemberCenter/v1/getLogisticsCompanyInfoByMobile', { params: {
+    mobile: mobile
+  }})
+}
+// 获取货主信息
+export function getShipperInfo(mobile) {
+  return fetch.get('/aflc-common/common/aflcMemberCenter/v1/getShipperInfoByMobile', { params: {
+    mobile: mobile
+  }})
 }
 
 export function getAccessInfo() {
