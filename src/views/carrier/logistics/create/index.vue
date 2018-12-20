@@ -725,36 +725,36 @@
               } else {
                 this.$set(data, 'flag', "0")
               }
-              if (this.ifShowRangeType === '1') {
-                this.$set(data, 'publishId', this.publishId)
-                // this.$set(data, 'publishId', this.publishId)
-                // console.log(data,'changeTransportRange')
-                commitFunction = changeTransportRange(data)
-              } else {
-                // console.log(data,'newTransportRangeList')
-                commitFunction = newTransportRangeList(data)
-              }
-              commitFunction.then(res => {
-                console.log('res', res)
-                if (res.status === 200) {
-                  this.$alert('操作成功', '提示', {
-                    confirmButtonText: '确定',
-                    callback: action => {
-                      this.$router.push({name: '管理物流专线'})
-                    }
-                  })
-                } else {
-                  this.$message({
-                    type: 'info',
-                    message: '操作失败，原因：' + res.errorInfo ? res.errorInfo : res.text
-                  })
-                }
-              }).catch(err => {
-                this.$message({
-                  type: 'info',
-                  message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
-                })
-              })
+              // if (this.ifShowRangeType === '1') {
+              //   this.$set(data, 'publishId', this.publishId)
+              //   // this.$set(data, 'publishId', this.publishId)
+              //   // console.log(data,'changeTransportRange')
+              //   commitFunction = changeTransportRange(data)
+              // } else {
+              //   // console.log(data,'newTransportRangeList')
+              //   commitFunction = newTransportRangeList(data)
+              // }
+              // commitFunction.then(res => {
+              //   console.log('res', res)
+              //   if (res.status === 200) {
+              //     this.$alert('操作成功', '提示', {
+              //       confirmButtonText: '确定',
+              //       callback: action => {
+              //         this.$router.push({name: '管理物流专线'})
+              //       }
+              //     })
+              //   } else {
+              //     this.$message({
+              //       type: 'info',
+              //       message: '操作失败，原因：' + res.errorInfo ? res.errorInfo : res.text
+              //     })
+              //   }
+              // }).catch(err => {
+              //   this.$message({
+              //     type: 'info',
+              //     message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+              //   })
+              // })
             } else {
               this.$message({
                 type: 'info',
