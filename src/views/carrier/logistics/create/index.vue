@@ -220,7 +220,12 @@
 </template>
 <script>
   import {getDictionary} from '@/api/common.js'
-  import {newTransportRangeList, TransportRangeInfo, changeTransportRange} from '@/api/carrier/TransportRange.js'
+  import {
+    newTransportRangeList,
+    TransportRangeInfo,
+    changeTransportRange,
+    getTransportRange
+  } from '@/api/carrier/TransportRange.js'
   import {getUserInfo} from '@/utils/auth.js'
   import {REGEX} from '@/utils/validate.js'
   import upload from '@/components/Upload/singleImage2'
@@ -276,7 +281,7 @@
           if (el.endVolume === '') {
             callback(new Error('请补充轻货运量'))
           } else if (el.primeryPrice === '') {
-            console.log('123')
+            // console.log('123')
             callback(new Error('请补充轻货价格区间'))
           } else {
             callback()
@@ -382,7 +387,8 @@
             {required: true, message: '请填写价格', trigger: 'blur'}
           ]
         },
-        publishId:''
+        publishId: '',
+        senAddress: {}
       }
     },
     watch: {},
@@ -512,12 +518,20 @@
         if (this.$route.query.data) {
           this.ifShowRangeType = this.$route.query.ifrevise// 1是修改，2是详情
 
-          const dataObj =JSON.parse( this.$route.query.data)// 接收数据
+          const dataObj = JSON.parse(this.$route.query.data)// 接收数据
           this.ligthPriceForms = dataObj.lightcargo
           this.weigthPriceForms = dataObj.weightcargo
           this.publishId = dataObj.publishId
+          // this.$set(this.ruleForm,{'startProvince',dataObj.startProvince},)
+          this.$set(this.ruleForm, 'startProvince', dataObj.startProvince)
+          this.$set(this.ruleForm, 'startCity', dataObj.startCity)
+          this.$set(this.ruleForm, 'startArea', dataObj.startArea)
+          this.$set(this.ruleForm, 'endProvince', dataObj.endProvince)
+          this.$set(this.ruleForm, 'endCity', dataObj.endCity)
+          this.$set(this.ruleForm, 'endArea', dataObj.endArea)
           this.checkedFlag = false
           console.log('```', dataObj)
+          // getTransportRange(dataObj.id).then()
           TransportRangeInfo(dataObj.id).then(res => {
             this.ruleForm = res.data
             // console.log(res.data,'xiug ');
@@ -525,10 +539,13 @@
 
             this.ruleForm.startCity = this.ruleForm.startLocation
             // this.ruleForm.endProvince =res.data.endProvince
-            console.log('this.rangeLogo', this.rangeLogo,res.data)
+            console.log('this.rangeLogo', this.rangeLogo, res.data)
           })
           if (this.ifShowRangeType == 2) {
             this.unable = true
+            // this.ligthPriceForms = dataObj.lightcargo
+            // this.weigthPriceForms = dataObj.weightcargo
+            // this.publishId = dataObj.publishId
           }
         }
       },
@@ -709,7 +726,8 @@
                 this.$set(data, 'flag', "0")
               }
               if (this.ifShowRangeType === '1') {
-                this.$set(data,'publishId',this.publishId)
+                this.$set(data, 'publishId', this.publishId)
+                // this.$set(data, 'publishId', this.publishId)
                 // console.log(data,'changeTransportRange')
                 commitFunction = changeTransportRange(data)
               } else {

@@ -9,7 +9,7 @@
     <TopNavCreateOrder />
     <TopNavSearch />
   </div>
-  
+
 </template>
 
 <script>
@@ -66,21 +66,21 @@ export default {
       height: auto;
       float: left;
       height: $topNavHeight;
-      
+
 
       a{
         line-height: $topNavHeight;
         display: block;
       }
-      
+
       img{
-        height: 29px;
+        height: 52px;
         width: 65px;
         vertical-align: middle;
-        margin-left: 30px;
+        margin-left: 20px;
       }
     }
-    
+
 
     .pickClip{
       width: 110px;

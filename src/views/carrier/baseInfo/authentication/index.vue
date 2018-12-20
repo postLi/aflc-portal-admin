@@ -309,6 +309,11 @@
           cityCode: '', // 市code
           areaCode: '' // 区code
         },
+        sendData: {
+          "provinceCode": "",
+          "cityCode": "",
+          "areaCode": "",
+        },
         rules: {
           companyName: [
             {required: true, message: '请输入公司名称', trigger: 'blur'},
@@ -398,12 +403,16 @@
     methods: {
       regionChange(d) {
         console.log('data:', d)
+
         this.logisticsForm.address = ''
         this.logisticsForm.belongCityName = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
         this.logisticsForm.provinceCode = d.province ? d.province.code : ''
         this.logisticsForm.cityCode = d.city ? d.city.code : ''
         this.logisticsForm.areaCode = d.area ? d.area.code : ''
-        // console.log(this.logisticsForm.provinceCode,this.logisticsForm.cityCode,this.logisticsForm.areaCode)
+        // this.sendData.provinceCode = d.province? d.province.name:''
+        // this.sendData.cityCode = d.province? d.province.cityCode:''
+        // this.sendData.areaCode = d.province? d.province.areaCode:''
+        console.log(this.logisticsForm.provinceCode,this.logisticsForm.cityCode,this.logisticsForm.areaCode)
       },
       getValue(obj) {
         return obj ? obj.value : ''
@@ -526,7 +535,7 @@
         this.$refs[formName].validate((valid) => {
           this.completeInfo()
           const form = Object.assign({}, this.logisticsForm, {authStatus: 'AF0010402', authStatusName: '待认证'})
-          console.log(form)
+          console.log(form,'submitForm')
           if (valid) {
             identifyCarrier(form).then(res => {
               console.log(res)
