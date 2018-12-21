@@ -30,29 +30,59 @@
             </template>
           </el-table-column>
           <el-table-column
-            fixed
-            label="出发地 -> 到达地" width="400">
-            <template slot-scope="scope">
-              <span class="vipline" v-if="scope.row.isCommonRoute === '1'"></span>
-              {{ scope.row.strartAddress + '->' + scope.row.endAddress }}
-            </template>
+            prop="strartAddress"
+            width="200"
+            label="出发地">
           </el-table-column>
           <el-table-column
-            prop="carNum"
-            width="120"
-            label="车牌号">
+            prop="endAddress"
+            width="200"
+            label="到达地">
           </el-table-column>
           <el-table-column
-            prop="carTypeName"
-            width="120"
-            label="车型">
+            prop="endAddress"
+            width="200"
+            label="发车时间">
           </el-table-column>
-
+          <el-table-column
+            prop="endAddress"
+            width="200"
+            label="期望运价">
+          </el-table-column>
           <el-table-column
             prop="carSourceTypeName"
-            width="120"
-            label="类型">
+            width="158"
+            label="车源类型">
           </el-table-column>
+          <el-table-column
+            prop="endAddress"
+            width="160"
+            label="即时/长期">
+          </el-table-column>
+          <!--<el-table-column-->
+            <!--fixed-->
+            <!--label="出发地 -> 到达地" width="300">-->
+            <!--<template slot-scope="scope">-->
+              <!--<span class="vipline" v-if="scope.row.isCommonRoute === '1'"></span>-->
+              <!--{{ scope.row.strartAddress + '->' + scope.row.endAddress }}-->
+            <!--</template>-->
+          <!--</el-table-column>-->
+          <!--<el-table-column-->
+            <!--prop="carNum"-->
+            <!--width="120"-->
+            <!--label="车牌号">-->
+          <!--</el-table-column>-->
+          <!--<el-table-column-->
+            <!--prop="carTypeName"-->
+            <!--width="120"-->
+            <!--label="车型">-->
+          <!--</el-table-column>-->
+
+          <!--<el-table-column-->
+            <!--prop="carSourceTypeName"-->
+            <!--width="120"-->
+            <!--label="类型">-->
+          <!--</el-table-column>-->
           <!--<el-table-column-->
             <!--label="常跑线路"-->
             <!--&gt;-->
@@ -61,12 +91,12 @@
                 <!--<el-button size="mini" type="primary" v-if="scope.row.isCommonRoute === '0'" @click="setRemote(scope.row.id, '1')">设置常跑</el-button>-->
             <!--</template>-->
           <!--</el-table-column>-->
-          <el-table-column
-            prop="createrName"
-            width="120"
-            label="创建人"
-            >
-          </el-table-column>
+          <!--<el-table-column-->
+            <!--prop="createrName"-->
+            <!--width="120"-->
+            <!--label="创建人"-->
+            <!--&gt;-->
+          <!--</el-table-column>-->
           <el-table-column
             width="200"
             label="创建时间">
@@ -75,7 +105,7 @@
             </template>
           </el-table-column>
           <el-table-column
-            width="330"
+            width="300"
             label="操作">
             <template slot-scope="scope">
                 <el-button size="mini" type="primary" @click="changeItem(scope.row.id)">修改</el-button>
