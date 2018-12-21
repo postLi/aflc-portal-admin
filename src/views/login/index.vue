@@ -227,7 +227,7 @@ export default {
   .el-form-item__content{
     display: flex;
     &>span{
-      width: 83px;
+      width: 65px;
     }
   }
 }

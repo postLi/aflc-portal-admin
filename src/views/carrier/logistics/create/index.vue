@@ -433,6 +433,7 @@
         this.ruleForm.startArea = d.area ? d.area.name : ''
         const obj = d.area || d.city || d.province
         this.ruleForm.startLocationCode = obj.code
+        console.log(this.ruleForm.startCity,' this.ruleForm.startCity');
         // let zhixiashi = ['北京市','天津市','重庆市','上海市'];
         // let ifZhixia = false;
         // zhixiashi.forEach(el => {
@@ -537,9 +538,9 @@
             // console.log(res.data,'xiug ');
             this.rangeLogo = this.ruleForm.rangeLogo.split(',')
 
-            this.ruleForm.startCity = this.ruleForm.startLocation
+            // this.ruleForm.startCity = this.ruleForm.startLocation
             // this.ruleForm.endProvince =res.data.endProvince
-            console.log('this.rangeLogo', this.rangeLogo, res.data)
+            // console.log('this.rangeLogo', this.rangeLogo, res.data)
           })
           if (this.ifShowRangeType == 2) {
             this.unable = true
@@ -725,36 +726,36 @@
               } else {
                 this.$set(data, 'flag', "0")
               }
-              // if (this.ifShowRangeType === '1') {
-              //   this.$set(data, 'publishId', this.publishId)
-              //   // this.$set(data, 'publishId', this.publishId)
-              //   // console.log(data,'changeTransportRange')
-              //   commitFunction = changeTransportRange(data)
-              // } else {
-              //   // console.log(data,'newTransportRangeList')
-              //   commitFunction = newTransportRangeList(data)
-              // }
-              // commitFunction.then(res => {
-              //   console.log('res', res)
-              //   if (res.status === 200) {
-              //     this.$alert('操作成功', '提示', {
-              //       confirmButtonText: '确定',
-              //       callback: action => {
-              //         this.$router.push({name: '管理物流专线'})
-              //       }
-              //     })
-              //   } else {
-              //     this.$message({
-              //       type: 'info',
-              //       message: '操作失败，原因：' + res.errorInfo ? res.errorInfo : res.text
-              //     })
-              //   }
-              // }).catch(err => {
-              //   this.$message({
-              //     type: 'info',
-              //     message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
-              //   })
-              // })
+              // console.log(data,'changeTransportRange111')
+              if (this.ifShowRangeType === '1') {
+                this.$set(data, 'publishId', this.publishId)
+                commitFunction = changeTransportRange(data)
+              }
+              else {
+                console.log(data,'newTransportRangeList')
+                commitFunction = newTransportRangeList(data)
+              }
+              commitFunction.then(res => {
+                console.log('res', res)
+                if (res.status === 200) {
+                  this.$alert('操作成功', '提示', {
+                    confirmButtonText: '确定',
+                    callback: action => {
+                      this.$router.push({name: '管理物流专线'})
+                    }
+                  })
+                } else {
+                  this.$message({
+                    type: 'info',
+                    message: '操作失败，原因：' + res.errorInfo ? res.errorInfo : res.text
+                  })
+                }
+              }).catch(err => {
+                this.$message({
+                  type: 'info',
+                  message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                })
+              })
             } else {
               this.$message({
                 type: 'info',

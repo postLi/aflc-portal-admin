@@ -78,7 +78,7 @@
             <input class="nativeinput" :value="ruleForm.expectPrice"
                    @change="(e)=>{setInputVal(e.target.value,ruleForm, 'expectPrice')}" :maxlength="9" placeholder=""
                    auto-complete="off" clearable
-                   v-number-only:point1 type="text">元/车 （运价不填自动为面议）
+                   v-number-only:point1 type="text"> 元/车 （运价不填自动为面议）
             <!-- <el-input v-model="ruleForm.expectPrice"></el-input> -->
             <p style="color: red">填写运价，车源线路将排名优先，让车源线路更有竞争力！</p>
           </el-form-item>

@@ -26,7 +26,7 @@
         <el-form-item required label="车辆规格">
           <selectType v-model="ruleForm.carSpec" type="AF009" clearable size="mini"></selectType>
         </el-form-item>
-      <el-form-item class="carvinfo" required label="车长">
+      <el-form-item class="carvinfo" required label="车   长">
         长 <input class="nativeinput" :value="ruleForm.carLength" @change="(e)=>{setInputVal(e.target.value,ruleForm, 'carLength')}" :maxlength="4" placeholder="" auto-complete="off"  clearable
           v-number-only:point1 type="text">
           <!-- <el-input maxlength="5" v-numberOnly:point1 v-model="ruleForm.carLength"></el-input> -->
@@ -466,7 +466,7 @@ export default {
   }
   .carvinfo{
     .el-form-item__label{
-      width: 72px !important;
+      width: 78px !important;
     }
     .el-input,.nativeinput{
       width: 80px;
