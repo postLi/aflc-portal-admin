@@ -33,7 +33,13 @@ export function TransportRangeInfo(id){
       method: 'get',
     })
   }
-
+//根据Id获取物流专线
+export function getTransportRange(id){
+  return fetch.axios({
+    url: '/'+baseUrl+'/usercenter/aflcTransportRange/v1/findMemberAflcTransportRange/'+id,
+    method: 'get',
+  })
+}
 
 //根据id修改物流专线
 export function changeTransportRange(data){

@@ -4,7 +4,7 @@
       <h2><span>管理车源信息</span></h2>
     </div>
 
-    <SearchForm :orgid="otherinfo.orgid" :issender="true" @change="getSearchParam" :btnsize="btnsize" />  
+    <SearchForm :orgid="otherinfo.orgid" :issender="true" @change="getSearchParam" :btnsize="btnsize" />
     <div class="tab_info">
       <div class="btns_box">
          <el-button type="primary" size="mini"  @click="createNew">发布车源</el-button>
@@ -31,7 +31,7 @@
           </el-table-column>
           <el-table-column
             fixed
-            label="出发地 -> 到达地">
+            label="出发地 -> 到达地" width="400">
             <template slot-scope="scope">
               <span class="vipline" v-if="scope.row.isCommonRoute === '1'"></span>
               {{ scope.row.strartAddress + '->' + scope.row.endAddress }}
@@ -47,20 +47,20 @@
             width="120"
             label="车型">
           </el-table-column>
-          
+
           <el-table-column
             prop="carSourceTypeName"
             width="120"
             label="类型">
           </el-table-column>
-          <el-table-column
-            label="常跑线路"
-            >
-            <template slot-scope="scope">
-                <el-button size="mini" type="info" v-if="scope.row.isCommonRoute === '1'" @click="setRemote(scope.row.id, '0')">取消常跑</el-button>
-                <el-button size="mini" type="primary" v-if="scope.row.isCommonRoute === '0'" @click="setRemote(scope.row.id, '1')">设置常跑</el-button>
-            </template>
-          </el-table-column>
+          <!--<el-table-column-->
+            <!--label="常跑线路"-->
+            <!--&gt;-->
+            <!--<template slot-scope="scope">-->
+                <!--<el-button size="mini" type="info" v-if="scope.row.isCommonRoute === '1'" @click="setRemote(scope.row.id, '0')">取消常跑</el-button>-->
+                <!--<el-button size="mini" type="primary" v-if="scope.row.isCommonRoute === '0'" @click="setRemote(scope.row.id, '1')">设置常跑</el-button>-->
+            <!--</template>-->
+          <!--</el-table-column>-->
           <el-table-column
             prop="createrName"
             width="120"
@@ -75,19 +75,23 @@
             </template>
           </el-table-column>
           <el-table-column
-            width="230"
+            width="330"
             label="操作">
             <template slot-scope="scope">
                 <el-button size="mini" type="primary" @click="changeItem(scope.row.id)">修改</el-button>
                 <el-button size="mini" type="danger" @click="deleteItem(scope.row.id)">删除</el-button>
                 <el-button size="mini" type="primary" v-if="scope.row.isEnable === '0'" @click="enableItem(scope.row.id,'1')">启用</el-button>
                 <el-button size="mini" type="info" v-if="scope.row.isEnable === '1'" @click="enableItem(scope.row.id,'0')">禁用</el-button>
-                  {{ scope.row.contractEndtime | parseTime('{y}{m}{d}') }}
+
+              <el-button size="mini" type="info" v-if="scope.row.isCommonRoute === '1'" @click="setRemote(scope.row.id, '0')">取消常跑</el-button>
+              <el-button size="mini" type="primary" v-if="scope.row.isCommonRoute === '0'" @click="setRemote(scope.row.id, '1')">设置常跑</el-button>
+
             </template>
+            <!--{{ scope.row.contractEndtime | parseTime('{y}{m}{d}') }}-->
           </el-table-column>
         </el-table>
       </div>
-      <div class="info_tab_footer">共计:{{ total }} <div class="show_pager"> <Pager :sizes="sizes" :total="total" @change="handlePageChange" /></div> </div>    
+      <div class="info_tab_footer">共计:{{ total }} <div class="show_pager"> <Pager :sizes="sizes" :total="total" @change="handlePageChange" /></div> </div>
     </div>
   </div>
 </template>
@@ -335,7 +339,7 @@ export default {
         .info_tab{
             width: 100%;
             height: 600px;
-            
+
 
 
           .cell{

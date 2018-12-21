@@ -166,7 +166,7 @@
         let isApihttp = '/huoyuan/'
         let isApiDate = '2018/0508'
         let isApinum = '/2'
-        console.log(row,'spacialLine');
+        // console.log(row,'spacialLine');
         if (window.location.host.indexOf('192.168.1') !== -1) {
           // console.log(window.location.host);
           // console.log(window.location.host.indexOf('192.168.1.157:89'))
@@ -311,7 +311,6 @@
         this.fetchAllCollList()
       },
       handlePageChange(obj) {
-
         this.searchQuery.currentPage = obj.pageNum
         this.searchQuery.pageSize = obj.pageSize
         this.fetchAllCollList()

@@ -32,19 +32,19 @@
           <el-table-column prop="consignor" label="操作" width="400">
             <template slot-scope="scope">
               <el-button type="warning" size="small" plain @click="handleEdit(scope.$index, scope.row,'check')">查看详情</el-button>
-              <el-button  v-if="scope.row.paymentState === 0" type="primary" size="small" plain @click="handleEdit(scope.$index, scope.row,'amend')"  
+              <el-button  v-if="scope.row.paymentState === 0" type="primary" size="small" plain @click="handleEdit(scope.$index, scope.row,'amend')"
               >修改</el-button>
-              <el-button type="danger" size="small" plain @click="handleEdit(scope.$index, scope.row,'delete')">删除</el-button> 
-              <!-- <el-button type="primary" size="small" plain @click="handleEdit(scope.$index, scope.row,'payment')"  
+              <el-button type="danger" size="small" plain @click="handleEdit(scope.$index, scope.row,'delete')">删除</el-button>
+              <!-- <el-button type="primary" size="small" plain @click="handleEdit(scope.$index, scope.row,'payment')"
               v-if="/(unpaid)/.test(listtype)">{{scope.row.paymentState === 0 ? '支付' : '已支付'}}</el-button> -->
-              <el-button  v-if="scope.row.paymentState === 0" type="primary" size="small" plain @click="handleEdit(scope.$index, scope.row,'payment')"  
+              <el-button  v-if="scope.row.paymentState === 0" type="primary" size="small" plain @click="handleEdit(scope.$index, scope.row,'payment')"
               >支付</el-button>
             </template>
           </el-table-column>
 
         </el-table>
       </div>
-     
+
       <div class="info_tab_footer">共计:{{ total }}
         <div class="show_pager">
           <Pager :total="total"  @change="handlePageChange"/>

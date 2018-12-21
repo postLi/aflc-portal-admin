@@ -87,5 +87,9 @@ export default {
     {
       path: '/carrier/collection', icon: 'col', name: '我的收藏', component: _import('carrier/collection/index'), meta: { role: ['admin'], title: '我的收藏', istab: true, noCache: false }
     },
+
+    {
+      path: '/cargoInfo/insure', icon: 'insure', name: '我的投保单', component: _import('carrier/cargoInfo/insure/index'), meta: { role: ['admin'], title: '我的投保单', noCache: false }
+    }
   ]
 }
