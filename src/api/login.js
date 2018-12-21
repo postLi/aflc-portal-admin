@@ -33,16 +33,24 @@ export function login(username, password, orgid) {
 }
 
 export function getInfo(mobile, memberType) {
+  let pro
   if (memberType === 'AF00102') {
     // 车主
-    return getDriverInfo(mobile)
+    pro = getDriverInfo(mobile)
   } else if (memberType === 'AF00101') {
     // 货主
-    return getShipperInfo(mobile)
+    pro = getShipperInfo(mobile)
   } else {
     // 物流公司
-    return getLogisticsCompanyInfo(mobile)
+    pro = getLogisticsCompanyInfo(mobile)
   }
+  return pro.then(res => {
+    const data = res.data
+    if (data) {
+      data.id = data.id || data.shipperId || data.driverId
+    }
+    return res
+  })
   return fetch.get('/aflc-common/common/aflcMemberCenter/v1/getUserInfo', {
     params: {
       mobile,
