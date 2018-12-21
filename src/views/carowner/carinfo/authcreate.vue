@@ -271,7 +271,7 @@ export default {
       }
     },
     ifProvice(type) {
-      console.log('ifProvice', type)
+      // console.log('ifProvice', type)
       this.$message({
         type: 'info',
         message: '至少选择到市级范围'
@@ -291,7 +291,7 @@ export default {
           this.ruleForm[i] = data[i]
         }
         var labels = data.carTag.split('|')
-        console.log(labels, this.labelArr)
+        // console.log(labels, this.labelArr)
         this.labelArr = this.labelArr.map(el => {
           if (labels.indexOf(el.code) !== -1) {
             el.ischeck = true

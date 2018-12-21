@@ -1,5 +1,5 @@
 <template>
-    <div class="newPointNetwork identification">
+    <div class="newPointNetwork identification lll-newpoint">
         <el-form :model="logisticsForm" :rules="rules" ref="ruleForm" label-width="250px" class="demo-ruleForm">
             <div class="carrierTitle">
                 <div class="realname">
@@ -16,7 +16,7 @@
                         <p slot="append">请填写网点名称</p>
                     </el-input>
                 </el-form-item>
-                <el-form-item label="网点地址：" prop="address"> 
+                <el-form-item label="网点地址：" prop="address">
                     <el-input @focus="()=>{showMap('strartAddress')}" v-model="logisticsForm.address" :disabled="unable"></el-input>
                 </el-form-item>
                 <el-form-item label="所属园区：" maxlength="18"  prop="parkName">
@@ -58,7 +58,7 @@
          <!-- <Add></Add> -->
     </div>
 
-    
+
 </template>
 
 <script>
@@ -268,4 +268,10 @@ export default {
         line-height: 28px;
         width: 25%;
     }
+  .lll-newpoint{
+    .companyInformation{
+      padding: 18px 20px 0 !important;
+      margin: 0 20px 10px 20px !important;
+    }
+  }
 </style>

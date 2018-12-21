@@ -3,7 +3,7 @@
     <div class="navbar-wrapper">
         <navbar></navbar>
     </div>
-    
+
     <div class="main-container">
       <div class="sidebar-wrapper">
         <sidebar></sidebar>
@@ -112,7 +112,7 @@ export default {
         height: 100%;
         &.hideSidebar {
             .main-container {
-                
+
             }
             .sidebar-wrapper{
                 width: $hideSidebarWidth;
@@ -134,13 +134,22 @@ export default {
             }
         }
         .sidebar-wrapper {
-            width: $sidebarWidth;
+          width: 168px;
+          position: fixed;
+          height: 100%;
+          padding-top: 50px;
+          bottom: 0;
+          left: 0;
+          z-index: 1001;
+          transition: all .1s ease-out;
+          box-sizing: border-box;
+            /*width: $sidebarWidth;
             float: left;
             bottom: 0;
             left: 0;
             z-index: 1001;
             transition: all .1s ease-out;
-            box-sizing: border-box;
+            box-sizing: border-box;*/
         }
         .sidebar-container {
             transition: all .1s ease-out;
@@ -158,17 +167,37 @@ export default {
             min-height: 100%;
         }
         .main-container-wrap{
+
+          height: 100%;
+          transition: all .1s ease-out;
+          margin-left: 168px;
+          box-sizing: border-box;
+          padding-top: 55px;
+          position: relative;
+
+
+
             float: left;
             flex: 1;
             overflow: auto;
         }
         .navbar-wrapper{
-            width: 100%;
+          position: fixed;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 50px;
+          line-height: 50px;
+          border-radius: 0!important;
+          background: #373d41;
+          z-index: 1009;
+          min-width: 1180px;
+            /*width: 100%;
             height: $topNavHeight;
             line-height: $topNavHeight;
             border-radius: 0px !important;
             background: rgb(0,32,57);
-            min-width: 1200px;
+            min-width: 1200px;*/
         }
     }
 </style>

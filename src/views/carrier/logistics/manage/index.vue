@@ -415,5 +415,11 @@
       }
 
     }
+    .el-table{
+      .el-table__body-wrapper {
+        max-height: 500px !important;
+        min-height: 500px !important;
+      }
+    }
   }
 </style>

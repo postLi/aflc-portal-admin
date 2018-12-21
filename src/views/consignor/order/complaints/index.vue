@@ -1,5 +1,5 @@
 <template>
-    <div class="Complaint identification">
+    <div class="Complaint identification lll-complaints">
         <el-form :model="logisticsForm" ref="ruleForm" label-width="110px" class="demo-ruleForm">
             <div class="carrierTitle">
                 <div class="realname">
@@ -78,11 +78,11 @@
                         </el-table-column>
                         <el-table-column
                             prop="complainStatusName"
-                            label="投诉状态" 
+                            label="投诉状态"
                             width="200">
                         </el-table-column>
-                        <el-table-column 
-                            
+                        <el-table-column
+
                             prop="address"
                             label="操作"
                             >
@@ -94,8 +94,8 @@
                         </el-table-column>
                     </el-table>
                 </div>
-            </div>  
-            <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>    
+            </div>
+            <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>
         </el-form>
     </div>
 </template>
@@ -148,7 +148,7 @@ export default {
     },
     mounted(){
         this.firstblood();
-    },  
+    },
     methods: {
         handlePageChange(obj) {
             this.page = obj.pageNum
@@ -187,14 +187,22 @@ export default {
             console.log(row);
             this.$router.push({name: '投诉详情',query:{ orderSerial:row.orderSerial}});
         },
-        
+
     },
-  
+
 }
 </script>
 
 <style type="text/css" lang="scss">
     .Complaint{
-        
+
     }
+  .lll-complaints{
+    .el-table {
+      .el-table__body-wrapper {
+        max-height: 600px !important;
+        min-height: 600px !important;
+      }
+    }
+  }
 </style>

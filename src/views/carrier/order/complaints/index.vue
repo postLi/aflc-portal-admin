@@ -1,5 +1,5 @@
 <template>
-    <div class="Complaint identification">
+    <div class="Complaint identification lll-complaints">
         <el-form :model="logisticsForm" ref="ruleForm" label-width="110px" class="demo-ruleForm">
             <div class="carrierTitle">
                 <div class="realname">
@@ -193,5 +193,13 @@ export default {
 <style type="text/css" lang="scss">
     .Complaint{
 
+    }
+    .lll-complaints{
+      .el-table {
+        .el-table__body-wrapper {
+          max-height: 600px !important;
+          min-height: 600px !important;
+        }
+      }
     }
 </style>

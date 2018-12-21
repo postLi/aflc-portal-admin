@@ -732,11 +732,11 @@
                 commitFunction = changeTransportRange(data)
               }
               else {
-                console.log(data,'newTransportRangeList')
+                // console.log(data,'newTransportRangeList')
                 commitFunction = newTransportRangeList(data)
               }
               commitFunction.then(res => {
-                console.log('res', res)
+                // console.log('res', res)
                 if (res.status === 200) {
                   this.$alert('操作成功', '提示', {
                     confirmButtonText: '确定',

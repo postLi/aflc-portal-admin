@@ -223,5 +223,11 @@ export default {
         .el-form{
 
         }
+      .el-table{
+        .el-table__body-wrapper {
+          max-height: 600px !important;
+          min-height: 600px !important;
+        }
+      }
     }
 </style>

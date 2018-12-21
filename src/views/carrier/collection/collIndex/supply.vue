@@ -287,21 +287,21 @@
       },
       userTypeFn(item) {
 
-        this.$set(item, 'userId', this.otherinfo.id)
+
         switch (getOrgId()) {
           case 'aflc-1':
             this.$set(item, 'userType', 2)
-
-            console.log(item,'itemitemitemitem',this.otherinfo.driverId);
+            this.$set(item, 'userId', this.otherinfo.driverId)
+            // console.log(item,'itemitemitemitem',this.otherinfo.driverId);
             break
           case 'aflc-2':
             this.$set(item, 'userType', 3)
-            this.$set(item, 'userId', this.otherinfo.driverId)
-            console.log(item,'itemitemitemitem',this.otherinfo.driverId);
+            this.$set(item, 'userId', this.otherinfo.shipperId)
+            // console.log(item,'itemitemitemitem',this.otherinfo.driverId);
             break
           case 'aflc-5':
             this.$set(item, 'userType', 1)
-            console.log(item,'itemitemitemitem',this.otherinfo.driverId);
+            this.$set(item, 'userId', this.otherinfo.id)
             break
         }
       },
