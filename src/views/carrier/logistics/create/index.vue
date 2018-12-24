@@ -736,7 +736,7 @@
                 // console.log(data,'newTransportRangeList')
                 commitFunction = newTransportRangeList(data)
               }
-              alert('')
+              // alert('')
               commitFunction.then(res => {
                 // console.log('res', res)
                 if (res.status === 200) {

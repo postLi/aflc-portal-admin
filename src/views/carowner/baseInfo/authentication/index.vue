@@ -171,9 +171,13 @@ export default {
   },
   methods: {
     getMoreInformation() {
-      const res = getUserInfo()
-      getDriverInfoByMobile(res.mobile).then(res => {
-               console.log(res,'resres',getUserInfo().mobile)
+
+      // console.log(localStorage.getItem('lastloginUsername').substring(0,11),'lastloginUsername');
+      // const res = getUserInfo()
+      const res = localStorage.getItem('lastloginUsername').substring(0,11)
+      // console.log(res,'resres',res.mobile)
+      getDriverInfoByMobile(res).then(res => {
+               // console.log(res,'resres',res.mobile)
         this.logisticsForm = res.data
         this.loading = false
       })

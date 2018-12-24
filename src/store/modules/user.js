@@ -155,6 +155,7 @@ const user = {
     GetInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
         const param = getLogin()
+        console.log(getLogin(),'getLogin()getLogin()getLogin()getLogin()getLogin()getLogin()')
         getInfo(param.mobile, param.memberType).then(response => {
           const data = response.data
           // data.rolesIdList = data.rolesId.split(',')
@@ -168,6 +169,7 @@ const user = {
           commit('SET_AVATAR', require('../../assets/role.png'))
           commit('SET_OTHERINFO', data)
           setUserInfo(data)
+          console.log(data,'dataaaaaaaaaaaaaaaaaaaaa')
           resolve({ data })
         }).catch(error => {
           reject(error)
