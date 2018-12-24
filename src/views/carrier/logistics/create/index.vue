@@ -660,6 +660,7 @@
       },
       // 提交按钮
       submitForm(formName) {
+
         console.log(this.ruleForm)
         let ifNull = true
         let messageInfo
@@ -735,6 +736,7 @@
                 // console.log(data,'newTransportRangeList')
                 commitFunction = newTransportRangeList(data)
               }
+              alert('')
               commitFunction.then(res => {
                 // console.log('res', res)
                 if (res.status === 200) {

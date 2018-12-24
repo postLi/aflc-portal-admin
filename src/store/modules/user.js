@@ -90,8 +90,9 @@ const user = {
           // setOrgId(data.orgid)
           commit('SET_AVATAR', require('../../assets/role.png'))
           commit('SET_OTHERINFO', data)
+
           setUserInfo(data)
-          console.log('step2222')
+          console.log(data,'step2222setUserInfosetUserInfosetUserInfo')
 
           resolve({ data })
         }).catch(err => {

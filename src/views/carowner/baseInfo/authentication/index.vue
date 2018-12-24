@@ -173,7 +173,7 @@ export default {
     getMoreInformation() {
       const res = getUserInfo()
       getDriverInfoByMobile(res.mobile).then(res => {
-            //    console.log(res)
+               console.log(res,'resres',getUserInfo().mobile)
         this.logisticsForm = res.data
         this.loading = false
       })

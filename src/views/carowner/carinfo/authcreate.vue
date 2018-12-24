@@ -40,7 +40,7 @@
 
       <el-form-item required label="车辆载重">
         <div class="el-input-group">
-            <input class="nativeinput"  :value="ruleForm.carLoad"  @change="(e)=>{setInputVal(e.target.value,ruleForm, 'carLoad')}" :maxlength="5" v-numberOnly:point1 placeholder="" auto-complete="off"  clearable
+            <input class="nativeinput"  :value="ruleForm.carLoad"  @change="(e)=>{setInputVal(e.target.value,ruleForm, 'carLoad')}" :maxlength="3" v-numberOnly:point1 placeholder="" auto-complete="off"  clearable
                       type="text" />
             <div class="el-input-group__append">（吨）</div>
           </div>
@@ -243,6 +243,7 @@ export default {
     setInputVal(val, item, name) {
     //   this.$set(this.form.tmsOrderCargoList, name, val)
       this.$set(item, name, val)
+      console.log(item, name, val,'item, name, val')
     },
     getValue(obj) {
       return obj ? obj.value : ''
@@ -384,14 +385,14 @@ export default {
         this.$message.error('请选择车源类型。')
         return false
       }
-      if (!data.strartAddress) {
-        this.$message.error('请填写车辆出发地。')
-        return false
-      }
-      if (!data.endAddress) {
-        this.$message.error('请填写车辆到达地。')
-        return false
-      }
+      // if (!data.strartAddress) {
+      //   this.$message.error('请填写车辆出发地。')
+      //   return false
+      // }
+      // if (!data.endAddress) {
+      //   this.$message.error('请填写车辆到达地。')
+      //   return false
+      // }
       if (!data.carFile) {
         this.$message.error('请上传车辆45°照片。')
         return false
