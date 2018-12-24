@@ -78,7 +78,7 @@ export default {
     getOrgid(id) {
     },
     onSubmit() {
-      alert()
+      // alert()
       this.$emit('change', this.searchForm)
     },
     clearForm() {
