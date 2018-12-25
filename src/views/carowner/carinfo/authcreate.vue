@@ -130,8 +130,8 @@
       </el-form-item>
 </div>
 <div class="car-submit">
-  <el-button type="info" @click="resetForm">重置</el-button>
-  <el-button class="create-carinfo-btn" type="primary" @click="submitForm('ruleForm')">立即发布</el-button>
+  <!--<el-button type="info" @click="resetForm">重置</el-button>-->
+  <el-button class="create-carinfo-btn" type="primary" @click="submitForm('ruleForm')">确认提交</el-button>
 </div>
 
 
@@ -381,10 +381,10 @@ export default {
         this.$message.error('请填写车辆常驻地。')
         return false
       }
-      if (!data.carSourceType) {
-        this.$message.error('请选择车源类型。')
-        return false
-      }
+      // if (!data.carSourceType) {
+      //   this.$message.error('请选择车源类型。')
+      //   return false
+      // }
       // if (!data.strartAddress) {
       //   this.$message.error('请填写车辆出发地。')
       //   return false
@@ -411,23 +411,72 @@ export default {
           data.carTag = this.labelArr.filter(el => el.ischeck).map(el => el.code).join('|')
           data.carTagName = this.labelArr.filter(el => el.ischeck).map(el => el.name).join('|')
           let promiseObj
+          // const h = this.$createElement;
+          // this.$msgbox({
+          //   title: '提示',
+          //   message: h('div', { style:"text-align:center" }, [
+          //     h('span',  { style:"fontSize:15px" }, '提交成功 '),
+          //     h('p', { style: 'color: #ccc' }, '您可以前往车源列表开启或发布车源信息，'),
+          //     h('p', { style: 'color: #ccc' }, '让货主看到主动找上门啦')
+          //   ]),
+          //   confirmButtonText: '立即前往',
+          //   beforeClose: (action, instance, done) => {
+          //     if (action === 'confirm') {
+          //       this.eventBus.$emit('replaceCurrentView', '/carinfo/create')
+          //       done();
+          //     } else {
+          //       done();
+          //     }
+          //   }
+          // }).then(action => {
+          //   this.$message({
+          //     type: 'info',
+          //     message: 'action: ' + action
+          //   });
+          // });
           // 判断操作，调用对应的函数
           if (this.isModify) {
             data.id = this.id
-            promiseObj = ReqApi.putChangeCarInfo(data)
+            // promiseObj = ReqApi.putChangeCarInfo(data)
           } else {
             promiseObj = ReqApi.postCarInfo(data)
           }
 
           promiseObj.then(res => {
+            console.log(res,'resresresresresres');
             this.loading = false
-            this.$alert('操作成功', '提示', {
-              confirmButtonText: '确定',
-              callback: action => {
-                this.$emit('success')
-                this.eventBus.$emit('replaceCurrentView', '/carinfo/manage')
+            const h = this.$createElement;
+            this.$msgbox({
+              title: '提示',
+              message: h('div', { style:"text-align:center" }, [
+                h('span',  { style:"fontSize:15px" }, '提交成功 '),
+                h('p', { style: 'color: #ccc' }, '您可以前往车源列表开启或发布车源信息，'),
+                h('p', { style: 'color: #ccc' }, '让货主看到主动找上门啦')
+              ]),
+              confirmButtonText: '立即前往',
+              beforeClose: (action, instance, done) => {
+                if (action === 'confirm') {
+                  this.eventBus.$emit('replaceCurrentView', '/carinfo/manage')
+                  done();
+                } else {
+                  done();
+                }
               }
             })
+            //   .then(action => {
+            //   this.$message({
+            //     type: 'info',
+            //     message: 'action: ' + action
+            //   });
+            // });'
+
+            // this.$alert('操作成功', '提示', {
+            //   confirmButtonText: '确定',
+            //   callback: action => {
+            //     this.$emit('success')
+            //     this.eventBus.$emit('replaceCurrentView', '/carinfo/manage')
+            //   }
+            // })
           }).catch(err => {
             this.loading = false
           })

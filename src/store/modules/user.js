@@ -60,9 +60,9 @@ const user = {
       return new Promise((resolve, reject) => {
         setToken(tokenObject.access_token)
         commit('SET_TOKEN', tokenObject.access_token)
-        console.log('step0000', tokenObject)
+        // console.log('step0000', tokenObject)
         getAccessInfo().then(data => {
-          console.log('step1111')
+          // console.log('step1111')
           const mapObj = {
             'aflc-1': 'AF00102',
             'aflc-2': 'AF00101',
@@ -92,13 +92,13 @@ const user = {
           commit('SET_OTHERINFO', data)
 
           setUserInfo(data)
-          console.log(data,'step2222setUserInfosetUserInfosetUserInfo')
+          // console.log(data,'step2222setUserInfosetUserInfosetUserInfo')
 
           resolve({ data })
         }).catch(err => {
           reject(err)
         })
-        console.log('feLogin:', tokenObject)
+        // console.log('feLogin:', tokenObject)
         /*
         const userInfo = {
           'accNum': tokenObject.login_type,
@@ -128,7 +128,7 @@ const user = {
      */
     FeLogin({ commit }, tokenObject) {
       return new Promise((resolve, reject) => {
-        console.log('feLogin:', tokenObject)
+        // console.log('feLogin:', tokenObject)
         const mapObj = {
           'aflc-1': 'AF00102',
           'aflc-2': 'AF00101',
@@ -155,7 +155,7 @@ const user = {
     GetInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
         const param = getLogin()
-        console.log(getLogin(),'getLogin()getLogin()getLogin()getLogin()getLogin()getLogin()')
+        // console.log(getLogin(),'getLogin()getLogin()getLogin()getLogin()getLogin()getLogin()')
         getInfo(param.mobile, param.memberType).then(response => {
           const data = response.data
           // data.rolesIdList = data.rolesId.split(',')
@@ -169,7 +169,7 @@ const user = {
           commit('SET_AVATAR', require('../../assets/role.png'))
           commit('SET_OTHERINFO', data)
           setUserInfo(data)
-          console.log(data,'dataaaaaaaaaaaaaaaaaaaaa')
+          // console.log(data,'dataaaaaaaaaaaaaaaaaaaaa')
           resolve({ data })
         }).catch(error => {
           reject(error)

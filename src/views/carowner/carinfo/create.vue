@@ -133,7 +133,7 @@
       <!--</el-form-item>-->
       <!--</div>-->
       <div class="car-submit">
-        <el-button type="info" @click="resetForm">重置</el-button>
+        <!--<el-button type="info" @click="resetForm">重置</el-button>-->
         <el-button class="create-carinfo-btn" type="primary" @click="submitForm('ruleForm')">立即发布</el-button>
       </div>
 
@@ -274,7 +274,7 @@
         }
       },
       ifProvice(type) {
-        alert('')
+        // alert('')
         console.log('ifProvice', type)
         this.$message({
           type: 'info',
@@ -356,38 +356,38 @@
       },
       // 检测必填项
       checkValue(data) {
-        if (!data.carNum) {
-          this.$message.error('请填写车牌号。')
-          return false
-        }
-        if (!data.carType) {
-          this.$message.error('请选择车辆类型。')
-          return false
-        }
-        if (!data.carLength) {
-          this.$message.error('请填写车辆长度。')
-          return false
-        }
-        if (!data.carWidth) {
-          this.$message.error('请填写车辆宽度。')
-          return false
-        }
-        if (!data.carHeight) {
-          this.$message.error('请填写车辆高度。')
-          return false
-        }
-        if (!data.carLoad) {
-          this.$message.error('请填写车辆载重。')
-          return false
-        }
-        if (!data.usualPlace) {
-          this.$message.error('请填写车辆常驻地。')
-          return false
-        }
-        if (!data.carSourceType) {
-          this.$message.error('请选择车源类型。')
-          return false
-        }
+        // if (!data.carNum) {
+        //   this.$message.error('请填写车牌号。')
+        //   return false
+        // }
+        // if (!data.carType) {
+        //   this.$message.error('请选择车辆类型。')
+        //   return false
+        // }
+        // if (!data.carLength) {
+        //   this.$message.error('请填写车辆长度。')
+        //   return false
+        // }
+        // if (!data.carWidth) {
+        //   this.$message.error('请填写车辆宽度。')
+        //   return false
+        // }
+        // if (!data.carHeight) {
+        //   this.$message.error('请填写车辆高度。')
+        //   return false
+        // }
+        // if (!data.carLoad) {
+        //   this.$message.error('请填写车辆载重。')
+        //   return false
+        // }
+        // if (!data.usualPlace) {
+        //   this.$message.error('请填写车辆常驻地。')
+        //   return false
+        // }
+        // if (!data.carSourceType) {
+        //   this.$message.error('请选择车源类型。')
+        //   return false
+        // }
         if (!data.strartAddress) {
           this.$message.error('请填写车辆出发地。')
           return false
@@ -396,8 +396,8 @@
           this.$message.error('请填写车辆到达地。')
           return false
         }
-        if (!data.carFile) {
-          this.$message.error('请上传车辆45°照片。')
+        if (!data.startTime) {
+          this.$message.error('请选择发车时间。')
           return false
         }
         return true
@@ -414,23 +414,49 @@
             data.carTag = this.labelArr.filter(el => el.ischeck).map(el => el.code).join('|')
             data.carTagName = this.labelArr.filter(el => el.ischeck).map(el => el.name).join('|')
             let promiseObj
+
             // 判断操作，调用对应的函数
             if (this.isModify) {
               data.id = this.id
               promiseObj = ReqApi.putChangeCarInfo(data)
             } else {
-              promiseObj = ReqApi.postCarInfo(data)
+              promiseObj = ReqApi.postAddCarInfo(data)
             }
 
             promiseObj.then(res => {
               this.loading = false
-              this.$alert('操作成功', '提示', {
-                confirmButtonText: '确定',
-                callback: action => {
-                  this.$emit('success')
-                  this.eventBus.$emit('replaceCurrentView', '/carinfo/manage')
-                }
-              })
+              // this.$alert('操作成功', '提示', {
+              //   confirmButtonText: '确定',
+              //   callback: action => {
+              //     this.$emit('success')
+              //     this.eventBus.$emit('replaceCurrentView', '/carinfo/manage')
+              //   }
+              // })
+             if(res.text=='发布成功，请完善司机车辆信息！'){
+               const h = this.$createElement;
+               this.$msgbox({
+                 title: '提示',
+                 message: h('div', { style:"text-align:center" }, [
+                   h('span',  { style:"fontSize:15px" }, '发布成功 '),
+                   h('p', { style: 'color: #ccc' }, '您还没有任何车辆信息！'),
+                   h('p', { style: 'color: #ccc' }, '完善车辆信息客户才能看到您发布的内容哦')
+                 ]),
+                 confirmButtonText: '立即完善',
+                 beforeClose: (action, instance, done) => {
+                   if (action === 'confirm') {
+                     this.eventBus.$emit('replaceCurrentView', '/carinfo/authcreate')
+                     done();
+                   } else {
+                     this.eventBus.$emit('replaceCurrentView', '/carinfo/manage')
+                     done();
+                   }
+                 }
+               })
+             }else{
+               this.eventBus.$emit('replaceCurrentView', '/carinfo/manage')
+               done();
+             }
+
             }).catch(err => {
               this.loading = false
             })

@@ -40,12 +40,15 @@
             label="到达地">
           </el-table-column>
           <el-table-column
-            prop="endAddress"
+            prop="startTime"
             width="200"
             label="发车时间">
+            <template slot-scope="scope">
+              {{ scope.row.startTime | parseTime }}
+            </template>
           </el-table-column>
           <el-table-column
-            prop="endAddress"
+            prop="expectPrice"
             width="200"
             label="期望运价">
           </el-table-column>
@@ -55,9 +58,12 @@
             label="车源类型">
           </el-table-column>
           <el-table-column
-            prop="endAddress"
+            prop="isLongCar"
             width="160"
             label="即时/长期">
+            <template slot-scope="scope">
+              {{scope.row.isLongCar=="0"?'长期车源':'即时车源'}}
+            </template>
           </el-table-column>
           <!--<el-table-column-->
             <!--fixed-->
