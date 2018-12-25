@@ -18,7 +18,7 @@
       <!--<div class="tab-info-stitle"><strong>11基本信息：</strong>(<span class="important">带*为必填项</span>)</div>-->
       <div class="car-base-info clearfix">
       <el-form-item required  label="车牌号">
-        <el-input maxlength="15" v-model="ruleForm.carNum"></el-input>
+        <el-input maxlength="15" v-model="ruleForm.carNumber"></el-input>
       </el-form-item>
       <el-form-item required label="车辆类型">
         <selectType v-model="ruleForm.carType" type="AF018" clearable size="mini"></selectType>
@@ -160,6 +160,7 @@ export default {
         this.initModify()
       } else {
         this.initNew()
+        this.getDetails()
       }
     })
   },
@@ -180,7 +181,8 @@ export default {
         'carHeight': '', // 车高
         'carLength': '', // 车长
         'carLoad': '', // 车载重
-        'carNum': '', // 车牌号
+        'carNumber': '', // 车牌号
+        // 'carNum': '', // 车牌号
         'carSourceType': '', // 车源类型  "AF01801","回程车" "AF01802","本地车"
         'carSpec': '', // 车辆规格
         'carTag': '', // 车辆标签属性（用|分割）
@@ -240,10 +242,31 @@ export default {
     }
   },
   methods: {
+    getDetails(){
+      return ReqApi.postGetCarInfo().then(res=>{
+        // console.log(res.data,'postGetCarInfo')
+        this.comDetail(res.data)
+      })
+    },
+    comDetail(item){
+      this.$set(this.ruleForm,'carFile',item.carFile)
+      this.$set(this.ruleForm,'carHeight',item.carHeight)
+      this.$set(this.ruleForm,'carLength',item.carLength)
+      this.$set(this.ruleForm,'carWidth',item.carWidth)
+      this.$set(this.ruleForm,'carLoad',item.carLoad)
+      this.$set(this.ruleForm,'carNumber',item.carNumber)
+      // this.$set(this.ruleForm,'carSourceType',item.carSourceType)
+      this.$set(this.ruleForm,'carSpec',item.carSpec)
+      this.$set(this.ruleForm,'carType',item.carType)
+      this.$set(this.ruleForm,'carVolume',item.carVolume)
+      this.$set(this.ruleForm,'usualPlace',item.usualPlace)
+      this.$set(this.ruleForm,'usualPlaceCoordinate',item.usualPlaceCoordinate)
+
+    },
     setInputVal(val, item, name) {
     //   this.$set(this.form.tmsOrderCargoList, name, val)
       this.$set(item, name, val)
-      console.log(item, name, val,'item, name, val')
+      // console.log(item, name, val,'item, name, val')
     },
     getValue(obj) {
       return obj ? obj.value : ''
@@ -353,7 +376,7 @@ export default {
     },
     // 检测必填项
     checkValue(data) {
-      if (!data.carNum) {
+      if (!data.carNumber) {
         this.$message.error('请填写车牌号。')
         return false
       }

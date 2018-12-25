@@ -78,7 +78,7 @@
             <input class="nativeinput" :value="ruleForm.expectPrice"
                    @change="(e)=>{setInputVal(e.target.value,ruleForm, 'expectPrice')}" :maxlength="9" placeholder=""
                    auto-complete="off" clearable
-                   v-number-only:point1 type="text"> 元/车 （运价不填自动为面议）
+                   v-number-only:point1 type="text">&nbsp;&nbsp;元/车 （运价不填自动为面议）
             <!-- <el-input v-model="ruleForm.expectPrice"></el-input> -->
             <p style="color: red">填写运价，车源线路将排名优先，让车源线路更有竞争力！</p>
           </el-form-item>
@@ -163,6 +163,7 @@
           this.initModify()
         } else {
           this.initNew()
+
         }
       })
     },
@@ -183,7 +184,7 @@
           'carHeight': '', // 车高
           'carLength': '', // 车长
           'carLoad': '', // 车载重
-          'carNum': '', // 车牌号
+          'carNumber': '', // 车牌号
           'carSourceType': '', // 车源类型  "AF01801","回程车" "AF01802","本地车"
           'carSpec': '', // 车辆规格
           'carTag': '', // 车辆标签属性（用|分割）
@@ -295,7 +296,7 @@
             this.ruleForm[i] = data[i]
           }
           var labels = data.carTag.split('|')
-          console.log(labels, this.labelArr)
+          // console.log(labels, this.labelArr)
           this.labelArr = this.labelArr.map(el => {
             if (labels.indexOf(el.code) !== -1) {
               el.ischeck = true
@@ -402,6 +403,7 @@
         }
         return true
       },
+
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
@@ -432,7 +434,7 @@
               //     this.eventBus.$emit('replaceCurrentView', '/carinfo/manage')
               //   }
               // })
-             if(res.text=='发布成功，请完善司机车辆信息！'){
+             if(res.text=='发布成功，请完善司机车辆信息！'||res.text=='更新成功，请完善司机车辆信息！'){
                const h = this.$createElement;
                this.$msgbox({
                  title: '提示',
@@ -571,6 +573,9 @@
           opacity: 1;
           background: #498fe1;
           color: #fff;
+        }
+        &:hover{
+          color: #cce;
         }
       }
     }

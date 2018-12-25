@@ -55,13 +55,13 @@ export function getCarInfo(id) {
 export function postCarInfo(data) {
   // /usercenter/aflcDriver/v1/completeCarInfo
   // 完善车主车辆信息
-  return fetch.post('/aflcusercenterservice-chazz/usercenter/aflcDriver/v1/completeCarInfo', data)
+  return fetch.post('/aflcusercenterservice/usercenter/aflcDriver/v1/completeCarInfo', data)
   // return fetch.post('/aflc-uc/usercenter/aflcCarInfo/v1/add', data)
 }
 export function postAddCarInfo(data) {
   // /usercenter/aflcCarInfo/v1/addCarInfo
   // 新增车源信息
-  return fetch.post('/aflcusercenterservice-chazz/usercenter/aflcCarInfo/v1/addCarInfo', data)
+  return fetch.post('/aflcusercenterservice/usercenter/aflcCarInfo/v1/addCarInfo', data)
 }
 /**
  * 删除car
@@ -165,11 +165,15 @@ export function getCarList(data) {
   "viaAddressName": "string"
 }
  */
+// 获取车主车辆信息
+export function postGetCarInfo() {
+  return fetch.post('/aflcusercenterservice/usercenter/aflcDriver/v1/getCarInfo')
+}
+
 
 // aflcusercenterservice-chazz
 export function putChangeCarInfo(data) {
-  return fetch.put('/aflcusercenterservice-chazz/usercenter/aflcCarInfo/v1/updateCarInfo', data)
-  // return fetch.put('/aflc-uc/usercenter/aflcCarInfo/v1/update', data)
+  return fetch.post('/aflcusercenterservice/usercenter/aflcCarInfo/v1/updateCarInfo', data)
 }
 /**
  * 设置启用路线

@@ -42,9 +42,9 @@ export default {
         {
           path: '/carinfo/create', icon: 'QQ', name: '发布车源', component: _import('carowner/carinfo/create'), meta: { role: ['admin'], title: '发布车源', noCache: false }
         },
-        {
-          path: '/carinfo/create1', icon: 'QQ', name: '发布车源', component: _import('carowner/carinfo/create1'), meta: { role: ['admin'], title: '发布车源1', noCache: false }
-        },
+        // {
+        //   path: '/carinfo/create1', icon: 'QQ', name: '发布车源', component: _import('carowner/carinfo/create1'), meta: { role: ['admin'], title: '发布车源1', noCache: false }
+        // },
 
         {
           path: '/carinfo/manage', icon: 'QQ', name: '管理车源', component: _import('carowner/carinfo/manage'), meta: { role: ['admin'], title: '管理车源', noCache: false }
