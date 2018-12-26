@@ -58,73 +58,13 @@
           <template slot="append">（立方米）</template>
         </el-input>
       </el-form-item>
-
-
-      <!--<el-form-item required label="车源类型">-->
-        <!--<el-radio-group v-model="ruleForm.carSourceType">-->
-          <!--<el-radio label="AF01801">回程车</el-radio>-->
-          <!--<el-radio label="AF01802">本地车</el-radio>-->
-        <!--</el-radio-group>-->
-      <!--</el-form-item>-->
-      <!--<el-form-item required label="出发地">-->
-        <!--<vregion :ui="true" @values="regionChangeStart" class="form-control" :ifAera = 'true' @testCity="ifProvice('strartAddress')">-->
-          <!--<el-input v-model="ruleForm.strartAddress" placeholder="出发地"></el-input>-->
-        <!--</vregion>-->
-      <!--</el-form-item>-->
-      <!--<el-form-item required label="到达地">-->
-        <!--<vregion :ui="true" @values="regionChangeEnd" class="form-control" :ifAera = 'true' @testCity="ifProvice('endAddress')">-->
-          <!--<el-input v-model="ruleForm.endAddress" placeholder="到达地"></el-input>-->
-        <!--</vregion>-->
-      <!--</el-form-item>-->
-      <!--<el-form-item label="途径点">-->
-        <!--<el-input v-model="ruleForm.viaAddress"></el-input>-->
-      <!--</el-form-item>-->
-      <!--<el-form-item label="发车时间">-->
-        <!--<el-date-picker-->
-            <!--v-model="ruleForm.startTime"-->
-            <!--type="date"-->
-            <!--placeholder="选择日期"-->
-            <!--value-format="timestamp"-->
-            <!--&gt;-->
-          <!--</el-date-picker>-->
-      <!--</el-form-item>-->
-
-      <!--<el-form-item class="carinfo-expect" label="期望运价">-->
-        <!--<input class="nativeinput" :value="ruleForm.expectPrice" @change="(e)=>{setInputVal(e.target.value,ruleForm, 'expectPrice')}" :maxlength="9" placeholder="" auto-complete="off"  clearable-->
-          <!--v-number-only:point1 type="text">元/车  （运价不填自动为面议）-->
-          <!--&lt;!&ndash; <el-input v-model="ruleForm.expectPrice"></el-input> &ndash;&gt;-->
-      <!--</el-form-item>-->
-      <!--<el-form-item label="即时/长期">-->
-        <!--<el-radio-group v-model="ruleForm.isLongCar">-->
-          <!--<el-radio label="1">即时车源</el-radio>-->
-          <!--<el-radio label="0">长期车源</el-radio>-->
-        <!--</el-radio-group>-->
-      <!--</el-form-item>-->
       </div>
-
-      <!--<div class="carinfo-remark">-->
-      <!--<el-form-item label="备注">-->
-        <!--<div class="label-content clearfix">-->
-          <!--<span :key="index" v-for="(label, index) in labelArr" @click="selectTag(label)" :class="{'active': label.ischeck}">{{label.name}}</span>-->
-        <!--</div>-->
-        <!--<el-input-->
-          <!--type="textarea"-->
-          <!--:rows="2"-->
-          <!--maxlength="30"-->
-          <!--placeholder="请输入备注"-->
-          <!--v-model="ruleForm.remark">-->
-        <!--</el-input>-->
-        <!--请填写备注（{{ruleForm.remark.length}}-30字）。<span class="important-info">提供“原创”说明有利于提升线路效果</span>-->
-      <!--</el-form-item>-->
-      <!--</div>-->
 </div>
 
 <div class="car-picinfo">
-      <!--<div class="tab-info-stitle"><strong>车主认证照片：</strong><span class="important">（上传的图片不超过5M，并且为JPG/PNG/JPEG中的一种格式）</span></div>-->
   <div class="tab-info-stitle" style="padding:0 0 20px 150px"><span style="color: red">*</span><strong>上传车辆45°照片</strong></div>
 
       <el-form-item required style="padding-left: 50px" >
-        <!--<span class="info-require">上传车辆45°照片</span>-->
         <upload :limit="3" listtype="picture-card" :title="'身份证'" :showFileList="true" v-model="ruleForm.carFile" />
 
       </el-form-item>
@@ -244,7 +184,6 @@ export default {
   methods: {
     getDetails(){
       return ReqApi.postGetCarInfo().then(res=>{
-        // console.log(res.data,'postGetCarInfo')
         this.comDetail(res.data)
       })
     },
@@ -255,7 +194,6 @@ export default {
       this.$set(this.ruleForm,'carWidth',item.carWidth)
       this.$set(this.ruleForm,'carLoad',item.carLoad)
       this.$set(this.ruleForm,'carNumber',item.carNumber)
-      // this.$set(this.ruleForm,'carSourceType',item.carSourceType)
       this.$set(this.ruleForm,'carSpec',item.carSpec)
       this.$set(this.ruleForm,'carType',item.carType)
       this.$set(this.ruleForm,'carVolume',item.carVolume)
@@ -264,9 +202,7 @@ export default {
 
     },
     setInputVal(val, item, name) {
-    //   this.$set(this.form.tmsOrderCargoList, name, val)
       this.$set(item, name, val)
-      // console.log(item, name, val,'item, name, val')
     },
     getValue(obj) {
       return obj ? obj.value : ''
@@ -295,7 +231,6 @@ export default {
       }
     },
     ifProvice(type) {
-      // console.log('ifProvice', type)
       this.$message({
         type: 'info',
         message: '至少选择到市级范围'
@@ -315,7 +250,6 @@ export default {
           this.ruleForm[i] = data[i]
         }
         var labels = data.carTag.split('|')
-        // console.log(labels, this.labelArr)
         this.labelArr = this.labelArr.map(el => {
           if (labels.indexOf(el.code) !== -1) {
             el.ischeck = true

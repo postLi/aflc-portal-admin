@@ -110,10 +110,6 @@
       Pager
     },
     computed: {
-      // orgid() {
-      //   console.log(this.selectInfo.orgid, this.searchQuery.vo.orgid, this.otherinfo.orgid)
-      //   return this.isModify ? this.selectInfo.orgid : this.searchQuery.vo.orgid || this.otherinfo.orgid
-      // }
     },
     mounted() {
       this.searchQuery.vo.orgid = this.otherinfo.orgid
@@ -152,7 +148,6 @@
       fetchAllCustomer() {
         this.loading = true
         return carApi.getCarList(this.searchQuery).then(data => {
-          // console.log('list:', data, data.list)
           this.usersArr = data.list
           this.total = data.totalCount
           this.loading = false
