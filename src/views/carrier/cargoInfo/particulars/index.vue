@@ -53,7 +53,7 @@
             style="width: 100%;">
             <el-table-column prop="policyHolderType" label="类型">
               <template slot-scope="scope">
-                {{scope.row.policyHolderType === 0 ? '个人' : '公司'}}
+                {{scope.row.policyHolderType === 0 ? '个人' : '团体'}}
               </template>
             </el-table-column>
             <el-table-column prop="policyHolderName" label="投保人"></el-table-column>
@@ -73,7 +73,7 @@
             style="width: 100%;">
             <el-table-column prop="theInsuredType" label="类型">
               <template slot-scope="scope">
-                {{scope.row.theInsuredType === 0 ? '个人' : '公司'}}
+                {{scope.row.theInsuredType === 0 ? '个人' : '团体'}}
               </template>
             </el-table-column>
             <el-table-column prop="theInsuredName" label="被保人"></el-table-column>

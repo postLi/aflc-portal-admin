@@ -105,26 +105,31 @@
         }
       }
     },
+    //
     mounted() {
-      this.fetchData()
+      // this.fetchAllData()
     },
     methods: {
       handlePageChange(obj) {
         this.searchQuery.currentPage = obj.pageNum
         this.searchQuery.pageSize = obj.pageSize
-        this.fetchData()
+        this.fetchAllData()
       },
       getSearchParam(obj) {
         // console.log('obj::', obj,JSON.stringify(obj), this.searchQuery.vo)
         this.searchQuery.vo = Object.assign(this.searchQuery.vo, obj)
         this.loading = false
-        this.fetchData()
+        this.fetchAllData()
       },
       clickDetails(row, event, column) {
         this.$refs.multipleTable.toggleRowSelection(row)
       },
       getSelection(selection) {
         this.selected = selection
+      },
+      fetchAllData(){
+        this.eventBus.$emit('updateListCount')
+        this.fetchData()
       },
       fetchData() {
         this.loading = true
@@ -166,7 +171,7 @@
                   type: 'success',
                   message: '删除成功!'
                 })
-                this.fetchData()
+                this.fetchAllData()
               }).catch(() => {
                 this.$message({
                   type: 'info',

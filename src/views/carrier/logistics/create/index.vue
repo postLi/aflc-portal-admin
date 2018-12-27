@@ -423,6 +423,7 @@
           }
         }
       },
+      // vue init mpvue/mpvue-quickstart my-project
       regionChangeStart(d) {
         // console.log('data:',d)
         this.ruleForm.startLocation = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
