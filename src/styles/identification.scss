@@ -89,7 +89,7 @@
         .created{
             margin-bottom: 20px;
         }
-       
+
         h2{
             line-height: 24px;
             font-size: 20px;
@@ -106,6 +106,7 @@
         }
         .information{
             background: #fff;
+            //padding: 5px 20px 0px;
             padding: 18px 20px;
             margin:0 20px 20px 20px;
             .tableStyle{
@@ -153,7 +154,7 @@
                     .el-date-editor{
                         width: 100%;
                         .el-input__inner{
-                            padding-left:35px; 
+                            padding-left:35px;
                         }
                         .el-input__icon{
                             line-height: 30px;
@@ -174,7 +175,7 @@
                         display: inline-block;
                         margin-top: 18px;
                     }
-                   
+
                 }
             }
             .moreWidth{
@@ -208,7 +209,7 @@
                 }
             }
         }
-        
+
         .informationTable{
             height:72%
         }
@@ -222,7 +223,7 @@
         .picInformation{
             .el-form-item{
                 .el-form-item__content{
-                    min-height:209px; 
+                    min-height:209px;
                 }
                 p{
                     span{
@@ -234,7 +235,7 @@
 
 
         .fromfooter{
-            padding: 60px 0;
+            padding: 0 0 10px;
             margin-left: 150px;
             .el-button{
                 span{
@@ -266,6 +267,6 @@
         }
     }
 
-    
+
 
 }

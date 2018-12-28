@@ -116,73 +116,66 @@ export default {
         {
           path: '/cargoInfo/manage', icon: 'QQ', name: '管理货源', component: _import('carrier/cargoInfo/manage/index'), meta: { role: ['admin'], title: '管理货源信息', noCache: false }
         },
-        {
-          path: '/cargoInfo/insure', icon: 'QQ', name: '我的投保单', component: _import('carrier/cargoInfo/insure/index'), meta: { role: ['admin'], title: '我的投保单', noCache: false }
-        }
         // {
-        //   path: '/cargoInfo/particulars', icon: 'QQ', name: '我的投保单', component: _import('carrier/cargoInfo/particulars/index'), meta: { role: ['admin'], title: '我的投保单', noCache: false }
+        //   path: '/cargoInfo/insure', icon: 'QQ', name: '我的投保单', component: _import('carrier/cargoInfo/insure/index'), meta: { role: ['admin'], title: '我的投保单', noCache: false }
         // }
+
       ]
     },
     // 我的收藏
     {
-      path: '/carrier/collection', icon: 'QQ', name: '我的收藏', component: _import('carrier/collection/index'), meta: { role: ['admin'], title: '我的收藏', istab: true, noCache: false }
+      path: '/carrier/collection', icon: 'col', name: '我的收藏', component: _import('carrier/collection/index'), meta: { role: ['admin'], title: '我的收藏', istab: true, noCache: false }
     },
-    // // 我的收藏
+    {
+      path: '/cargoInfo/insure', icon: 'insure', name: '我的投保单', component: _import('carrier/cargoInfo/insure/index'), meta: { role: ['admin'], title: '我的投保单', noCache: false }
+    },
+
     // {
-    //   path: '/carrier/collection', hidden: false, icon: 'QQ', name: '我的收藏', component: _import('carrier/collection/index'), redirect: '/collection/resource', meta: { role: ['admin'], title: '我的收藏', istab: true, noCache: false },
+    //   path: '/member', icon: 'wzgl', name: '网站管理', component: _import('member/index'), redirect: '/member/manage/26', meta: { role: ['admin'], title: '网站管理', istab: true, noCache: false },
     //   children: [
     //     {
-    //       path: '/collection/resource', icon: 'QQ', name: '资源收藏', component: _import('carrier/collection/resource/index'), meta: { role: ['admin'], title: '资源收藏', noCache: false }
+    //       path: '/member/add/26', icon: 'QQ', name: '发布公司形象', component: _import('member/detail'), meta: { role: ['admin'], title: '发布公司形象', noCache: false, url: '/member/archives_do.php?dopost=addArc&channelid=26' }
+    //     },
+    //     {
+    //       path: '/member/manage/26', icon: 'QQ', name: '管理公司形象', component: _import('member/detail'), meta: { role: ['admin'], title: '管理公司形象', noCache: false, url: '/member/content_list.php?channelid=26' }
+    //     },
+    //     {
+    //       path: '/member/add/27', icon: 'QQ', name: '发布资质证照', component: _import('member/detail'), meta: { role: ['admin'], title: '发布资质证照', noCache: false, url: '/member/archives_add.php?channelid=27' }
+    //     },
+    //     {
+    //       path: '/member/manage/27', icon: 'QQ', name: '管理资质证照', component: _import('member/detail'), meta: { role: ['admin'], title: '管理资质证照', noCache: false, url: '/member/content_list.php?channelid=27' }
+    //     },
+    //     {
+    //       path: '/member/add/28', icon: 'QQ', name: '发布荣誉证书', component: _import('member/detail'), meta: { role: ['admin'], title: '发布荣誉证书', noCache: false, url: '/member/archives_add.php?channelid=28' }
+    //     },
+    //     {
+    //       path: '/member/manage/28', icon: 'QQ', name: '管理荣誉证书', component: _import('member/detail'), meta: { role: ['admin'], title: '管理荣誉证书', noCache: false, url: '/member/content_list.php?channelid=28' }
+    //     },
+    //     {
+    //       path: '/member/add/29', icon: 'QQ', name: '发布公司动态', component: _import('member/detail'), meta: { role: ['admin'], title: '发布公司动态', noCache: false, url: '/member/archives_add.php?channelid=29' }
+    //     },
+    //     {
+    //       path: '/member/manage/29', icon: 'QQ', name: '管理公司动态', component: _import('member/detail'), meta: { role: ['admin'], title: '管理公司动态', noCache: false, url: '/member/content_list.php?channelid=29' }
+    //     },
+    //     {
+    //       path: '/member/add/30', icon: 'QQ', name: '发布招商加盟', component: _import('member/detail'), meta: { role: ['admin'], title: '发布招商加盟', noCache: false, url: '/member/archives_add.php?channelid=30' }
+    //     },
+    //     {
+    //       path: '/member/manage/30', icon: 'QQ', name: '管理招商加盟', component: _import('member/detail'), meta: { role: ['admin'], title: '管理招商加盟', noCache: false, url: '/member/content_list.php?channelid=30' }
+    //     },
+    //     {
+    //       path: '/member/add/31', icon: 'QQ', name: '发布公司轮播图', component: _import('member/detail'), meta: { role: ['admin'], title: '发布公司轮播图', noCache: false, url: '/member/archives_add.php?channelid=31' }
+    //     },
+    //     {
+    //       path: '/member/manage/31', icon: 'QQ', name: '管理公司轮播图', component: _import('member/detail'), meta: { role: ['admin'], title: '管理公司轮播图', noCache: false, url: '/member/content_list.php?channelid=31' }
+    //     },
+    //     {
+    //       path: '/member/add/34', icon: 'QQ', name: '发布行业新闻', component: _import('member/detail'), meta: { role: ['admin'], title: '发布行业新闻', noCache: false, url: '/member/archives_add.php?channelid=34' }
+    //     },
+    //     {
+    //       path: '/member/manage/34', icon: 'QQ', name: '管理行业新闻', component: _import('member/detail'), meta: { role: ['admin'], title: '管理行业新闻', noCache: false, url: '/member/content_list.php?channelid=34' }
     //     }
     //   ]
-    // },
-    {
-      path: '/member', icon: 'wzgl', name: '网站管理', component: _import('member/index'), redirect: '/member/manage/26', meta: { role: ['admin'], title: '网站管理', istab: true, noCache: false },
-      children: [
-        {
-          path: '/member/add/26', icon: 'QQ', name: '发布公司形象', component: _import('member/detail'), meta: { role: ['admin'], title: '发布公司形象', noCache: false, url: '/member/archives_do.php?dopost=addArc&channelid=26' }
-        },
-        {
-          path: '/member/manage/26', icon: 'QQ', name: '管理公司形象', component: _import('member/detail'), meta: { role: ['admin'], title: '管理公司形象', noCache: false, url: '/member/content_list.php?channelid=26' }
-        },
-        {
-          path: '/member/add/27', icon: 'QQ', name: '发布资质证照', component: _import('member/detail'), meta: { role: ['admin'], title: '发布资质证照', noCache: false, url: '/member/archives_add.php?channelid=27' }
-        },
-        {
-          path: '/member/manage/27', icon: 'QQ', name: '管理资质证照', component: _import('member/detail'), meta: { role: ['admin'], title: '管理资质证照', noCache: false, url: '/member/content_list.php?channelid=27' }
-        },
-        {
-          path: '/member/add/28', icon: 'QQ', name: '发布荣誉证书', component: _import('member/detail'), meta: { role: ['admin'], title: '发布荣誉证书', noCache: false, url: '/member/archives_add.php?channelid=28' }
-        },
-        {
-          path: '/member/manage/28', icon: 'QQ', name: '管理荣誉证书', component: _import('member/detail'), meta: { role: ['admin'], title: '管理荣誉证书', noCache: false, url: '/member/content_list.php?channelid=28' }
-        },
-        {
-          path: '/member/add/29', icon: 'QQ', name: '发布公司动态', component: _import('member/detail'), meta: { role: ['admin'], title: '发布公司动态', noCache: false, url: '/member/archives_add.php?channelid=29' }
-        },
-        {
-          path: '/member/manage/29', icon: 'QQ', name: '管理公司动态', component: _import('member/detail'), meta: { role: ['admin'], title: '管理公司动态', noCache: false, url: '/member/content_list.php?channelid=29' }
-        },
-        {
-          path: '/member/add/30', icon: 'QQ', name: '发布招商加盟', component: _import('member/detail'), meta: { role: ['admin'], title: '发布招商加盟', noCache: false, url: '/member/archives_add.php?channelid=30' }
-        },
-        {
-          path: '/member/manage/30', icon: 'QQ', name: '管理招商加盟', component: _import('member/detail'), meta: { role: ['admin'], title: '管理招商加盟', noCache: false, url: '/member/content_list.php?channelid=30' }
-        },
-        {
-          path: '/member/add/31', icon: 'QQ', name: '发布公司轮播图', component: _import('member/detail'), meta: { role: ['admin'], title: '发布公司轮播图', noCache: false, url: '/member/archives_add.php?channelid=31' }
-        },
-        {
-          path: '/member/manage/31', icon: 'QQ', name: '管理公司轮播图', component: _import('member/detail'), meta: { role: ['admin'], title: '管理公司轮播图', noCache: false, url: '/member/content_list.php?channelid=31' }
-        },
-        {
-          path: '/member/add/34', icon: 'QQ', name: '发布行业新闻', component: _import('member/detail'), meta: { role: ['admin'], title: '发布行业新闻', noCache: false, url: '/member/archives_add.php?channelid=34' }
-        },
-        {
-          path: '/member/manage/34', icon: 'QQ', name: '管理行业新闻', component: _import('member/detail'), meta: { role: ['admin'], title: '管理行业新闻', noCache: false, url: '/member/content_list.php?channelid=34' }
-        }
-      ]
-    }
+    // }
   ]
 }

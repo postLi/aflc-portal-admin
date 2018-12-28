@@ -74,16 +74,19 @@
 
     methods: {
       userTypeFn() {
-        this.$set(this.collListNum, 'userId', this.otherinfo.id)
+
         switch (getOrgId()) {
           case 'aflc-1':
             this.$set(this.collListNum, 'userType', 2)
+            this.$set(this.collListNum, 'userId', this.otherinfo.driverId)
             break
           case 'aflc-2':
-            this.$set(this.collListNum, 'userType', 2)
+            this.$set(this.collListNum, 'userType', 3)
+            this.$set(this.collListNum, 'userId', this.otherinfo.shipperId)
             break
           case 'aflc-5':
             this.$set(this.collListNum, 'userType', 1)
+            this.$set(this.collListNum, 'userId', this.otherinfo.id)
             break
         }
       },

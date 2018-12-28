@@ -5,7 +5,7 @@
     <el-form size="mini" :model="form" status-icon :rules="rules" ref="lockForm">
       <el-form-item label="密码" :label-width="formLabelWidth" prop="password">
         <el-input type="password" v-model="form.password" auto-complete="off"></el-input>
-      </el-form-item> 
+      </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button size="mini" type="primary" :disabled="form.password.trim().length < 4" :loading="loading" @click="submitForm('lockForm')">解锁</el-button>

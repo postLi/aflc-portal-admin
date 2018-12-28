@@ -25,6 +25,9 @@ export default {
           path: '/baseInfo/authentication', icon: 'QQ', name: '完善实名认证', component: _import('carowner/baseInfo/authentication/index'), meta: { role: ['admin'], title: '完善实名认证', noCache: false }
         },
         {
+          path: '/carinfo/authcreate', icon: 'QQ', name: '完善车辆信息', component: _import('carowner/carinfo/authcreate'), meta: { role: ['admin'], title: '完善车辆信息', noCache: false }
+        },
+        {
           path: '/changePassword', icon: 'QQ', name: '修改登录密码', component: _import('changePassword'), meta: { role: ['admin'], title: '修改登录密码', noCache: false }
         }
       ]
@@ -39,6 +42,10 @@ export default {
         {
           path: '/carinfo/create', icon: 'QQ', name: '发布车源', component: _import('carowner/carinfo/create'), meta: { role: ['admin'], title: '发布车源', noCache: false }
         },
+        // {
+        //   path: '/carinfo/create1', icon: 'QQ', name: '发布车源', component: _import('carowner/carinfo/create1'), meta: { role: ['admin'], title: '发布车源1', noCache: false }
+        // },
+
         {
           path: '/carinfo/manage', icon: 'QQ', name: '管理车源', component: _import('carowner/carinfo/manage'), meta: { role: ['admin'], title: '管理车源', noCache: false }
         }
@@ -46,7 +53,11 @@ export default {
     },
     // 我的收藏
     {
-      path: '/carrier/collection', icon: 'QQ', name: '我的收藏', component: _import('carrier/collection/index'), meta: { role: ['admin'], title: '我的收藏', istab: true, noCache: false }
+      path: '/carrier/collection', icon: 'col', name: '我的收藏', component: _import('carrier/collection/index'), meta: { role: ['admin'], title: '我的收藏', istab: true, noCache: false }
     },
+
+    {
+      path: '/cargoInfo/insure', icon: 'insure', name: '我的投保单', component: _import('carrier/cargoInfo/insure/index'), meta: { role: ['admin'], title: '我的投保单', noCache: false }
+    }
   ]
 }

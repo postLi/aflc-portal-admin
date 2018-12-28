@@ -23,7 +23,7 @@
                     <el-input v-model="logisticsForm.mobile" maxlength="11">
                     </el-input>
                 </el-form-item>
-                <el-form-item label="固话：" prop="telNum">
+                <el-form-item label="固话：" prop="telNum" style="padding-top: 10px">
                     <el-input v-model="logisticsForm.telNum" maxlength="11">
                     </el-input>
                 </el-form-item>
@@ -34,7 +34,7 @@
             </div>
             <!-- <div class="information">
                 <div class="click_and_search">
-                    <el-button type="primary" @click="handleNew">发布网点</el-button>  
+                    <el-button type="primary" @click="handleNew">发布网点</el-button>
                     <el-input placeholder="请输入内容" ref="topSearch" class="input-with-select" @focus="handleClickMore"  @blur="setShort">
                         <el-button slot="append" icon="el-icon-search" type="info"></el-button>
                     </el-input>
@@ -42,7 +42,7 @@
             </div> -->
             <div class="information" style="height:76%">
                 <div class="created">
-                    <el-button type="primary" @click="handleNew">发布网点</el-button>  
+                    <el-button type="primary" @click="handleNew">发布网点</el-button>
                 </div>
                 <div style="height:92%">
                     <el-table
@@ -83,19 +83,19 @@
                         </el-table-column>
                         <el-table-column
                             prop="telNum"
-                            label="固话" 
+                            label="固话"
                             width="180">
                         </el-table-column>
                         <el-table-column
                             prop="pointFile"
                             label="网点图片"
                             width="200">
-                                <template  slot-scope="scope"> 
+                                <template  slot-scope="scope">
                                     <img v-showPicture :src="scope.row.pointFile ? scope.row.pointFile : defaultImg" />
                                 </template>
                         </el-table-column>
-                        <el-table-column 
-                            
+                        <el-table-column
+
                             prop="address"
                             label="操作"
                             >
@@ -109,8 +109,8 @@
                         </el-table-column>
                     </el-table>
                 </div>
-            </div>  
-            <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>    
+            </div>
+            <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>
         </el-form>
     </div>
 </template>
@@ -241,6 +241,10 @@ export default {
                         height: 60px;
                     }
                 }
+              .el-table__body-wrapper {
+                max-height: 500px !important;
+                min-height: 500px !important;
+              }
             }
             .information{
                 .click_and_search{
@@ -261,4 +265,5 @@ export default {
             }
         }
     }
+
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <div class="Complaint identification">
+    <div class="Complaint identification lll-complaints">
         <el-form :model="logisticsForm" ref="ruleForm" label-width="110px" class="demo-ruleForm">
             <div class="carrierTitle">
                 <div class="realname">
@@ -78,11 +78,11 @@
                         </el-table-column>
                         <el-table-column
                             prop="complainStatusName"
-                            label="投诉状态" 
+                            label="投诉状态"
                             width="200">
                         </el-table-column>
-                        <el-table-column 
-                            
+                        <el-table-column
+
                             prop="address"
                             label="操作"
                             width="120"
@@ -96,8 +96,8 @@
                         </el-table-column>
                     </el-table>
                 </div>
-            </div>  
-            <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>    
+            </div>
+            <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>
         </el-form>
     </div>
 </template>
@@ -105,8 +105,8 @@
 <script>
 
 import '@/styles/identification.scss'
-import { getDictionary, } from '@/api/common.js'
-import { getPointNetwork,PointNetworkStatus,deletePointNetwork } from '@/api/carrier/index.js'
+import { getDictionary} from '@/api/common.js'
+// import { getPointNetwork,PointNetworkStatus,deletePointNetwork } from '@/api/carrier/index.js'
 import { listCompanyComplain } from '@/api/carrier/Complaint.js'
 
 
@@ -144,25 +144,33 @@ export default {
     },
     mounted(){
         this.firstblood();
-    },  
+        this.fetchCode();
+    },
     methods: {
         handlePageChange(obj) {
             this.page = obj.pageNum
             this.pagesize = obj.pageSize
         },
+        fetchCode(){
+          getDictionary(this.complainStatus).then(res => {
+            // console.log(res)
+            this.OptionscomplainStatus = [{
+              code:'',
+              name:'全部'
+            }]
+            res.data.forEach(el => {
+              this.OptionscomplainStatus.push(el)
+            })
+          })
+        },
         firstblood(){
             listCompanyComplain(this.page,this.pagesize,this.logisticsForm).then(res=>{
-                console.log(res)
+                // console.log(res)
                 this.tableData = res.data.list;
                 this.totalCount = res.data.totalCount;
             })
 
-            getDictionary(this.complainStatus).then(res => {
-                console.log(res)
-                res.data.forEach(el => {
-                    this.OptionscomplainStatus.push(el)
-                })
-            })
+
         },
         clearSearch(){
             this.$refs.ruleForm.resetFields();
@@ -174,16 +182,24 @@ export default {
         },
         //投诉回复
         handleComplain(row) {
-            console.log(row);
+            // console.log(row);
             this.$router.push({name: '投诉详情',query:{ orderSerial:row.orderSerial,type:'carrier'}});
         },
     },
-  
+
 }
 </script>
 
 <style type="text/css" lang="scss">
     .Complaint{
-        
-    }   
+
+    }
+    .lll-complaints{
+      .el-table {
+        .el-table__body-wrapper {
+          max-height: 600px !important;
+          min-height: 600px !important;
+        }
+      }
+    }
 </style>

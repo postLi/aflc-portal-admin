@@ -35,6 +35,7 @@
             :data="tableData"
             ref="multipleTable"
             @selection-change="getSelection"
+            @row-click="clickDetails"
             stripe
             border
             height="100%"
@@ -202,11 +203,6 @@
         let ids
         switch (type) {
           case 'use':
-            // ids = this.selected.filter(el => {
-            //   return el.rangeStatus !== 0
-            // }).map(el => {
-            //   return el.id
-            // })
             ids = this.selected.map(el => {
               return el.id
             })
@@ -217,7 +213,7 @@
               })
               return false
             } else {
-              console.log(ids,typeof ids,typeof ids[1],'idsidsidsids');
+              // console.log(ids,typeof ids,typeof ids[1],'idsidsidsids');
               putEnable(ids).then(res => {
                 this.$message({
                   type: 'success',
@@ -225,10 +221,9 @@
                 })
                 this.firstblood()
               }).catch(err => {
-                console.log(err, 'errrr')
+                // console.log(err, 'errrr')
               })
             }
-            //
             break
           case 'disable':
             ids = this.selected.map(el => {
@@ -241,7 +236,7 @@
               })
               return false
             } else {
-              console.log(ids,typeof ids,typeof ids[1],'idsidsidsids');
+              // console.log(ids,typeof ids,typeof ids[1],'idsidsidsids');
               putBatch(ids).then(res => {
                 this.$message({
                   type: 'success',
@@ -249,7 +244,7 @@
                 })
                 this.firstblood()
               }).catch(err => {
-                console.log(err, 'errrr')
+                // console.log(err, 'errrr')
               })
             }
             break
@@ -269,7 +264,7 @@
                 })
                 this.firstblood()
               }).catch(err => {
-                console.log(err, 'errrr')
+                // console.log(err, 'errrr')
                 // this._handlerCatchMsg(err)
               })
             })
@@ -304,7 +299,7 @@
             })
           })
           this.loading = false;
-          console.log(this.tableData)
+          // console.log(this.tableData)
         })
       },
       handlePageChange(obj) {
@@ -314,6 +309,9 @@
       },
       getSelection(selection) {
         this.selected = selection
+      },
+      clickDetails(row, event, column) {
+        this.$refs.multipleTable.toggleRowSelection(row)
       },
       clearSearch() {
         this.$refs.ruleForm.resetFields();
@@ -325,7 +323,7 @@
       },
       //查看详情
       handleInfo(row) {
-        this.$router.push({name: '发布物流专线', query: {data: row, ifrevise: '2'}});
+        this.$router.push({name: '发布物流专线', query: {data: JSON.stringify(row), ifrevise: '2'}});
       },
       //新增网点
       handleNew() {
@@ -341,11 +339,11 @@
         else {
           isApi = 'http://www.28china.cn'
         }
-        window.open(isApi + isApihttp + '.html?id=' + row.id + '&shipperId=' + row.publishId)
+        window.open(isApi + isApihttp + '.html?id=' + row.id + '&publishId=' + row.publishId)
       },
       //修改
       handleEdit(row) {
-        this.$router.push({name: '发布物流专线', query: {data: row, ifrevise: '1'}});
+        this.$router.push({name: '发布物流专线', query: {data: JSON.stringify(row), ifrevise: '1'}});
       },
       //删除网点
       handleDelete(row) {
@@ -359,7 +357,7 @@
           }).catch(err => {
             this.$message({
               type: 'info',
-              message: '操作失败，原因：' + errorInfo ? errorInfo : err.text
+              message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
             })
           })
         }).catch(() => {
@@ -416,6 +414,12 @@
         }
       }
 
+    }
+    .el-table{
+      .el-table__body-wrapper {
+        max-height: 500px !important;
+        min-height: 500px !important;
+      }
     }
   }
 </style>

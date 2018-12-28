@@ -1,5 +1,5 @@
 <template>
-    <div class="orderRate identification">
+    <div class="orderRate identification lll-rate">
         <el-form :model="logisticsForm" ref="ruleForm" label-width="110px" class="demo-ruleForm">
             <div class="searchInformation information">
                 <el-form-item label="订单号：" prop="orderSerial">
@@ -128,8 +128,8 @@
                             width="200 ">
                             </el-table-column>
                         </el-table-column>
-                        <el-table-column 
-                            
+                        <el-table-column
+
                             label="操作"
                             width="120"
                             >
@@ -141,8 +141,8 @@
                                 </template>
                         </el-table-column>
                     </el-table>
-            </div>  
-            <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>    
+            </div>
+            <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>
         </el-form>
     </div>
 </template>
@@ -225,7 +225,7 @@ export default {
     },
     mounted(){
         //this.firstblood();
-    },  
+    },
     methods: {
         handlePageChange(obj) {
             this.page = obj.pageNum
@@ -261,7 +261,7 @@ export default {
         },
 
     },
-  
+
 }
 </script>
 
@@ -297,5 +297,13 @@ export default {
                 }
             }
         }
+    }
+    .lll-rate{
+      .el-table {
+        .el-table__body-wrapper {
+          max-height: 580px !important;
+          min-height: 580px !important;
+        }
+      }
     }
 </style>

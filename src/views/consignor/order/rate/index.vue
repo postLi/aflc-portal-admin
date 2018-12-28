@@ -133,8 +133,8 @@
                             width="200">
                             </el-table-column>
                         </el-table-column>
-                        <el-table-column 
-                            
+                        <el-table-column
+
                             label="操作"
                             width="120"
                             >
@@ -147,8 +147,8 @@
                         </el-table-column>
                     </el-table>
                 </div>
-            </div>  
-            <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>    
+            </div>
+            <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>
         </el-form>
     </div>
 </template>
@@ -217,7 +217,7 @@ export default {
     },
     mounted(){
         this.firstblood();
-    },  
+    },
     methods: {
         handlePageChange(obj) {
             this.page = obj.pageNum
@@ -229,10 +229,10 @@ export default {
                 this.tableData = res.data.list;
                 this.totalCount = res.data.totalCount;
             }).catch(err=>{
-                    this.$message({
-                        type: 'info',
-                        message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
-                    })
+                    // this.$message({
+                    //     type: 'info',
+                    //     message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                    // })
                 })
         },
         clearSearch(){
@@ -283,6 +283,10 @@ export default {
             }
 
             .el-table{
+              .el-table__body-wrapper {
+                max-height: 570px !important;
+                min-height: 570px !important;
+              }
                 td{
                     .cell{
                         p{

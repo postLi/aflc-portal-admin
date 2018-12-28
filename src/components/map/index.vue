@@ -53,7 +53,11 @@ export default {
   },
   mounted() {
     // this.dialogTableVisible = this.popVisible
-
+    const _this = this
+    window.loadedGaodeMap = function() {
+      _this.initMap()
+      _this.hasLoadedMap = true
+    }
   },
   created() {
 
@@ -103,9 +107,9 @@ export default {
           this.initMap()
         }, 500)
       } else {
-        loadJs('https://webapi.amap.com/maps?v=1.4.8&key=e61aa7ddc6349acdb3b57c062080f730&plugin=AMap.Autocomplete,AMap.PlaceSearch,AMap.Geocoder').then(() => {
+        loadJs('https://webapi.amap.com/maps?v=1.4.8&key=e61aa7ddc6349acdb3b57c062080f730&plugin=AMap.Autocomplete,AMap.PlaceSearch,AMap.Geocoder&callback=loadedGaodeMap').then(() => {
          // loadJs('//webapi.amap.com/ui/1.0/main.js').then(() => {
-          this.initMap()
+          // this.initMap()
          // })
         })
       }

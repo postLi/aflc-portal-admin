@@ -33,7 +33,25 @@ export function login(username, password, orgid) {
 }
 
 export function getInfo(mobile, memberType) {
-  return fetch.get('/aflccommonservice/common/aflcMemberCenter/v1/getUserInfo', {
+  let pro
+  if (memberType === 'AF00102') {
+    // 车主
+    pro = getDriverInfo(mobile)
+  } else if (memberType === 'AF00101') {
+    // 货主
+    pro = getShipperInfo(mobile)
+  } else {
+    // 物流公司
+    pro = getLogisticsCompanyInfo(mobile)
+  }
+  return pro.then(res => {
+    const data = res.data
+    if (data) {
+      data.id = data.id || data.shipperId || data.driverId
+    }
+    return res
+  })
+  return fetch.get('/aflc-common/common/aflcMemberCenter/v1/getUserInfo', {
     params: {
       mobile,
       memberType
@@ -41,8 +59,27 @@ export function getInfo(mobile, memberType) {
   })
 }
 
+ // 获取车主信息
+export function getDriverInfo(mobile) {
+  return fetch.get('/aflc-common/common/aflcMemberCenter/v1/getDriverInfoByMobile', { params: {
+    mobile: mobile
+  }})
+}
+// 获取物流商信息
+export function getLogisticsCompanyInfo(mobile) {
+  return fetch.get('/aflc-common/common/aflcMemberCenter/v1/getLogisticsCompanyInfoByMobile', { params: {
+    mobile: mobile
+  }})
+}
+// 获取货主信息
+export function getShipperInfo(mobile) {
+  return fetch.get('/aflc-common/common/aflcMemberCenter/v1/getShipperInfoByMobile', { params: {
+    mobile: mobile
+  }})
+}
+
 export function getAccessInfo() {
-  return fetch.get('/aflcusercenterservice/usercenter/aflcLogisticsCompanyAccout/v1/getAccoutInfo').then(res => {
+  return fetch.get('/aflc-uc/usercenter/aflcLogisticsCompanyAccout/v1/getAccoutInfo').then(res => {
     return res.data
   })
 }

@@ -8,15 +8,15 @@
             </div>
             <div class="searchInformation information">
                 <el-form-item label="出发地：" >
-                    <el-input v-model="logisticsForm.startAddress">
+                    <el-input v-model="logisticsForm.startAddress" clearable>
                     </el-input>
                 </el-form-item>
                 <el-form-item label="到达地：">
-                    <el-input v-model="logisticsForm.endAddress">
+                    <el-input v-model="logisticsForm.endAddress" clearable>
                     </el-input>
                 </el-form-item>
                  <el-form-item label="商品名称：">
-                    <el-input v-model="logisticsForm.goodsName">
+                    <el-input v-model="logisticsForm.goodsName" clearable>
                     </el-input>
                 </el-form-item>
                 <el-form-item class="btnChoose" style="margin-left:20px;">
@@ -64,7 +64,7 @@
                         </el-table-column>
                         <el-table-column
                             prop="goodsWeight"
-                            label="预估总重量（公斤）" 
+                            label="预估总重量（公斤）"
                             width="150">
                         </el-table-column>
                         <el-table-column
@@ -74,17 +74,17 @@
                         </el-table-column>
                         <el-table-column
                             prop="consignor"
-                            label="发货人" 
+                            label="发货人"
                             width="180">
                         </el-table-column>
                         <el-table-column
                             prop="time"
-                            label="发布时间" 
+                            label="发布时间"
                             width="180">
                         </el-table-column>
                         <el-table-column
                             prop="address"
-                            label="操作" 
+                            label="操作"
                             width="200"
                             >
                                 <template slot-scope="scope">
@@ -97,8 +97,8 @@
                         </el-table-column>
                     </el-table>
                 </div>
-            </div>  
-            <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" :sizes="sizes"/></div> </div>    
+            </div>
+            <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" :sizes="sizes"/></div> </div>
 
         </el-form>
     </div>
@@ -110,13 +110,13 @@ import '@/styles/identification.scss'
 import { parseTime } from '@/utils/index.js'
 import { getGoodsSourceList,GoodsSourceStatus } from '@/api/carrier/goodssource.js'
 import Pager from '@/components/Pagination/index'
- 
+
 export default {
     components:{
         Pager
     },
     data() {
-       
+
         return {
             defaultImg:'/static/default.png',//默认加载失败图片
             totalCount:0,
@@ -137,17 +137,17 @@ export default {
     },
     mounted(){
         this.firstblood();
-    },  
+    },
     methods: {
         handlePageChange(obj) {
-            console.log(obj)
+            // console.log(obj)
             this.page = obj.pageNum;
             this.pagesize = obj.pageSize;
             this.firstblood();
         },
         firstblood(){
             getGoodsSourceList(this.page,this.pagesize,this.logisticsForm).then(res=>{
-                console.log(res)
+                // console.log(res)
                 this.tableData = res.data.list;
                 this.totalCount = res.data.totalCount;
                 this.tableData.forEach(el => {
@@ -156,12 +156,18 @@ export default {
             })
         },
         clearSearch(){
-            this.$refs.ruleForm.resetFields();
+            // this.$refs.ruleForm.resetFields();
+          this.logisticsForm= {
+            queryType:'2',
+              startAddress: '',//出发地
+              endAddress: '',//到达地
+              goodsName:'',//商品名称
+          },
             this.firstblood();
         },
         //搜索
         handleSearch(){
-
+// alert('')
             this.firstblood()
         },
         //新增网点
@@ -208,14 +214,20 @@ export default {
             })
         },
     },
-  
+
 }
 </script>
 
 <style type="text/css" lang="scss">
     .TransportRange{
         .el-form{
-           
+
         }
+      .el-table{
+        .el-table__body-wrapper {
+          max-height: 600px !important;
+          min-height: 600px !important;
+        }
+      }
     }
 </style>

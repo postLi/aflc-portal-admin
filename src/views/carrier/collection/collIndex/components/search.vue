@@ -91,13 +91,12 @@
           <el-option label="本地车" value='AF01802'></el-option>
           <el-option label="回程车" value='AF01801'></el-option>
         </el-select>
-        <!--<el-input v-model="searchForm.isCarSoure.orderSerialOrGoodsName" :maxlength="50" auto-complete="off"></el-input>-->
       </el-form-item>
       <el-form-item label="联系人：">
         <el-input v-model="searchForm.isCarSoure.carBelongDriver" clearable auto-complete="off"></el-input>
       </el-form-item>
       <el-form-item label="手机号：">
-        <el-input v-model="searchForm.isCarSoure.carPhone" :maxlength="50" auto-complete="off"></el-input>
+        <el-input v-model="searchForm.isCarSoure.carPhone" :maxlength="50" auto-complete="off" clearable></el-input>
       </el-form-item>
       <el-form-item label="常驻地：">
         <vregion :ui="true" @values="usualPlaceChange" class="form-control">

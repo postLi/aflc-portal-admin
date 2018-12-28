@@ -122,7 +122,7 @@ export function getOrderInfo(id) {
 }
  */
 export function postNewReview(data) {
-  return fetch.post('/aflcusercenterservice/usercenter/aflcTransportEvaluation/v1/add', data)
+  return fetch.post('/aflc-uc/usercenter/aflcTransportEvaluation/v1/add', data)
 }
 
 /**
@@ -141,7 +141,7 @@ export function postNewReview(data) {
 }
  */
 export function postNewCarrierReview(data) {
-  return fetch.post('/aflcusercenterservice/usercenter/aflcShipperEvaluation/v1/add', data)
+  return fetch.post('/aflc-uc/usercenter/aflcShipperEvaluation/v1/add', data)
 }
 /**
  * 根据id获取回传信息
@@ -209,7 +209,7 @@ export function getAllOrder(data) {
  * @param {*} id 专线id
  */
 export function getLineInfo(id) {
-  return fetch.get('/aflcusercenterservice/usercenter/aflcTransportRange/v1/findMemberAflcTransportRange/' + id).then(res => {
+  return fetch.get('/aflc-uc/usercenter/aflcTransportRange/v1/findMemberAflcTransportRange/' + id).then(res => {
     return res.data || {}
   })
 }

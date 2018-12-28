@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie'
 
-const TokenKey = 'TMS-Token'
+const TokenKey = 'access_token'
 const UsernameKey = 'lastloginUsername'
 const OrgIdKey = 'OrganizationId'
 const RefreshTokenKey = 'TMS-refreshtoken'
@@ -24,7 +24,11 @@ export function getToken() {
 }
 
 export function setToken(token) {
-  return Cookies.set(TokenKey, token)
+  var domain = location.hostname
+  if (domain.indexOf('28china.cn') !== -1) {
+    domain = '.28china.cn'
+  }
+  return Cookies.set(TokenKey, token, { expires: 7, domain: domain, path: '/' })
 }
 
 export function removeToken() {

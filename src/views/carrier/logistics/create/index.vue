@@ -12,7 +12,6 @@
       <div class="searchInformation information">
         <h2>基本信息</h2>
         <el-form-item label="出发地：" prop="startLocation">
-          <!-- <el-input @focus="()=>{showMap('strartAddress')}"  v-model="ruleForm.startLocation"></el-input> -->
           <el-input v-model="ruleForm.startLocation" v-if="unable" :disabled="unable"></el-input>
 
           <vregion :ui="true" @values="regionChangeStart" :ifAera='true' class="form-control"
@@ -29,9 +28,7 @@
         </el-form-item>
         <br>
         <el-form-item label="到达地：" prop="endLocation">
-          <!-- <el-input @focus="()=>{showMap('endAddress')}" v-model="ruleForm.endLocation"></el-input> -->
           <el-input v-model="ruleForm.endLocation" v-if="unable" :disabled="unable"></el-input>
-
           <vregion :ui="true" @values="regionChangeEnd" :ifAera='true' class="form-control"
                    @testCity="ifProvice('endLocation')" v-else>
             <el-input v-model="ruleForm.endLocation" placeholder="请选择到达地"></el-input>
@@ -44,9 +41,9 @@
           <el-input v-model="ruleForm.endLocationContactsMobile" :disabled="unable" v-numberOnly
                     maxlength="11"></el-input>
         </el-form-item>
-        <el-checkbox v-model="checked" style="display: block;margin-left: 180px" :disabled="checkedFlag||unable">生成全境专线
+        <el-checkbox v-model="checked" style="display: block;margin-left: 180px" v-if="checkedFlag">生成全境专线
         </el-checkbox>
-        <p style="margin-left: 180px;padding-top: 10px;font-size: 14px">
+        <p style="margin-left: 180px;padding-top: 10px;font-size: 14px" v-if="checkedFlag">
           即系统自动生成出发地【{{ruleForm.startCity}}】至目的地【{{ruleForm.endProvince}} 下所有市】的专线，其他属性默认同此专线一致，可修改 </p>
       </div>
       <div class="information priceTime">
@@ -91,17 +88,15 @@
                 公斤
               </li>
               <li>
-                <!-- <el-input v-model="form.primeryPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input> -->
                 <input class="nativeinput" :value="form.primeryPrice"
-                       @change="(e)=>{setInputVal(e.target.value,form, 'primeryPrice'),ifWrong(weigthPriceForms,keys)}"
+                       @change="(e)=>{setInputVal(e.target.value,form, 'primeryPrice')}"
                        :maxlength="7" auto-complete="off" clearable
                        v-number-only:point :disabled="unable" type="text">
                 元/公斤
               </li>
               <li>
-                <!-- <el-input v-model="form.discountPrice" :disabled="unable"  v-number-only:point maxlength="7"></el-input> -->
                 <input class="nativeinput" :value="form.discountPrice"
-                       @change="(e)=>{setInputVal(e.target.value,form, 'discountPrice'),ifWrong(weigthPriceForms,keys)}"
+                       @change="(e)=>{setInputVal(e.target.value,form, 'discountPrice')}"
                        :maxlength="7" auto-complete="off" clearable
                        v-number-only:point :disabled="unable" type="text">
                 元/公斤
@@ -142,7 +137,7 @@
                 <!-- <el-form-item prop="primeryPrice" style="display:inline-block;"> -->
                 <!-- <el-input v-model="form.primeryPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input> -->
                 <input class="nativeinput" :value="form.primeryPrice"
-                       @change="(e)=>{setInputVal(e.target.value,form, 'primeryPrice'),ifWrong(ligthPriceForms,keys)}"
+                       @change="(e)=>{setInputVal(e.target.value,form, 'primeryPrice')}"
                        :maxlength="7" auto-complete="off" clearable
                        v-number-only:point :disabled="unable" type="text">
                 元/立方
@@ -151,7 +146,7 @@
               <li>
                 <!-- <el-input v-model="form.discountPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input> -->
                 <input class="nativeinput" :value="form.discountPrice"
-                       @change="(e)=>{setInputVal(e.target.value,form, 'discountPrice'),ifWrong(ligthPriceForms,keys)}"
+                       @change="(e)=>{setInputVal(e.target.value,form, 'discountPrice')}"
                        :maxlength="7" auto-complete="off" clearable
                        v-number-only:point :disabled="unable" type="text">
                 元/立方
@@ -220,7 +215,12 @@
 </template>
 <script>
   import {getDictionary} from '@/api/common.js'
-  import {newTransportRangeList, TransportRangeInfo, changeTransportRange} from '@/api/carrier/TransportRange.js'
+  import {
+    newTransportRangeList,
+    TransportRangeInfo,
+    changeTransportRange,
+    getTransportRange
+  } from '@/api/carrier/TransportRange.js'
   import {getUserInfo} from '@/utils/auth.js'
   import {REGEX} from '@/utils/validate.js'
   import upload from '@/components/Upload/singleImage2'
@@ -276,7 +276,7 @@
           if (el.endVolume === '') {
             callback(new Error('请补充轻货运量'))
           } else if (el.primeryPrice === '') {
-            console.log('123')
+            // console.log('123')
             callback(new Error('请补充轻货价格区间'))
           } else {
             callback()
@@ -288,7 +288,7 @@
         flag: 1,//1选 0 不选
         rangeLogo: [],
         unable: false,
-        checkedFlag: false,
+        checkedFlag: true,
         btnText: '请选择',
         current: '',
         popVisible: false,
@@ -361,10 +361,10 @@
             {required: true, message: '请输入到达地联系人信息', trigger: 'blur'}
           ],
           startLocationContactsMobile: [
-            {required: true, validator: checkStartLocationContactsMobile, trigger: 'change'}
+            {required: true, validator: checkStartLocationContactsMobile}
           ],
           endLocationContactsMobile: [
-            {required: true, validator: checkEndLocationContactsMobile, trigger: 'change'}
+            {required: true, validator: checkEndLocationContactsMobile}
           ],
           rangeType: [
             {required: true, message: '请选择专线类型', trigger: 'change'}
@@ -381,7 +381,9 @@
           primeryPrice: [
             {required: true, message: '请填写价格', trigger: 'blur'}
           ]
-        }
+        },
+        publishId: '',
+        senAddress: {}
       }
     },
     watch: {},
@@ -416,6 +418,7 @@
           }
         }
       },
+      // vue init mpvue/mpvue-quickstart my-project
       regionChangeStart(d) {
         // console.log('data:',d)
         this.ruleForm.startLocation = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
@@ -426,6 +429,7 @@
         this.ruleForm.startArea = d.area ? d.area.name : ''
         const obj = d.area || d.city || d.province
         this.ruleForm.startLocationCode = obj.code
+        console.log(this.ruleForm.startCity,' this.ruleForm.startCity');
         // let zhixiashi = ['北京市','天津市','重庆市','上海市'];
         // let ifZhixia = false;
         // zhixiashi.forEach(el => {
@@ -475,7 +479,7 @@
         // }
       },
       ifProvice(type) {
-        console.log('ifProvice111111', type)
+        // console.log('ifProvice111111', type)
         this.$message({
           type: 'info',
           message: '至少选择到市级范围'
@@ -510,26 +514,22 @@
       getParams() {
         if (this.$route.query.data) {
           this.ifShowRangeType = this.$route.query.ifrevise// 1是修改，2是详情
-
-          const dataObj = this.$route.query.data// 接收数据
+          const dataObj = JSON.parse(this.$route.query.data)// 接收数据
           this.ligthPriceForms = dataObj.lightcargo
           this.weigthPriceForms = dataObj.weightcargo
-          if (dataObj.flag === '1') {
-            this.checked = true
-            this.checkedFlag = true
-          }else{
-            this.checked = false
-            this.checkedFlag = false
-          }
-
+          this.publishId = dataObj.publishId
+          // this.$set(this.ruleForm,{'startProvince',dataObj.startProvince},)
+          this.$set(this.ruleForm, 'startProvince', dataObj.startProvince)
+          this.$set(this.ruleForm, 'startCity', dataObj.startCity)
+          this.$set(this.ruleForm, 'startArea', dataObj.startArea)
+          this.$set(this.ruleForm, 'endProvince', dataObj.endProvince)
+          this.$set(this.ruleForm, 'endCity', dataObj.endCity)
+          this.$set(this.ruleForm, 'endArea', dataObj.endArea)
+          this.checkedFlag = false
           console.log('```', dataObj)
           TransportRangeInfo(dataObj.id).then(res => {
             this.ruleForm = res.data
             this.rangeLogo = this.ruleForm.rangeLogo.split(',')
-
-            this.ruleForm.startCity = this.ruleForm.startLocation
-            this.ruleForm.endProvince = this.ruleForm.endLocationContacts
-            console.log('this.rangeLogo', this.rangeLogo, this.ruleForm)
           })
           if (this.ifShowRangeType == 2) {
             this.unable = true
@@ -566,7 +566,7 @@
       },
       // 添加子节点新增
       addItem(type, idx, item) {
-        // console.log(type)
+        // console.log(type, idx, item,'type, idx, item')
         switch (type) {
           case 'weight':
             // console.log(item.primeryPrice)
@@ -615,7 +615,7 @@
       },
       // 删除子节点新增
       reduceItem(idx, type) {
-        console.log(idx, type)
+        // console.log(idx, type)
         switch (type) {
           case 'weight':
             this.weigthPriceForms.splice(idx, 1)
@@ -627,29 +627,23 @@
       },
       completeName() {
         this.ruleForm.rangePrices = []
-
         this.ligthPriceForms.forEach(item => {
           this.ruleForm.rangePrices.push(item)
         })
-
         this.weigthPriceForms.forEach(item => {
           this.ruleForm.rangePrices.push(item)
         })
-
         if (this.ruleForm.rangeType) {
           this.ruleForm.rangeTypeName = this.rangeTypeClassfy.find(item => item.code == this.ruleForm.rangeType)['name']
         }
-
         if (this.ruleForm.departureTimeCode) {
           this.ruleForm.departureTime = this.departClassfy.find(item => item.code == this.ruleForm.departureTimeCode)['name']
         }
       },
       // 提交按钮
       submitForm(formName) {
-        console.log(this.ruleForm)
         let ifNull = true
         let messageInfo
-
         this.ligthPriceForms.forEach(item => {
           if (item.primeryPrice == '') {
             messageInfo = '请补充轻货原报价'
@@ -662,7 +656,6 @@
             ifNull = false
           }
         })
-
         const departureHzData = parseInt(this.ruleForm.departureHzData, 10) || 0
         const departureHzTime = parseInt(this.ruleForm.departureHzTime, 10) || 0
 
@@ -671,7 +664,6 @@
           messageInfo = '请填写完整的“发车频率”信息'
           ifNull = false
         }
-
         if (ifNull) {
           this.$refs[formName].validate((valid) => {
             if (valid) {
@@ -704,21 +696,20 @@
                   }
                 }
               }
-              //checked: true,
               // flag: 1,//1选 0 不选
               if (this.checked === true) {
-
                 this.$set(data, 'flag', "1")
               } else {
                 this.$set(data, 'flag', "0")
               }
               if (this.ifShowRangeType === '1') {
+                this.$set(data, 'publishId', this.publishId)
                 commitFunction = changeTransportRange(data)
-              } else {
+              }
+              else {
                 commitFunction = newTransportRangeList(data)
               }
               commitFunction.then(res => {
-                console.log('res', res)
                 if (res.status === 200) {
                   this.$alert('操作成功', '提示', {
                     confirmButtonText: '确定',
@@ -753,7 +744,6 @@
           })
         }
       },
-
       resetForm(formName) {
         this.$refs[formName].resetFields()
         this.ruleForm.departureHzTime = ''
@@ -799,7 +789,6 @@
             }
           }
         }
-
       }
       .priceTime {
         .el-input {

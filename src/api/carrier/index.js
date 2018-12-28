@@ -1,6 +1,6 @@
 import fetch from '@/utils/fetch'
 
-const baseUrl = 'aflcusercenterservice' ;
+const baseUrl = 'aflc-uc' ;
 
 /**
  * 新增物流专线
@@ -35,7 +35,7 @@ const baseUrl = 'aflcusercenterservice' ;
 }
  */
 export function postNewRange(data) {
-  return fetch.post('/aflcusercenterservice/   /aflcTransportRange/v1/add', data)
+  return fetch.post('/aflc-uc/   /aflcTransportRange/v1/add', data)
 }
 
 //认证物流公司
@@ -83,7 +83,7 @@ export function getPointNetwork(page,pagesize,data){
 //更改物流公司网点状态
 export function PointNetworkStatus(id){
     return fetch.axios({
-      url: '/aflcusercenterservice/usercenter/aflcPointNetwork/v1/updateAflcPointNetworkStatus/'+id,
+      url: '/aflc-uc/usercenter/aflcPointNetwork/v1/updateAflcPointNetworkStatus/'+id,
       method: 'PUT',
     })
   }

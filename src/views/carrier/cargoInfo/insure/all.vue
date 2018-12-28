@@ -32,19 +32,17 @@
           <el-table-column prop="consignor" label="操作" width="400">
             <template slot-scope="scope">
               <el-button type="warning" size="small" plain @click="handleEdit(scope.$index, scope.row,'check')">查看详情</el-button>
-              <el-button  v-if="scope.row.paymentState === 0" type="primary" size="small" plain @click="handleEdit(scope.$index, scope.row,'amend')"  
+              <el-button  v-if="scope.row.paymentState === 0" type="primary" size="small" plain @click="handleEdit(scope.$index, scope.row,'amend')"
               >修改</el-button>
-              <el-button type="danger" size="small" plain @click="handleEdit(scope.$index, scope.row,'delete')">删除</el-button> 
-              <!-- <el-button type="primary" size="small" plain @click="handleEdit(scope.$index, scope.row,'payment')"  
-              v-if="/(unpaid)/.test(listtype)">{{scope.row.paymentState === 0 ? '支付' : '已支付'}}</el-button> -->
-              <el-button  v-if="scope.row.paymentState === 0" type="primary" size="small" plain @click="handleEdit(scope.$index, scope.row,'payment')"  
+              <el-button type="danger" size="small" plain @click="handleEdit(scope.$index, scope.row,'delete')">删除</el-button>
+              <el-button  v-if="scope.row.paymentState === 0" type="primary" size="small" plain @click="handleEdit(scope.$index, scope.row,'payment')"
               >支付</el-button>
             </template>
           </el-table-column>
 
         </el-table>
       </div>
-     
+
       <div class="info_tab_footer">共计:{{ total }}
         <div class="show_pager">
           <Pager :total="total"  @change="handlePageChange"/>
@@ -58,7 +56,6 @@
   import SearchForm from './components/search'
   import Pager from '@/components/Pagination/index'
   import { postInsurelist, deleteInsure } from '@/api/carrier/insure.js'
-  // import * as ReqApi from '@/api/carrier/manage'
   export default {
     name: 'all',
     props: {
@@ -105,26 +102,30 @@
         }
       }
     },
+    //
     mounted() {
-      this.fetchData()
+      // this.fetchAllData()
     },
     methods: {
       handlePageChange(obj) {
         this.searchQuery.currentPage = obj.pageNum
         this.searchQuery.pageSize = obj.pageSize
-        this.fetchData()
+        this.fetchAllData()
       },
       getSearchParam(obj) {
-        // console.log('obj::', obj,JSON.stringify(obj), this.searchQuery.vo)
         this.searchQuery.vo = Object.assign(this.searchQuery.vo, obj)
         this.loading = false
-        this.fetchData()
+        this.fetchAllData()
       },
       clickDetails(row, event, column) {
         this.$refs.multipleTable.toggleRowSelection(row)
       },
       getSelection(selection) {
         this.selected = selection
+      },
+      fetchAllData(){
+        this.eventBus.$emit('updateListCount')
+        this.fetchData()
       },
       fetchData() {
         this.loading = true
@@ -155,7 +156,6 @@
             return window.location.href = 'http://192.168.1.157:89/Insurance/pay.htm?id=' + row.id
             break
           case 'delete':
-            // console.log(index, row, row.id)
             deleteInsure(row.id).then(res => {
               this.$confirm('确定要删除此投保单吗?', '提示', {
                 confirmButtonText: '确定',
@@ -166,7 +166,7 @@
                   type: 'success',
                   message: '删除成功!'
                 })
-                this.fetchData()
+                this.fetchAllData()
               }).catch(() => {
                 this.$message({
                   type: 'info',
@@ -216,7 +216,6 @@
       left: 0;
       width: 100%;
     }
-
     .show_pager {
       float: right;
       line-height: 40px;

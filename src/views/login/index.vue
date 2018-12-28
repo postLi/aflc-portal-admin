@@ -136,7 +136,8 @@ export default {
         accNum: 'aflc-5',
         // 130888888885 承运商 130888888881
         // 13088888886 123456  可以作为货主、车主、承运商登录
-        username: '13088888886',
+        username: '18500000000',
+        // username: '13088888886',
         password: '123456',
         memberType: 'AF00107'
       },
@@ -175,7 +176,7 @@ export default {
           const data = Object.assign({}, this.loginForm)
           data.mobile = data.username
           data.username = data.username + '|' + this.loginForm.accNum
-          console.log('md5',data);
+          // console.log('md5',data);
           data.password = md5(data.password)
           this.$store.dispatch('Login', data).then(() => {
             // if (!this.loginForm.accNum) {
@@ -205,7 +206,6 @@ export default {
     },
     forgetPsw() {
       // this.$router.push({ path: '/' })
-      // console.log(5555)
     },
     accNum() {
       this.holder = ''
@@ -228,7 +228,7 @@ export default {
   .el-form-item__content{
     display: flex;
     &>span{
-      width: 83px;
+      width: 65px;
     }
   }
 }

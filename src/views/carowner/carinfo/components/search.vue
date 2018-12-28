@@ -78,6 +78,7 @@ export default {
     getOrgid(id) {
     },
     onSubmit() {
+      // alert()
       this.$emit('change', this.searchForm)
     },
     clearForm() {
@@ -86,7 +87,7 @@ export default {
     }
   }
 }
-</script> 
+</script>
 
 
 <style lang="scss">
@@ -102,7 +103,7 @@ export default {
           margin-right: 0;
         }
     }
-    
+
 @media screen and (max-width:1308px){
       .carrier_searchinfo{
           .el-form-item{

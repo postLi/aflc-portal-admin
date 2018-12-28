@@ -3,11 +3,11 @@ import fetch from '@/utils/fetch'
 // /usercenter/aflclogisticspark/v1/list
 // 云平台-查询物流园区表分页信息
 // const baseUrl = 'aflc-uc'
-const baseUrl = 'aflcusercenterservice'
+const baseUrl = 'aflc-uc'
 
 // export function postList(page, pagesize, data) {
 //   return fetch({
-//     url: '/aflcusercenterservice/usercenter/aflclogisticspark/v1/list',
+//     url: '/aflc-uc/usercenter/aflclogisticspark/v1/list',
 //     method: 'post',
 //     data: {
 //       'currentPage': page,
@@ -18,7 +18,7 @@ const baseUrl = 'aflcusercenterservice'
 // }
 
 export function postList(page, pagesize, data) {
-  return fetch.post('/aflcusercenterservice/usercenter/aflclogisticspark/v1/list', {
+  return fetch.post('/aflc-uc/usercenter/aflclogisticspark/v1/list', {
     'currentPage': page,
     'pageSize': pagesize,
     'vo': data

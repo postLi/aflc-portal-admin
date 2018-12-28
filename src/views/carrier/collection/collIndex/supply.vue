@@ -3,9 +3,6 @@
     <SearchForm :isAllSupplyl="isAllSupplyl" :isSpacialLine="isSpacialLine" :isPhysicalDis="isPhysicalDis"
                 :isCarSoure="isCarSoure" @change="getSearchParam"></SearchForm>
     <div class="tab_info">
-      <!--<div class="btns_box">-->
-      <!--<el-button type="primary" size="large" icon="el-icon-circle-plus" @click="doAction('add')">创建订单</el-button>-->
-      <!--</div>-->
       <div class="info_tab">
         <el-table
           ref="multipleTable"
@@ -22,9 +19,6 @@
             label="序号"
             width="80"
             type="index">
-            <!--<template slot-scope="scope">-->
-              <!--{{ (searchQuery.currentPage - 1)*searchQuery.pageSize + scope.$index + 1 }}-->
-            <!--</template>-->
           </el-table-column>
 
           <div v-if="/(allSupplyl)/.test(listtype)===true">
@@ -116,11 +110,8 @@
 <script>
   import SearchForm from './components/search'
   import Pager from '@/components/Pagination/index'
-  // getCollectList
-  import * as ReqApi from '@/api/carrier/manage'
   import * as collApi from '@/api/carrier/collection'
   import {getOrgId, getLogin} from '@/utils/auth'
-  // import {getOrgId} from '@/utils/auth'
 
   export default {
     name: 'supply',
@@ -166,10 +157,7 @@
     },
     methods: {
       createDetail(row, type) {
-        //
         this.$router.push({path: '/order/create', query: {id: row.rangeId}})
-        // this.$router.push({path: '/order/create', query: {isquery: JSON.stringify(row)}})
-        // console.log(this.$router.push, type)
       },
       viewDetail(row, type) {
 
@@ -178,9 +166,10 @@
         let isApihttp = '/huoyuan/'
         let isApiDate = '2018/0508'
         let isApinum = '/2'
+        // console.log(row,'spacialLine');
         if (window.location.host.indexOf('192.168.1') !== -1) {
-          console.log(window.location.host);
-          console.log(window.location.host.indexOf('192.168.1.157:89'))
+          // console.log(window.location.host);
+          // console.log(window.location.host.indexOf('192.168.1.157:89'))
           isApi = 'http://192.168.1.157:89'
         }
         else {
@@ -197,11 +186,12 @@
           isApihttp = '/wlzx/'
           isApiDate = '2018/0509'
           isApinum = '/7'
-          if (row.rangeId === null || row.shipperId === null) {
+
+          if (row.rangeId === null || row.publishId === null) {
             this.$message.info('详情暂无数据~')
             return false
           }
-          window.open(isApi + isApihttp + isApiDate + isApinum + '.html?id=' + row.rangeId + '&shipperId=' + row.shipperId)
+          window.open(isApi + isApihttp + isApiDate + isApinum + '.html?id=' + row.rangeId + '&publishId=' + row.publishId)
         }
         if (type === 'physicalDis') {
           if (row.account === null) {
@@ -221,7 +211,6 @@
           isApinum = '/5'
           window.open(isApi + isApihttp + isApiDate + isApinum + '.html?id=' + row.carId + '&driverId=' + row.driverId)
         }
-        // console.log(row, type)
       },
       remDetail(row, type) {
         const sendData = {}
@@ -277,9 +266,6 @@
           case 'allSupplyl':
             this.isAllSupplyl = true
             this.$set(this.searchQuery.vo, 'collectType', 3)
-            // this.$set(this.searchQuery.vo, 'orderClassName','')
-
-            // this.setIsAllSupply()
             this.fetchData()
             break
           case 'spacialLine':
@@ -300,16 +286,22 @@
         }
       },
       userTypeFn(item) {
-        this.$set(item, 'userId', this.otherinfo.id)
+
+
         switch (getOrgId()) {
           case 'aflc-1':
             this.$set(item, 'userType', 2)
+            this.$set(item, 'userId', this.otherinfo.driverId)
+            // console.log(item,'itemitemitemitem',this.otherinfo.driverId);
             break
           case 'aflc-2':
             this.$set(item, 'userType', 3)
+            this.$set(item, 'userId', this.otherinfo.shipperId)
+            // console.log(item,'itemitemitemitem',this.otherinfo.driverId);
             break
           case 'aflc-5':
             this.$set(item, 'userType', 1)
+            this.$set(item, 'userId', this.otherinfo.id)
             break
         }
       },
@@ -325,14 +317,12 @@
         this.fetchAllCollList()
       },
       handlePageChange(obj) {
-
         this.searchQuery.currentPage = obj.pageNum
         this.searchQuery.pageSize = obj.pageSize
-        // console.log(obj,this.searchQuery,'8888888888');
         this.fetchAllCollList()
       },
       getSearchParam(obj) {
-        console.log('obj::', JSON.stringify(obj), this.searchQuery.vo)
+        // console.log('obj::', JSON.stringify(obj), this.searchQuery.vo)
         this.searchQuery.vo = Object.assign(this.searchQuery.vo, obj)
         this.loading = false
 
