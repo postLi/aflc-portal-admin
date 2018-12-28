@@ -1,5 +1,3 @@
-
-
 <template>
   <div class="manage-orderinfo page-main">
     <div class="list-tab-title clearfix"  v-if="allVisible">
@@ -8,9 +6,6 @@
     <div class="list-tab-content">
       <all :listtype="component"  @showDetail="showDetail" v-if="allVisible"></all>
       <Particulars :info="detailInfo" v-if="centerDialogVisible" @reback="reback"></Particulars>
-      <!-- <keep-alive>
-        <component :key="componentKey" :listtype="component"  v-bind:is="component"></component>
-      </keep-alive> -->
     </div>
   </div>
 </template>
