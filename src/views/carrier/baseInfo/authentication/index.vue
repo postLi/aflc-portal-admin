@@ -479,12 +479,6 @@
             }
           }
           // this.loading = false;
-        }).catch(err => {
-          console.log(err)
-          this.$message({
-            type: 'info',
-            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
-          })
         })
       },
       // 完善信息
@@ -541,11 +535,6 @@
               console.log(res)
               this.getMoreInformation()
               this.clear()
-            }).catch(err => {
-              this.$message({
-                type: 'info',
-                message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
-              })
             })
           } else {
             this.$message({

@@ -10,7 +10,7 @@
     </div>
     <div class="order-info-wrapper">
         <div class="rate_content rate_orderInfo">
-            <h2>订单信息</h2>       
+            <h2>订单信息</h2>
             <div class="orderInfo">
                 <ul>
                     <li>订单号：{{orderForm.orderSerial}}</li>
@@ -21,7 +21,7 @@
                     <li>收货人：{{orderForm.consignee}}</li>
                 </ul>
                 <ul>
-                    <li>下单时间：{{orderForm.createTime}} 
+                    <li>下单时间：{{orderForm.createTime}}
                         <el-popover
                         v-if="!iscancel"
                         width="100%"
@@ -46,7 +46,7 @@
                 </ul>
             </div>
         </div>
-        
+
     </div>
     <div class="order-info-wrapper">
         <div class="order-control-pannel">
@@ -336,10 +336,10 @@ export default {
           })
           this.fetchData()
         }).catch(err => {
-          this.$message({
-            type: 'info',
-            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
-          })
+          // this.$message({
+          //   type: 'info',
+          //   message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
+          // })
         })
       }).catch(() => {
         this.$message({
@@ -361,16 +361,13 @@ export default {
           })
           this.fetchData()
         }).catch(err => {
-          this.$message({
-            type: 'info',
-            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
-          })
+          // this.$message({
+          //   type: 'info',
+          //   message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
+          // })
         })
       }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消'
-        })
+
       })
     },
     confirmPickUp(row) {
@@ -386,10 +383,7 @@ export default {
           })
           this.fetchData()
         }).catch(err => {
-          this.$message({
-            type: 'info',
-            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
-          })
+
         })
       }).catch(() => {
         this.$message({
@@ -410,11 +404,6 @@ export default {
             message: '操作成功!'
           })
           this.fetchData()
-        }).catch(err => {
-          this.$message({
-            type: 'info',
-            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
-          })
         })
       }).catch(() => {
         this.$message({
@@ -436,10 +425,7 @@ export default {
           })
           this.fetchData()
         }).catch(err => {
-          this.$message({
-            type: 'info',
-            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
-          })
+
         })
       }).catch(() => {
         this.$message({
@@ -522,9 +508,9 @@ export default {
           line-height: 22px;
           padding: 21px 0;
       }
-      
+
   }
-  
+
   .rate_info{
       width:47%;
       min-height: 430px;

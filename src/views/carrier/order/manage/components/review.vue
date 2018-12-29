@@ -169,9 +169,6 @@ export default {
             this.loading = false
             this.$emit('success')
             this.close()
-          }).catch(err => {
-            this.$message.error('保存失败：' + JSON.stringify(err))
-            this.loading = false
           })
         }
       })
@@ -215,7 +212,7 @@ export default {
       color: #ef0000;
     }
   }
-  
+
 }
 </style>
 

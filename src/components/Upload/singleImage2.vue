@@ -2,12 +2,12 @@
     <div :class="{'hideUploadBtn': filelist.length >= limit}">
       <el-upload
         drag
-        v-if="uploadUrl" 
-        :data="upload" 
+        v-if="uploadUrl"
+        :data="upload"
         :action="uploadUrl"
-        :multiple="false" 
+        :multiple="false"
         list-type="picture-card"
-        :show-file-list="showFileList" 
+        :show-file-list="showFileList"
         :file-list="filelist"
         :limit="limit"
         :before-upload="beforeUpload"
@@ -118,7 +118,6 @@ export default {
         this.uploadUrl = data.host
         this.dir = data.dir
         this.upload.key = data.dir + this.random_string() + type
-      }).catch(err => {
       })
     },
     rmImage() {
@@ -208,7 +207,7 @@ export default {
    display: flex;
    align-items: center;
    justify-content: center;
- } 
+ }
 }
 .pop-show-img{
   max-width: 100%;

@@ -220,8 +220,6 @@
                   message: '启用成功~'
                 })
                 this.firstblood()
-              }).catch(err => {
-                // console.log(err, 'errrr')
               })
             }
             break
@@ -243,8 +241,6 @@
                   message: '禁用成功~'
                 })
                 this.firstblood()
-              }).catch(err => {
-                // console.log(err, 'errrr')
               })
             }
             break
@@ -263,9 +259,6 @@
                   message: '删除成功!'
                 })
                 this.firstblood()
-              }).catch(err => {
-                // console.log(err, 'errrr')
-                // this._handlerCatchMsg(err)
               })
             })
             break
@@ -354,11 +347,6 @@
         }).then(() => {
           deleteTransportRange(row.id).then(res => {
             this.firstblood();
-          }).catch(err => {
-            this.$message({
-              type: 'info',
-              message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
-            })
           })
         }).catch(() => {
           this.$message({
@@ -371,11 +359,6 @@
       handleStatus(row) {
         TransportRangeStatus(row.id).then(res => {
           this.firstblood();
-        }).catch(err => {
-          this.$message({
-            type: 'info',
-            message: '操作失败，原因：' + err.text ? err.text : err
-          })
         })
       },
     },

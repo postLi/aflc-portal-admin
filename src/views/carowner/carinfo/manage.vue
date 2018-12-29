@@ -170,16 +170,12 @@
         return carApi.putSetRouteType(id, type).then((res) => {
           this.$message.success(res.text ? res.text : res.errInfo)
           this.fetchData()
-        }).catch(err => {
-          this.$message.error('操作出错了： ' + JSON.stringify(err))
         })
       },
       enableItem(id, type) {
         return carApi.putEnableType(id, type).then((res) => {
           this.$message.success(res.text ? res.text : res.errInfo)
           this.fetchData()
-        }).catch(err => {
-          this.$message.error('操作出错了： ' + JSON.stringify(err))
         })
       },
       enableBtn(row) {
@@ -214,11 +210,6 @@
               message: '删除成功!'
             })
             this.fetchData()
-          }).catch(err => {
-            this.$message({
-              type: 'info',
-              message: '删除失败，原因：' + err.errorInfo ? err.errorInfo : JSON.stringify(err)
-            })
           })
         }).catch(() => {
           this.$message({

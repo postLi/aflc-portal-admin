@@ -6,12 +6,12 @@
       width="30%"
       center
       @close="closeMe"
-      :close-on-click-modal="false" 
+      :close-on-click-modal="false"
       :before-close="closeMe">
       <el-form :model="formAllData" :rules="rules"  ref="ruleForm" :inline="true"  label-position="right" label-width="100px" class="demo-ruleForm">
         <div class="search_warrper">
           <el-form-item label="" prop="belongCityName" >
-                    
+
           <vregion :ui="true" @values="regionChange" class="form-control" >
               <el-input v-model="formAllData.belongCityName" placeholder="请选择园区所在地"></el-input>
           </vregion>
@@ -25,7 +25,7 @@
             <el-button size="mini" icon="el-icon-close" type="info" @click="handleSearch('clearForm')" plain>重置</el-button>
           </el-form-item>
         </div>
-        
+
         <div class="classify_info">
           <ul class="addlist">
             <!-- :class="{active: active == item}" -->
@@ -33,7 +33,7 @@
               <h4>{{item.parkName}}</h4>
               <span>{{item.locationProvince + item.locationCity + item.locationArea + item.parkAddress}}</span>
             </li>
-           
+
           </ul>
         </div>
       </el-form>
@@ -44,12 +44,12 @@
         <div class="show_pager">
           <Pager :total="dataTotal" @change="handlePageChange" :sizes="sizes"/>
         </div>
-      </div>  
+      </div>
       </div>
     </el-dialog>
-    
+
   </div>
-  
+
 </template>
 <script>
 // import { parseTime, pickerOptions2 } from '@/utils/index.js'
@@ -266,8 +266,6 @@ export default {
         console.log('res', res)
         this.dataset = res.list
         this.dataTotal = res.total
-      }).catch(err => {
-        this.$message.warning(err.text || err.errorInfo || '无法获取服务端数据~')
       })
     },
     handlePageChange(obj) {
@@ -320,12 +318,6 @@ export default {
             })
             this.closeMe()
             this.$emit('success')
-          }).catch(err => {
-            this.$message({
-              type: 'error',
-              message: err.errorInfo || err.text || '未知错误，请重试~'
-            })
-            this.loading = false
           })
         } else {
           return false
@@ -392,7 +384,7 @@ export default {
       width:100%;
       .el-form-item__content{
         width:80%;
-        
+
       }
     }
     .el-textarea__inner{
@@ -421,7 +413,7 @@ export default {
       cursor: pointer;
       border-radius: 5px;
       // text-align: center;
-      
+
     }
     h4,span{
       height: 30px;

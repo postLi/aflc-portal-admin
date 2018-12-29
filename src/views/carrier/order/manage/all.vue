@@ -1,6 +1,6 @@
 <template>
   <div class="tab-content order-list" v-loading="loading">
-    <SearchForm :isall="isall"  @change="getSearchParam" :btnsize="btnsize" />  
+    <SearchForm :isall="isall"  @change="getSearchParam" :btnsize="btnsize" />
     <div class="tab_info">
       <div class="btns_box">
           <el-button type="primary" size="large" icon="el-icon-circle-plus" @click="doAction('add')">创建订单</el-button>
@@ -27,7 +27,7 @@
           </el-table-column>
           <el-table-column
             fixed
-            
+
             label="订单号"
             width="130">
             <template slot-scope="scope">
@@ -36,24 +36,24 @@
           </el-table-column>
           <el-table-column
             prop="orderStatusName"
-            
+
             label="订单状态"
             width="110">
           </el-table-column>
           <el-table-column
             prop="wlName"
-            
+
             label="物流公司"
             width="130">
           </el-table-column>
           <el-table-column
             prop="goodsName"
-            
+
             label="商品名称"
             width="90">
           </el-table-column>
           <el-table-column
-            
+
             prop="goodsNum"
             label="货品总数量（件）"
             width="110">
@@ -61,19 +61,19 @@
           <el-table-column
             label="预估总重量（公斤）"
             prop="goodsWeight"
-            
+
             width="90"
             >
           </el-table-column>
           <el-table-column
             prop="goodsVolume"
             label="预计总体积（方）"
-            
+
             width="80"
             >
           </el-table-column>
           <el-table-column
-            
+
             prop="goodsTypeName"
             label="货物类型"
             width="80">
@@ -81,14 +81,14 @@
           <el-table-column
             prop="totalAmount"
             label="预估总运费（元）"
-            
+
             width="80"
             >
           </el-table-column>
           <el-table-column
             prop="consignorAddress"
             label="出发地"
-            
+
             width="80"
             >
             <template slot-scope="scope">
@@ -98,7 +98,7 @@
           <el-table-column
             prop="consigneeAddress"
             label="到达地"
-            
+
             width="110"
             >
             <template slot-scope="scope">
@@ -108,42 +108,42 @@
           <el-table-column
             prop="consignor"
             label="发货人"
-            
+
             width="80"
             >
           </el-table-column>
           <el-table-column
             prop="consignorPhone"
             label="发货人手机"
-            
+
             width="110"
           >
           </el-table-column>
           <el-table-column
             prop="consignee"
             label="收货人"
-            
+
             width="90"
           >
           </el-table-column>
           <el-table-column
             prop="consigneePhone"
             label="收货人手机"
-            
+
             width="120"
           >
           </el-table-column>
           <el-table-column
             prop="createTime"
             label="下单时间"
-            
+
             width="100"
           >
           </el-table-column>
           <el-table-column
             v-if="/(chengyun)/.test(listtype) === false"
             label="承运时间"
-            
+
             width="120"
           >
             <template slot-scope="scope">
@@ -179,7 +179,7 @@
           </el-table-column>
           <el-table-column
             label="操作"
-            
+
             width="110"
           >
           <template slot-scope="scope">
@@ -191,7 +191,7 @@
                 <!-- <el-button  type="primary" :size="btnsize"  plain @click="modifyOrder(scope.row)">修改</el-button> -->
                 <el-button type="danger" :size="btnsize"  plain @click="cancelOrder(scope.row)">取消订单</el-button>
               </div>
-              
+
               <!-- 待提货 -->
               <div v-if="scope.row.orderStatus === 'AF03703'">
               </div>
@@ -204,7 +204,7 @@
                 <el-button type="warning" :size="btnsize"  v-if="!scope.row.complainWorkSerial"  @click="addComplain(scope.row)">投诉</el-button>
               </div>
               <!-- 待评价 -->
-              
+
               <div v-if="scope.row.orderStatus === 'AF03706'">
                 <el-button type="warning" :size="btnsize"  v-if="!scope.row.complainWorkSerial"  @click="addComplain(scope.row)">投诉</el-button>
               <el-button type="warning" :size="btnsize"   v-if="scope.row.complainWorkSerial" @click="viewComplain(scope.row)">投诉详情</el-button>
@@ -234,10 +234,10 @@
                 <el-button  type="primary" :size="btnsize"  plain @click="confirmCarrier(scope.row)">确定承运</el-button>
                 <el-button type="danger" :size="btnsize"  plain @click="cancelOrder(scope.row)">取消订单</el-button>
               </div>
-              
+
               <!-- 待提货 -->
               <div v-if="scope.row.orderStatus === 'AF03703'">
-                
+
                 <el-button type="primary" :size="btnsize"  plain @click="confirmPickUp(scope.row)">确认提货</el-button>
               </div>
               <!-- 待发货 -->
@@ -254,7 +254,7 @@
               <!-- 待评价 -->
 
               <div v-if="scope.row.orderStatus === 'AF03706'">
-                
+
               </div>
               <!-- 已完成 -->
               <div v-if="scope.row.orderStatus === 'AF03707'">
@@ -272,7 +272,7 @@
           </el-table-column>
         </el-table>
       </div>
-      <div class="info_tab_footer">共计:{{ total }} <div class="show_pager"> <Pager :total="total" @change="handlePageChange" /></div> </div>    
+      <div class="info_tab_footer">共计:{{ total }} <div class="show_pager"> <Pager :total="total" @change="handlePageChange" /></div> </div>
     </div>
     <AddReview @success="fetchData" :dialogVisible.sync="dialogVisible" :orderSerial="orderSerial" :transportRangeId="transportRangeId" />
     <AddReview2 @success="fetchData" :dialogVisible.sync="dialogVisible2" :companyId="companyId" :orderSerial="orderSerial" :shipperId="shipperId" />
@@ -394,11 +394,6 @@ export default {
             message: '操作成功!'
           })
           this.fetchData()
-        }).catch(err => {
-          this.$message({
-            type: 'info',
-            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
-          })
         })
       }).catch(() => {
         this.$message({
@@ -419,11 +414,6 @@ export default {
             message: '操作成功!'
           })
           this.fetchData()
-        }).catch(err => {
-          this.$message({
-            type: 'info',
-            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
-          })
         })
       }).catch(() => {
         this.$message({
@@ -444,11 +434,6 @@ export default {
             message: '操作成功!'
           })
           this.fetchData()
-        }).catch(err => {
-          this.$message({
-            type: 'info',
-            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
-          })
         })
       }).catch(() => {
         this.$message({
@@ -469,11 +454,6 @@ export default {
             message: '操作成功!'
           })
           this.fetchData()
-        }).catch(err => {
-          this.$message({
-            type: 'info',
-            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
-          })
         })
       }).catch(() => {
         this.$message({
@@ -494,11 +474,6 @@ export default {
             message: '操作成功!'
           })
           this.fetchData()
-        }).catch(err => {
-          this.$message({
-            type: 'info',
-            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
-          })
         })
       }).catch(() => {
         this.$message({
@@ -519,11 +494,6 @@ export default {
             message: '操作成功!'
           })
           this.fetchData()
-        }).catch(err => {
-          this.$message({
-            type: 'info',
-            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err
-          })
         })
       }).catch(() => {
         this.$message({

@@ -188,11 +188,6 @@ export default {
             }).then(()=>{
                 deleteTransportRange(row.id).then(res => {
                     this.firstblood();
-                }).catch(err => {
-                    this.$message({
-                        type: 'info',
-                        message: '操作失败，原因：' + errorInfo ? errorInfo : err.text
-                    })
                 })
             }).catch(() => {
                 this.$message({
@@ -206,11 +201,6 @@ export default {
             let type = row.isEnable == '0' ? '1' : '0';
             GoodsSourceStatus(row.id,type).then(res => {
                 this.firstblood();
-            }).catch(err=>{
-                this.$message({
-                    type: 'info',
-                    message: '操作失败，原因：' + err.text ? err.text : err
-                })
             })
         },
     },

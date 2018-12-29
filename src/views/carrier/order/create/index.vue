@@ -574,8 +574,6 @@ export default {
         this.aflcOrderAddressWebDtoList[0].contactsPhone = data.startLocationContactsMobile
         this.aflcOrderAddressWebDtoList[1].contacts = data.endLocationContacts
         this.aflcOrderAddressWebDtoList[1].contactsPhone = data.endLocationContactsMobile */
-      }).catch(err => {
-        this.$message.error('查询出错：' + (err.errorInfo || err.text || '未知错误'))
       })
     },
     // 从首页下单
@@ -1012,7 +1010,7 @@ export default {
         this.contactPopVisible = true
         this.popContactList = data.list
       }).catch(() => {
-        this.$message.error('加载数据失败~')
+        // this.$message.error('加载数据失败~')
       })
     },
     // 点击选择
@@ -1054,7 +1052,7 @@ export default {
         this.dialogFormVisible = false
         this.showContactPop(this.currentType)
       }).catch(err => {
-        this.$message.error('保存失败：' + JSON.stringify(err))
+        // this.$message.error('保存失败：' + JSON.stringify(err))
       })
     },
     // 重置

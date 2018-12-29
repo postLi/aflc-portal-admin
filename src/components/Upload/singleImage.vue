@@ -1,16 +1,16 @@
 <template>
     <div class="upload-container" :class="{'uploadlist': showFileList}">
-        <el-upload 
-            class="image-uploader" 
-            v-if="uploadUrl" 
-            :data="upload" 
+        <el-upload
+            class="image-uploader"
+            v-if="uploadUrl"
+            :data="upload"
             :action="uploadUrl"
-            :multiple="multiple" 
-            :drag="!showFileList" 
-            :show-file-list="showFileList" 
+            :multiple="multiple"
+            :drag="!showFileList"
+            :show-file-list="showFileList"
             :file-list="filelist"
             :limit="limit"
-            :before-upload="beforeUpload" 
+            :before-upload="beforeUpload"
             :list-type="listtype"
             :on-exceed="onexceed"
             :disabled="disabled"
@@ -212,7 +212,7 @@ export default {
             resolve(true)
           }).catch(err => {
             console.log('loooo3')
-            this.$message.error('未知错误：' + JSON.stringify(err))
+            // this.$message.error('未知错误：' + JSON.stringify(err))
             resolve(false)
           })
         }
@@ -239,7 +239,7 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
     @import "src/styles/mixin.scss";
-    
+
     .upload-container {
         width: 100%;
         position: relative;

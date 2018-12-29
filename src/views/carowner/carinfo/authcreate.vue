@@ -258,10 +258,6 @@ export default {
         })
         this.isModify = true
         this.title = '修改'
-      }).catch(() => {
-        // 如果拿不到信息
-        this.$message.error('查找不到相关信息~')
-        this.initNew()
       })
     },
     initNew() {
@@ -400,7 +396,7 @@ export default {
           }
 
           promiseObj.then(res => {
-            console.log(res,'resresresresresres');
+            // console.log(res,'resresresresresres');
             this.loading = false
             const h = this.$createElement;
             this.$msgbox({

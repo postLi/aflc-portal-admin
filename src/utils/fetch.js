@@ -57,14 +57,17 @@ service.interceptors.response.use(
     const res = response.data
 
     if (res.status !== 200 && response.config.url.indexOf('/uaa/oauth/token') === -1) {
-      Message({
-        // message: ((res.errorInfo || '') + ' : ' + (res.msg || '') + ' : ' + (res.code || '') + ' : ' + (res.text || '') + ' : ' + (res.status || '')),
-        // message:res.errorInfo?res.errorInfo:res.text,
-        message: ((res.errorInfo || '') + ' : ' + (res.text || '')),
-        type: 'error',
-        duration: 5 * 1000
-      })
-      // return Promise.reject(res)
+      if (res.scope&&res.scope.indexOf('tms')!=-1) {
+        // alert('1')
+        // console.log(1111111111111)
+      } else {
+        // console.log(2222222222222222)
+        Message({
+          message: ((res.errorInfo || '') + ' : ' + (res.text || '')),
+          type: 'error',
+          duration: 5 * 1000
+        })
+      }
       return res
     } else {
       return response.data
@@ -88,7 +91,7 @@ service.interceptors.response.use(
         })
       } else if (status === 401) {
         // 401:非法的token;Token 过期了;
-        if (error.response.data.message.indexOf('账号不存在')==-1) {
+        if (error.response.data.message.indexOf('账号不存在') == -1) {
           MessageBox.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
             confirmButtonText: '重新登录',
             cancelButtonText: '取消',
@@ -133,7 +136,7 @@ export function checkStatus(res) {
     // if (res.status === 200 || res.code === 200) {
     return res
   } else {
-    console.log('axios res err: ', res)
+    // console.log('axios res err: ', res)
     return Promise.reject(res)
   }
 }

@@ -173,11 +173,6 @@
                   message: '已取消删除'
                 })
               })
-            }).catch(err => {
-              this.$message({
-                type: 'error',
-                message: err.errorInfo || err.text || '未知错误，请重试~'
-              })
             })
             break
           default:
