@@ -566,7 +566,6 @@
       },
       // 添加子节点新增
       addItem(type, idx, item) {
-        // console.log(type, idx, item,'type, idx, item')
         switch (type) {
           case 'weight':
             // console.log(item.primeryPrice)

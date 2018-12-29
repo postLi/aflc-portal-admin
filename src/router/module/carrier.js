@@ -26,7 +26,6 @@ export default {
         {
           path: '/changePassword', icon: 'QQ', name: '修改登录密码', component: _import('changePassword'), meta: { role: ['admin'], title: '修改登录密码', noCache: false }
         }
-
       ]
     },
 
@@ -40,26 +39,12 @@ export default {
         {
           path: '/order/detail', icon: 'QQ', hidden: true, name: '订单详情', component: _import('carrier/order/detail/index'), meta: { role: ['admin'], title: '订单详情', noCache: false }
         },
-
         {
           path: '/order/rateInfo/carrier', icon: 'QQ', hidden: true, name: '评价详情', component: _import('carrier/order/rateInfo/index'), meta: { role: ['admin'], title: '评价详情', noCache: false }
         },
         {
           path: '/order/rateInfo', icon: 'QQ', hidden: true, name: '评价详情2', component: _import('consignor/order/rateInfo/index'), meta: { role: ['admin'], title: '评价详情2', noCache: false }
         },
-
-        /* {
-          path: '/order/track', redirect: '/order/manage', icon: 'QQ', name: '订单跟踪', component: _import('carrier/order/index'), meta: { role: ['admin'], title: '订单跟踪', noCache: false, istab: true },
-          children: [
-            {
-              path: '/order/manage', icon: 'QQ', name: '我创建的订单', component: _import('carrier/order/manage/index'), meta: { role: ['admin'], title: '我创建的订单', noCache: false }
-            },
-            {
-              path: '/order/manage/carrier', icon: 'QQ', name: '我承运的订单', component: _import('carrier/order/manage/index'), meta: { role: ['admin'], title: '我承运的订单', noCache: false }
-            }
-          ]
-        }, */
-
         {
           path: '/order/manage', icon: 'QQ', name: '我创建的订单', component: _import('carrier/order/manage/index'), meta: { role: ['admin'], title: '跟踪创建的订单', noCache: false }
         },
@@ -115,10 +100,7 @@ export default {
         },
         {
           path: '/cargoInfo/manage', icon: 'QQ', name: '管理货源', component: _import('carrier/cargoInfo/manage/index'), meta: { role: ['admin'], title: '管理货源信息', noCache: false }
-        },
-        // {
-        //   path: '/cargoInfo/insure', icon: 'QQ', name: '我的投保单', component: _import('carrier/cargoInfo/insure/index'), meta: { role: ['admin'], title: '我的投保单', noCache: false }
-        // }
+        }
 
       ]
     },

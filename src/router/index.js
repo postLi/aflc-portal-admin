@@ -37,19 +37,6 @@ export const constantRouterMap = [
     name: '首页',
     hidden: true
   }
-/*   {
-    path: '/',
-    component: Layout,
-    redirect: '/dashboard',
-    noDropdown: true,
-    icon: 'shouye',
-    name: '首页',
-    hidden: true,
-    children: [{
-      path: 'dashboard', name: '首页', icon: 'shouye', component: _import('dashboard/index'),
-      meta: { title: '首页', noCache: true }
-    }]
-  } */
 ]
 // 用来展示自定义组件、指令、过滤器等
 if (process.env.NODE_ENV === 'development') {

@@ -1,7 +1,7 @@
 import axios from 'axios'
-import { Message, MessageBox } from 'element-ui'
+import {Message, MessageBox} from 'element-ui'
 import store from '../store'
-import { getToken, getUserInfo } from './auth'
+import {getToken, getUserInfo} from './auth'
 
 // 创建axios实例
 const service = axios.create({
@@ -51,9 +51,9 @@ service.interceptors.request.use(config => {
 // respone拦截器
 service.interceptors.response.use(
   response => {
-  /**
-  * status为非200是抛错 可结合自己业务进行修改
-  */
+    /**
+     * status为非200是抛错 可结合自己业务进行修改
+     */
     const res = response.data
 
     if (res.status !== 200 && response.config.url.indexOf('/uaa/oauth/token') === -1) {
@@ -88,25 +88,33 @@ service.interceptors.response.use(
         })
       } else if (status === 401) {
         // 401:非法的token;Token 过期了;
-        MessageBox.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
-          confirmButtonText: '重新登录',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          store.dispatch('FedLogOut').then(() => {
-            location.reload()// 为了重新实例化vue-router对象 避免bug
+        if (error.response.data.message.indexOf('账号不存在')==-1) {
+          MessageBox.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
+            confirmButtonText: '重新登录',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            store.dispatch('FedLogOut').then(() => {
+              location.reload()// 为了重新实例化vue-router对象 避免bug
+            })
+          }).catch(() => {
+            store.dispatch('FedLogOut').then(() => {
+              location.reload()// 为了重新实例化vue-router对象 避免bug
+            })
           })
-        }).catch(() => {
-          store.dispatch('FedLogOut').then(() => {
-            location.reload()// 为了重新实例化vue-router对象 避免bug
+        } else {
+          Message({
+            message: '该账号不存在或者未找到相关信息',
+            type: 'error',
+            duration: 3 * 1000
           })
-        })
+        }
       } else {
-        // /* Message({
-        //   message: '请求错误：' + status,
-        //   type: 'error',
-        //   duration: 5 * 1000
-        // }) */
+        Message({
+          message: '请求错误：' + status,
+          type: 'error',
+          duration: 5 * 1000
+        })
       }
     } else {
       console.log('response err:', error)// for debug
@@ -122,7 +130,7 @@ service.interceptors.response.use(
 
 export function checkStatus(res) {
   if (res.status !== 100 && res.status !== -1 && res.status !== 40001 && res.status !== 415) {
-  // if (res.status === 200 || res.code === 200) {
+    // if (res.status === 200 || res.code === 200) {
     return res
   } else {
     console.log('axios res err: ', res)

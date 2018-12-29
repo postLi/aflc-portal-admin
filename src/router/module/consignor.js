@@ -41,11 +41,9 @@ export default {
         {
           path: '/order/detail', icon: 'QQ', hidden: true, name: '订单详情', component: _import('carrier/order/detail/index'), meta: { role: ['admin'], title: '订单详情', noCache: false }
         },
-
         {
           path: '/order/rateInfo', icon: 'QQ', hidden: true, name: '评价详情', component: _import('consignor/order/rateInfo/index'), meta: { role: ['admin'], title: '评价详情', noCache: false }
         },
-
         {
           path: '/complaintsInfo/index', icon: 'QQ', hidden: true, name: '投诉详情', component: _import('complaintsInfo/index'), meta: { role: ['admin'], title: '投诉详情', istab: true, noCache: false }
         }
