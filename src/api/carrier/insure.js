@@ -16,7 +16,6 @@ export function getCheckinsure(id) {
     return res.data
   })
 }
-
 /**
  * /usercenter/aflcinsurancepolicy/v1/{id}
 根据ID修改保险单信息

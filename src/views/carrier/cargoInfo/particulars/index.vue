@@ -123,11 +123,18 @@
                 {{scope.row.endProvince ? scope.row.endProvince : ''}}{{ scope.row.endCity ? scope.row.endCity : ''}}
               </template>
             </el-table-column>
+<<<<<<< HEAD
+            <el-table-column prop="transferCitys" label="中转地">
+              <!-- <template slot-scope="scope">
+                {{scope.row.transferProvince ? scope.row.transferProvince : ''}}{{ scope.row.transferCity ? scope.row.transferCity : ''}}
+              </template> -->
+=======
             <el-table-column prop="" label="中转地">
               <template slot-scope="scope">
                 {{scope.row.transferProvince ? scope.row.transferProvince : ''}}{{ scope.row.transferCity ?
                 scope.row.transferCity : ''}}
               </template>
+>>>>>>> 613f22a7b0daf76aab9d8261340fca8fc5c88a3c
             </el-table-column>
             <el-table-column prop="startTime" label="起运日期"></el-table-column>
 

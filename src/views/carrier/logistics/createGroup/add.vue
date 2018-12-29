@@ -46,7 +46,6 @@
         </div>
       </div>  
       </div>
-      
     </el-dialog>
     
   </div>
@@ -274,7 +273,7 @@ export default {
     handlePageChange(obj) {
       this.page = obj.pageNum
       this.pagesize = obj.pageSize
-        // this.firstblood()
+      this.fetchInfo()
     },
     // changeColumn(obj) {
     //   this.formAllData.recommendColumn = obj
