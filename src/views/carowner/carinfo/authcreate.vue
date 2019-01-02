@@ -188,6 +188,7 @@ export default {
       })
     },
     comDetail(item){
+
       this.$set(this.ruleForm,'carFile',item.carFile)
       this.$set(this.ruleForm,'carHeight',item.carHeight)
       this.$set(this.ruleForm,'carLength',item.carLength)
