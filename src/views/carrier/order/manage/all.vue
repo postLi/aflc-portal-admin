@@ -576,7 +576,15 @@ export default {
       this.fetchData()
     },
     doAction(type) {
-      this.$router.push({ path: '/order/create' })
+      let isApi
+      if (window.location.host.indexOf('192.168.1') !== -1) {
+        isApi = 'http://192.168.1.157:89'
+      }
+      else {
+        isApi = 'http://www.28china.cn'
+      }
+      window.open(isApi + `/plus/list.php?tid=77`)
+      // this.$router.push({ path: '/order/create' })
     },
     clickDetails(row, event, column) {
       this.$refs.multipleTable.toggleRowSelection(row)

@@ -136,7 +136,7 @@ export default {
         accNum: 'aflc-5',
         // 130888888885 承运商 130888888881
         // 13088888886 123456  可以作为货主、车主、承运商登录
-        username: '18500000055',
+        username: '13001010101',
         // username: '13088888886',
         password: '123456',
         memberType: 'AF00107'

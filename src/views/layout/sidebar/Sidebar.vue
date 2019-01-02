@@ -9,7 +9,7 @@
       <el-menu
         class="el-menu-vertical-sidebar"
         :default-active="$route.path"
-        router
+
         ref="sidebarmenu"
         @open="setLastPath"
         @select="getCurrentPath"
@@ -17,8 +17,8 @@
         text-color="rgba(255,255,255,0.65)">
         <template v-if="!item.hidden" v-for="(item,index) in sidebarRouters">
           <el-menu-item :key="index" v-if="!item.children" :index="item.path">
-            <icon-svg v-if='item.icon' :icon-class="item.icon" /> 
-            <span slot="title">{{item.meta.title}}</span>
+            <icon-svg v-if='item.icon' :icon-class="item.icon" />
+            <a :href="item.path" :target="item.path.indexOf('http')!==-1 ? '_blank' : '_self'" slot="title">{{item.meta.title}}</a>
           </el-menu-item>
           <el-submenu v-else :key="index" :index="item.path">
             <template slot="title">
@@ -28,7 +28,7 @@
             <template v-if="!item2.hidden" v-for="(item2,index2) in item.children">
               <el-menu-item :key="index2" v-if="!item2.children" :index="item2.path">
                 <!-- <icon-svg v-if='item2.icon' :icon-class="item2.icon" />  -->
-                <span slot="title">{{item2.meta.title}}</span>
+                <a :href="item2.path" :target="item2.path.indexOf('http')!==-1 ? '_blank' : '_self'" slot="title">{{item2.meta.title}}</a>
               </el-menu-item>
               <el-submenu v-else :key="index2" :index="item2.path">
                 <template slot="title">{{item2.meta.title}}</template>
@@ -51,7 +51,7 @@
     <!-- 当从28tms过来且是物流商时加载 -->
        <iframe  v-if="shouldLogin" :src="$const.INDEXURL + '/member/loginbytoken.php?access_token='+token" frameborder="0" style="width:0;height:0;"></iframe>
   </div>
-  
+
 </template>
 
 <script>
@@ -122,7 +122,7 @@ export default {
 @import "src/styles/mixin.scss";
 
  .sidebar-menu{
- 
+
   overflow-y: auto;
   overflow-x: visible;
   width: 100%;
@@ -156,7 +156,7 @@ export default {
   }
 
   .el-submenu.is-opened .el-submenu__title{
-    box-shadow: 0px 4px 4px 0px 
+    box-shadow: 0px 4px 4px 0px
 		rgba(0, 0, 0, 0.5);
 
     span{
@@ -183,7 +183,7 @@ export default {
       border-radius: 50%;
       margin-right: 10px;
       margin-left: 5px;
-      
+
     }
     span{
       display: inline-block;

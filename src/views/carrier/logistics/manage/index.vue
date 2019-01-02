@@ -24,11 +24,13 @@
       <div class="information syStyle">
         <div class="created">
           <el-button type="primary" @click="handleNew">发布专线</el-button>
-        </div>
-        <div class="btns_box">
-          <el-button size="small" round type="success" icon="" @click="doAction('use')">启用</el-button>
-          <el-button size="small" round type="info" icon="" @click="doAction('disable')">禁用</el-button>
+          <el-button @click="doAction('detail')" round type="warning" size="mini">详情</el-button>
+          <el-button @click="doAction('edit')" round type="info" size="mini">修改</el-button>
+          <el-button size="small" round type="success" icon="" @click="doAction('use')">上架</el-button>
+          <el-button size="small" round type="info" icon="" @click="doAction('disable')">下架</el-button>
           <el-button size="small" round type="danger" icon="" @click="doAction('remove')">删除</el-button>
+
+
         </div>
         <div class="tableStyle" style="height:92%">
           <el-table
@@ -107,11 +109,11 @@
               label="最低一票价格（元）"
               width="180">
             </el-table-column>
-            <el-table-column
-              prop="publishName"
-              label="创建人"
-              width="180">
-            </el-table-column>
+            <!--<el-table-column-->
+            <!--prop="publishName"-->
+            <!--label="创建人"-->
+            <!--width="180">-->
+            <!--</el-table-column>-->
             <el-table-column
               prop="Time"
               label="创建时间"
@@ -122,23 +124,6 @@
               width="180">
               <template slot-scope="scope">
                 <span class="rangeTypeName">{{scope.row.rangeTypeName}}</span>
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="address"
-              label="操作"
-
-              width="320"
-            >
-              <template slot-scope="scope">
-                <!-- <el-button-group> -->
-                <el-button @click="handleDetail(scope.row)" type="test" size="mini">查看详情</el-button>
-                <el-button @click="handleEdit(scope.row)" type="primary" size="mini">修改</el-button>
-                <el-button @click="handleDelete(scope.row)" type="danger" size="mini">删除</el-button>
-                <el-button @click="handleStatus(scope.row)" :type="scope.row.rangeStatus == 0 ? 'primary' : 'info'"
-                           size="mini">{{scope.row.rangeStatus == 0 ? '启用' : '禁用'}}
-                </el-button>
-                <!-- </el-button-group> -->
               </template>
             </el-table-column>
           </el-table>
@@ -262,8 +247,33 @@
               })
             })
             break
+          case 'detail':
+            if (this.selected.length > 1) {
+              this.$message.info('只允许操作一条数据~')
+              this.$refs.multipleTable.clearSelection()
+              return false
+            }
+            let isApi = 'http://192.168.1.157:89'
+            // const isApi = 'http://www.28china.cn'
+            const isApihttp = '/wlzx/2018/0509/7'
+            if (window.location.host.indexOf('192.168.1') !== -1) {
+              isApi = 'http://192.168.1.157:89'
+            }
+            else {
+              isApi = 'http://www.28china.cn'
+            }
+            window.open(isApi + isApihttp + '.html?id=' + this.selected[0].id + '&publishId=' + this.selected[0].publishId)
+            break
+          case `edit`:
+            if (this.selected.length > 1) {
+              this.$message.info('只允许操作一条数据~')
+              this.$refs.multipleTable.clearSelection()
+              return false
+            }
+            this.$router.push({name: '发布物流专线', query: {data: JSON.stringify(this.selected[0]), ifrevise: '1'}});
+            break
         }
-
+        this.$refs.multipleTable.clearSelection()
       },
       firstblood() {
         this.loading = true;
@@ -320,47 +330,19 @@
       },
       //新增网点
       handleNew() {
-        this.$router.push({name: '发布物流专线'});
+        this.openWindow()
+        // this.$router.push({name: '发布物流专线'});
       },
-      handleDetail(row){
-        let isApi = 'http://192.168.1.157:89'
-        // const isApi = 'http://www.28china.cn'
-        const isApihttp = '/wlzx/2018/0509/7'
+      openWindow() {
+        let isApi
         if (window.location.host.indexOf('192.168.1') !== -1) {
           isApi = 'http://192.168.1.157:89'
         }
         else {
           isApi = 'http://www.28china.cn'
         }
-        window.open(isApi + isApihttp + '.html?id=' + row.id + '&publishId=' + row.publishId)
-      },
-      //修改
-      handleEdit(row) {
-        this.$router.push({name: '发布物流专线', query: {data: JSON.stringify(row), ifrevise: '1'}});
-      },
-      //删除网点
-      handleDelete(row) {
-        this.$confirm('确定要删除 ' + row.startLocation + '-' + row.endLocation + ' 该条专线吗？', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          deleteTransportRange(row.id).then(res => {
-            this.firstblood();
-          })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消'
-          })
-        })
-      },
-      //更改状态
-      handleStatus(row) {
-        TransportRangeStatus(row.id).then(res => {
-          this.firstblood();
-        })
-      },
+        window.open(isApi + `/plus/list.php?tid=85`)
+      }
     },
 
   }
@@ -398,7 +380,7 @@
       }
 
     }
-    .el-table{
+    .el-table {
       .el-table__body-wrapper {
         max-height: 500px !important;
         min-height: 500px !important;

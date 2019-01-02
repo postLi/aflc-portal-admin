@@ -143,7 +143,15 @@
     },
     methods: {
       createNew() {
-        this.$router.push('/carinfo/create')
+        let isApi
+        if (window.location.host.indexOf('192.168.1') !== -1) {
+          isApi = 'http://192.168.1.157:89'
+        }
+        else {
+          isApi = 'http://www.28china.cn'
+        }
+        window.open(isApi + `/plus/list.php?tid=84`)
+        // this.$router.push('/carinfo/create')
       },
       fetchAllCustomer() {
         this.loading = true

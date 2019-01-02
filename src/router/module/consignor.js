@@ -7,7 +7,13 @@ const _import = require('../_import_' + (process.env.NODE_ENV === 'development' 
  * hidden 是否隐藏不显示
  * meta 路由相关信息 ： stitle为边栏折叠时显示， noCache是否加入到路由的缓存列表里， istab 是否为页面内的tab切换
  */
-
+let isApi
+if (window.location.host.indexOf('192.168.1') !== -1) {
+  isApi = 'http://192.168.1.157:89'
+}
+else {
+  isApi = 'http://www.28china.cn'
+}
 export default {
   path: '/consignor',
   component: Layout,
@@ -33,7 +39,7 @@ export default {
       path: '/consignor/order', icon: 'dingdangl', name: '订单管理', component: _import('carrier/order/index'), redirect: '/order/manage', meta: { role: ['admin'], title: '订单管理', istab: true, noCache: false },
       children: [
         {
-          path: '/order/create', icon: 'QQ', name: '创建订单', component: _import('carrier/order/create/index'), meta: { role: ['admin'], title: '创建订单', noCache: false }
+          path: isApi + `/plus/list.php?tid=77`, icon: 'QQ', name: '创建订单', component: _import('carrier/order/create/index'), meta: { role: ['admin'], title: '创建订单', noCache: false }
         },
         {
           path: '/order/manage', icon: 'QQ', name: '订单跟踪', component: _import('carrier/order/manage/index'), meta: { role: ['admin'], title: '订单跟踪', noCache: false }
@@ -60,7 +66,9 @@ export default {
       path: '/consignor/cargoInfo', icon: 'huoyuangl', name: '货源管理', component: _import('consignor/cargoInfo/index'), redirect: '/cargoInfo/manage', meta: { role: ['admin'], title: '货源管理', istab: true, noCache: false },
       children: [
         {
-          path: '/cargoInfo/create', icon: 'QQ', name: '发布货源', component: _import('carrier/order/create/index'), meta: { role: ['admin'], title: '发布货源信息', noCache: false }
+        // /cargoInfo/create
+        //   http://192.168.1.157:89/plus/list.php?tid=84
+          path: isApi + `/plus/list.php?tid=83`, icon: 'QQ', name: '发布货源', component: _import('carrier/order/create/index'), meta: { role: ['admin'], title: '发布货源信息', noCache: false }
         },
         {
           path: '/cargoInfo/manage', icon: 'QQ', name: '管理货源', component: _import('carrier/cargoInfo/manage/index'), meta: { role: ['admin'], title: '管理货源信息', noCache: false }

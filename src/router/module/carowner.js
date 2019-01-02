@@ -8,6 +8,13 @@ const _import = require('../_import_' + (process.env.NODE_ENV === 'development' 
  * meta 路由相关信息 ： stitle为边栏折叠时显示， noCache是否加入到路由的缓存列表里， istab 是否为页面内的tab切换
  */
 
+let isApi
+if (window.location.host.indexOf('192.168.1') !== -1) {
+  isApi = 'http://192.168.1.157:89'
+}
+else {
+  isApi = 'http://www.28china.cn'
+}
 export default {
   path: '/carowner',
   component: Layout,
@@ -40,7 +47,7 @@ export default {
       path: '/carowner/carinfo', icon: 'cheyuangl', name: '车源管理', component: _import('carowner/carinfo/index'), redirect: '/carinfo/create', meta: { role: ['admin'], title: '车源管理', istab: true, noCache: false },
       children: [
         {
-          path: '/carinfo/create', icon: 'QQ', name: '发布车源', component: _import('carowner/carinfo/create'), meta: { role: ['admin'], title: '发布车源', noCache: false }
+          path: isApi + `/plus/list.php?tid=84`, icon: 'QQ', name: '发布车源', component: _import('carowner/carinfo/create'), meta: { role: ['admin'], title: '发布车源', noCache: false }
         },
         // {
         //   path: '/carinfo/create1', icon: 'QQ', name: '发布车源', component: _import('carowner/carinfo/create1'), meta: { role: ['admin'], title: '发布车源1', noCache: false }

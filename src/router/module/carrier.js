@@ -7,7 +7,14 @@ const _import = require('../_import_' + (process.env.NODE_ENV === 'development' 
  * hidden 是否隐藏不显示
  * meta 路由相关信息 ： stitle为边栏折叠时显示， noCache是否加入到路由的缓存列表里， istab 是否为页面内的tab切换
  */
-
+let isApi
+if (window.location.host.indexOf('192.168.1') !== -1) {
+  isApi = 'http://192.168.1.157:89'
+}
+else {
+  isApi = 'http://www.28china.cn'
+}
+// window.open(isApi + `/plus/list.php?tid=85`)
 export default {
   path: '/carrier',
   component: Layout,
@@ -34,7 +41,7 @@ export default {
       path: '/carrier/order', icon: 'dingdangl', name: '订单管理', component: _import('carrier/order/index'), redirect: '/order/manage', meta: { role: ['admin'], title: '订单管理', istab: true, noCache: false },
       children: [
         {
-          path: '/order/create', icon: 'QQ', name: '创建订单', component: _import('carrier/order/create/index'), meta: { role: ['admin'], title: '创建订单', noCache: false }
+          path: isApi + `/plus/list.php?tid=77`, icon: 'QQ', name: '创建订单', component: _import('carrier/order/create/index'), meta: { role: ['admin'], title: '创建订单', noCache: false }
         },
         {
           path: '/order/detail', icon: 'QQ', hidden: true, name: '订单详情', component: _import('carrier/order/detail/index'), meta: { role: ['admin'], title: '订单详情', noCache: false }
@@ -73,7 +80,7 @@ export default {
       path: '/carrier/logistics/group', icon: 'wangdiangl', name: '网点管理', component: _import('carrier/logistics/index'), redirect: '/logistics/manageGroup', meta: { role: ['admin'], title: '网点管理', istab: true, noCache: false },
       children: [
         {
-          path: '/logistics/createGroup', icon: 'QQ', name: '发布我的网点', component: _import('carrier/logistics/createGroup/index'), meta: { role: ['admin'], title: '发布我的网点', noCache: false }
+          path: `/logistics/createGroup` , icon: 'QQ', name: '发布我的网点', component: _import('carrier/logistics/createGroup/index'), meta: { role: ['admin'], title: '发布我的网点', noCache: false }
         },
         {
           path: '/logistics/manageGroup', icon: 'QQ', name: '管理我的网点', component: _import('carrier/logistics/manageGroup/index'), meta: { role: ['admin'], title: '管理我的网点', noCache: false }
@@ -84,7 +91,7 @@ export default {
       path: '/carrier/logistics', icon: 'xianlugl', name: '线路管理', component: _import('carrier/logistics/index'), redirect: '/logistics/manage', meta: { role: ['admin'], title: '线路管理', istab: true, noCache: false },
       children: [
         {
-          path: '/logistics/create', icon: 'QQ', name: '发布物流专线', component: _import('carrier/logistics/create/index'), meta: { role: ['admin'], title: '发布物流专线', noCache: false }
+          path: isApi + `/plus/list.php?tid=85`, icon: 'QQ', name: '发布物流专线', component: _import('carrier/logistics/create/index'), meta: { role: ['admin'], title: '发布物流专线', noCache: false }
         },
         {
           path: '/logistics/manage', icon: 'QQ', name: '管理物流专线', component: _import('carrier/logistics/manage/index'), meta: { role: ['admin'], title: '管理物流专线', noCache: false }
@@ -96,7 +103,7 @@ export default {
       path: '/carrier/cargoInfo', icon: 'huoyuangl', name: '货源管理', component: _import('carrier/cargoInfo/index'), redirect: '/carrier/cargoInfo/manage', meta: { role: ['admin'], title: '货源管理', istab: true, noCache: false },
       children: [
         {
-          path: '/cargoInfo/create', icon: 'QQ', name: '发布货源', component: _import('carrier/order/create/index'), meta: { role: ['admin'], title: '发布货源信息', noCache: false }
+          path:  isApi + `/plus/list.php?tid=83`, icon: 'QQ', name: '发布货源', component: _import('carrier/order/create/index'), meta: { role: ['admin'], title: '发布货源信息', noCache: false }
         },
         {
           path: '/cargoInfo/manage', icon: 'QQ', name: '管理货源', component: _import('carrier/cargoInfo/manage/index'), meta: { role: ['admin'], title: '管理货源信息', noCache: false }
