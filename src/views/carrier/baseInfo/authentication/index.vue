@@ -443,7 +443,7 @@
         const res = getUserInfo()
         Promise.all([getDictionary(this.belongBrand), getDictionary(this.productServiceCode), getDictionary(this.otherServiceCode), getDictionary(this.serviceType), getLogisticsCompanyInfoByMobile(res.mobile)]).then(resArr => {
           this.loading = false
-          console.log('resArr', resArr)
+          console.log('resArr111111', resArr,res.mobile,'res.mobileres.mobile')
           this.optionsBelongBrand = resArr[0].data
           this.optionsProductService = resArr[1].data
           this.optionsOtherService = resArr[2].data

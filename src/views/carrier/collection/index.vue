@@ -97,6 +97,7 @@
         }
         this.userTypeFn()
         let data = objectMerge2({}, this.collListNum)
+        // console.log(this.otherinfo,'this.otherinfothis.otherinfothis.otherinfothis.otherinfothis.otherinfo');
         collApi.getCollectListNum(this.otherinfo.userToken, data).then((data, index) => {
           data.forEach((el, index) => {
             el.collectNum = el.collectNum > 99 ? '99+' : el.collectNum

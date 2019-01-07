@@ -155,7 +155,8 @@ const user = {
     GetInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
         const param = getLogin()
-        // console.log(getLogin(),'getLogin()getLogin()getLogin()getLogin()getLogin()getLogin()')
+        // console.log(param,'paramparamparamparamparam',this.otherinfo);
+// let ismobile = this.otherinfo
         getInfo(param.mobile, param.memberType).then(response => {
           const data = response.data
           // data.rolesIdList = data.rolesId.split(',')

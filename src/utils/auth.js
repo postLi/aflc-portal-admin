@@ -28,7 +28,7 @@ export function setToken(token) {
   if (domain.indexOf('28china.cn') !== -1) {
     domain = '.28china.cn'
   }
-  return Cookies.set(TokenKey, token, { expires: 7, domain: domain, path: '/' })
+  return Cookies.set(TokenKey, token, {expires: 7, domain: domain, path: '/'})
 }
 
 export function removeToken() {
@@ -36,15 +36,24 @@ export function removeToken() {
 }
 
 export function getUsername() {
-  return localStorage.getItem(UsernameKey)
+  let user = Cookies.getItem('login_mobile')
+  let type = Cookies.getItem('login_type')
+  return user + '|' + type
+  // return localStorage.getItem(UsernameKey)
 }
 
 export function setUsername(name) {
-  return localStorage.setItem(UsernameKey, name)
+  let user = Cookies.setItem('login_mobile',name)
+  let type = Cookies.setItem('login_type',name)
+  return user + '|' + type
+  // return localStorage.setItem(UsernameKey, name)
 }
 
 export function removeUsername() {
-  return localStorage.removeItem(UsernameKey)
+  let user = Cookies.removeItem('login_mobile')
+  let type = Cookies.removeItem('login_type')
+  return user + '|' + type
+  // return localStorage.removeItem(UsernameKey)
 }
 
 export function getOrgId() {

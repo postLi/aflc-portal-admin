@@ -216,7 +216,6 @@
         const sendData = {}
         this.userTypeFn(sendData)
         this.collectTypeFn(sendData, type, row)
-
         this.$set(sendData, 'mobile', getLogin().mobile)
         this.$confirm('确定删除吗?', '提示', {
           confirmButtonText: '确定',

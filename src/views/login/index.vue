@@ -216,6 +216,9 @@ export default {
     password() {
       this.holder = ''
     }
+  },
+  mounted(){
+    // console.log(getCookie,'2222222222');
   }
 }
 </script>
