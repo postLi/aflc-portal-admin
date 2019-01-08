@@ -36,23 +36,28 @@ export function removeToken() {
 }
 
 export function getUsername() {
-  let user = Cookies.getItem('login_mobile')
-  let type = Cookies.getItem('login_type')
+  let user = Cookies.get('login_mobile')
+  let type = Cookies.get('login_type')
   return user + '|' + type
   // return localStorage.getItem(UsernameKey)
 }
 
 export function setUsername(name) {
-  let user = Cookies.setItem('login_mobile',name)
-  let type = Cookies.setItem('login_type',name)
-  return user + '|' + type
+  var domain = location.hostname
+  if (domain.indexOf('28china.cn') !== -1) {
+    domain = '.28china.cn'
+  }
+  let nameArr = name.split('|')
+  let user = Cookies.set('login_mobile',nameArr[0], {expires: 7, domain: domain, path: '/'})
+  let type = Cookies.set('login_type',nameArr[1], {expires: 7, domain: domain, path: '/'})
+  // return user + '|' + type
   // return localStorage.setItem(UsernameKey, name)
 }
 
 export function removeUsername() {
-  let user = Cookies.removeItem('login_mobile')
-  let type = Cookies.removeItem('login_type')
-  return user + '|' + type
+  let user = Cookies.remove('login_mobile')
+  let type = Cookies.remove('login_type')
+  // return user + '|' + type
   // return localStorage.removeItem(UsernameKey)
 }
 

@@ -42,6 +42,7 @@ const user = {
       const username = userInfo.username.trim()
       return new Promise((resolve, reject) => {
         login(username, userInfo.password, userInfo.accNum).then(response => {
+
           const data = response
           setToken(data.access_token)
           setUsername(username)
@@ -49,6 +50,7 @@ const user = {
           setLogin(userInfo)
           commit('SET_TOKEN', data.access_token)
           commit('SET_USERNAME', username)
+
           resolve()
         }).catch(error => {
           reject(error)
