@@ -402,24 +402,27 @@
     },
     methods: {
       regionChange(d) {
-        console.log('data:', d)
+        // console.log('data:', d)
 
         this.logisticsForm.address = ''
         this.logisticsForm.belongCityName = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
+        this.sendData.provinceCode = d.province ? d.province.name : ''
+        this.sendData.cityCode = d.city ? d.city.name : ''
+        this.sendData.areaCode = d.area ? d.area.name : ''
         this.logisticsForm.provinceCode = d.province ? d.province.code : ''
         this.logisticsForm.cityCode = d.city ? d.city.code : ''
         this.logisticsForm.areaCode = d.area ? d.area.code : ''
         // this.sendData.provinceCode = d.province? d.province.name:''
         // this.sendData.cityCode = d.province? d.province.cityCode:''
         // this.sendData.areaCode = d.province? d.province.areaCode:''
-        console.log(this.logisticsForm.provinceCode,this.logisticsForm.cityCode,this.logisticsForm.areaCode)
+        // console.log(d,this.logisticsForm.provinceCode,this.logisticsForm.cityCode,this.logisticsForm.areaCode)
       },
       getValue(obj) {
         return obj ? obj.value : ''
       },
       getInfo(pos, name, info) {
         // info.name  info.pos
-        console.log(pos, name, info)
+        // console.log(pos, name, info)
         // this.logisticsForm.belongCityName = info.addressComponent.province +info.addressComponent.city+info.addressComponent.district;
         this.logisticsForm.address = name
         this.logisticsForm.longitude = pos.split(',')[0]
@@ -443,7 +446,7 @@
         const res = getUserInfo()
         Promise.all([getDictionary(this.belongBrand), getDictionary(this.productServiceCode), getDictionary(this.otherServiceCode), getDictionary(this.serviceType), getLogisticsCompanyInfoByMobile(res.mobile)]).then(resArr => {
           this.loading = false
-          console.log('resArr111111', resArr,res.mobile,'res.mobileres.mobile')
+          console.log('resArr111111', resArr, res.mobile, 'res.mobileres.mobile')
           this.optionsBelongBrand = resArr[0].data
           this.optionsProductService = resArr[1].data
           this.optionsOtherService = resArr[2].data
@@ -528,11 +531,20 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           this.completeInfo()
-          const form = Object.assign({}, this.logisticsForm, {authStatus: 'AF0010402', authStatusName: '待认证'})
-          console.log(form,'submitForm')
+          delete this.logisticsForm.provinceCode
+          delete this.logisticsForm.cityCode
+          delete this.logisticsForm.areaCode
+          const form = Object.assign({}, this.logisticsForm, {
+            authStatus: 'AF0010402',
+            authStatusName: '待认证'
+          }, this.sendData)
+          // form = Object.assign({}.this.sendData)
+          // console.log(form, 'submitForm')
+
           if (valid) {
+
             identifyCarrier(form).then(res => {
-              console.log(res)
+              // console.log(res)
               this.getMoreInformation()
               this.clear()
             })
